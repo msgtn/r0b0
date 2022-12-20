@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>blossom</title>
+</head>
+
+<body style="margin:0;">
+
+  <link rel="stylesheet" href="style.css">
+
+
+  <section class="select" id="">
+    <select id="videoSource"></select>
+  </section>
+  <section class="select" id="">
+    <select id="audioSource"></select>
+  </section>
+
+
+
+  <!-- <p id="look" align="center" justify-content="center" 1222
+    /style="font-family:sans-serif;font-size:100px;"></p> -->
+
+
+  <div id="videoContainer" align="right" z-index="-10">
+    
+    <div id="watcherVideoContainer" align="left" position="relative" display="flex">
+      <!-- <div class="box"> -->
+      <!-- <div> -->
+        <div class="overlay">
+          <video id="videoWebm" z-index="9" src="vid.webm" align="left" width="0px" height="0px" position="absolute"></video>  
+        </div>
+        <video playsinline autoplay muted id="watcherVideo" align="left" position="absolute"></video>  <!-- </div> -->
+      <!-- <div class="box stack-top"> -->
+      <!-- </div> -->
+      <div class="overlay">
+        <p id="recordingIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+
+      </div>
+    </div>
+    <video playsinline autoplay muted id="broadcasterVideo"></video>
+    <div class="overlay">
+      <p id="endpointIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+    </div>
+
+
+  <canvas id="touchpad" style="height:0%; width:100%; border:1px solid #000000;" >
+    <span class="right">RIGHT ARM</span>
+    <span class="left">LEFT ARM</span>
+  </canvas>
+
+
+    <iframe id="ytVid" width="0" src="https://www.youtube.com/embed/Nbs-Dy6RThk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" width="0px"></iframe>
+  </div>
+
+  <script>
+    var c = document.getElementById("touchpad");
+  </script>
+
+  <input type="button" class="block" id="playWebm" value="Play movement" onclick="playWebm();">
+
+
+  <p id="promptSpace">Prompt text will appear here.</p>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.1/angular.min.js"></script>
+
+  <div id="heightControl">
+    <input type="range" id="heightSlider" min="20" max="100" value="70">
+  </div>
+  <br>
+
+  <div id="controlBar">
+<!--     <div id="viewSwitch" align="right" align-items="center" justify-content="center">
+      <p style="font-family:sans-serif;">1st / 3rd</p>
+      <label class="switch" hidden>
+        <input id="view" type="checkbox" onclick="toggleView()" disabled=true>
+        <span class="slider round"></span>
+      </label>
+    </div>
+ -->
+    <div id="appendageSwitch" align="left" align-items="center" justify-content="center">
+      <p style="font-family:sans-serif;">ARMS</p>
+      <label class="switch" >
+        <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+        <span class="slider round" style="font-family:sans-serif;"></span>
+      </label>
+    </div>
+
+
+      <button class="button recButton" id="record" value="Record" onclick="record();" disabled=true></button>
+
+    <div id="controlSwitch" align="right" align-items="center" justify-content="center">
+      <p style="font-family:sans-serif;">HEAD</p>
+      <label class="switch" >
+        <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+        <span class="slider round" style="font-family:sans-serif;"></span>
+      </label>
+    </div>
+  </div>
+
+  <input type="button" class="block" id="calibrate" value="Calibrate" onclick="calibrateYaw();" disabled=true>
+
+  <h1 id="gestureBar">
+    <select id="gestures" name="gesture" class="select-css">
+      <option value="none">None</option>
+    </select>
+    <!-- <input type="button" class="block" id="get_gestures" value="Reload" onclick="getGestures();" disabled=true> -->
+    <input type="button" class="block" id="playGesture" value="Play" onclick="playGesture();" disabled=true>
+  </h1>
+
+  <div id="videoInput">
+    <input type="text" id="videoId" placeholder="Video ID">
+    <input type="button" class="block" id="displayVideoById" value="Get Video" onclick="updateVideo();">
+  </div>
+
+
+
+  <iframe id="survey" src="https://cornell.ca1.qualtrics.com/jfe/form/SV_4UieYOXWcSgSzgq" height="0px" hidden></iframe>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="data.js"></script>
+  <script src="controller.js"></script>
+
+</body>
+
+</html>

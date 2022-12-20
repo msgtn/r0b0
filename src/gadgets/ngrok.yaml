@@ -1,0 +1,13 @@
+authtoken: 7y1rHQG66tNzFw88ZRfBy_2Jv1pHTsGcAZskzcvcdiG
+
+tunnels:
+  blossomapp:
+    addr: https://localhost:8000
+    proto: http
+    subdomain: blossomapp
+    host_header: rewrite
+  blossomctrl:
+    addr: 4000
+    proto: http   
+    host_header: rewrite
+  

@@ -1,0 +1,37 @@
+{
+  "name": "webrtcvideobroadcast",
+  "version": "1.0.0",
+  "description": "WebRTC example for a video broadcast",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "HTTPS=true node index.js"
+  },
+  "keywords": [
+    "WebRTC",
+    "SocketIO"
+  ],
+  "author": "Tanner Gabriel",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.6.10",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "express-force-ssl": "^0.3.2",
+    "htpasswd-js": "^1.0.2",
+    "http": "0.0.1-security",
+    "http-server": "^14.1.1",
+    "internal-ip": "~3.0.1",
+    "jquery": "^3.6.0",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "require": "^0.4.4",
+    "requirejs": "^2.3.6",
+    "socket.io": "^2.3.0",
+    "tls": "0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "7.0.0"
+  }
+}

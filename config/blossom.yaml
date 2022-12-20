@@ -1,0 +1,35 @@
+robots:
+  - name: blossom
+    motors: # use these same names as kwargs to constructors
+    - name: tower_1
+      type: xl330-m288
+      id: 1
+      position:
+        reset: 0
+        min: -40
+        max: 140
+    - name: tower_2
+      type: xl330-m288
+      id: 2
+      position:
+        reset: 0
+        min: -40
+        max: 140
+    - name: tower_3
+      type: xl330-m288
+      id: 3
+      position:
+        reset: 0
+        min: -40
+        max: 140
+    - name: base
+      type: xl330-m288
+      id: 4
+      position:
+        reset: 0
+        min: -140
+        max: 140
+servers:
+  - name: midi
+sensors:
+  - name: midi
