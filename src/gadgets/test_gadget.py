@@ -2,6 +2,7 @@ import unittest
 # from .gadget_socket import *
 # from .gadget_socket import Socket
 # server.start_server('localhost',8080)
+import socketio
 from src.cables.gadget_socket import Socket, MIDISocket
 from .gadget import Gadget, MIDIController, Robot
 import mido
@@ -12,6 +13,7 @@ import time
 import random
 import copy
 
+
 LOCALHOST = 'localhost'
 MIDI_HOST = LOCALHOST
 ROBOT_HOST = LOCALHOST
@@ -19,6 +21,11 @@ SERVER_PORT = 8080
 MIDI_PORT = 9000
 ROBOT_PORT = 9090
 port_ctr = 9000
+
+
+sio = socketio.Client()
+# sio.connect(f"http://{LOCALHOST}:{SERVER_PORT}")
+
 class GadgetTest(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -49,6 +56,7 @@ class GadgetTest(unittest.TestCase):
         self.gadget.disconnect()
         pass
 
+@unittest.skip('')
 class MIDIGadgetTest(GadgetTest):
     def setUp(self):
         super().setUp()
@@ -82,11 +90,13 @@ class MIDIGadgetTest(GadgetTest):
     def test_midi_event(self):
 
         print(self.port_ctr)
-        # self.gadget.accept(block=True)
-        # print(self.gadget.receive(block=True))
+        self.gadget.connect(LOCALHOST,SERVER_PORT)
         # breakpoint()
         # self.gadget.accept(block=True)
+        # print(self.gadget.receive(block=True))
+        # self.gadget.accept(block=True)
         pass
+    
         
     @unittest.skip('skipping')
     def test_recv(self):
@@ -125,10 +135,19 @@ class RobotGadget(GadgetTest):
         pass
     
     def test_connect(self):
-        super().test_connect()
+        # super().test_connect()
+        pass
+        
+    def test_midi_event(self):
+        print(self.gadget)
+        
+        self.gadget.connect('localhost',8080)
+        # self.gadget.emit('midi','testing')
+        # self.gadget.wait()
+        breakpoint()
+        pass
     
     def tearDown(self):
         super().tearDown()
         pass
     
-    5

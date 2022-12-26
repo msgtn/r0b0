@@ -1,23 +1,38 @@
 import mido
 from mido.sockets import PortServer, connect
+from mido.ports import BaseIOPort
 from src.cables.gadget_socket import Socket, MIDISocket
-from socketio import Client
-sio = Client()
-
+from socketio import Client, AsyncClient
+# sio = Client()
+import asyncio
 
 # class Gadget(object):
-class Gadget(Client):
+class Gadget(AsyncClient):
+# class Gadget(Client):
     def __init__(self, hostname='localhost', port=8000, **kwargs):
         super().__init__()
         self.hostname=hostname
         self.port = port
         self.__dict__.update(**kwargs)
         pass
-
+    
+    # def emit(self, sid, data)
     def connect(self, hostname, port, header='http'):
         # breakpoint()
         print(f"Connecting to {header}://{hostname}:{port}")
-        super().connect(f"{header}://{hostname}:{port}")
+        asyncio.run(self._connect(hostname,port,header))
+        # super().connect(f"{header}://{hostname}:{port}")
+        
+    async def _connect(self, hostname, port,header='http'):
+        await super().connect(f"{header}://{hostname}:{port}")
+        # print('emiting')
+        await super().emit('midi',data='testingsgsd')
+        await super().wait()
+        return "OK", 123
+        
+        
+    # def emit(self, **kwargs):
+    #     asyncio.run(super().emit(**kwargs))
 
     def recv(self):
         pass
@@ -29,7 +44,7 @@ class Gadget(Client):
         pass
     
     def disconnect(self) -> None:
-        super().disconnect()
+        asyncio.run(super().disconnect())
         pass
 
 # class MIDIController(PortServer, Gadget):
@@ -43,15 +58,26 @@ class MIDIController(Gadget):
         #     portno=kwargs['port']
         # )
         print(mido.get_input_names())
-        self.midi_port = mido.open_ioport(config['port_name'])
+        self.midi_port = mido.open_ioport(
+            config['port_name'],
+            callback=self.callback)
+        self.echo = True
         
+        # self.connect(hostname=self.hostname,port=self.port)
         
         self.on('midi',self.midi_event)
         
     def add_socket(self, socket: MIDISocket):
         self.sockets.append(socket)
         
-        
+    def callback(self, message):
+        # print(self.connected)
+        # self.emit('midi','test')
+        print(str(message))
+        if self.connected:
+            if self.echo:
+                self.emit('midi',str(message))
+                
     def midi_event(self, sid, data):
         print(data)
         pass
@@ -62,11 +88,25 @@ class MIDIController(Gadget):
       
 from dynamixel_python import DynamixelManager, ReadError
 class Robot(Gadget, DynamixelManager):
+    
+    async def midi_event(self, data):
+        print('robot',data)
+        return "OK", 123
+    
     def __init__(self, **kwargs):
         Gadget.__init__(self, **kwargs)
         self.name = ''
         self.motors = []
         self.kinematic_function = ''
+        self.on('*',self.any_event)
+        self.on('midi',self.midi_event)
+        self.on('connect',self.connect_event)
+        
+    async def any_event(self):
+        print('event')
+        
+    def connect_event(self,):
+        print(f"Connected to ")
         
     def add_motor(self):
         pass
@@ -86,18 +126,13 @@ class Robot(Gadget, DynamixelManager):
         pass
     
     
-    @sio.event(namespace='/midi')
-    def midi_event(sid, data):
-        print(data)
-        return "OK", 123
+    # @sio.event(namespace='/http')
+    # def http_event(sid, data):
+    #     return "OK", 123
 
-    @sio.event(namespace='/http')
-    def http_event(sid, data):
-        return "OK", 123
-
-    @sio.event(namespace='/gamepad')
-    def gamepad_event(sid, data):
-        return "OK", 123
+    # @sio.event(namespace='/gamepad')
+    # def gamepad_event(sid, data):
+        # return "OK", 123
 
     def from_config(self, config): 
         for motor, motor_param in config.items():

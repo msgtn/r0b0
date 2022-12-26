@@ -10,7 +10,7 @@ import os
 from flask import Flask, render_template, request, jsonify, send_file, make_response
 from flask_socketio import SocketIO
 import json
-import numpy as np
+import numpy as n
 from collections import OrderedDict
 import socket
 import requests

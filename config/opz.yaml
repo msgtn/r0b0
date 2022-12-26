@@ -1,5 +1,5 @@
 name: opz
 type: midi
-# port_name: OP-Z Bluetooth
-port_name: OP-Z
+port_name: OP-Z Bluetooth
+# port_name: OP-Z
 channel: 1
