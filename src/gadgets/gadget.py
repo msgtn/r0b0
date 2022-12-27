@@ -7,8 +7,8 @@ from socketio import Client, AsyncClient
 import asyncio
 
 # class Gadget(object):
-class Gadget(AsyncClient):
-# class Gadget(Client):
+# class Gadget(AsyncClient):
+class Gadget(Client):
     def __init__(self, hostname='localhost', port=8000, **kwargs):
         super().__init__()
         self.hostname=hostname
@@ -20,18 +20,23 @@ class Gadget(AsyncClient):
     def connect(self, hostname, port, header='http'):
         # breakpoint()
         print(f"Connecting to {header}://{hostname}:{port}")
-        asyncio.run(self._connect(hostname,port,header))
-        # super().connect(f"{header}://{hostname}:{port}")
+        # asyncio.run(self._connect(hostname,port,header))
+        super().connect(f"{header}://{hostname}:{port}")
         
-    async def _connect(self, hostname, port,header='http'):
-        await super().connect(f"{header}://{hostname}:{port}")
+    # async def _connect(self, hostname, port,header='http'):
+        # await super().connect(f"{header}://{hostname}:{port}")
         # print('emiting')
-        await super().emit('midi',data='testingsgsd')
-        await super().wait()
-        return "OK", 123
+        # await super().emit('midi',data='testingsgsd')
+        # await super().wait()
+        # return "OK", 123
+    
+    # def wait(self):
+    #     # await super().wait()
+    #     asyncio.run(super().wait())
         
-        
-    # def emit(self, **kwargs):
+    # def temit(self, **kwargs):
+    #     # await super().emit(**kwargs)
+    #     print(kwargs)
     #     asyncio.run(super().emit(**kwargs))
 
     def recv(self):
@@ -44,7 +49,8 @@ class Gadget(AsyncClient):
         pass
     
     def disconnect(self) -> None:
-        asyncio.run(super().disconnect())
+        # asyncio.run(super().disconnect())
+        super().disconnect()
         pass
 
 # class MIDIController(PortServer, Gadget):
@@ -73,12 +79,13 @@ class MIDIController(Gadget):
     def callback(self, message):
         # print(self.connected)
         # self.emit('midi','test')
-        print(str(message))
         if self.connected:
             if self.echo:
+                # asyncio.run(self.emit('midi',str(message)))
                 self.emit('midi',str(message))
+                print(str(message))
                 
-    def midi_event(self, sid, data):
+    def midi_event(self, data):
         print(data)
         pass
     
@@ -89,8 +96,12 @@ class MIDIController(Gadget):
 from dynamixel_python import DynamixelManager, ReadError
 class Robot(Gadget, DynamixelManager):
     
-    async def midi_event(self, data):
+    def midi_event(self, data):
         print('robot',data)
+        return "OK", 123
+    
+    def http_event(self, data):
+        print('http',data)
         return "OK", 123
     
     def __init__(self, **kwargs):
@@ -100,6 +111,7 @@ class Robot(Gadget, DynamixelManager):
         self.kinematic_function = ''
         self.on('*',self.any_event)
         self.on('midi',self.midi_event)
+        self.on('http',self.http_event)
         self.on('connect',self.connect_event)
         
     async def any_event(self):

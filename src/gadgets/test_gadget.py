@@ -12,6 +12,7 @@ from src.config import CONFIG_DIR
 import time
 import random
 import copy
+import asyncio
 
 
 LOCALHOST = 'localhost'
@@ -44,6 +45,7 @@ class GadgetTest(unittest.TestCase):
 
     def test_connect(self, hostname=LOCALHOST, port=8080):
         # self.gadget.add_socket(MIDISocket(host='localhost',port=8080))
+        print(self.gadget)
         self.gadget.connect(
             # hostname=hostname,
             # port=port
@@ -56,7 +58,7 @@ class GadgetTest(unittest.TestCase):
         self.gadget.disconnect()
         pass
 
-@unittest.skip('')
+# @unittest.skip('')
 class MIDIGadgetTest(GadgetTest):
     def setUp(self):
         super().setUp()
@@ -69,8 +71,9 @@ class MIDIGadgetTest(GadgetTest):
         # 
         pass
     
-    # def test_connect(self):
-    #     super().test_connect()
+    def test_connect(self):
+        super().test_connect()
+        self.gadget.wait()
     
     # def test_send(self):
     #     msgs = [
@@ -91,6 +94,7 @@ class MIDIGadgetTest(GadgetTest):
 
         print(self.port_ctr)
         self.gadget.connect(LOCALHOST,SERVER_PORT)
+        
         # breakpoint()
         # self.gadget.accept(block=True)
         # print(self.gadget.receive(block=True))
@@ -123,6 +127,7 @@ class MIDIGadgetTest(GadgetTest):
         # self.gadget.close()
         super().tearDown()
         
+# @unittest.skip('')
 class RobotGadget(GadgetTest):
     def setUp(self):
         super().setUp()
@@ -134,17 +139,14 @@ class RobotGadget(GadgetTest):
             )
         pass
     
-    def test_connect(self):
-        # super().test_connect()
-        pass
         
     def test_midi_event(self):
         print(self.gadget)
         
         self.gadget.connect('localhost',8080)
-        # self.gadget.emit('midi','testing')
-        # self.gadget.wait()
-        breakpoint()
+        # self.gadget.temit(event='midi',data='testing')
+        self.gadget.wait()
+        # breakpoint()
         pass
     
     def tearDown(self):
