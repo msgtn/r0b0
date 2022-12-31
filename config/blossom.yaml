@@ -1,29 +1,33 @@
 name: blossom
-type: robot
+type: Robot
+hostname: localhost
+port: 9000
+usb_port: /dev/tty.usbserial-FT1SF1UM
+baud_rate: 57600
 motors: # use these same names as kwargs to constructors
 - name: tower_1
-  type: xl330-m288
+  model: xl330-m288
   id: 1
   position:
     reset: 0
     min: -40
     max: 140
 - name: tower_2
-  type: xl330-m288
+  model: xl330-m288
   id: 2
   position:
     reset: 0
     min: -40
     max: 140
 - name: tower_3
-  type: xl330-m288
+  model: xl330-m288
   id: 3
   position:
     reset: 0
     min: -40
     max: 140
 - name: base
-  type: xl330-m288
+  model: xl330-m288
   id: 4
   position:
     reset: 0

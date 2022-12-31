@@ -1,87 +1,78 @@
+from .gadget import Gadget, Message
+from dynamixel_python import \
+    DynamixelManager, DynamixelMotor, \
+    ReadError
+import pickle
+from collections import OrderedDict
+from socketio import ClientNamespace
 import numpy as np
-# import pypot.robot
-# from . import sequence
-from socketio import \
-    Client, AsyncClient, \
-    Server, AsyncServer
-import collections
-import time
-from dynamixel_python import DynamixelManager, ReadError
-
-motor_lut = {
-    'XL-320':'xl320',
-    'XL-330':'xl330-m288'
-}
-
-# sio = AsyncClient()
-# server = Server()
-client = Client()
 
 
-class Robot(DynamixelManager):
+class Robot(Gadget, DynamixelManager):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.motors = { }
-        self.motor_channels = {} 
-        self.seq_list = collections.OrderedDict()
-        self.compliant = True
+        Gadget.__init__(self, **kwargs)
+        DynamixelManager.__init__(self,
+            usb_port=self.config['usb_port'],
+            baud_rate=self.config['baud_rate'])
+        self.name = ''
+        self.motors = OrderedDict()
+        self.add_motors_from_config(self.config['motors'])
         self.power_up()
-        self.set_compliant(False)
-        self.reset_pos = {
-            'tower_1':0,
-            'tower_2':0,
-            'tower_3':0,
-            'base':0,
-            'ears':100,
-            'left_arm':100,
-            'right_arm':-100,
-            'tail':0
-        }
-        self.range_pos = {
-            'tower_1':(-40,140),
-            'tower_2':(-40,140),
-            'tower_3':(-40,140),
-            'base':(-150,150),
-            'ears':(0,140),
-            'left_arm':(-150,150),
-            'right_arm':(-150,150),
-            'tail':(-150,150)
-        }
-        self.believed_motor_pos = self.reset_pos
-        self.reset_position()
-        # self.sio = AsyncClient()
-
-    @client.event(namespace='/midi')
-    def midi_event(sid, data):
-        print(data)
-        return "OK", 123
-
-    @client.event(namespace='/http')
-    def http_event(sid, data):
-        return "OK", 123
-
-    @client.event(namespace='/gamepad')
-    def gamepad_event(sid, data):
-        return "OK", 123
-
+        # self.set_compliant(False)
+        self.kinematic_function = ''
+        self.message = MotorMessage
+        self.on('*',self.any_event)
+        self.on('motor',self.motor_event)
+        
+        
+    def connect(self, *args, **kwargs):
+        Gadget.connect(namespace='/robot',*args,**kwargs)
+        
+    def any_event(self):
+        print('event')
+        
+    def connect_event(self,):
+        print(f"Connected to ")
+        
+    def motor_event(self, message):
+        motor_message = pickle.loads(message)
+        pass
+        
+    def add_dynamixel(self, motor_name: str, motor_id: int, motor_model: str, **kwargs):
+    
+        motor = DynamixelManager.add_dynamixel(
+            motor_name,
+            motor_id,
+            motor_model,
+            **kwargs)
+        if not motor.ping():
+            raise BaseException(f"Motor {motor_name} not configured correctly")
+        motor.set_operating_mode(3)
+        motor.set_profile_velocity(262)
+        motor.set_torque_enable(True)
+        return motor
+        
     def from_config(self, config): 
         for motor, motor_param in config.items():
             self.add_motor(motor, motor_param)
-
-    def add_motor(self, motor,motor_param):
-        motor_obj = self.add_dynamixel(motor, **motor_param)
-        # motor_obj.set_operating_mode(3)
-        self.motors.update({motor:motor_obj} )
-        self.motor_channels.update({motor_param['dxl_id']:motor_obj})
-
+    
+    def add_motors_from_config(self, motor_config: list):
+        for motor in self.config['motors']:
+            self.motors.update({
+                motor['name']:self.add_dynamixel(
+                    motor_name=motor['name'],
+                    motor_id=motor['id'],
+                    motor_model=motor['model'],
+                    
+            )})
+        
     def power_up(self):
         self.init()
-
 
     # def id_to_list(self, id, **kwargs):
     def set_compliant(self, compliant=True):
         for motor in list(self.motors.items()):
-            motor.set_torque_enable(compliant)
+            motor.set_torque_enable(~compliant)
 
     def move_motor_name(self, name, position):
         if isinstance(name, list):
@@ -134,8 +125,34 @@ class Robot(DynamixelManager):
     def reconfig(self, config):
         pass
 
-    # def set_compliant(self, compliant=True):
     def load_sequence(self, seq_fn, rad=True, force=True):
         pass
     def add_sequence(self, seq):
         pass
+
+
+class Motor(DynamixelMotor):
+    def __init__(**kwargs):
+        super().__init__(**kwargs)
+        
+        
+class MotorMessage(Message):
+    def __init__(self, msg_type, value, motor_id, **kwargs):
+        Message.__init__(**kwargs)
+        self.msg_type = msg_type
+        self.value = value
+        self.motor_id = motor_id    
+    
+def midicc2motor(tx_msg, ):
+    return MotorMessage(
+        type='position',
+        value=tx_msg.value*4096//127,
+        motor_id=tx_msg.channel+1,
+    )
+    
+def midinote2motor(tx_msg, ):
+    return MotorMessage(
+        type='position',
+        value=np.interp(tx_msg.value, [30,60], [0,4096]),
+        motor_id=tx_msg.channel+1,   
+    )

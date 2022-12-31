@@ -1,227 +1,61 @@
-import mido
-from mido.sockets import PortServer, connect
-from mido.ports import BaseIOPort
-from src.cables.gadget_socket import Socket, MIDISocket
+'''
+GVR's design goals for Python
+An easy and intuitive language just as powerful as major competitors
+Open source, so anyone can contribute to its development
+Code that is as understandable as plain English
+Suitability for everyday tasks, allowing for short development times
+'''
+from src.config import LOCALHOST, SERVER_PORT
 from socketio import Client, AsyncClient
-# sio = Client()
 import asyncio
+import pickle
+from threading import Thread
 
-# class Gadget(object):
-# class Gadget(AsyncClient):
-class Gadget(Client):
-    def __init__(self, hostname='localhost', port=8000, **kwargs):
-        super().__init__()
-        self.hostname=hostname
-        self.port = port
+class Gadget(Client, Thread):
+    def __init__(self, config: dict, hostname='localhost', port=8000, **kwargs):
+        Client.__init__(self)
+        Thread.__init__(self,
+            target=self._connect,
+            args=(LOCALHOST, SERVER_PORT))
+        self.name = config.get('name','')
+        self.namespace = f"/{self.name}"
+        self.hostname=config.get('hostname',hostname)
+        self.port = config.get('port',port)
+        self.__dict__.update({'config':config})
         self.__dict__.update(**kwargs)
+        self.message = Message
         pass
     
     # def emit(self, sid, data)
-    def connect(self, hostname, port, header='http'):
-        # breakpoint()
-        print(f"Connecting to {header}://{hostname}:{port}")
-        # asyncio.run(self._connect(hostname,port,header))
-        super().connect(f"{header}://{hostname}:{port}")
-        
-    # async def _connect(self, hostname, port,header='http'):
-        # await super().connect(f"{header}://{hostname}:{port}")
-        # print('emiting')
-        # await super().emit('midi',data='testingsgsd')
-        # await super().wait()
-        # return "OK", 123
+    def connect(self, hostname, port, header='http', namespaces=None):
+        # self.connected = True
+        Thread.start(self)
     
-    # def wait(self):
-    #     # await super().wait()
-    #     asyncio.run(super().wait())
-        
-    # def temit(self, **kwargs):
-    #     # await super().emit(**kwargs)
-    #     print(kwargs)
-    #     asyncio.run(super().emit(**kwargs))
-
-    def recv(self):
-        pass
-
-    def send(self, sockets=None):
-        if not sockets:
-            for socket in self.sockets:
-                socket.send('s')
-        pass
+    def _connect(self, hostname, port, header='http'):
+        print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.name}")
+        hostname='127.0.0.1'
+        Client.connect(self,
+            f"{header}://{hostname}:{port}",
+            namespaces=["/",self.namespace],
+            wait=False,
+            wait_timeout=1)
+        Client.wait(self)
+    
+    def emit(self, event, data, to=None):
+        super().emit(event, pickle.dumps(data),
+                     namespace=self.namespace)
+    
+    def pack_msg(self,func,**msg_kwargs):
+        return self.message(**msg_kwargs)
+    def unpack_msg(self,func,msg):
+        return msg.__dict__
     
     def disconnect(self) -> None:
-        # asyncio.run(super().disconnect())
-        super().disconnect()
-        pass
-
-# class MIDIController(PortServer, Gadget):
-# class MIDIController(Gadget, PortServer):
-class MIDIController(Gadget):
-    def __init__(self, config, **kwargs):
-        Gadget.__init__(self, **kwargs)
-        # PortServer.__init__(self,
-        #     # port=self.config['name'],
-        #     host=kwargs['hostname'],
-        #     portno=kwargs['port']
-        # )
-        print(mido.get_input_names())
-        self.midi_port = mido.open_ioport(
-            config['port_name'],
-            callback=self.callback)
-        self.echo = True
-        
-        # self.connect(hostname=self.hostname,port=self.port)
-        
-        self.on('midi',self.midi_event)
-        
-    def add_socket(self, socket: MIDISocket):
-        self.sockets.append(socket)
-        
-    def callback(self, message):
-        # print(self.connected)
-        # self.emit('midi','test')
         if self.connected:
-            if self.echo:
-                # asyncio.run(self.emit('midi',str(message)))
-                self.emit('midi',str(message))
-                print(str(message))
-                
-    def midi_event(self, data):
-        print(data)
-        pass
-    
-    def disconnect(self):
-        super().disconnect()
-        self.midi_port.close()
-      
-from dynamixel_python import DynamixelManager, ReadError
-class Robot(Gadget, DynamixelManager):
-    
-    def midi_event(self, data):
-        print('robot',data)
-        return "OK", 123
-    
-    def http_event(self, data):
-        print('http',data)
-        return "OK", 123
-    
-    def __init__(self, **kwargs):
-        Gadget.__init__(self, **kwargs)
-        self.name = ''
-        self.motors = []
-        self.kinematic_function = ''
-        self.on('*',self.any_event)
-        self.on('midi',self.midi_event)
-        self.on('http',self.http_event)
-        self.on('connect',self.connect_event)
-        
-    async def any_event(self):
-        print('event')
-        
-    def connect_event(self,):
-        print(f"Connected to ")
-        
-    def add_motor(self):
-        pass
-
-    def load_config(self):
-        # load this from yaml or a dictionary
-        pass
-
-    def recv(self):
-        pass
-        # motor_positions = def handle_kinematics(self):
-        pass
-    
-    def close(self):
-        # self.inport.close()
-        # self.outport.close()
-        pass
-    
-    
-    # @sio.event(namespace='/http')
-    # def http_event(sid, data):
-    #     return "OK", 123
-
-    # @sio.event(namespace='/gamepad')
-    # def gamepad_event(sid, data):
-        # return "OK", 123
-
-    def from_config(self, config): 
-        for motor, motor_param in config.items():
-            self.add_motor(motor, motor_param)
-
-    def add_motor(self, motor,motor_param):
-        motor_obj = self.add_dynamixel(motor, **motor_param)
-        # motor_obj.set_operating_mode(3)
-        self.motors.update({motor:motor_obj} )
-        self.motor_channels.update({motor_param['dxl_id']:motor_obj})
-
-    def power_up(self):
-        self.init()
-
-
-    # def id_to_list(self, id, **kwargs):
-    def set_compliant(self, compliant=True):
-        for motor in list(self.motors.items()):
-            motor.set_torque_enable(compliant)
-
-    def move_motor_name(self, name, position):
-        if isinstance(name, list):
-            for _name,_position in zip(name,position):
-                self._move_motor_name(_name, _position)
-        else:
-            self._move_motor_name(name, position)
-    
-
-    def move_motor_id(self, id, position):
-        if isinstance(id, list):
-            for _id,_position in zip(id,position):
-                self._move_motor_id(_id, _position)
-        else:
-            self._move_motor_id(id, position)
-    
-    def _move_motor_id(self, id, position):
-        self.motor_channels[id].set_torque_enable(True)
-        self.motor_channels[id].set_goal_position(position)
-
-    def _move_motor_name(self, name, position):
-        self.motors[name].set_torque_enable(True)
-        self.motors[name].set_goal_position(position)
-
-    def motor_fn(self, id, fn, **kwargs):
-        try:
-            return getattr(self.motor_channels[id], fn)(**kwargs)
-        except ReadError:
-            print(f'Motor {id} blocked')
-
-    def _deg2dxl(self, deg, deg_range=[-150,150], dxl_range=[0,4090]):
-        return int(np.interp(deg, deg_range, dxl_range))
-
-    def goto_position(self,motor_pos, delay=0.1, wait=False):
-        available_motors = list(self.motors.keys())
-        for motor_name, position in motor_pos.items():
-            if motor_name not in available_motors:
-                continue
-            self.move_motor_name(motor_name,self._deg2dxl(position))
-            # self.move_motor
-
-    def get_motor_pos(self):
-        
-        return {motor_name:motor.get_present_position() \
-            for motor_name, motor in self.motors.items()}
-
-    def reset_position(self):
-        self.goto_position(self.reset_pos)
-
-    def reconfig(self, config):
-        pass
-
-    # def set_compliant(self, compliant=True):
-    def load_sequence(self, seq_fn, rad=True, force=True):
-        pass
-    def add_sequence(self, seq):
-        pass
-
+            self.join()
+            
+            super().disconnect()
+            
 
 class Phone(Gadget):
     def __init_(self, **kwargs):
@@ -231,3 +65,8 @@ class GamePad(Gadget):
     def __init_(self, **kwargs):
         super.__init__(**kwargs)
 
+
+
+class Message(object):
+    def __init__(self, *args, **kwargs):
+        self.__dict__.update(**kwargs)
