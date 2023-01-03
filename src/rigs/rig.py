@@ -63,13 +63,12 @@ class Rig(Cable):
             handler=func_emit,
             namespace=tx_namespace
         )
-        breakpoint()
         
     def func_emit(self, sid, data, tx_namespace='/', rx_namespace='/'):
         # print(msg_func(pickle.loads(data)))
         emit_data = self.gadgets[rx_gadget].message(**msg_func(pickle.loads(data)))
         # print('emit_data', emit_data, rx_namespace)
-        breakpoint()
+        # breakpoint()
         self.emit(
             emit_data.event,
             pickle.dumps(emit_data),

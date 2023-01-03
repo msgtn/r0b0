@@ -16,6 +16,7 @@ class Robot(Gadget, DynamixelManager):
             baud_rate=self.config['baud_rate'])
         self.name = config['name']
         self.motors = OrderedDict()
+        self.motors_by_id = {}
         if self.config.get('motors', False):
             self.add_motors_from_config(self.config['motors'])
         self.power_up()
@@ -38,6 +39,10 @@ class Robot(Gadget, DynamixelManager):
     def position_event(self, data):
         # message: MotorMessage
         print('position_event', pickle.loads(data))
+        msg = pickle.loads(data)
+        # add these asserts more often
+        assert isinstance(msg, MotorMessage), "Incoming robot message is not a motor message"
+        self.move_motor_id(msg.motor_id, msg.value)
         # pass
         
     # def add_dynamixel(self, motor_name: str, motor_id: int, motor_model: str, **kwargs):
@@ -60,13 +65,19 @@ class Robot(Gadget, DynamixelManager):
     
     def add_motors_from_config(self, motor_config: list):
         for motor in self.config['motors']:
-            self.motors.update({
-                motor['name']:self.add_dynamixel(
+            dxl_motor = self.add_dynamixel(
                     dxl_name=motor['name'],
                     dxl_id=motor['id'],
                     dxl_model=motor['model'],
+            )
                     
-            )})
+            self.motors.update({
+                motor['name']:dxl_motor
+            })
+            # TODO - catch if two motors are on the same id
+            self.motors_by_id.update({
+                motor['id']:dxl_motor
+            })
         
     def power_up(self):
         self.init()
@@ -92,8 +103,8 @@ class Robot(Gadget, DynamixelManager):
             self._move_motor_id(_id, _position)
         
     def _move_motor_id(self, id, position):
-        self.motor_channels[id].set_torque_enable(True)
-        self.motor_channels[id].set_goal_position(position)
+        self.motors_by_id[id].set_torque_enable(True)
+        self.motors_by_id[id].set_goal_position(int(position))
 
     def _move_motor_name(self, name, position):
         self.motors[name].set_torque_enable(True)

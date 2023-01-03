@@ -31,7 +31,7 @@ def main():
     # breakpoint()
     # rig.add_server()
     rig.add_message(OPZ, BLOSSOM,cc2motor)
-    breakpoint()
+    # breakpoint()
     rig.power_on()        
 
     # input()
