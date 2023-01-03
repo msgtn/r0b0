@@ -1,12 +1,15 @@
 # from src import gadgets
 # import src.gadgets
 from src import gadgets as gadget_shelf
+from src.utils import loaders
 # from src.gadgets.server import start_server
 from src.gadgets.server import Cable
 from multiprocessing import Process
+import pickle
 
-class Rig(object):
-    def __init__(self, hostname='localhost', port=8080):
+class Rig(Cable):
+    def __init__(self, hostname='localhost', port=8080, **kwargs):
+        Cable.__init__(self, hostname, port, **kwargs)
         self.gadgets = {}
         self.server = None
         self.hostname = hostname
@@ -15,44 +18,64 @@ class Rig(object):
     
     def add_gadget(self, gadget_name):
         config = loaders.load_config(gadget_name)
-        GadgetObject = getattr(gadget_shelf, config['type'])
+        gadget = getattr(gadget_shelf, config['type'])(config)
+        # breakpoint()
         self.gadgets.update({
-            config['name']:getattr(gadgets, config['type'])(
-                config
-            )
+            gadget_name:gadget
         })
-    
-    def add_server(self, hostname, port):
-        self.server = Cable(hostname,port)
+        return gadget
         
     def power_on(self,):
-        self.server.start()
-        for gadget in self.gadgets:
-            gadget.start()
+        self.start()
+        [g.start() for g in self.gadgets.values()]
+        # for gadget in self.gadgets:
+            # gadget.start()
             
         self.power = True
             
-    def power_off(self,**kwargs):
-        self.server.join()
-        for gadget in self.gadgets:
-            gadget.join()
+    def power_off(self,signum,frame,**kwargs):
+        self.join()
+        [g.join() for g in self.gadgets.values()]
+        
+        # for gadget in self.gadgets:
+        #     gadget.join()
         self.power = False
         
-    def add_message(self, from_gadget, to_gadget, func):
-        # @self.gadgets[to_gadget].pack_msg
-        # @self.gadgets[from_gadget].unpack_msg
+    def add_message(self, tx_gadget, rx_gadget, msg_func):
+        tx_namespace, rx_namespace = map(
+            lambda gadget : self.gadgets.get(gadget).namespace, 
+            [tx_gadget, rx_gadget])
         def func_emit(sid, data):
-            return self.gadgets['to_gadget'].message(**func(data))
-        self.server.on(
-            'event_name',
-            # self.gadgets['to_gadget'].message(**func()),
-            # self.server.emit(
-            #     'func_type_name',
-            func_emit,
-            #     namespace=f"/{to_gadget}"
-            # ),
-            namespace=f"/{from_gadget}",
+            # print(msg_func(pickle.loads(data)))
+            emit_data = self.gadgets[rx_gadget].message(**msg_func(pickle.loads(data)))
+            print('emit_data', emit_data.event, tx_namespace, rx_namespace)
+            # breakpoint()
+            self.emit(
+                event=emit_data.event,
+                data=pickle.dumps(emit_data),
+                to=None,
+                namespace=rx_namespace
+            )
+            print('emitted')
+        # breakpoint()
+        self.on(
+            msg_func()['event'],
+            handler=func_emit,
+            namespace=tx_namespace
         )
+        breakpoint()
+        
+    def func_emit(self, sid, data, tx_namespace='/', rx_namespace='/'):
+        # print(msg_func(pickle.loads(data)))
+        emit_data = self.gadgets[rx_gadget].message(**msg_func(pickle.loads(data)))
+        # print('emit_data', emit_data, rx_namespace)
+        breakpoint()
+        self.emit(
+            emit_data.event,
+            pickle.dumps(emit_data),
+            namespace=rx_namespace
+        )
+    
         
     # def start_server(self, ):
     #     return Process(

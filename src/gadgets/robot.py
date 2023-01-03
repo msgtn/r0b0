@@ -9,48 +9,50 @@ import numpy as np
 
 
 class Robot(Gadget, DynamixelManager):
-    def __init__(self, **kwargs):
-        Gadget.__init__(self, **kwargs)
+    def __init__(self, config, **kwargs):
+        Gadget.__init__(self, config, **kwargs)
         DynamixelManager.__init__(self,
             usb_port=self.config['usb_port'],
             baud_rate=self.config['baud_rate'])
-        self.name = ''
+        self.name = config['name']
         self.motors = OrderedDict()
-        self.add_motors_from_config(self.config['motors'])
+        if self.config.get('motors', False):
+            self.add_motors_from_config(self.config['motors'])
         self.power_up()
         # self.set_compliant(False)
         self.kinematic_function = ''
         self.message = MotorMessage
-        self.on('*',self.any_event)
+        # self.on('*',self.any_event)
         self.on('motor',self.motor_event)
+        self.on('position',handler=self.position_event,namespace=self.namespace)
+        # self.on('position',handler=self.position_event)
         
-        
-    def connect(self, *args, **kwargs):
-        Gadget.connect(namespace='/robot',*args,**kwargs)
         
     def any_event(self):
         print('event')
         
-    def connect_event(self,):
-        print(f"Connected to ")
-        
     def motor_event(self, message):
         motor_message = pickle.loads(message)
         pass
-        
-    def add_dynamixel(self, motor_name: str, motor_id: int, motor_model: str, **kwargs):
     
-        motor = DynamixelManager.add_dynamixel(
-            motor_name,
-            motor_id,
-            motor_model,
-            **kwargs)
-        if not motor.ping():
-            raise BaseException(f"Motor {motor_name} not configured correctly")
-        motor.set_operating_mode(3)
-        motor.set_profile_velocity(262)
-        motor.set_torque_enable(True)
-        return motor
+    def position_event(self, data):
+        # message: MotorMessage
+        print('position_event', pickle.loads(data))
+        # pass
+        
+    # def add_dynamixel(self, motor_name: str, motor_id: int, motor_model: str, **kwargs):
+    
+    #     motor = DynamixelManager.add_dynamixel(self,
+    #         motor_name,
+    #         motor_id,
+    #         motor_model,
+    #         **kwargs)
+    #     if motor is None or not motor.ping():
+    #         raise BaseException(f"Motor {motor_name} not configured correctly")
+    #     motor.set_operating_mode(3)
+    #     motor.set_profile_velocity(262)
+    #     motor.set_torque_enable(True)
+    #     return motor
         
     def from_config(self, config): 
         for motor, motor_param in config.items():
@@ -60,9 +62,9 @@ class Robot(Gadget, DynamixelManager):
         for motor in self.config['motors']:
             self.motors.update({
                 motor['name']:self.add_dynamixel(
-                    motor_name=motor['name'],
-                    motor_id=motor['id'],
-                    motor_model=motor['model'],
+                    dxl_name=motor['name'],
+                    dxl_id=motor['id'],
+                    dxl_model=motor['model'],
                     
             )})
         
@@ -82,13 +84,13 @@ class Robot(Gadget, DynamixelManager):
             self._move_motor_name(name, position)
     
 
-    def move_motor_id(self, id, position):
-        if isinstance(id, list):
-            for _id,_position in zip(id,position):
-                self._move_motor_id(_id, _position)
-        else:
-            self._move_motor_id(id, position)
-    
+    def move_motor_id(self, motor_id, position):
+        if not isinstance(motor_id, list): 
+            motor_id = [motor_id]
+            position = [position]
+        for _id,_position in zip(motor_id,position):
+            self._move_motor_id(_id, _position)
+        
     def _move_motor_id(self, id, position):
         self.motor_channels[id].set_torque_enable(True)
         self.motor_channels[id].set_goal_position(position)
@@ -137,22 +139,23 @@ class Motor(DynamixelMotor):
         
         
 class MotorMessage(Message):
-    def __init__(self, msg_type, value, motor_id, **kwargs):
-        Message.__init__(**kwargs)
-        self.msg_type = msg_type
+    def __init__(self, event, value, motor_id, **kwargs):
+        # breakpoint()
+        Message.__init__(self,**kwargs)
+        self.event = event
         self.value = value
         self.motor_id = motor_id    
     
-def midicc2motor(tx_msg, ):
-    return MotorMessage(
-        type='position',
-        value=tx_msg.value*4096//127,
-        motor_id=tx_msg.channel+1,
-    )
+# def midicc2motor(tx_msg, ):
+#     return MotorMessage(
+#         type='position',
+#         value=tx_msg.value*4096//127,
+#         motor_id=tx_msg.channel+1,
+#     )
     
-def midinote2motor(tx_msg, ):
-    return MotorMessage(
-        type='position',
-        value=np.interp(tx_msg.value, [30,60], [0,4096]),
-        motor_id=tx_msg.channel+1,   
-    )
+# def midinote2motor(tx_msg, ):
+#     return MotorMessage(
+#         type='position',
+#         value=np.interp(tx_msg.value, [30,60], [0,4096]),
+#         motor_id=tx_msg.channel+1,   
+#     )

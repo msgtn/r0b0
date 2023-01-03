@@ -29,11 +29,12 @@ class Gadget(Client, Thread):
     # def emit(self, sid, data)
     def connect(self, hostname, port, header='http', namespaces=None):
         # self.connected = True
+        # print(f"Connecting {self.name}")
         Thread.start(self)
     
     def _connect(self, hostname, port, header='http'):
         print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.name}")
-        hostname='127.0.0.1'
+        # hostname='127.0.0.1'
         Client.connect(self,
             f"{header}://{hostname}:{port}",
             namespaces=["/",self.namespace],

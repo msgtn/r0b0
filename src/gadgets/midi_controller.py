@@ -32,7 +32,7 @@ class MIDIController(Gadget):
         if not midi_event: return
         if self.connected:
             if self.echo:
-                print(message)
+                # print(midi_event, message)
                 Gadget.emit(self,midi_event, message)
                     
     # def connect(self, *args, **kwargs):
@@ -59,4 +59,7 @@ class MIDIMessage(Message, MidoMessage):
     def __init__(self, **kwargs):
         Message.__init__(self, **kwargs)
         MidoMessage.__init__(self, **kwargs)
+        
+        self.event = self.type
+        # breakpoint()
         

@@ -27,10 +27,11 @@ from threading import Thread
 #     pickle.loads()
 
 class Cable(Server, Thread):        
-    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT):
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         Server.__init__(
             self,
             async_mode='eventlet',
+            **kwargs
         )
         self.gadgets = []
         self.static_files = {
@@ -40,7 +41,7 @@ class Cable(Server, Thread):
                 }    
         }
         self.on('connect',self.connect_event)
-        self.on('midi_cc',handler=self.print_event,namespace='/opz')
+        # self.on('midi_cc',handler=self.print_event,namespace='/opz')
         # self.on('*',handler=self.print_event)
         self.app = socketio.WSGIApp(
             self, self.static_files)
@@ -48,12 +49,12 @@ class Cable(Server, Thread):
         Thread.__init__(self,
             target=self._start)
         
-    def print_event(self,event, data):
-        print(f'opz {data}')
+    # def print_event(self,event, data):
+        # print(f'opz {data}')
         
-    def connect_event(self,sid,data,namespace=None):
+    def connect_event(self,sid, environ, auth,):
         print(f"Connected to {sid}")
-        # super().
+        print(environ,auth)
         
     def _start(self,):
         eventlet.wsgi.server(
