@@ -26,18 +26,15 @@ class MIDIController(Gadget):
         [EVENT_TABLE.pop(mute_message,None) for mute_message in MUTE_EVENTS]
         self.message = MIDIMessage
         
-    def midi_callback(self, message):
-        # print(message)
-        midi_event = EVENT_TABLE.get(message.type, None)
-        if not midi_event: return
+    def midi_callback(self, mido_msg):
+        midi_msg = MIDIMessage.from_mido(mido_msg)
         if self.connected:
             if self.echo:
-                # print(midi_event, message)
-                Gadget.emit(self,midi_event, message)
+                Gadget.emit(
+                    self,
+                    midi_msg.event,
+                    midi_msg)
                     
-    # def connect(self, *args, **kwargs):
-    #     Gadget.connect(self,*args,**kwargs)
-    
     def disconnect(self):
         super().disconnect()
         self.midi_port.close()
@@ -55,11 +52,21 @@ def from_midi(func):
     
     return func
 
-class MIDIMessage(Message, MidoMessage):
+class MIDIMessage(Message):
     def __init__(self, **kwargs):
         Message.__init__(self, **kwargs)
-        MidoMessage.__init__(self, **kwargs)
         
-        self.event = self.type
-        # breakpoint()
+    @classmethod
+    def from_mido(self, mido_msg: mido.Message):
+        mido_dict = {}
+        mido_dict.update({
+            k:v for k,v in mido_msg.__dict__.items() if isinstance(
+                v,(str,bool,int,float))})
+        value = mido_dict.get('note',None) or mido_msg.value
+        event = EVENT_TABLE.get(mido_msg.type,mido_msg.type)
+        mido_dict.update(dict(
+            event=event,
+            value=value,
+        ))
+        return MIDIMessage(**mido_dict)
         

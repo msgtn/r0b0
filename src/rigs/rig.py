@@ -3,13 +3,13 @@
 from src import gadgets as gadget_shelf
 from src.utils import loaders
 # from src.gadgets.server import start_server
-from src.gadgets.server import Cable
+from src.gadgets.server import FlaskHost
 from multiprocessing import Process
 import pickle
 
-class Rig(Cable):
+class Rig(FlaskHost):
     def __init__(self, hostname='localhost', port=8080, **kwargs):
-        Cable.__init__(self, hostname, port, **kwargs)
+        FlaskHost.__init__(self, hostname, port, **kwargs)
         self.gadgets = {}
         self.server = None
         self.hostname = hostname
@@ -19,7 +19,6 @@ class Rig(Cable):
     def add_gadget(self, gadget_name):
         config = loaders.load_config(gadget_name)
         gadget = getattr(gadget_shelf, config['type'])(config)
-        # breakpoint()
         self.gadgets.update({
             gadget_name:gadget
         })

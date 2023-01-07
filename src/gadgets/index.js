@@ -9,15 +9,6 @@ const http = require('http');
 const fs = require('fs');
 var express = require('express');
 var app = express();
-const htpasswd = require('htpasswd-js');
-const basicAuth = require('express-basic-auth');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var passwords = JSON.parse(fs.readFileSync('./passwords.json','utf8'))[0];
-console.log(passwords);
-for (pw in passwords) {
-  console.log(`blossombot.com username:${pw} password:${passwords[pw]}`);
-}
 
 process.on('SIGINT', function() {
   console.log("Interrupted");
@@ -31,26 +22,11 @@ const options = {
     cert: fs.readFileSync('./cert.pem')
 }
 
-app.use(basicAuth({
-  users: passwords,
-  challenge: true,
-}))
-
 app.use(express.static('./public'))
-
-
-var ctrl_addr = "";
-fs.readFile('public/ctrl_addr.txt', (err,data) => {
-  if (err) throw err;
-  console.log(data.toString());
-  ctrl_addr = data.toString();
-})
-
 
 if (app.get('env') ==='development'){
     var server = https.createServer(options, app);
     var ctrlServer = https.createServer(options, app);
-
 
     const io = require("socket.io")(server, {origins: '*:*'});
     const ctrlIO = require('socket.io')(ctrlServer);
@@ -63,17 +39,12 @@ if (app.get('env') ==='development'){
       socket.on("broadcaster", () => {
         broadcaster = socket.id;
         socket.broadcast.emit("broadcaster");
-        // socket.broadcast.emit("watcher");
-        socket.broadcast.emit("getVidViewDict");
       });
       socket.on("watcher", (id) => {
         if (typeof broadcaster !== 'undefined') {
           console.log(id);
           console.log(socket.id);
-          // socket.emit("watcher",socket.id);
           socket.to(broadcaster).emit("watcher", socket.id);
-          // socket.to(id).emit("watcher", socket.id);
-          // socket.to(socket.id).emit("watcher", id);
         }
       });
       socket.on("offer", (id, message) => {
@@ -81,10 +52,8 @@ if (app.get('env') ==='development'){
       });
       socket.on("answer", (id, message) => {
         connections.push(socket.id);
-        // console.log(connections);
         if (connections.length<100) {
           socket.to(id).emit("answer", socket.id, message);
-          // console.log("Connection from", socket.id);
         }
       });
       socket.on("candidate", (id, message) => {
@@ -94,8 +63,6 @@ if (app.get('env') ==='development'){
         if (typeof broadcaster !== 'undefined') {
           socket.to(broadcaster).emit("disconnectPeer", socket.id);
           connections.splice(connections.indexOf(socket.id),1);
-          // console.log(connections);
-          // console.log("Disconnection from", socket.id);
         }
       });
       socket.on("updateRecInd", (text) => {

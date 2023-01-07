@@ -6,10 +6,14 @@ Code that is as understandable as plain English
 Suitability for everyday tasks, allowing for short development times
 '''
 from src.config import LOCALHOST, SERVER_PORT
-from socketio import Client, AsyncClient
+from socketio import Client, AsyncClient, ClientNamespace
 import asyncio
 import pickle
 from threading import Thread
+
+class Message(object):
+    def __init__(self, *args, **kwargs):
+        self.__dict__.update(**kwargs)
 
 class Gadget(Client, Thread):
     def __init__(self, config: dict, hostname='localhost', port=8000, **kwargs):
@@ -19,22 +23,17 @@ class Gadget(Client, Thread):
             args=(LOCALHOST, SERVER_PORT))
         self.name = config.get('name','')
         self.namespace = f"/{self.name}"
-        self.hostname=config.get('hostname',hostname)
+        self.hostname = config.get('hostname',hostname)
         self.port = config.get('port',port)
         self.__dict__.update({'config':config})
         self.__dict__.update(**kwargs)
         self.message = Message
-        pass
     
-    # def emit(self, sid, data)
-    def connect(self, hostname, port, header='http', namespaces=None):
-        # self.connected = True
-        # print(f"Connecting {self.name}")
+    def connect(self, ):
         Thread.start(self)
     
     def _connect(self, hostname, port, header='http'):
         print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.name}")
-        # hostname='127.0.0.1'
         Client.connect(self,
             f"{header}://{hostname}:{port}",
             namespaces=["/",self.namespace],
@@ -42,10 +41,21 @@ class Gadget(Client, Thread):
             wait_timeout=1)
         Client.wait(self)
     
-    def emit(self, event, data, to=None):
-        super().emit(event, pickle.dumps(data),
-                     namespace=self.namespace)
-    
+    def emit(self, event, data, **kwargs):
+        super().emit(
+            event, pickle.dumps(data),
+            namespace=self.namespace,
+            **kwargs)
+        
+    # def check_msg(self, data):
+    def check_msg(event_func):
+        def check_func(event, data):
+            msg = pickle.loads(data)
+            # breakpoint()
+            # assert isinstance(msg, self.message), f"{type(msg)} not readable by {type(self)}"
+            return event_func(msg)
+        return check_func
+        
     def pack_msg(self,func,**msg_kwargs):
         return self.message(**msg_kwargs)
     def unpack_msg(self,func,msg):
@@ -53,11 +63,9 @@ class Gadget(Client, Thread):
     
     def disconnect(self) -> None:
         if self.connected:
-            self.join()
-            
+            self.join()    
             super().disconnect()
             
-
 class Phone(Gadget):
     def __init_(self, **kwargs):
         super.__init__(**kwargs)
@@ -65,9 +73,3 @@ class Phone(Gadget):
 class GamePad(Gadget):
     def __init_(self, **kwargs):
         super.__init__(**kwargs)
-
-
-
-class Message(object):
-    def __init__(self, *args, **kwargs):
-        self.__dict__.update(**kwargs)

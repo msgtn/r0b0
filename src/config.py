@@ -7,6 +7,9 @@ GADGETS_DIR = SRC_DIR / 'gadgets'
 KINEMATICS_DIR = SRC_DIR / 'kinematics'
 UTILS_DIR = SRC_DIR / 'utils'
 
+CSR_PEM = SRC_DIR / 'csr.pem'
+KEY_PEM = SRC_DIR / 'key.pem'
+
 STATIC_DIR = GADGETS_DIR / 'static'
 PUBLIC_DIR = GADGETS_DIR / 'public'
 

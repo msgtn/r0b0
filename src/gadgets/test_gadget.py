@@ -22,6 +22,7 @@ port_ctr = 9000
 
 sio = socketio.Client()
 
+# @unittest.skip('')    
 class GadgetTest(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -38,14 +39,14 @@ class GadgetTest(unittest.TestCase):
     def test_connect(self, hostname=LOCALHOST, port=8080):
         print(self.gadget)
         self.gadget.connect(
-            hostname=LOCALHOST,
-            port=SERVER_PORT
+            # hostname=LOCALHOST,
+            # port=SERVER_PORT
         )
     
     def tearDown(self):
         self.gadget.disconnect()
         
-        
+# @unittest.skip('')    
 class MIDIGadgetTest(GadgetTest):
     def setUp(self):
         super().setUp()

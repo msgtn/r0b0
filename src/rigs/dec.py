@@ -4,6 +4,7 @@ from src.rigs.rig import Rig
 
 from multiprocessing import Process
 import signal
+import numpy as np
 
 LOCALHOST = 'localhost'
 SERVER_PORT = 8080
@@ -15,11 +16,17 @@ OPZ = 'opz'
 
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
-    # breakpoint()
-    print(data)
     return {
         'event':'position',
         'value':(data.value/127.)*4096,
+        'motor_id':data.control
+    }
+    
+def note2motor(data=None):
+    if data is None: return {'event':'midi_on'}
+    return {
+        'event':'position',
+        'value':int(np.interp(data.value, [30, 60], [0,4096])),
         'motor_id':data.control
     }
 
@@ -28,10 +35,7 @@ def main():
     rig = Rig(hostname=LOCALHOST,port=SERVER_PORT,namespaces=['/opz','/blossomsingle'])
     rig.add_gadget(BLOSSOM)
     rig.add_gadget(OPZ)
-    # breakpoint()
-    # rig.add_server()
     rig.add_message(OPZ, BLOSSOM,cc2motor)
-    # breakpoint()
     rig.power_on()        
 
     # input()

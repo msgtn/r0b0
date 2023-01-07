@@ -7,6 +7,14 @@ from collections import OrderedDict
 from socketio import ClientNamespace
 import numpy as np
 
+class MotorMessage(Message):
+    def __init__(self, event, value, motor_id, **kwargs):
+        # breakpoint()
+        Message.__init__(self,**kwargs)
+        self.event = event
+        self.value = value
+        self.motor_id = motor_id    
+    
 
 class Robot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
@@ -15,50 +23,34 @@ class Robot(Gadget, DynamixelManager):
             usb_port=self.config['usb_port'],
             baud_rate=self.config['baud_rate'])
         self.name = config['name']
-        self.motors = OrderedDict()
+        # self.motors = OrderedDict()
+        self.motors = {}
+        self.motors.setdefault(None)
         self.motors_by_id = {}
+        self.motors_by_id.setdefault(None)
         if self.config.get('motors', False):
             self.add_motors_from_config(self.config['motors'])
         self.power_up()
-        # self.set_compliant(False)
         self.kinematic_function = ''
         self.message = MotorMessage
-        # self.on('*',self.any_event)
-        self.on('motor',self.motor_event)
         self.on('position',handler=self.position_event,namespace=self.namespace)
-        # self.on('position',handler=self.position_event)
-        
-        
-    def any_event(self):
-        print('event')
-        
-    def motor_event(self, message):
-        motor_message = pickle.loads(message)
-        pass
-    
-    def position_event(self, data):
-        # message: MotorMessage
-        print('position_event', pickle.loads(data))
-        msg = pickle.loads(data)
-        # add these asserts more often
-        assert isinstance(msg, MotorMessage), "Incoming robot message is not a motor message"
-        self.move_motor_id(msg.motor_id, msg.value)
-        # pass
-        
-    # def add_dynamixel(self, motor_name: str, motor_id: int, motor_model: str, **kwargs):
-    
-    #     motor = DynamixelManager.add_dynamixel(self,
-    #         motor_name,
-    #         motor_id,
-    #         motor_model,
-    #         **kwargs)
-    #     if motor is None or not motor.ping():
-    #         raise BaseException(f"Motor {motor_name} not configured correctly")
-    #     motor.set_operating_mode(3)
-    #     motor.set_profile_velocity(262)
-    #     motor.set_torque_enable(True)
-    #     return motor
-        
+        self.on('velocity',handler=self.velocity_event,namespace=self.namespace)
+
+    # @Gadget.check_msg
+    def position_event(self,msg):
+        msg = pickle.loads(msg)
+        motor = self.motors_by_id.get(msg.motor_id,None)
+        assert motor is not None, f"Motor {msg.motor_id} does not exist"
+        # TODO - set motor control mode
+        motor.set_torque_enable(True)
+        motor.set_goal_position(int(msg.value))
+
+    # @Gadget.check_msg
+    def velocity_event(self, msg):
+        motor = self.motors_by_id.get(msg.motor_id,None)
+        assert motor is not None, f"Motor {msg.motor_id} does not exist"
+        self._move_motor_id(msg.motor_id, msg.value)
+
     def from_config(self, config): 
         for motor, motor_param in config.items():
             self.add_motor(motor, motor_param)
@@ -149,14 +141,6 @@ class Motor(DynamixelMotor):
         super().__init__(**kwargs)
         
         
-class MotorMessage(Message):
-    def __init__(self, event, value, motor_id, **kwargs):
-        # breakpoint()
-        Message.__init__(self,**kwargs)
-        self.event = event
-        self.value = value
-        self.motor_id = motor_id    
-    
 # def midicc2motor(tx_msg, ):
 #     return MotorMessage(
 #         type='position',
