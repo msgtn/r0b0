@@ -22,6 +22,11 @@ def motion2motor(data=None):
     # motor_values = inv_kin(data)
     # print(get_motor_pos(data))
     # messages need to handle lists of values
+    # return [{
+    #     'event':'position',
+    #     'value':motor_value,
+    #     'motor_id':motor_id
+    #     } for motor_value,motor_id in zip(motor_values,range(1,5))]
     return {
         'event':'position',
         # 'value': # the function that gives

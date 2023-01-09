@@ -11,14 +11,14 @@ SERVER_PORT = 8080
 BLOSSOM_PORT = 9000
 MIDI_PORT = 9002
 BLOSSOM = 'blossomsingle'
-# BLOSSOM = 'blossom'
+BLOSSOM = 'blossom'
 OPZ = 'opz'
 
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
     return {
         'event':'position',
-        'value':(data.value/127.)*4096,
+        'value':(data.value*4096)//127,
         'motor_id':data.control
     }
     
@@ -32,19 +32,20 @@ def note2motor(data=None):
 
 def main():
     # start server
-    rig = Rig(hostname=LOCALHOST,port=SERVER_PORT,namespaces=['/opz','/blossomsingle'])
+    rig = Rig(
+        hostname=LOCALHOST,port=SERVER_PORT,
+        namespaces=['/opz','/blossom'])
     rig.add_gadget(BLOSSOM)
     rig.add_gadget(OPZ)
     rig.add_message(OPZ, BLOSSOM,cc2motor)
     rig.power_on()        
 
-    # input()
-    # signal.signal(signal.SIGINT, rig.power_off)
     try:
-        while True:
-            continue
+        breakpoint()
+        # while True:
+        #     continue
     except KeyboardInterrupt:
         rig.power_off('','')        
-    
+
 if __name__=="__main__":
     main()

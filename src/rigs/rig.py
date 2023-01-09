@@ -38,7 +38,7 @@ class Rig(Host):
                 **msg_func(
                     data))
             # print(emit_data)
-            print(emit_data.event, rx_namespace)
+            # print(emit_data.event, rx_namespace)
             self.emit(
                 event=emit_data.event,
                 data=pickle.dumps(emit_data),
