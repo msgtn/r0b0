@@ -1,0 +1,7 @@
+{
+	"name": "xerror",
+	"description": "Extended Error",
+	"options": {
+		"outdir": "./docs"
+	}
+}
