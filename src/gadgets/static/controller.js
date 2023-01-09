@@ -1,7 +1,7 @@
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
 
-var ctrlSocket = "";
+var socket = "";
 var lastEvent = 0;
 var initYaw = 0;
 var ctrlAddr = "";
@@ -158,39 +158,15 @@ function checkPswd() {
   // calibrateButton.disabled = false;
   // recordButton.disabled = false;
 
+  // TODO - set this to a yaml config
   var socketAddr = "r0b0t.ngrok.io"
-  // socketAddr = "localhost:8080"
-  // if (document.location.href.includes('localhost')) {
-  //   socketAddr = "localhost:8080";
-  //   console.log("Using localhost socket")
-  // }
-
-  // fetch(`https://${socketAddr}/ctrl_addr.txt`)
-  //   .then(response => response.text())
-  //   .then((data) => {
-  //     ctrlAddr = data;
-  //     ctrlSocket = io.connect(ctrlAddr);
-  //     if (mobileDevice) { getGestures(); };
-  //   })
-  //   .catch(() => {
-  //     console.log("Couldnt get control address");
-  //     socketAddr = "localhost:8080";
-  //   })
-
   socket = io.connect(`https://${socketAddr}`);
-  ctrlSocket = socket;
 
   let peerConnection;
 
-  socket.on("updateRecInd", (text) => {
-    // recordingIndicator.innerHTML = text;
-    console.log('got message from server')
-  });
-  ctrlSocket.on("updateRecInd", (text) => {
-    // recordingIndicator.innerHTML = text;
-    console.log('got message from server')
-  });
-
+  socket.on('python', (data) => {
+    console.log(data);
+  })
   socket.on("watcher", async (id) => {
     console.log("Watcher");
     const peerConnection = new RTCPeerConnection(config);
@@ -374,8 +350,8 @@ const handleOrientation = ( e) => {
         portrait: true,
       };
 
-    ctrlSocket.emit("position", body);
-    ctrlSocket.emit("message", {data: 'test'});
+    socket.emit("device_motion", body);
+    // socket.emit("message", {data: 'test'});
     console.log(body);
   } 
 }

@@ -1,0 +1,4 @@
+name: testgadget
+type: Gadget
+hostname: localhost
+port: 9000

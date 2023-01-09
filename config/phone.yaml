@@ -1,0 +1,4 @@
+name: phone
+type: Phone
+hostname: localhost
+port: 7000

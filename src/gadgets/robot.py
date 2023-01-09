@@ -33,12 +33,18 @@ class Robot(Gadget, DynamixelManager):
         self.power_up()
         self.kinematic_function = ''
         self.message = MotorMessage
-        self.on('position',handler=self.position_event,namespace=self.namespace)
-        self.on('velocity',handler=self.velocity_event,namespace=self.namespace)
+        print(self.__dict__['namespace'])
+        self.on('position',
+                handler=self.position_event,
+                namespace=self.namespace)
+        self.on('velocity',
+                handler=self.velocity_event,
+                namespace=self.namespace)
 
     # @Gadget.check_msg
     def position_event(self,msg):
         msg = pickle.loads(msg)
+        print(msg)
         motor = self.motors_by_id.get(msg.motor_id,None)
         assert motor is not None, f"Motor {msg.motor_id} does not exist"
         # TODO - set motor control mode

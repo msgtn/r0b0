@@ -3,15 +3,15 @@
 from src import gadgets as gadget_shelf
 from src.utils import loaders
 # from src.gadgets.server import start_server
-from src.gadgets.server import FlaskHost
+from src.gadgets.server import Host
 from multiprocessing import Process
 import pickle
 
-class Rig(FlaskHost):
+class Rig(Host):
     def __init__(self, hostname='localhost', port=8080, **kwargs):
-        FlaskHost.__init__(self, hostname, port, **kwargs)
+        Host.__init__(self, hostname, port, **kwargs)
         self.gadgets = {}
-        self.server = None
+        # self.server = None
         self.hostname = hostname
         self.port = port
         self.power = False
@@ -23,9 +23,39 @@ class Rig(FlaskHost):
             gadget_name:gadget
         })
         return gadget
+    
+    def _get_gadget_namespace(self, gadget):
+        return self.gadgets.get(gadget).namespace
+        
+    def add_message(self, tx_gadget, rx_gadget, msg_func):
+        tx_namespace, rx_namespace = map(
+            self._get_gadget_namespace,
+            [tx_gadget, rx_gadget])
+        # def func_emit(sid, data):
+        def func_emit(data):
+            if not isinstance(data,dict): data = pickle.loads(data)
+            emit_data = self.gadgets[rx_gadget].message(
+                **msg_func(
+                    data))
+            # print(emit_data)
+            print(emit_data.event, rx_namespace)
+            self.emit(
+                event=emit_data.event,
+                data=pickle.dumps(emit_data),
+                to=None,
+                namespace=rx_namespace
+            )
+            # print('emitted')
+        self.on_event(
+            msg_func()['event'],
+            handler=func_emit,
+            namespace=tx_namespace
+        )
+        
         
     def power_on(self,):
         self.start()
+        # return
         [g.start() for g in self.gadgets.values()]
         # for gadget in self.gadgets:
             # gadget.start()
@@ -39,30 +69,6 @@ class Rig(FlaskHost):
         # for gadget in self.gadgets:
         #     gadget.join()
         self.power = False
-        
-    def add_message(self, tx_gadget, rx_gadget, msg_func):
-        tx_namespace, rx_namespace = map(
-            lambda gadget : self.gadgets.get(gadget).namespace, 
-            [tx_gadget, rx_gadget])
-        def func_emit(sid, data):
-            # print(msg_func(pickle.loads(data)))
-            emit_data = self.gadgets[rx_gadget].message(**msg_func(pickle.loads(data)))
-            print('emit_data', emit_data.event, tx_namespace, rx_namespace)
-            # breakpoint()
-            self.emit(
-                event=emit_data.event,
-                data=pickle.dumps(emit_data),
-                to=None,
-                namespace=rx_namespace
-            )
-            print('emitted')
-        # breakpoint()
-        self.on(
-            msg_func()['event'],
-            handler=func_emit,
-            namespace=tx_namespace
-        )
-        
     def func_emit(self, sid, data, tx_namespace='/', rx_namespace='/'):
         # print(msg_func(pickle.loads(data)))
         emit_data = self.gadgets[rx_gadget].message(**msg_func(pickle.loads(data)))

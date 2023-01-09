@@ -10,35 +10,47 @@ from socketio import Client, AsyncClient, ClientNamespace
 import asyncio
 import pickle
 from threading import Thread
+import urllib3
+urllib3.disable_warnings()
 
 class Message(object):
     def __init__(self, *args, **kwargs):
         self.__dict__.update(**kwargs)
 
 class Gadget(Client, Thread):
-    def __init__(self, config: dict, hostname='localhost', port=8000, **kwargs):
-        Client.__init__(self)
+    def __init__(self, config: dict, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
+        Client.__init__(self,
+                        
+            ssl_verify=False,            
+            )
         Thread.__init__(self,
             target=self._connect,
-            args=(LOCALHOST, SERVER_PORT))
+            # args=(LOCALHOST, SERVER_PORT)
+        )
         self.name = config.get('name','')
-        self.namespace = f"/{self.name}"
+        self.namespace = f"/{config.get('namespace',self.name)}"
         self.hostname = config.get('hostname',hostname)
         self.port = config.get('port',port)
         self.__dict__.update({'config':config})
         self.__dict__.update(**kwargs)
         self.message = Message
     
-    def connect(self, ):
-        Thread.start(self)
+    # def gadget_connect(self, ):
+    #     Thread.start(self)
     
-    def _connect(self, hostname, port, header='http'):
-        print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.name}")
+    def _connect(self,):
+        hostname=LOCALHOST
+        
+        port=SERVER_PORT
+        header='https'
+        print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
         Client.connect(self,
-            f"{header}://{hostname}:{port}",
+            url=f"{header}://{hostname}:{port}",
+            # "https://r0b0t.ngrok.io/",
             namespaces=["/",self.namespace],
             wait=False,
-            wait_timeout=1)
+            wait_timeout=1,
+            )
         Client.wait(self)
     
     def emit(self, event, data, **kwargs):

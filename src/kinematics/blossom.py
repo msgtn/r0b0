@@ -8,7 +8,7 @@ from numpy import sin
 from numpy import pi
 from scipy.spatial.transform import Rotation
 import time
-
+from functools import partial
 '''
 physical params
 '''
@@ -152,80 +152,85 @@ def integrate(x,x_d,del_t):
     """
     return (x+np.multiply(x_d,del_t))
 
-class BlossomKinematics(Kinematics):
-    def __init__(self, **kwargs):
-        super.__init__(**kwargs)
+# class BlossomKinematics(Kinematics):
+#     def __init__(self, **kwargs):
+#         super.__init__(**kwargs)
+#         pass
+
+def get_motor_pos(ori, portrait=True, sensitivity=1.0):
+    """
+    Get position of the motors given orientation using inverse kinematics
+    args:
+        ori     orientation from sensors (Euler angles)
+        accel   accelerometer readings
+    returns:
+        motor positions
+    """
+    # yaw, pitch, roll
+    # zyx / alpha,gamma,beta
+    # print(ori)
+    # [e_1, e_2, e_3, e_4, yaw_offset] = ori
+    # [beta, gamma, alpha,_, yaw_offset] = ori
+    # breakpoint()
+    beta = ori['x']
+    gamma = ori['y']
+    alpha = ori['z']
+    e_4 = ori['h']
+    yaw_offset = ori['yaw']
+
+    angle_order = 'ZXY'
+    angles = [alpha, beta, gamma]
+
+    r = Rotation.from_euler(
+        angle_order,
+        angles=angles)
+    r = r*Rotation.from_euler('Z',np.pi/2)
+    if portrait:
+        r = r*Rotation.from_euler('Y',np.pi/2)
+
+    p_0 = [r.apply(_p) for _p in [p1_0, p2_0, p3_0]]
+
+    # calculate height
+    h = ((e_4-50)/100.0)*h_range*h_fac+h_mid
+
+    # init array for motor positions (tower_1-4)
+    motor_pos = np.array([])
+    # calculate distance motor must rotate
+    for i, p_i in enumerate(p_0):
+        # get just x,z components
+        p_i_xz = p_i[[0,2]]
+        # p_i_xz = p_i
+        # get displacement and its magnitude
+        # del_h = p_i_xz-yaw.apply(p_list[i])
+        del_h = p_i_xz-p_xz[i]
+        # del_h = del_h[[0,2]]
+        mag_del_h = np.linalg.norm(del_h)
+
+        # calculate motor angle
+        theta = np.rad2deg(mag_del_h/(r_w/sensitivity))*np.sign(del_h[1])
+
+        # EXPERIMENTAL - only take the z-difference
+        mag_del_h = del_h[1]
+        theta = np.rad2deg(mag_del_h/(r_w/sensitivity))
+
+        # print(theta)
+        motor_pos = np.append(motor_pos,theta)
+
+    # constrain tower motor range (50-130)
+    motor_pos = np.maximum(np.minimum(motor_pos+h,h_max),h_min)
+    try:
+        alpha -= yaw_offset
+    except:
         pass
 
-    def get_motor_pos(self, ori, portrait=False, sensitivity=1.0):
-        """
-        Get position of the motors given orientation using inverse kinematics
-        args:
-            ori     orientation from sensors (Euler angles)
-            accel   accelerometer readings
-        returns:
-            motor positions
-        """
-        # yaw, pitch, roll
-        # zyx / alpha,gamma,beta
-        [e_1, e_2, e_3, e_4, yaw_offset] = ori
-        [beta, gamma, alpha,_, yaw_offset] = ori
+    if (alpha < -np.pi):
+        alpha+=2*np.pi
+    elif(alpha > np.pi):
+        alpha-=2*np.pi
 
-        angle_order = 'ZXY'
-        angles = [alpha, beta, gamma]
+    # add the base motor for yaw (-140,140)
+    motor_pos = np.append(motor_pos,np.maximum(np.minimum(np.rad2deg(base_mult*alpha),150),-150))
 
-        r = Rotation.from_euler(
-            angle_order,
-            angles=angles)
-        # print(alpha, r.as_euler(angle_order)[0], r.as_euler(angle_order.lower())[0])
-        r = r*Rotation.from_euler('Z',np.pi/2)
-        # print(alpha-gamma)
-        # alpha -= gamma
-        if portrait:
-            r = r*Rotation.from_euler('Y',np.pi/2)
-        # print(r.as_rotvec()[-1])
+    motor_pos = list(map(int, map(partial(np.interp, xp=[-140,140],fp=[0,4096]),motor_pos)))
+    return motor_pos
 
-        p_0 = [r.apply(_p) for _p in [p1_0, p2_0, p3_0]]
-
-        # calculate height
-        h = ((e_4-50)/100.0)*h_range*h_fac+h_mid
-
-        # init array for motor positions (tower_1-4)
-        motor_pos = np.array([])
-        # calculate distance motor must rotate
-        for i, p_i in enumerate(p_0):
-            # get just x,z components
-            p_i_xz = p_i[[0,2]]
-            # p_i_xz = p_i
-            # get displacement and its magnitude
-            # del_h = p_i_xz-yaw.apply(p_list[i])
-            del_h = p_i_xz-p_xz[i]
-            # del_h = del_h[[0,2]]
-            mag_del_h = np.linalg.norm(del_h)
-
-            # calculate motor angle
-            theta = np.rad2deg(mag_del_h/(r_w/sensitivity))*np.sign(del_h[1])
-
-            # EXPERIMENTAL - only take the z-difference
-            mag_del_h = del_h[1]
-            theta = np.rad2deg(mag_del_h/(r_w/sensitivity))
-
-            # print(theta)
-            motor_pos = np.append(motor_pos,theta)
-
-        # constrain tower motor range (50-130)
-        motor_pos = np.maximum(np.minimum(motor_pos+h,h_max),h_min)
-        try:
-            alpha -= yaw_offset
-        except:
-            pass
-
-        if (alpha < -np.pi):
-            alpha+=2*np.pi
-        elif(alpha > np.pi):
-            alpha-=2*np.pi
-
-        # add the base motor for yaw (-140,140)
-        motor_pos = np.append(motor_pos,np.maximum(np.minimum(np.rad2deg(base_mult*alpha),150),-150))
-
-        return motor_pos

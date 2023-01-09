@@ -8,15 +8,17 @@ from src.config import \
 from aiohttp import web
 # import socketio
 from socketio import AsyncServer, Server, Namespace
-from flask import Flask, request, render_template
-from flask_socketio import SocketIO, emit
-from flask_cors import CORS
 import pickle
 from functools import partial
 from threading import Thread
+
+from flask import Flask, request, render_template
+from flask_socketio import SocketIO, emit
+from flask_cors import CORS
     
-class FlaskHost(Thread, SocketIO):        
-    def __init__(self, hostname, port,**kwargs):
+class Host(Thread, SocketIO):        
+# class Host(SocketIO, Thread):        
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT,**kwargs):
         self.app = app = Flask(__name__)
         CORS(self.app)
         self.hostname = hostname
@@ -27,8 +29,10 @@ class FlaskHost(Thread, SocketIO):
             cors_allowed_origins=[
                 "*",
                 "https://r0b0t.ngrok.io",
-                "https://localhost",
-            ])
+                f"https://{LOCALHOST}:{SERVER_PORT}",
+            ],
+            **kwargs
+            )
         Thread.__init__(self,
             # TODO - in order for this to work, must subclass Thread before SocketIO
             # probably because they both have run() functions
@@ -41,8 +45,10 @@ class FlaskHost(Thread, SocketIO):
                 'keyfile':KEY_PEM,
             })
         
-        
-        SocketIO.on_event(self,'position',handler=self.position_message)
+        SocketIO.on_event(
+            self,
+            'device_motion',
+            handler=self.device_motion)
         
         @app.route('/')
         def index():
@@ -50,36 +56,23 @@ class FlaskHost(Thread, SocketIO):
         @app.route('/reset',methods=["GET","POST"])
         def reset():
             print('reset')
-            # return 200
             return "<p>Hello, World!</p>"
-            # return render_template('index.html')
+        
+        
+    def add_route(self, route, route_func):
+        # @self.app.
+        self.app.add_url_rule(route, view_rule=route_func)
+        
         
     
-    def position_message(self,data):
-        print('position',data)
-        # self.emit('updateRecInd',{'data':42})
-        
+    def device_motion(self,data, **kwargs):
+        print('device_motion',data, kwargs)
+        # self.emit('python',{'data':42})
         
     def connect_event(self,sid, environ, auth,):
         print(f"Server connected to {sid}")
         
-    def _start(self,):
-        SocketIO.run(self,
-            app=self.app,
-            # debug=True,
-            host=LOCALHOST,
-            # host='0.0.0.0',
-            # port=SERVER_PORT,
-            port=9000,
-            # certfile=SERVER_CRT,
-            # keyfile=SERVER_KEY,
-            # certfile=str(CSR_PEM),
-            # keyfile=str(KEY_PEM),
-            # ssl_context=(SERVER_CRT,SERVER_KEY),
-            ssl_context=(str(CSR_PEM),str(KEY_PEM)),
-            )
-
-class Host(Server, Thread):        
+class _Host(Server, Thread):        
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         Server.__init__(self,
             async_mode='eventlet',
@@ -145,6 +138,6 @@ def start_server(sio):
         sio.ws_server, app)
     
 if __name__=="__main__":
-    # Host().start()
-    app = Flask(__name__)
-    FlaskHost(LOCALHOST, SERVER_PORT).start()
+    Host().start()
+    # app = Flask(__name__)
+    # FlaskHost(LOCALHOST, SERVER_PORT).start()
