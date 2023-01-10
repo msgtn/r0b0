@@ -25,7 +25,7 @@ All from the top-level directory.
 
 Start just a server:
 ```
-python3 -m src.gadgets.server
+python3 -m src.gadgets.rig
 ```
 
 Start an example rig with `blossom` and `opz`:

@@ -1,5 +1,5 @@
 from src.gadgets import MIDIController, Robot
-from src.gadgets.server import start_server
+from src.gadgets.rig import start_server
 from src.rigs.rig import Rig
 from src.kinematics.blossom import get_motor_pos
 

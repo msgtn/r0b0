@@ -1,0 +1,9 @@
+name: dec
+gadgets:
+- opz
+- blossom
+messages:
+- msg_func: cc2motor
+  tx_gadget: opz
+  rx_gadget: blossom
+  

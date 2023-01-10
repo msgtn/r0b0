@@ -1,0 +1,10 @@
+name: blsm
+hostname: localhost
+port: 8080
+gadgets:
+- blossom
+- phone
+messages:
+- msg_func: motion2motor
+  from: phone
+  to: blossom

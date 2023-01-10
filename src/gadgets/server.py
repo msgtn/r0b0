@@ -25,7 +25,6 @@ class Host(Thread, SocketIO):
         self.port = port
         SocketIO.__init__(self,
             self.app,
-            # cors_allowed_origins=["*","https://localhost:8080"],
             cors_allowed_origins=[
                 "*",
                 "https://r0b0t.ngrok.io",
