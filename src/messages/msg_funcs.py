@@ -1,4 +1,4 @@
-
+import numpy as np
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
     return {
@@ -8,11 +8,14 @@ def cc2motor(data=None):
     }
     
 def note2motor(data=None):
+    '''
+    C4 = note value 60
+    '''
     if data is None: return {'event':'midi_on'}
     return {
         'event':'position',
-        'value':int(np.interp(data.value, [30, 60], [0,4096])),
-        'motor_id':data.control
+        'value':int(np.interp(data.value, [53,77], [0,4096])),
+        'motor_id':(data.channel+1)
     }
 
 def motion2motor(data=None):

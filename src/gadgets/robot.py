@@ -44,16 +44,16 @@ class Robot(Gadget, DynamixelManager):
     # @Gadget.check_msg
     def position_event(self,msg):
         msg = pickle.loads(msg)
-        print(msg.motor_id)
+        # print(msg.motor_id)
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
+        print(msg)
         for motor_id, motor_value in zip(msg.motor_id,msg.value):
-            
             motor = self.motors_by_id.get(motor_id,None)
             assert motor is not None, f"Motor {msg.motor_id} does not exist"
             # TODO - set motor control mode
-            # motor.set_torque_enable(True)
+            motor.set_torque_enable(True)
             motor.set_goal_position(int(motor_value))
 
     # @Gadget.check_msg
@@ -73,7 +73,10 @@ class Robot(Gadget, DynamixelManager):
                     dxl_id=motor['id'],
                     dxl_model=motor['model'],
             )
-                    
+            # TODO - set motor control mode
+            # https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/
+                   
+            # TODO - use something like a DataFrame instead
             self.motors.update({
                 motor['name']:dxl_motor
             })
@@ -83,6 +86,7 @@ class Robot(Gadget, DynamixelManager):
             })
         
     def power_up(self):
+        
         self.init()
 
     # def id_to_list(self, id, **kwargs):

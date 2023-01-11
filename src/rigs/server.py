@@ -6,7 +6,7 @@ from src.config import \
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
 import pickle
-from functools import partial
+from functools import partial, partialmethod
 from threading import Thread
 
 from flask import Flask, request, render_template
@@ -25,7 +25,7 @@ class Host(Thread, SocketIO):
             self.app,
             cors_allowed_origins=[
                 "*",
-                "https://r0b0t.ngrok.io",
+                "https://r0b0.ngrok.io",
                 f"https://{self.hostname}:{self.port}",
             ],
             **kwargs
@@ -42,14 +42,6 @@ class Host(Thread, SocketIO):
                 'keyfile':KEY_PEM,
             })
         
-        SocketIO.on_event(
-            self,
-            'device_motion',
-            handler=self.device_motion)
-        
-        SocketIO.on_event(self,
-            'broadcaster',
-            handler=self.broadcaster)
         self.broadcaster_id = None
         
         webrtc_events = [
@@ -68,7 +60,6 @@ class Host(Thread, SocketIO):
         @app.route('/broadcast')
         def broadcast():
             return render_template('broadcast.html')
-        
         @app.route('/reset',methods=["GET","POST"])
         def reset():
             print('reset')
@@ -95,7 +86,6 @@ class Host(Thread, SocketIO):
         # breakpoint()
         SocketIO.emit(self,
             'offer',
-            # dict(id=request.sid,description=msg),
             (request.sid,msg),
             to=sid,
             )

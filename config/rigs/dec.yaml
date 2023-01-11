@@ -6,4 +6,7 @@ messages:
 - msg_func: cc2motor
   tx_gadget: opz
   rx_gadget: blossom
+- msg_func: note2motor
+  tx_gadget: opz
+  rx_gadget: blossom
   

@@ -160,7 +160,7 @@ function checkPswd() {
   // recordButton.disabled = false;
 
   // TODO - set this to a yaml config
-  var socketAddr = "r0b0t.ngrok.io"
+  var socketAddr = "r0b0.ngrok.io"
   socket = io.connect(`https://${socketAddr}`);
 
   let peerConnection;
@@ -213,6 +213,7 @@ function checkPswd() {
       });
     peerConnection.ontrack = event => {
       broadcasterVideo.srcObject = event.streams[0];
+      console.log(event.streams)
       console.log(event.streams[0]);
     };
     peerConnection.onicecandidate = event => {
@@ -419,7 +420,7 @@ window.onunload = window.onbeforeunload = () => {
 };
 
 // audioSelect.onchange = getStream;
-videoSelect.onchange = getStream;
+// videoSelect.onchange = getStream;
 
 // getStream(videoSelect)
 //   .then(getDevices)

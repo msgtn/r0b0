@@ -40,8 +40,6 @@ socket.on("broadcaster", () => {
 });
 
 socket.on("watcher", async (id) => {
-  console.log(id);
-  console.log(`watcher ${videoSelect.options[videoSelect.selectedIndex].text}`);
   const peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });

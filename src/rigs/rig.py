@@ -17,8 +17,10 @@ class Rig(Host):
         self.power = False
     
     def add_gadget(self, gadget_name):
-        config = loaders.load_config(gadget_name)
-        gadget = getattr(gadget_shelf, config['type'])(config)
+        config = loaders.load_gadget(gadget_name)
+        gadget = getattr(gadget_shelf, config['type'], None)
+        assert gadget is not None, f"Gadget type {config['type']} does not exist"
+        gadget = gadget(config)
         self.gadgets.update({
             gadget_name:gadget
         })
@@ -28,6 +30,7 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
         
     def add_message(self, tx_gadget, rx_gadget, msg_func):
+        print(tx_gadget, rx_gadget, msg_func)
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,
             [tx_gadget, rx_gadget])
@@ -36,6 +39,7 @@ class Rig(Host):
             if not isinstance(data,dict): data = pickle.loads(data)
             emit_data = self.gadgets[rx_gadget].message(
                 **msg_func(data))
+            print(data)
             self.emit(
                 event=emit_data.event,
                 data=pickle.dumps(emit_data),
@@ -54,8 +58,8 @@ class Rig(Host):
         [g.start() for g in self.gadgets.values()]
         self.power = True
             
-    def power_off(self,signum,frame,**kwargs):
-        if not self.power: return
+    def power_off(self,*args,**kwargs):
+        assert self.power, "Rig not powered on"
         self.join()
         [g.join() for g in self.gadgets.values()]
         self.power = False

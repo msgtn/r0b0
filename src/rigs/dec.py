@@ -1,6 +1,7 @@
 from src.gadgets import MIDIController, Robot
-from src.gadgets.rig import start_server
+# from src.gadgets.rig import start_server
 from src.rigs.rig import Rig
+from src.messages.msg_funcs import cc2motor
 
 from multiprocessing import Process
 import signal
@@ -20,7 +21,7 @@ def main():
         namespaces=['/opz','/blossom'])
     rig.add_gadget(BLOSSOM)
     rig.add_gadget(OPZ)
-    rig.add_message(OPZ, BLOSSOM,cc2motor)
+    rig.add_message(OPZ, BLOSSOM,'cc2motor')
     rig.power_on()        
 
     try:
