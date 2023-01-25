@@ -6,6 +6,11 @@ import sys
 from multiprocessing import Process
 import signal
 import numpy as np
+import logging
+logging.basicConfig(
+    filename='example.log',
+    encoding='utf-8',
+    level=logging.DEBUG)
 
 LOCALHOST = 'localhost'
 SERVER_PORT = 8080

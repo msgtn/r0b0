@@ -6,6 +6,8 @@ Code that is as understandable as plain English
 Suitability for everyday tasks, allowing for short development times
 '''
 from src.config import LOCALHOST, SERVER_PORT
+from src.utils.data import load_pickle, dump_pickle
+
 from socketio import Client, AsyncClient, ClientNamespace
 import asyncio
 import pickle
@@ -57,11 +59,11 @@ class Gadget(Client, Thread):
             )
         Client.wait(self)
     
+    @dump_pickle
     def emit(self, event, data, **kwargs):
         super().emit(
-            event, pickle.dumps(data),
-            # namespace=self.namespace,
-            # namespace=kwargs.get('namespace',self.namespace),
+            event,
+            data,
             **kwargs)
         
     # def check_msg(self, data):
@@ -82,10 +84,6 @@ class Gadget(Client, Thread):
         if self.connected:
             self.join()    
             super().disconnect()
-            
-class Phone(Gadget):
-    def __init_(self, **kwargs):
-        super.__init__(**kwargs)
 
 class GamePad(Gadget):
     def __init_(self, **kwargs):

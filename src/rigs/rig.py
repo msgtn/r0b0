@@ -48,6 +48,7 @@ class Rig(Host):
                 to=None,
                 namespace=rx_namespace
             )
+        print('tx',tx_namespace)
         self.on_event(
             msg_func()['event'],
             handler=func_emit,

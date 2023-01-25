@@ -2,6 +2,7 @@ from src.config import \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
     LOCALHOST, SERVER_PORT, \
     CSR_PEM, KEY_PEM
+from src.utils.data import load_pickle,dump_pickle
 
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
@@ -42,7 +43,6 @@ class Host(Thread, SocketIO):
                 'port':self.port,
                 'certfile':CSR_PEM,
                 'keyfile':KEY_PEM,
-                # 'kwargs':kwargs
             })
         
         self.broadcaster_id = None
@@ -57,39 +57,13 @@ class Host(Thread, SocketIO):
                 webrtc_event,
                 getattr(self,webrtc_event))
             
-        # SocketIO.on_event(self,
-        # catch-all through the socketio.Server
-        self.server.on(
-            '*',
-            lambda x,y,z: print(x,y,z))
-        
-        # url_routes = {
-        #     '':'index',
-        #     'broadcast':'broadcast'
-        # }
-        # @app.route('/')
-        # def index():
-        #     return render_template('index.html')
-        # @app.route('/broadcast')
-        # def broadcast():
-        #     return render_template('broadcast.html')
-        # @app.route('/reset',methods=["GET","POST"])
-        # def reset():
-        #     print('reset')
-        #     return "<p>Hello, World!</p>"
-        
-        # SocketIO.on_event(self,
-        #     'device_motion',
-        #     self.device_motion
-        #     )
-        # SocketIO.on_event(self,
-        #     'add_url')
         SocketIO.on_event(self,
             'add_url',
-            self.add_route,
-            # self.add_url_route
+            self.add_url,
         )
-            # lambda data: self.add_url_rule(data['rule'],view_func=render_template(data('url'))))
+        SocketIO.on_event(self,
+            'add_emit',
+            self.add_emit,)
         
     def broadcaster(self, sid):
         print('broadcaster', sid)
@@ -134,8 +108,12 @@ class Host(Thread, SocketIO):
     def device_motion(self,data):
         print(data)
 
-    def add_route(self, data):
-        data = pickle.loads(data)
+    def unpickle(func):
+        return lambda s,data: func(s, data=pickle.loads(data))
+    #     return func(pickle.loads())
+
+    @load_pickle
+    def add_url(self, data):
         route_func = lambda: render_template(data['url'])
         route_func.__name__ = f"route_{data['url'].split('.')[0]}"
         self.app.add_url_rule(
@@ -143,10 +121,20 @@ class Host(Thread, SocketIO):
             view_func=route_func
         )
         
+    @load_pickle
+    def add_emit(self,data):
+        # print(data)
+        self.server.on(
+            data['event'],
+            lambda s,d: self.emit(
+                event=data['event'],
+                data=d,
+                **data['kwargs'],
+            )
+        )
+        
     def connect_event(self,sid, environ, auth,):
         print(f"Server connected to {sid}")
 
 if __name__=="__main__":
     Host().start()
-    # app = Flask(__name__)
-    # FlaskHost(LOCALHOST, SERVER_PORT).start()

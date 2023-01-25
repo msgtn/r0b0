@@ -400,7 +400,7 @@ function onControl() {
 
 function onRecord() {
   console.log('record');
-  socket.emit("r",{record:true});
+  socket.emit("record",{record:true});
 
 }
 

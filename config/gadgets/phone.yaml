@@ -1,5 +1,19 @@
 name: phone
-namespace: 
 type: Phone
 hostname: localhost
 port: 7000
+route_urls:
+  /: index.html
+  /broadcast: broadcast.html
+event_kwargs:
+  record: 
+    # namespace: /
+    namespace: /phone
+  device_motion:
+    # namespace: /
+    namespace: /phone
+messages:
+- msg_func: note2motor
+  tx_gadget: opz
+  rx_gadget: blossom
+  
