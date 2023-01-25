@@ -17,6 +17,7 @@ OPZ = 'opz'
 
 def main():
     config = loaders.load_rig(sys.argv[1])
+    print([f'/{gadget}' for gadget in config['gadgets']])
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
@@ -27,7 +28,7 @@ def main():
     for gadget in config['gadgets']:
         rig.add_gadget(gadget)
     # breakpoint()
-    for msg in config['messages']:
+    for msg in config.get('messages',[]):
         rig.add_message(**msg)
     # map(lambda msg: rig.add_message(**msg), config['messages'])
     rig.power_on()

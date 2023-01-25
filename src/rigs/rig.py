@@ -11,7 +11,9 @@ import pickle
 class Rig(Host):
     def __init__(self, hostname='localhost', port=8080, **kwargs):
         Host.__init__(self, hostname, port, **kwargs)
-        self.gadgets = {}
+        self.gadgets = {
+            'phone':self,
+        }
         self.hostname = hostname
         self.port = port
         self.power = False
@@ -55,6 +57,7 @@ class Rig(Host):
         
     def power_on(self,):
         self.start()
+        # breakpoint()
         [g.start() for g in self.gadgets.values()]
         self.power = True
             

@@ -231,6 +231,15 @@ def get_motor_pos(ori, portrait=True, sensitivity=1.0):
     # add the base motor for yaw (-140,140)
     motor_pos = np.append(motor_pos,np.maximum(np.minimum(np.rad2deg(base_mult*alpha),150),-150))
 
-    motor_pos = list(map(int, map(partial(np.interp, xp=[-140,140],fp=[0,4096]),motor_pos)))
+    if ori['mirror']:
+        motor_pos[1],motor_pos[2]=motor_pos[2],motor_pos[1]
+        motor_pos[3] *= -1
+
+
+    motor_pos = list(map(int, map(
+        partial(np.interp,
+            xp=[-10,140],
+            fp=[0,2048]),
+        motor_pos)))
     return motor_pos
 

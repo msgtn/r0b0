@@ -159,7 +159,7 @@ function checkPswd() {
   // recordButton.disabled = false;
 
   // TODO - set this to a yaml config
-  var socketAddr = "r0b0t.ngrok.io"
+  var socketAddr = "r0b0.ngrok.io"
   socket = io.connect(`https://${socketAddr}`);
 
   let peerConnection;

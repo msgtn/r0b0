@@ -25,15 +25,18 @@ class Gadget(Client, Thread):
             )
         Thread.__init__(self,
             target=self._connect,
+            # target=Client.wait
             # args=(LOCALHOST, SERVER_PORT)
         )
         self.name = config.get('name','')
         self.namespace = f"/{config.get('namespace',self.name)}"
+        # self.namespace = [f"/{config.get('namespace',self.name)}"]
         self.hostname = config.get('hostname',hostname)
         self.port = config.get('port',port)
         self.__dict__.update({'config':config})
         self.__dict__.update(**kwargs)
         self.message = Message
+        # self._connect()
     
     # def gadget_connect(self, ):
     #     Thread.start(self)
@@ -44,9 +47,10 @@ class Gadget(Client, Thread):
         port=SERVER_PORT
         header='https'
         print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
+        print(self.namespace)
         Client.connect(self,
             url=f"{header}://{hostname}:{port}",
-            # "https://r0b0t.ngrok.io/",
+            # "https://r0b0.ngrok.io/",
             namespaces=["/",self.namespace],
             wait=False,
             wait_timeout=1,
@@ -56,7 +60,8 @@ class Gadget(Client, Thread):
     def emit(self, event, data, **kwargs):
         super().emit(
             event, pickle.dumps(data),
-            namespace=self.namespace,
+            # namespace=self.namespace,
+            # namespace=kwargs.get('namespace',self.namespace),
             **kwargs)
         
     # def check_msg(self, data):

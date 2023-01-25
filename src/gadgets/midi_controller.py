@@ -42,15 +42,6 @@ class MIDIController(Gadget):
 class MIDINamespace(Namespace):
     def on_midi_cc(self, sid, data):
         pass
-    
-def from_midi(func):
-    '''
-    what am i trying to do here
-    the decorator just does stuff around the function
-    it cant go inside the function itself
-    '''
-    
-    return func
 
 class MIDIMessage(Message):
     def __init__(self, **kwargs):
@@ -59,6 +50,7 @@ class MIDIMessage(Message):
     @classmethod
     def from_mido(self, mido_msg: mido.Message):
         mido_dict = {}
+        # update instances with basic fields of types (str,bool,int,float)
         mido_dict.update({
             k:v for k,v in mido_msg.__dict__.items() if isinstance(
                 v,(str,bool,int,float))})

@@ -33,16 +33,16 @@ var videoSelect = document.getElementById('videoSource');
 var recordingIndicator = document.getElementById("recordingIndicator");
 
 // check if mobile device
+var iosDevice = false
+var orientationEvent = 'deviceorientation';
 let mobileDevice = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 if (mobileDevice) {
-  const iosDevice =  typeof DeviceMotionEvent.requestPermission === "function";
-  const orientationEvent = iosDevice ? "deviceorientation" : "deviceorientationabsolute";
-}
-
-// hide controllers if not on a mobile device
-if (mobileDevice) {
-  // calibrateButton.style.display = "none";
-  // videoInput.style.display = "none";
+  if  (typeof DeviceMotionEvent !== 'undefined') {
+    iosDevice =  typeof DeviceMotionEvent.requestPermission === "function";
+    orientationEvent = iosDevice ? "deviceorientation" : "deviceorientationabsolute";
+    // alibrateButton.style.display = "none";
+    // videoInput.style.display = "none";
+  }
 } else {
   controlBar.style.display = "none";
   // calibrateButton.style.display = "none";
@@ -343,8 +343,8 @@ const handleOrientation = ( e) => {
         // tail: tailPos,
         landscape: false,
         // mirror: !externalCam,
-        // mirror: true,
-        mirror: false,
+        mirror: true,
+        // mirror: false,
         heightCtrl: false,
         // armsCtrl: appendageSwitch.checked,
         headCtrl: controlSwitch.checked,
@@ -396,6 +396,12 @@ function onControl() {
   } else {
     window.removeEventListener(orientationEvent, handleOrientation);
   }
+}
+
+function onRecord() {
+  console.log('record');
+  socket.emit("r",{record:true});
+
 }
 
 const config = {

@@ -27,7 +27,7 @@ class Host(Thread, SocketIO):
             self.app,
             cors_allowed_origins=[
                 "*",
-                "https://r0b0t.ngrok.io",
+                "https://r0b0.ngrok.io",
                 f"https://{LOCALHOST}:{SERVER_PORT}",
             ],
             **kwargs

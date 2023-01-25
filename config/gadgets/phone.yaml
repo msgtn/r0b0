@@ -1,4 +1,5 @@
 name: phone
+namespace: 
 type: Phone
 hostname: localhost
 port: 7000

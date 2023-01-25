@@ -1,4 +1,6 @@
 import numpy as np
+from src.kinematics.blossom import get_motor_pos
+
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
     return {

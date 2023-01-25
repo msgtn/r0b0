@@ -51,7 +51,10 @@ class Robot(Gadget, DynamixelManager):
         print(msg)
         for motor_id, motor_value in zip(msg.motor_id,msg.value):
             motor = self.motors_by_id.get(motor_id,None)
-            assert motor is not None, f"Motor {msg.motor_id} does not exist"
+            if motor is None: 
+                print(f"No motor ID {motor_id} found, skipping")
+                return
+            # assert motor is not None, f"Motor {msg.motor_id} does not exist"
             # TODO - set motor control mode
             motor.set_torque_enable(True)
             motor.set_goal_position(int(motor_value))

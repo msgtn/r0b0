@@ -6,8 +6,9 @@ from src.config import \
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
 import pickle
-from functools import partial, partialmethod
+from functools import partial, partialmethod, wraps
 from threading import Thread
+from copy import copy, deepcopy
 
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
@@ -21,6 +22,7 @@ class Host(Thread, SocketIO):
         CORS(self.app)
         self.hostname = hostname
         self.port = port
+        # self.namespace='/'
         SocketIO.__init__(self,
             self.app,
             cors_allowed_origins=[
@@ -40,6 +42,7 @@ class Host(Thread, SocketIO):
                 'port':self.port,
                 'certfile':CSR_PEM,
                 'keyfile':KEY_PEM,
+                # 'kwargs':kwargs
             })
         
         self.broadcaster_id = None
@@ -53,17 +56,40 @@ class Host(Thread, SocketIO):
             SocketIO.on_event(self,
                 webrtc_event,
                 getattr(self,webrtc_event))
+            
+        # SocketIO.on_event(self,
+        # catch-all through the socketio.Server
+        self.server.on(
+            '*',
+            lambda x,y,z: print(x,y,z))
         
-        @app.route('/')
-        def index():
-            return render_template('index.html')
-        @app.route('/broadcast')
-        def broadcast():
-            return render_template('broadcast.html')
-        @app.route('/reset',methods=["GET","POST"])
-        def reset():
-            print('reset')
-            return "<p>Hello, World!</p>"
+        # url_routes = {
+        #     '':'index',
+        #     'broadcast':'broadcast'
+        # }
+        # @app.route('/')
+        # def index():
+        #     return render_template('index.html')
+        # @app.route('/broadcast')
+        # def broadcast():
+        #     return render_template('broadcast.html')
+        # @app.route('/reset',methods=["GET","POST"])
+        # def reset():
+        #     print('reset')
+        #     return "<p>Hello, World!</p>"
+        
+        # SocketIO.on_event(self,
+        #     'device_motion',
+        #     self.device_motion
+        #     )
+        # SocketIO.on_event(self,
+        #     'add_url')
+        SocketIO.on_event(self,
+            'add_url',
+            self.add_route,
+            # self.add_url_route
+        )
+            # lambda data: self.add_url_rule(data['rule'],view_func=render_template(data('url'))))
         
     def broadcaster(self, sid):
         print('broadcaster', sid)
@@ -108,8 +134,14 @@ class Host(Thread, SocketIO):
     def device_motion(self,data):
         print(data)
 
-    def add_route(self, route, route_func):
-        self.app.add_url_rule(route, view_rule=route_func)
+    def add_route(self, data):
+        data = pickle.loads(data)
+        route_func = lambda: render_template(data['url'])
+        route_func.__name__ = f"route_{data['url'].split('.')[0]}"
+        self.app.add_url_rule(
+            data['route'],
+            view_func=route_func
+        )
         
     def connect_event(self,sid, environ, auth,):
         print(f"Server connected to {sid}")
