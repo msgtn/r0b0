@@ -14,6 +14,9 @@ import pickle
 from threading import Thread
 import urllib3
 urllib3.disable_warnings()
+import logging
+logging.basicConfig(level=logging.INFO)
+
 
 class Message(object):
     def __init__(self, *args, **kwargs):

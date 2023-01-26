@@ -23,7 +23,6 @@ class Host(Thread, SocketIO):
         CORS(self.app)
         self.hostname = hostname
         self.port = port
-        # self.namespace='/'
         SocketIO.__init__(self,
             self.app,
             cors_allowed_origins=[
@@ -65,53 +64,6 @@ class Host(Thread, SocketIO):
             'add_emit',
             self.add_emit,)
         
-    def broadcaster(self, sid):
-        print('broadcaster', sid)
-        self.broadcaster_id = sid
-        SocketIO.emit(self,
-            'broadcaster')
-        
-    def watcher(self,sid):
-        if not self.broadcaster_id: return
-        SocketIO.emit(self,
-            'watcher',
-            # {'sid':request.sid},
-            request.sid,
-            # args={'sid':request.sid},
-            to=self.broadcaster_id,
-            )
-        print('watcher', sid)
-
-    def offer(self,sid,msg, *args,**kwargs):
-        # breakpoint()
-        SocketIO.emit(self,
-            'offer',
-            (request.sid,msg),
-            to=sid,
-            )
-    def answer(self,sid,msg):
-        # TODO - handle max connections
-        # print(sid,msg)
-        SocketIO.emit(self,
-            'answer',
-            (request.sid,msg),
-            to=sid,
-            )
-    def candidate(self,sid,msg):
-        SocketIO.emit(self,
-            'candidate',
-            (request.sid,msg),
-            to=sid,
-            # args=msg,        
-        )
-        
-    def device_motion(self,data):
-        print(data)
-
-    def unpickle(func):
-        return lambda s,data: func(s, data=pickle.loads(data))
-    #     return func(pickle.loads())
-
     @load_pickle
     def add_url(self, data):
         route_func = lambda: render_template(data['url'])
@@ -123,7 +75,6 @@ class Host(Thread, SocketIO):
         
     @load_pickle
     def add_emit(self,data):
-        # print(data)
         self.server.on(
             data['event'],
             lambda s,d: self.emit(
@@ -133,8 +84,36 @@ class Host(Thread, SocketIO):
             )
         )
         
-    def connect_event(self,sid, environ, auth,):
-        print(f"Server connected to {sid}")
+    def broadcaster(self, sid):
+        self.broadcaster_id = sid
+        SocketIO.emit(self,
+            'broadcaster')
+    def watcher(self,sid):
+        if not self.broadcaster_id: return
+        SocketIO.emit(self,
+            'watcher',
+            request.sid,
+            to=self.broadcaster_id,
+            )
+    def offer(self,sid,msg, *args,**kwargs):
+        SocketIO.emit(self,
+            'offer',
+            (request.sid,msg),
+            to=sid,
+            )
+    def answer(self,sid,msg):
+        # TODO - handle max connections
+        SocketIO.emit(self,
+            'answer',
+            (request.sid,msg),
+            to=sid,
+            )
+    def candidate(self,sid,msg):
+        SocketIO.emit(self,
+            'candidate',
+            (request.sid,msg),
+            to=sid,
+        )
 
 if __name__=="__main__":
     Host().start()

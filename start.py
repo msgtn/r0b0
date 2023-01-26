@@ -8,34 +8,26 @@ import signal
 import numpy as np
 import logging
 logging.basicConfig(
-    filename='example.log',
+    # filename='example.log',
     encoding='utf-8',
-    level=logging.DEBUG)
+    level=logging.INFO,
+    )
 
 LOCALHOST = 'localhost'
 SERVER_PORT = 8080
-BLOSSOM_PORT = 9000
-MIDI_PORT = 9002
-BLOSSOM = 'blossomsingle'
-BLOSSOM = 'blossom'
-OPZ = 'opz'
 
 def main():
     config = loaders.load_rig(sys.argv[1])
-    print([f'/{gadget}' for gadget in config['gadgets']])
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
         # TODO - get rid of this by adding to rig.add_gadget
         namespaces=[f'/{gadget}' for gadget in config['gadgets']]
     )
-    # map(rig.add_gadget, config['gadgets'])
     for gadget in config['gadgets']:
         rig.add_gadget(gadget)
-    # breakpoint()
     for msg in config.get('messages',[]):
         rig.add_message(**msg)
-    # map(lambda msg: rig.add_message(**msg), config['messages'])
     rig.power_on()
 
     try:

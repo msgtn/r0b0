@@ -6,11 +6,9 @@ route_urls:
   /: index.html
   /broadcast: broadcast.html
 event_kwargs:
-  record: 
-    # namespace: /
+  record:
     namespace: /phone
   device_motion:
-    # namespace: /
     namespace: /phone
 messages:
 - msg_func: note2motor

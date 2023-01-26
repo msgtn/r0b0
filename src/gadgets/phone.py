@@ -10,8 +10,13 @@ import time
 from socketio import Client
 import pickle
 import logging
+logging.basicConfig(
+    filename='phone.log',
+    encoding='utf-8',
+    level=logging.INFO,
+)
 
-logging.debug('warning')
+logging.debug('warning'.upper())
 
 class Phone(Gadget):
     def __init__(self, config, **kwargs):
