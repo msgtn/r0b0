@@ -1,7 +1,5 @@
-name: phone
+name: testphone
 type: Phone
-hostname: localhost
-port: 8080
 route_urls:
   /: index.html
   /broadcast: broadcast.html

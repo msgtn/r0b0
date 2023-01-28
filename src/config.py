@@ -1,6 +1,7 @@
 from pathlib import Path
 ROOT_DIR = Path('./').absolute()
 CONFIG_DIR = ROOT_DIR / 'config'
+TAPES_DIR = ROOT_DIR / 'tapes'
 SRC_DIR = ROOT_DIR / 'src'
 CABLES_DIR = SRC_DIR / 'cables'
 GADGETS_DIR = SRC_DIR / 'gadgets'

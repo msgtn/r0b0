@@ -13,7 +13,7 @@ import logging
 logging.basicConfig(
     filename='phone.log',
     encoding='utf-8',
-    level=logging.INFO,
+    level=logging.DEBUG,
 )
 
 logging.debug('warning'.upper())
@@ -23,6 +23,8 @@ class Phone(Gadget):
         Gadget.__init__(self, config, **kwargs)
         self.route_urls = config.get('route_urls',{})
         self.event_kwargs = config.get('event_kwargs',{})
+        self.on('*',
+            handler=lambda msg: self.emit(**msg))
         
     def add_emit(self,event,**kwargs):
         self.on(
@@ -34,6 +36,7 @@ class Phone(Gadget):
     def on_record(self,msg):
         # self.emit()
         print(msg)
+        logging.debug(msg)
         
     # @dump_pickle
     def on_device_motion(self,msg):
@@ -42,6 +45,7 @@ class Phone(Gadget):
             data=msg,
             namespace=self.namespace,
             )
+        
         
     def start(self):
         Thread.start(self)
@@ -53,8 +57,8 @@ class Phone(Gadget):
         # route urls
         for _route,_url in self.route_urls.items():
             self.emit(
-                'add_url',
-                {'route':_route,'url':_url}
+                event='add_url',
+                data={'route':_route,'url':_url}
             )
             
         # define events

@@ -18,6 +18,7 @@ SERVER_PORT = 8080
 
 def main():
     config = loaders.load_rig(sys.argv[1])
+    print(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
@@ -28,6 +29,7 @@ def main():
         rig.add_gadget(gadget)
     for msg in config.get('messages',[]):
         rig.add_message(**msg)
+    print('powering')
     rig.power_on()
 
     try:

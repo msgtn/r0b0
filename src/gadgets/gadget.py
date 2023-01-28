@@ -6,7 +6,7 @@ Code that is as understandable as plain English
 Suitability for everyday tasks, allowing for short development times
 '''
 from src.config import LOCALHOST, SERVER_PORT
-from src.utils.data import load_pickle, dump_pickle
+from src.utils.loaders import load_pickle, dump_pickle
 
 from socketio import Client, AsyncClient, ClientNamespace
 import asyncio
@@ -24,8 +24,7 @@ class Message(object):
 
 class Gadget(Client, Thread):
     def __init__(self, config: dict, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
-        Client.__init__(self,
-                        
+        Client.__init__(self,           
             ssl_verify=False,            
             )
         Thread.__init__(self,
@@ -36,20 +35,22 @@ class Gadget(Client, Thread):
         self.name = config.get('name','')
         self.namespace = f"/{config.get('namespace',self.name)}"
         # self.namespace = [f"/{config.get('namespace',self.name)}"]
-        self.hostname = config.get('hostname',hostname)
-        self.port = config.get('port',port)
+        # self.hostname = config.get('hostname',hostname)
+        # self.port = config.get('port',port)
+        self.hostname, self.port = hostname, port
         self.__dict__.update({'config':config})
         self.__dict__.update(**kwargs)
         self.message = Message
+        # self.power_on, self.power_off = Thread.start, Thread.join
         # self._connect()
     
     # def gadget_connect(self, ):
     #     Thread.start(self)
     
+    
     def _connect(self,):
-        hostname=LOCALHOST
-        
-        port=SERVER_PORT
+        hostname=self.hostname
+        port=self.port
         header='https'
         print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
         print(self.namespace)
@@ -63,8 +64,13 @@ class Gadget(Client, Thread):
         Client.wait(self)
     
     @dump_pickle
+    # @load_pickle
     def emit(self, event, data, **kwargs):
-        super().emit(
+        print(data)
+        
+        data.update(dict(event=event))
+        print(data)
+        Client.emit(self,
             event,
             data,
             **kwargs)
@@ -91,3 +97,4 @@ class Gadget(Client, Thread):
 class GamePad(Gadget):
     def __init_(self, **kwargs):
         super.__init__(**kwargs)
+

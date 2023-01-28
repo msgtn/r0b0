@@ -1,7 +1,9 @@
 # from src import gadgets
 # import src.gadgets
 from src import gadgets as gadget_shelf
+from src.config import LOCALHOST, SERVER_PORT
 from src.utils import loaders
+from src.rigs import logging
 # from src.gadgets.rig import start_server
 from src.rigs.server import Host
 from src.messages import msg_funcs
@@ -9,11 +11,9 @@ from multiprocessing import Process
 import pickle
 
 class Rig(Host):
-    def __init__(self, hostname='localhost', port=8080, **kwargs):
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         Host.__init__(self, hostname, port, **kwargs)
-        self.gadgets = {
-            'phone':self,
-        }
+        self.gadgets = {}
         self.hostname = hostname
         self.port = port
         self.power = False
@@ -32,7 +32,7 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
         
     def add_message(self, tx_gadget, rx_gadget, msg_func):
-        print(tx_gadget, rx_gadget, msg_func)
+        logging.debug(tx_gadget, rx_gadget, msg_func)
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,
             [tx_gadget, rx_gadget])
@@ -57,14 +57,15 @@ class Rig(Host):
         
         
     def power_on(self,):
-        self.start()
         # breakpoint()
+        self.start()
+        print(self.gadgets.values())
         [g.start() for g in self.gadgets.values()]
         self.power = True
             
     def power_off(self,*args,**kwargs):
         assert self.power, "Rig not powered on"
-        self.join()
-        [g.join() for g in self.gadgets.values()]
+        self.disconnect()
+        [g.disconnect() for g in self.gadgets.values()]
         self.power = False
         

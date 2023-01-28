@@ -31,6 +31,9 @@ var watcherVideo = document.getElementById("watcherVideo");
 var audioSelect = document.getElementById('audioSource');
 var videoSelect = document.getElementById('videoSource');
 var recordingIndicator = document.getElementById("recordingIndicator");
+var recordButton = document.getElementById("record");
+recordButton.classList.add('notRec');
+recording = false;
 
 // check if mobile device
 var iosDevice = false
@@ -351,9 +354,10 @@ const handleOrientation = ( e) => {
         yaw: 0,
         time: Date.now(),
         portrait: true,
+        id: socket.id
       };
 
-    socket.emit("device_motion", body);
+    socket.emit("device_motion", "device_motion", body);
     // socket.emit("message", {data: 'test'});
     console.log(body);
   } 
@@ -400,8 +404,11 @@ function onControl() {
 
 function onRecord() {
   console.log('record');
-  socket.emit("record",{record:true});
-
+  // socket.emit("record",{record:true,event:'device_motion'});
+  recording = !recording;
+  recordButton.classList.remove(recording ? 'notRec' : 'Rec');
+  recordButton.classList.add(recording ? 'Rec' : 'notRec');
+  socket.emit('record',{record:recording,event:'device_motion',id:socket.id});
 }
 
 const config = {

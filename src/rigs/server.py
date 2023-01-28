@@ -1,8 +1,12 @@
+import glob
+import logging
 from src.config import \
+    ROOT_DIR, TAPES_DIR, \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
     LOCALHOST, SERVER_PORT, \
     CSR_PEM, KEY_PEM
-from src.utils.data import load_pickle,dump_pickle
+from src.utils.loaders import load_pickle,dump_pickle
+from src.gadgets import Tape
 
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
@@ -14,15 +18,17 @@ from copy import copy, deepcopy
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
-    
+import time
+import json
 # TODO - try to remove dependency of having to import Thread first
 # to call the correct *.run()
-class Host(Thread, SocketIO):        
+class Host(Thread, SocketIO):      
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         self.app = app = Flask(__name__)
         CORS(self.app)
         self.hostname = hostname
         self.port = port
+        self.tapes = {}
         SocketIO.__init__(self,
             self.app,
             cors_allowed_origins=[
@@ -44,8 +50,61 @@ class Host(Thread, SocketIO):
                 'keyfile':KEY_PEM,
             })
         
-        self.broadcaster_id = None
+        SocketIO.on_event(self,
+            'add_url',
+            self.add_url,
+        )
+        SocketIO.on_event(self,
+            'add_emit',
+            self.add_emit,)
         
+        self._webrtc_setup()
+        self._player_setup()
+        
+        # self.power_on, self.power_off = self.start, self.join
+        
+    def _player_setup(self):
+        self.tapes = {}
+        player_events = [
+            'load','play','record',
+        ]
+        for player_event in player_events:
+            SocketIO.on_event(self,
+                player_event,
+                getattr(self,f"on_{player_event}"))
+    
+    def on_load(self, data):
+        tape_name = data['tape_name']
+        self.tapes.update({
+            tape_name:Tape().open(tape_name)
+        })
+        
+    def on_record(self, data):
+        '''
+        data = {record: true/false, event: str}
+        '''
+        id_event = f"{data['id']}_{data['event']}"
+        if data['record']:
+            self.tapes.update({
+                id_event:Tape(f"{time.strftime('%Y%m%d%H%M%S')}_{data['event']}.json")
+            })
+        else: 
+            tape = self.tapes.pop(id_event)
+            tape.save()
+        logging.debug(self.tapes)
+        return 
+        
+    def on_play(self, data):
+        tape = self.tapes.get(data['tape_name'],None)
+        # TODO - make this a thread
+        if tape:
+            playing = True
+            while playing:
+                frame, playing = tape.get_frame()
+                self.emit(**frame)
+
+    def _webrtc_setup(self):
+        self.broadcaster_id = None
         webrtc_events = [
             'broadcaster', 'watcher',
             'offer','answer',
@@ -56,32 +115,41 @@ class Host(Thread, SocketIO):
                 webrtc_event,
                 getattr(self,webrtc_event))
             
-        SocketIO.on_event(self,
-            'add_url',
-            self.add_url,
-        )
-        SocketIO.on_event(self,
-            'add_emit',
-            self.add_emit,)
-        
     @load_pickle
     def add_url(self, data):
         route_func = lambda: render_template(data['url'])
-        route_func.__name__ = f"route_{data['url'].split('.')[0]}"
+        route_func.__name__ = \
+            f"route_{data['url'].split('.')[0]}"
+        # print(data,route_func.__name__)
         self.app.add_url_rule(
             data['route'],
             view_func=route_func
         )
-        
     @load_pickle
     def add_emit(self,data):
+        event = data['event']
+        def _emit_record(s,e,d):
+            logging.debug(e,d)
+            self.emit(
+                event=e,
+                data=d,
+                **data['kwargs']
+            )
+            id_event = f"{data['id']}_{data['event']}"
+            tape = self.tapes.get(id_event,None)
+            if tape is not None:
+            # if id_event in self.tapes.keys():
+                # record time in millis
+                d.update({'time':int(time.time()*1e3)})
+                tape.write({
+                    'event':data['event'],
+                    'data':d,
+                })
+                # with open(self.tapes[id_event],'a') as outfile:
+                #     outfile.write(json.dumps({'event':data['event'],'data':d})+'\n')
         self.server.on(
             data['event'],
-            lambda s,d: self.emit(
-                event=data['event'],
-                data=d,
-                **data['kwargs'],
-            )
+            _emit_record,
         )
         
     def broadcaster(self, sid):
@@ -116,4 +184,6 @@ class Host(Thread, SocketIO):
         )
 
 if __name__=="__main__":
-    Host().start()
+    host = Host()
+    host.start()
+    breakpoint()

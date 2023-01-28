@@ -3,7 +3,9 @@ import unittest
 # from .gadget_socket import Socket
 # server.start_server('localhost',8080)
 import socketio
-from src.cables.gadget_socket import Socket, MIDISocket
+# from src.gadget_socket import Socket, MIDISocket
+from src.gadgets.phone import Phone
+from src.rigs.server import Host
 # from .gadget import Gadget, MIDIController, Robot
 from . import Gadget, MIDIController, Robot
 import mido
@@ -27,26 +29,36 @@ class GadgetTest(unittest.TestCase):
 
     def setUp(self) -> None:
         global port_ctr
-        port_ctr += 1
+        port_ctr += 2
         self.port_ctr = port_ctr
-        self.gadget = Gadget(config={})
+        self.gadget = Gadget(config={},port=port_ctr)
+        self.host = Host(port=port_ctr)
+        self.host.start()
+        # print(self.gadget.__dict__)
         
     def test_fail(self):
         # assert False
         pass
-
-    # @unittest.skip('')
-    def test_connect(self, hostname=LOCALHOST, port=8080):
-        print(self.gadget)
-        self.gadget.connect(
-            # hostname=LOCALHOST,
-            # port=SERVER_PORT
-        )
     
-    def tearDown(self):
+    def test_start(self):
+        # self.gadget.power_on()
+        self.gadget.start()
+        time.sleep(2)
+        self.assertTrue(self.gadget.connected)
+        
+    def test_disconnect(self):
+        self.gadget.test_start()
+        assert not self.gadget.connected
+        
+    @unittest.expectedFailure
+    def test_disconnect_when_not_connected(self):
         self.gadget.disconnect()
         
-# @unittest.skip('')    
+    def tearDown(self):
+        self.gadget.join()
+        self.host.join()
+        
+@unittest.skip('')    
 class MIDIGadgetTest(GadgetTest):
     def setUp(self):
         super().setUp()
@@ -56,31 +68,24 @@ class MIDIGadgetTest(GadgetTest):
             hostname=MIDI_HOST,
             port=port_ctr)
         
-    def test_connect(self):
-        super().test_connect()
-        breakpoint()
-            
     @unittest.skip('skipping')
     def test_recv(self):
         pass
     
     def tearDown(self):
         super().tearDown()
-        
-@unittest.skip('')
-class RobotGadgetTest(GadgetTest):
+
+@unittest.skip('')            
+class PhoneTest(GadgetTest):
     def setUp(self):
         super().setUp()
-        config = loaders.load_config('blossom')
-        self.gadget = Robot(
-            config=config,
-            )
+        config = loaders.load_gadget('test_phone')
+        self.gadget = Phone(config)
         
+    # def test_on_device_motion(self):
+    def test_on_record(self):
+        self.gadget.on_record('test')
         
-    def test_midi_event(self):
-        super().connect()
-        self.gadget.wait()
-    
-    def tearDown(self):
-        super().tearDown()
-        
+    @unittest.expectedFailure
+    def test_on_record_no_msg(self):
+        self.gadget.on_record()

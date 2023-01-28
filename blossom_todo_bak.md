@@ -23,4 +23,19 @@
 ### Phone
 - [ ] Access server
 - [ ] send gyro data to server
-- [ ] 
+
+
+20230127
+event: device_motion
+# data should be emittable by callign socketio.emit(event=event,**data)
+:
+data: 
+  event: event
+  x: 1
+  y: 2
+  z: 3
+namespace: 
+I think this means that the js emits should also pass the event explicitly,
+i.e. mirror the function call of the python emit
+
+- [ ] midi to keyboard shortcuts and mouse control
