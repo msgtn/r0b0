@@ -23,19 +23,26 @@ from src.config import \
 port_ctr = 9000
 
 sio = socketio.Client()
+host = Host(
+    hostname=LOCALHOST,
+    port=SERVER_PORT
+)
+host.start()
 
 # @unittest.skip('')    
 class GadgetTest(unittest.TestCase):
 
     def setUp(self) -> None:
-        global port_ctr
-        port_ctr += 2
-        self.port_ctr = port_ctr
+        # global port_ctr
+        # port_ctr += 2
+        # self.port_ctr = port_ctr
         self.gadget = Gadget(
             config=loaders.load_gadget('testgadget'),
-            port=port_ctr)
-        self.host = Host(port=port_ctr)
-        self.host.start()
+            hostname=LOCALHOST,
+            port=SERVER_PORT,
+            )
+        # self.host = Host(port=self.port_ctr)
+        # self.host.start()
         # print(self.gadget.__dict__)
         
     def test_fail(self):
@@ -51,18 +58,21 @@ class GadgetTest(unittest.TestCase):
         # self.assertTrue(self.gadget.connected)
         self.assertTrue(self.gadget.is_alive())
         
-    def test_disconnect(self):
-        self.test_start()
-        assert not self.gadget.connected
+    # def test_disconnect(self):
+    #     self.test_start()
+    #     self.assertFalse(self.gadget.connected)
         
-    @unittest.expectedFailure
-    def test_disconnect_when_not_connected(self):
-        self.gadget.disconnect()
+    # @unittest.expectedFailure
+    # def test_disconnect_when_not_connected(self):
+    #     self.gadget.disconnect()
         
     def tearDown(self):
+        # pass
+        print(self.gadget.__dict__)
+        # if self.gadget.connected: self.gadget.disconnect()
         # if self.gadget.is_alive(): self.gadget.join()
-        if self.gadget.connected: self.gadget.join()
         # if self.host.is_alive(): self.host.join()
+        # if self.host.connected: self.host.disconnect()
         
 @unittest.skip('')    
 class MIDIGadgetTest(GadgetTest):

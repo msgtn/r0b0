@@ -20,6 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 class Message(object):
     def __init__(self, *args, **kwargs):
+        # print(self.__dict__, type(self.__dict__), args, kwargs)
         self.__dict__.update(**kwargs)
 
 class Gadget(Client, Thread):

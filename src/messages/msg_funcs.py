@@ -27,3 +27,14 @@ def motion2motor(data=None):
         'value':get_motor_pos(data),
         'motor_id':[1,2,3,4]
     }
+    
+def motion2midi(data=None):
+    if data is None: return {'event':'device_motion'}
+    note = int(np.interp(np.rad2deg(data['x']),[0,180],[40,90]))
+    return {
+        'event':'midi',
+        'type':'note_on',
+        'note':note,
+        'velocity':100,
+        'channel':7,
+    }
