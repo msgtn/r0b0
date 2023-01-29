@@ -33,7 +33,7 @@ class MIDIController(Gadget):
                 Gadget.emit(
                     self,
                     event=midi_msg.event,
-                    data={'pickle':midi_msg})
+                    data={'msg':midi_msg})
                     
     def disconnect(self):
         super().disconnect()

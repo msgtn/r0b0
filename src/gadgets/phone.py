@@ -35,11 +35,12 @@ class Phone(Gadget):
     # @dump_pickle
     def on_record(self,msg):
         # self.emit()
-        print(msg)
+        # print(msg)
         logging.debug(msg)
         
     # @dump_pickle
     def on_device_motion(self,msg):
+        # print(msg)
         self.emit(
             event='device_motion',
             data=msg,
@@ -65,7 +66,8 @@ class Phone(Gadget):
         for _event,_kwargs in self.event_kwargs.items():
             self.emit(
                 event='add_emit',
-                data={'event':_event,'kwargs':_kwargs}
+                data={'event':_event,'kwargs':_kwargs},
+                # namespace=self.namespace,
             )
             self.on(
                 _event,

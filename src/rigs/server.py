@@ -1,5 +1,6 @@
 import glob
 import logging
+
 from src.config import \
     ROOT_DIR, TAPES_DIR, \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
@@ -7,6 +8,7 @@ from src.config import \
     CSR_PEM, KEY_PEM
 from src.utils.loaders import load_pickle,dump_pickle
 from src.gadgets import Tape
+from src import logging
 
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
@@ -28,6 +30,7 @@ class Host(Thread, SocketIO):
         CORS(self.app)
         self.hostname = hostname
         self.port = port
+        # print(f'host port {port}')
         self.tapes = {}
         SocketIO.__init__(self,
             self.app,
@@ -123,19 +126,20 @@ class Host(Thread, SocketIO):
         # print(data,route_func.__name__)
         self.app.add_url_rule(
             data['route'],
-            view_func=route_func
-        )
+            view_func=route_func)
     @load_pickle
     def add_emit(self,data):
+        logging.debug('add_emit',data)
         event = data['event']
-        def _emit_record(s,e,d):
-            logging.debug(e,d)
+        def _emit_record(s,d):
+            logging.debug(s,d)
+            # print(s,d)
             self.emit(
-                event=e,
+                event=d['event'],
                 data=d,
                 **data['kwargs']
             )
-            id_event = f"{data['id']}_{data['event']}"
+            id_event = f"{d['id']}_{d['event']}"
             tape = self.tapes.get(id_event,None)
             if tape is not None:
             # if id_event in self.tapes.keys():
@@ -150,6 +154,7 @@ class Host(Thread, SocketIO):
         self.server.on(
             data['event'],
             _emit_record,
+            # **data['kwargs']
         )
         
     def broadcaster(self, sid):

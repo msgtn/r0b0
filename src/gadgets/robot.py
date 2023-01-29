@@ -45,9 +45,11 @@ class Robot(Gadget, DynamixelManager):
 
     # @Gadget.check_msg
     @load_pickle
-    def position_event(self,msg):
+    def position_event(self,data):
         # msg = pickle.loads(msg)
         # print(msg.motor_id)
+        # print(msg=msg)
+        msg = data['msg']
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]

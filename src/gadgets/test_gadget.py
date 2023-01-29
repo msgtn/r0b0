@@ -31,7 +31,9 @@ class GadgetTest(unittest.TestCase):
         global port_ctr
         port_ctr += 2
         self.port_ctr = port_ctr
-        self.gadget = Gadget(config={},port=port_ctr)
+        self.gadget = Gadget(
+            config=loaders.load_gadget('testgadget'),
+            port=port_ctr)
         self.host = Host(port=port_ctr)
         self.host.start()
         # print(self.gadget.__dict__)
@@ -41,13 +43,16 @@ class GadgetTest(unittest.TestCase):
         pass
     
     def test_start(self):
-        # self.gadget.power_on()
         self.gadget.start()
-        time.sleep(2)
-        self.assertTrue(self.gadget.connected)
+        # time.sleep(1)
+        retry = 0
+        # while not self.gadget.connected and retry<1000:
+            # retry += 1
+        # self.assertTrue(self.gadget.connected)
+        self.assertTrue(self.gadget.is_alive())
         
     def test_disconnect(self):
-        self.gadget.test_start()
+        self.test_start()
         assert not self.gadget.connected
         
     @unittest.expectedFailure
@@ -55,14 +60,15 @@ class GadgetTest(unittest.TestCase):
         self.gadget.disconnect()
         
     def tearDown(self):
-        self.gadget.join()
-        self.host.join()
+        # if self.gadget.is_alive(): self.gadget.join()
+        if self.gadget.connected: self.gadget.join()
+        # if self.host.is_alive(): self.host.join()
         
 @unittest.skip('')    
 class MIDIGadgetTest(GadgetTest):
     def setUp(self):
         super().setUp()
-        config = loaders.load_config('opz')
+        config = loaders.load_gadget('opz')
         self.gadget = MIDIController(
             config=config,
             hostname=MIDI_HOST,

@@ -3,12 +3,14 @@
 from src import gadgets as gadget_shelf
 from src.config import LOCALHOST, SERVER_PORT
 from src.utils import loaders
-from src.rigs import logging
+# from src.rigs import logging
 # from src.gadgets.rig import start_server
 from src.rigs.server import Host
 from src.messages import msg_funcs
 from multiprocessing import Process
 import pickle
+from  src import logging
+# logging = logging.getLogger(__name__)
 
 class Rig(Host):
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
@@ -32,23 +34,23 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
         
     def add_message(self, tx_gadget, rx_gadget, msg_func):
-        logging.debug(tx_gadget, rx_gadget, msg_func)
+        logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,
             [tx_gadget, rx_gadget])
         msg_func = getattr(msg_funcs,msg_func)
         def func_emit(data):
-            if not isinstance(data,dict): data = pickle.loads(data)
+            # if not isinstance(data,dict): data = pickle.loads(data)
             emit_data = self.gadgets[rx_gadget].message(
                 **msg_func(data))
-            print(data)
+            # print(data)
             self.emit(
                 event=emit_data.event,
-                data=pickle.dumps(emit_data),
+                data={'event':emit_data.event,'msg':pickle.dumps(emit_data)},
                 to=None,
                 namespace=rx_namespace
             )
-        print('tx',tx_namespace)
+        # print('tx',tx_namespace)
         self.on_event(
             msg_func()['event'],
             handler=func_emit,

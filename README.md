@@ -37,7 +37,7 @@ python3 -m start dec
 
 Test
 ```
-python3 -m unittest -s src.gadget -t .
+python3 -m unittest discover -s src.gadgets -t .
 ```
 
 ## Notes

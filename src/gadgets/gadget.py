@@ -66,10 +66,9 @@ class Gadget(Client, Thread):
     @dump_pickle
     # @load_pickle
     def emit(self, event, data, **kwargs):
-        print(data)
-        
-        data.update(dict(event=event))
-        print(data)
+        # data.update(dict(event=event))
+        data.update(dict(event=data.get('event',event)))
+        # kwargs.update(data.get('kwargs',{}))
         Client.emit(self,
             event,
             data,
@@ -90,9 +89,8 @@ class Gadget(Client, Thread):
         return msg.__dict__
     
     def disconnect(self) -> None:
-        if self.connected:
-            self.join()    
-            super().disconnect()
+        if self.connected: Client.disconnect(self)
+        if self.is_alive(): self.join()   
 
 class GamePad(Gadget):
     def __init_(self, **kwargs):

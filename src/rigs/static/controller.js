@@ -330,6 +330,7 @@ const handleOrientation = ( e) => {
   if (e.timeStamp-lastEvent > 50) {
     lastEvent = e.timeStamp;
     var body = {
+        event: "device_motion",
         x: beta,
         y: gamma,
         z: alpha, 
@@ -357,7 +358,7 @@ const handleOrientation = ( e) => {
         id: socket.id
       };
 
-    socket.emit("device_motion", "device_motion", body);
+    socket.emit("device_motion", body);
     // socket.emit("message", {data: 'test'});
     console.log(body);
   } 

@@ -1,5 +1,2 @@
 name: testgadget
-namespace: ''
 type: Gadget
-hostname: localhost
-port: 9000
