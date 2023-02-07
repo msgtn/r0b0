@@ -1,8 +1,10 @@
 import numpy as np
 from src.kinematics.blossom import get_motor_pos
+import pickle
 
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
+    print(data)
     return {
         'event':'position',
         'value':(data.value*4096)//127,
@@ -14,9 +16,11 @@ def note2motor(data=None):
     C4 = note value 60
     '''
     if data is None: return {'event':'midi_on'}
+    data = pickle.loads(data['msg'])
+    # print(data)
     return {
         'event':'position',
-        'value':int(np.interp(data.value, [53,77], [0,4096])),
+        'value':int(np.interp(data.note, [53,77], [0,4096])),
         'motor_id':(data.channel+1)
     }
 

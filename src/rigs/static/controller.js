@@ -32,6 +32,7 @@ var audioSelect = document.getElementById('audioSource');
 var videoSelect = document.getElementById('videoSource');
 var recordingIndicator = document.getElementById("recordingIndicator");
 var recordButton = document.getElementById("record");
+var tapeName = document.getElementById("tapeName");
 recordButton.classList.add('notRec');
 recording = false;
 
@@ -410,6 +411,15 @@ function onRecord() {
   recordButton.classList.remove(recording ? 'notRec' : 'Rec');
   recordButton.classList.add(recording ? 'Rec' : 'notRec');
   socket.emit('record',{record:recording,event:'device_motion',id:socket.id});
+}
+
+function onLoad() {
+  console.log('load');
+  socket.emit(
+    'load',{
+      tapeName:tapeName.value,
+      event:'load',
+      id:socket.id})
 }
 
 const config = {

@@ -1,0 +1,1 @@
+/Users/psychomugs/obsidian/psychomugs/projects/blossom/blossom.md

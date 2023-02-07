@@ -21,6 +21,6 @@ SERVER_PORT = 8080
 MIDI_PORT = 9000
 ROBOT_PORT = 9090
 
-with open(str(ROOT_DIR / 'blossom_todo.md'),'r') as infile:
-    with open(str(ROOT_DIR / 'blossom_todo_bak.md'),'w') as outfile:
-        outfile.writelines(infile.readlines())
+# with open(str(ROOT_DIR / 'blossom_todo.md'),'r') as infile:
+#     with open(str(ROOT_DIR / 'blossom_todo_bak.md'),'w') as outfile:
+#         outfile.writelines(infile.readlines())

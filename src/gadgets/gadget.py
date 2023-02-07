@@ -7,6 +7,7 @@ Suitability for everyday tasks, allowing for short development times
 '''
 from src.config import LOCALHOST, SERVER_PORT
 from src.utils.loaders import load_pickle, dump_pickle
+from src import logging
 
 from socketio import Client, AsyncClient, ClientNamespace
 import asyncio
@@ -14,8 +15,8 @@ import pickle
 from threading import Thread
 import urllib3
 urllib3.disable_warnings()
-import logging
-logging.basicConfig(level=logging.INFO)
+# import logging
+# logging.basicConfig(level=logging.INFO)
 
 
 class Message(object):
@@ -69,20 +70,14 @@ class Gadget(Client, Thread):
     def emit(self, event, data, **kwargs):
         # data.update(dict(event=event))
         data.update(dict(event=data.get('event',event)))
+        data.update(dict(id=data.get('id',self.sid)))
         # kwargs.update(data.get('kwargs',{}))
+        logging.debug(data)
+        # print(event,data,kwargs)
         Client.emit(self,
             event,
             data,
             **kwargs)
-        
-    # def check_msg(self, data):
-    def check_msg(event_func):
-        def check_func(event, data):
-            msg = pickle.loads(data)
-            # breakpoint()
-            # assert isinstance(msg, self.message), f"{type(msg)} not readable by {type(self)}"
-            return event_func(msg)
-        return check_func
         
     def pack_msg(self,func,**msg_kwargs):
         return self.message(**msg_kwargs)

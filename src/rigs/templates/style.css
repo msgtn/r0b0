@@ -316,6 +316,10 @@ div {
 
 body {
   margin: 0; /* Because annoying default browser margins */
+  font-family: sans-serif;
+}
+label {
+  font-family: sans-serif;
 }
 video {
     position: absolute;

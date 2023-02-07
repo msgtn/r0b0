@@ -24,11 +24,12 @@ def dump_pickle(func):
             data['msg']=pickle.dumps(data['msg'])
         return func(s,event,data,**kwargs)
     return _inner_func
+
+# the callback
 def load_pickle(func):
     def _inner_func(s,data,**kwargs):
         # print(s,data,kwargs)
         if data.get('msg',None) is not None:
             data['msg']=pickle.loads(data['msg'])
         return func(s,data,**kwargs)
-            
     return _inner_func

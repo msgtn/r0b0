@@ -9,9 +9,6 @@ event_kwargs:
   # record:
   #   namespace: /phone
   device_motion:
+    # namespace: /
     namespace: /phone
-messages:
-- msg_func: note2motor
-  tx_gadget: opz
-  rx_gadget: blossom
   

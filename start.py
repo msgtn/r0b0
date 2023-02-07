@@ -31,11 +31,24 @@ def main():
         rig.add_message(**msg)
     print('powering')
     rig.power_on()
+    return rig
 
+def test_script(rig):
+    tape_name = '20230131000558_device_motion'
+    rig.on_load(
+        {'tapeName':tape_name}
+    )
+    rig.on_play({
+        'tape_name':tape_name
+    })
+
+if __name__=="__main__":
+    rig = main()
+    
+    test_script(rig)
+    
     try:
         breakpoint()
     except KeyboardInterrupt:
         rig.power_off('','')        
-
-if __name__=="__main__":
-    main()
+    

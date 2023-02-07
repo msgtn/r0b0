@@ -25,14 +25,13 @@ MIDO_ARGS = [
     'pitch'
 ]
 
-
 class MIDIController(Gadget):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         self.midi_port = mido.open_ioport(
             config['port_name'],
             callback=self.midi_callback)
-        self.echo = False
+        self.echo = True
         [EVENT_TABLE.pop(mute_message,None) for mute_message in MUTE_EVENTS]
         self.message = MIDIMessage
         self.on('midi',
@@ -44,22 +43,22 @@ class MIDIController(Gadget):
         if midi_msg.type in MUTE_EVENTS: return
         logging.debug(midi_msg.type)
         logging.debug(midi_msg.__dict__)
-        
-        # logging.debug(midi_msg.__dict__.get('note',midi_msg.__dict__))
-        
+        # print(midi_msg,self.connected,self.echo,midi_msg.event)
         if self.connected:
             if self.echo:
-                Gadget.emit(
-                    self,
+                # print(midi_msg,midi_msg.event, )
+                # Gadget.emit(
+                #     self,
+                self.emit(
                     event=midi_msg.event,
-                    data={'event':midi_msg.event,'msg':midi_msg})
+                    data={'event':midi_msg.event,'msg':midi_msg},
+                    namespace=self.namespace)
                     
     @load_pickle
     def on_midi(self,data):
         logging.debug(data)
         self.midi_port.send(
             # TODO - update to self-defined MIDIMessage(**data)
-            # mido.Message(**data)
             data['msg']
         )
                    

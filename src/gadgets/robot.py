@@ -22,8 +22,11 @@ class Robot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         DynamixelManager.__init__(self,
-            usb_port=self.config['usb_port'],
-            baud_rate=self.config['baud_rate'])
+            # usb_port=self.config['usb_port'],
+            usb_port=self.config.get('usb_port', '/dev/tty.usbserial-FT1SF1UM')
+            # baud_rate=self.config['baud_rate'],
+            baud_rate=self.config.get('baud_rate',57600),
+            )
         self.name = config['name']
         # self.motors = OrderedDict()
         self.motors = {}
@@ -99,8 +102,12 @@ class Robot(Gadget, DynamixelManager):
 
     # def id_to_list(self, id, **kwargs):
     def set_compliant(self, compliant=True):
-        for motor in list(self.motors.items()):
-            motor.set_torque_enable(~compliant)
+        # for motor in list(self.motors.items()):
+        #     motor.set_torque_enable(~compliant)
+        if compliant:
+            self.enable_all()
+        else:
+            self.disable_all()
 
     def move_motor_name(self, name, position):
         if isinstance(name, list):

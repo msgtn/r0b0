@@ -57,22 +57,26 @@ class GadgetTest(unittest.TestCase):
             # retry += 1
         # self.assertTrue(self.gadget.connected)
         self.assertTrue(self.gadget.is_alive())
+        time.sleep(5)
+        self.assertTrue(self.gadget.connected)
+        # self.assertFalse(self.gadget.connected)
         
-    # def test_disconnect(self):
-    #     self.test_start()
-    #     self.assertFalse(self.gadget.connected)
+    def test_disconnect(self):
+        self.test_start()
+        self.gadget.disconnect()
+        time.sleep(5)
+        self.assertFalse(self.gadget.connected)
         
-    # @unittest.expectedFailure
-    # def test_disconnect_when_not_connected(self):
-    #     self.gadget.disconnect()
+    @unittest.expectedFailure
+    def test_disconnect_when_not_connected(self):
+        self.gadget.disconnect()
         
     def tearDown(self):
-        # pass
-        print(self.gadget.__dict__)
-        # if self.gadget.connected: self.gadget.disconnect()
-        # if self.gadget.is_alive(): self.gadget.join()
-        # if self.host.is_alive(): self.host.join()
-        # if self.host.connected: self.host.disconnect()
+        # print(self.gadget.__dict__)
+        if self.gadget.connected: self.gadget.disconnect()
+        if self.gadget.is_alive(): self.gadget.join()
+        # if host.is_alive(): self.host.join()
+        # if host.connected: self.host.disconnect()
         
 @unittest.skip('')    
 class MIDIGadgetTest(GadgetTest):
