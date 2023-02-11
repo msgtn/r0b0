@@ -45,7 +45,8 @@ class Rig(Host):
             # if not isinstance(data,dict): data = pickle.loads(data)
             emit_data = self.gadgets[rx_gadget].message(
                 **msg_func(data))
-            print(data)
+            # print(data)
+            # logging.debug(f"func_emit {data}")
             self.emit(
                 event=emit_data.event,
                 data={'event':emit_data.event,'msg':pickle.dumps(emit_data)},

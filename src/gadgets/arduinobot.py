@@ -1,12 +1,15 @@
 from .gadget import Gadget, Message, logging
-from dynamixel_python import \
-    DynamixelManager, DynamixelMotor, \
-    ReadError
+from src.utils import loaders
+
+# from dynamixel_python import \
+#     DynamixelManager, DynamixelMotor, \
+#     ReadError
 import pickle
 from collections import OrderedDict
 from socketio import ClientNamespace
 import numpy as np
 from Arduino import Arduino
+
 
 class MotorMessage(Message):
     def __init__(self, event, value, motor_id, **kwargs):
@@ -24,6 +27,7 @@ class ArduinoBot(Gadget, Arduino):
             port=self.config['usb_port'],
             baud=self.config['baud_rate'],
             timeout=self.config['timeout'])
+        return
         self.name = config['name']
         self.motors = {}
         self.motors.setdefault(None)
@@ -135,9 +139,9 @@ class ArduinoBot(Gadget, Arduino):
         pass
 
 
-class Motor(DynamixelMotor):
-    def __init__(**kwargs):
-        super().__init__(**kwargs)
+# class Motor(DynamixelMotor):
+#     def __init__(**kwargs):
+#         super().__init__(**kwargs)
         
         
 # def midicc2motor(tx_msg, ):
@@ -153,3 +157,18 @@ class Motor(DynamixelMotor):
 #         value=np.interp(tx_msg.value, [30,60], [0,4096]),
 #         motor_id=tx_msg.channel+1,   
 #     )
+
+if __name__=="__main__":
+    board = ArduinoBot(
+        config=loaders.load_gadget('ardubot')
+    )
+    # board = Arduino('9600',port='/dev/cutimeout=10)
+    LED_PIN = 13
+    board.pinMode(LED_PIN,'OUTPUT')
+    import time
+    while True:
+        board.digitalWrite(LED_PIN, "LOW")
+        time.sleep(1)
+        board.digitalWrite(LED_PIN, "HIGH")
+        time.sleep(1)
+    breakpoint()

@@ -113,37 +113,7 @@ class Host(Thread, SocketIO):
     def on_play(self, data):
         tape = self.tapes.get(data['tape_name'],None)
         if tape is not None:
-            # print(tape.get_frame())
-            # f = tape.get_frame()
-            # [print(_f) for _f in f]
-            # frame, playing = tape.get_frame()
-            # t_0 = frame['data']['time']
-            # tape_time = lambda : time.time-(frame['data']['time']/10e3)
-            
-            # while playing:
-            tape_sched = None
-            
-            for frame,_ in tape.get_frame():
-                if tape_sched is None:
-                    t_0 = frame['data']['time']
-                    tape_sched = sched.scheduler(
-                        # define time relative to first frame
-                        # timefunc=lambda: time.time()-t_0/10e3,
-                        timefunc=time.time,
-                        delayfunc=time.sleep)
-                    
-                # frame['kwargs'] = {'namespace':'/blossom'}
-                    
-                # tape_sched.enterabs(
-                tape_sched.enter(
-                    # time=frame['data']['time']/10e3,
-                    delay=frame['data']['time'],
-                    priority=1,
-                    action=self.emit,
-                    kwargs=frame,
-                )
-                # frame, playing = tape.get_frame()
-            tape_sched.run()            
+            tape.start()            
 
     # no metaphor for this one
     def _webrtc_setup(self):
@@ -187,12 +157,12 @@ class Host(Thread, SocketIO):
             # if id_event in self.tapes.keys():
                 # record time in millis
                 d.update({
-                    'time':int(time.time()*1e3),
+                    'time':int(time.time()*10e3),
                     })
-                tape.write({
+                tape.write({**{
                     'event':data['event'],
-                    'data':d,
-                    'kwargs':data['kwargs']
+                    'data':d},
+                    **data['kwargs'],
                 })
         self.server.on(
             data['event'],

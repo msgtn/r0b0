@@ -15,6 +15,7 @@ BAUD_DICT = {
 
 dxl_mgr = DynamixelManager(
     usb_port='/dev/tty.usbserial-FT1SF1UM',
+    # usb_port='/dev/tty.usbserial-FT2KQD1N',
     baud_rate=57600,
     # baud_rate=10e6,
 )
@@ -30,6 +31,7 @@ def add_motors(motor_id_limit=MOTOR_ID_LIMIT):
     
 def get_connected_motors():
     return [int(motor_id) for motor_id,motor in dxl_mgr.dxl_dict.items() if motor.ping()]
+# alias
 gcm = get_connected_motors
 
 def set_ids(id_dict):
@@ -44,12 +46,13 @@ def set_param(param,id_dict):
 if __name__=="__main__":
     
     add_motors(MOTOR_ID_LIMIT)
-    
-    set_ids({
-        7:1,
-    })
+    dxl_mgr.enable_all()
+    # set_ids({
+    #     1:3
+    # })
     
     print(f"Found motors with ids {get_connected_motors()}")
+    
     
     breakpoint()
     

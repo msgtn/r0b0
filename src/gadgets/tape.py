@@ -1,3 +1,4 @@
+import sched
 from src.config import CSR_PEM, KEY_PEM, LOCALHOST, SERVER_PORT, TAPES_DIR
 from .gadget import Gadget, Message
 
@@ -29,13 +30,36 @@ class Tape(Gadget):
             port=port)
         self.filename = str( TAPES_DIR / f"{name}.json")
         self.tape = []
+        self.sched = sched.scheduler(
+            timefunc=time.time,
+            delayfunc=time.sleep,
+        )
+        self.playing_thread = Thread(
+            target=self._play,
+        )
         
-        # if name is not 'tmp' and os.path.exists(self.filename):
-        #     self.tape = self.open(name)
-        #     # self.tape = self.create(name)
-        # else:
-        #     self.tape = []
+    def start(self):
+        self.namespace = self.tape[0].get('namespace','')
+        logging.debug(f"Tape namespace: {self.namespace}")
+        # connect to server
+        Gadget.start(self)
+        logging.debug(self)
+        # while len(self.namespaces)==0:
+        while self.namespaces.get(self.namespace,None) is None:
+            # continue
+            logging.debug("Waiting for client connect")
+            
+        logging.debug(self.namespaces)
+        self.playing_thread.start()
         
+    def _play(self):
+        t_last = 0
+        for f,frame in enumerate(self.get_frame()):
+            self.emit(**frame)
+            # print(frame)
+            time.sleep(frame['data']['time']-t_last)
+            t_last = frame['data']['time']
+            
     def _normalize_time(self):
         t_0 = self.tape[0]['data']['time']
         for f,frame in enumerate(self.tape):
@@ -74,7 +98,8 @@ class Tape(Gadget):
         subtape = self.tape[in_idx:out_idx]
         for f,frame in enumerate(subtape):
             print(frame['data']['time'])
-            yield [frame, f==(len(subtape)-1)]
+            # yield [frame, f==(len(subtape)-1)]
+            yield frame
         
     # def play(self):
     #     t_last = self.tape[0]['time']

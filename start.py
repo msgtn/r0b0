@@ -10,11 +10,13 @@ import logging
 logging.basicConfig(
     # filename='example.log',
     encoding='utf-8',
-    level=logging.INFO,
+    # level=logging.INFO,
+    level=logging.DEBUG,
     )
+from src.config import LOCALHOST, SERVER_PORT
 
-LOCALHOST = 'localhost'
-SERVER_PORT = 8080
+# LOCALHOST = 'localhost'
+# SERVER_PORT = 8080
 
 def main():
     config = loaders.load_rig(sys.argv[1])
@@ -23,7 +25,8 @@ def main():
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
         # TODO - get rid of this by adding to rig.add_gadget
-        namespaces=[f'/{gadget}' for gadget in config['gadgets']]
+        # namespaces=[f'/{gadget}' for gadget in config['gadgets']],
+        namespaces=['/','/blossom'],
     )
     for gadget in config['gadgets']:
         rig.add_gadget(gadget)
@@ -35,6 +38,10 @@ def main():
 
 def test_script(rig):
     tape_name = '20230131000558_device_motion'
+    tape_name = '20230209011442_device_motion'
+    tape_name = '20230210224815_device_motion'
+    tape_name = '20230210225358_device_motion'
+    tape_name = '20230210225448_device_motion'
     rig.on_load(
         {'tapeName':tape_name}
     )

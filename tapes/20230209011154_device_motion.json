@@ -1,0 +1,1562 @@
+[
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2489543881544023,
+            "y": 0.27652319391670427,
+            "z": 6.159520431449535,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923114785,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2537987562558082,
+            "y": 0.24667529411663125,
+            "z": 6.167654498429909,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923114786,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2550309156838277,
+            "y": 0.13896776977896513,
+            "z": 6.179236195706664,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923114843,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2544331054462068,
+            "y": -0.02074257510594204,
+            "z": 6.201832419650741,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923114885,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2425815636155784,
+            "y": -0.20825026802549032,
+            "z": 6.2317583352204755,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923114956,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.248853446293757,
+            "y": -0.26349035253021313,
+            "z": 6.243500429563279,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115022,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2804209457025362,
+            "y": -0.21884257598386017,
+            "z": 6.251880180425572,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115091,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2897451062877954,
+            "y": 0.16030567805905532,
+            "z": 6.273341688021584,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115304,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.043682146809164,
+            "y": 0.6361686518235067,
+            "z": 0.08657606376216972,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115308,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.7554375964284226,
+            "y": 0.650269194323207,
+            "z": 0.10860065099017352,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115309,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.5359600649472388,
+            "y": 0.7890421111949854,
+            "z": 6.245895953352066,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115343,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.557433076209046,
+            "y": 0.8865760677006437,
+            "z": 6.225226764666346,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115393,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.7432368539444505,
+            "y": 0.9883564552790409,
+            "z": 6.196201965428985,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115489,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.9918069942390081,
+            "y": 0.9588064851934743,
+            "z": 6.225729672748652,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115504,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2508880198350663,
+            "y": 0.5751793545197611,
+            "z": 6.276448549667194,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115559,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2692590338938514,
+            "y": -0.7297500623072054,
+            "z": 0.021271041081775483,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115698,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.9810906579048346,
+            "y": -1.2341450092354287,
+            "z": 0.12424103298722464,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115700,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.6791619071668896,
+            "y": -1.3050966495760377,
+            "z": 0.1827655115345002,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115830,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.6999230699897047,
+            "y": -1.2016462870112374,
+            "z": 0.1323668565030682,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115832,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.9417239326649355,
+            "y": -1.031467496818735,
+            "z": 0.05507675286360786,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115872,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2418288789783216,
+            "y": -0.6682494910910592,
+            "z": 0.0654075567595766,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923115945,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1648963282125593,
+            "y": 0.6998025951145841,
+            "z": 0.11391635493955093,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116005,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.8310262385140916,
+            "y": 0.9282847793497168,
+            "z": 0.06391854608693501,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116088,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.6303482706384291,
+            "y": 0.8959692516771389,
+            "z": 0.015439114673033588,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116132,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.7045495108546258,
+            "y": 0.7723210591905018,
+            "z": 0.1128755030501894,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116195,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.8776983076519177,
+            "y": 0.5451405683061998,
+            "z": 0.258409835542202,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116551,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.8568438838051418,
+            "y": 0.2542734120708548,
+            "z": 0.32160168563357094,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116555,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.5788330171986212,
+            "y": 0.05680610911087453,
+            "z": 0.2312198655354873,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116557,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.20088163039492335,
+            "y": 0.04867761673158258,
+            "z": 6.179064064759666,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116559,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": -0.01717447327005368,
+            "y": -0.02944092516201515,
+            "z": 2.126287810339023,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116562,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.06022305997100697,
+            "y": -0.11941439126722535,
+            "z": 1.0823775171107262,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923116626,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.3218598507847517,
+            "y": -0.09776551543421151,
+            "z": 0.23349929999674413,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117076,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.8049019802020326,
+            "y": -0.06975377364328428,
+            "z": 6.201042063960502,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117078,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.3143778349392194,
+            "y": 0.1377091954874272,
+            "z": 6.034271544481926,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117081,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.6715101868385873,
+            "y": -0.8046385550555938,
+            "z": 6.030360375478381,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117083,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.8606609406293533,
+            "y": -0.3983917229032308,
+            "z": 6.153631508515138,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117085,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.9131437567815406,
+            "y": -0.47869057353462785,
+            "z": 0.018248616222322493,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117087,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.8738616622982682,
+            "y": -0.6773636490024867,
+            "z": 0.196350460612652,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117089,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.7193771532540834,
+            "y": -0.8974356647614132,
+            "z": 0.1794209429677544,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117108,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.3346119943070691,
+            "y": -0.07960256424796691,
+            "z": 6.247142316339581,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117174,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.9310957074904345,
+            "y": -0.34776291983859187,
+            "z": 0.05642866741257094,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117241,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.5892151749823606,
+            "y": -0.4698986952958632,
+            "z": 0.35342918990382916,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117401,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.4000685326922412,
+            "y": -0.5122449355163186,
+            "z": 0.5331927147223523,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117402,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.47403889247433245,
+            "y": -0.5002660088754571,
+            "z": 0.4063130383294776,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117446,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 0.7389784819390611,
+            "y": -0.3877674997538251,
+            "z": 0.09581096671680836,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117529,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.00384500069555,
+            "y": -0.1267792914446732,
+            "z": 6.133474228970999,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117565,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.241862890143504,
+            "y": 0.7553774441363266,
+            "z": 6.016686892352907,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117634,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1113477320244924,
+            "y": 1.5405112782401558,
+            "z": 6.0467163945565074,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117797,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 2.089670667817222,
+            "y": -1.5645140355860738,
+            "z": 6.089795485672901,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117798,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1355139797360578,
+            "y": 1.4980349162022943,
+            "z": 6.100132281081701,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117804,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.326241994794446,
+            "y": 1.2339281652577718,
+            "z": 6.078026407396557,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117930,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.3284048005504705,
+            "y": -0.2911030278029673,
+            "z": 6.073141038589064,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923117942,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1186713203383012,
+            "y": -0.6990734927716096,
+            "z": 6.132003522981057,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118013,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.0874362686019896,
+            "y": -0.7289120808984034,
+            "z": 6.135546642934624,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118062,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.094493172042813,
+            "y": -0.6887726666951645,
+            "z": 6.115000929085569,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118132,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1154400020240127,
+            "y": -0.5937600732347573,
+            "z": 6.08889211122788,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118193,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.1862560442616659,
+            "y": -0.3717955149671423,
+            "z": 6.020555918676717,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118261,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2351770502128359,
+            "y": -0.06758960469396744,
+            "z": 5.9764720501408695,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118452,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2297588185984996,
+            "y": 0.20461348666203188,
+            "z": 5.982159183710994,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118452,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    },
+    {
+        "event": "device_motion",
+        "data": {
+            "event": "device_motion",
+            "x": 1.2278290327744974,
+            "y": 0.33277590894735337,
+            "z": 5.997802584502645,
+            "ax": 0,
+            "ay": 0,
+            "az": 0,
+            "h": 70,
+            "q": 0,
+            "ears": 50,
+            "landscape": false,
+            "mirror": true,
+            "heightCtrl": false,
+            "headCtrl": true,
+            "yaw": 0,
+            "time": 1675923118453,
+            "portrait": true,
+            "id": "HVEBXdUub9C3Ry0aAAAG"
+        },
+        "kwargs": {
+            "namespace": "/phone"
+        }
+    }
+]

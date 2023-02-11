@@ -8,6 +8,14 @@ import pickle
 from collections import OrderedDict
 from socketio import ClientNamespace
 import numpy as np
+from src import logging
+
+BAUD_DICT = {
+    57600:1,
+    115200:2,
+    1000000:3,
+    9600:0
+}
 
 class MotorMessage(Message):
     def __init__(self, event, value, motor_id, **kwargs):
@@ -23,7 +31,7 @@ class Robot(Gadget, DynamixelManager):
         Gadget.__init__(self, config, **kwargs)
         DynamixelManager.__init__(self,
             # usb_port=self.config['usb_port'],
-            usb_port=self.config.get('usb_port', '/dev/tty.usbserial-FT1SF1UM')
+            usb_port=self.config.get('usb_port', '/dev/tty.usbserial-FT1SF1UM'),
             # baud_rate=self.config['baud_rate'],
             baud_rate=self.config.get('baud_rate',57600),
             )
@@ -53,6 +61,7 @@ class Robot(Gadget, DynamixelManager):
         # print(msg.motor_id)
         # print(msg=msg)
         msg = data['msg']
+        logging.debug(msg)
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
@@ -88,9 +97,9 @@ class Robot(Gadget, DynamixelManager):
             # https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/
                    
             # TODO - use something like a DataFrame instead
-            self.motors.update({
-                motor['name']:dxl_motor
-            })
+            # self.motors.update({
+            #     motor['name']:dxl_motor
+            # })
             # TODO - catch if two motors are on the same id
             self.motors_by_id.update({
                 motor['id']:dxl_motor
@@ -129,8 +138,8 @@ class Robot(Gadget, DynamixelManager):
         self.motors_by_id[id].set_goal_position(int(position))
 
     def _move_motor_name(self, name, position):
-        self.motors[name].set_torque_enable(True)
-        self.motors[name].set_goal_position(position)
+        self.dxl_dict[name].set_torque_enable(True)
+        self.dxl_dict[name].set_goal_position(position)
 
     def motor_fn(self, id, fn, **kwargs):
         try:
@@ -150,9 +159,8 @@ class Robot(Gadget, DynamixelManager):
             # self.move_motor
 
     def get_motor_pos(self):
-        
         return {motor_name:motor.get_present_position() \
-            for motor_name, motor in self.motors.items()}
+            for motor_name, motor in self.dxl_dict.items()}
 
     def reset_position(self):
         self.goto_position(self.reset_pos)
@@ -160,10 +168,11 @@ class Robot(Gadget, DynamixelManager):
     def reconfig(self, config):
         pass
 
-    def load_sequence(self, seq_fn, rad=True, force=True):
-        pass
-    def add_sequence(self, seq):
-        pass
+    def set_param(self,param,id_dict):
+        for old_id,new_id in id_dict.items():
+            getattr(
+                self.dxl_dict[str(old_id)], f"set_{param}")(new_id)
+
 
 
 class Motor(DynamixelMotor):

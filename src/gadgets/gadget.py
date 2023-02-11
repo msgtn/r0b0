@@ -54,13 +54,12 @@ class Gadget(Client, Thread):
         hostname=self.hostname
         port=self.port
         header='https'
-        print(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
-        print(self.namespace)
+        logging.debug(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
         Client.connect(self,
             url=f"{header}://{hostname}:{port}",
             # "https://r0b0.ngrok.io/",
-            namespaces=["/",self.namespace],
-            wait=False,
+            namespaces=[self.namespace,"/"],
+            wait=True,
             wait_timeout=1,
             )
         Client.wait(self)
@@ -71,9 +70,10 @@ class Gadget(Client, Thread):
         # data.update(dict(event=event))
         data.update(dict(event=data.get('event',event)))
         data.update(dict(id=data.get('id',self.sid)))
-        # kwargs.update(data.get('kwargs',{}))
-        logging.debug(data)
-        # print(event,data,kwargs)
+        # logging.debug(data)
+        # logging.debug(self)
+        # logging.debug(self.namespaces)
+        # breakpoint() # TODO - self does not have any connected namespaces
         Client.emit(self,
             event,
             data,
@@ -86,9 +86,14 @@ class Gadget(Client, Thread):
     
     def disconnect(self) -> None:
         if self.connected: Client.disconnect(self)
-        if self.is_alive(): self.join()   
+        # if self.is_alive(): self.join()   
 
 class GamePad(Gadget):
     def __init_(self, **kwargs):
         super.__init__(**kwargs)
+        
+def init_gadget(gadget_type=Gadget, *args, **kwargs):
+    return gadget_type(*args, **kwargs)
 
+if __name__=="__main__":
+    gadget = init_gadget()
