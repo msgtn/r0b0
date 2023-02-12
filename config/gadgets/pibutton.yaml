@@ -1,0 +1,8 @@
+name: mpibuttons
+type: PiButton
+buttons:
+  manual_button: 20
+  shutter: 5
+leds:
+  led: 15
+  
