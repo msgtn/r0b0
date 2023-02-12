@@ -25,8 +25,8 @@ def main():
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
         # TODO - get rid of this by adding to rig.add_gadget
-        # namespaces=[f'/{gadget}' for gadget in config['gadgets']],
-        namespaces=['/','/blossom'],
+        namespaces=[f'/{gadget}' for gadget in config['gadgets']],
+        # namespaces=['/','/blossom'],
     )
     for gadget in config['gadgets']:
         rig.add_gadget(gadget)
@@ -52,7 +52,7 @@ def test_script(rig):
 if __name__=="__main__":
     rig = main()
     
-    test_script(rig)
+    # test_script(rig)
     
     try:
         breakpoint()

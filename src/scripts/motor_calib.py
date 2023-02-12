@@ -53,9 +53,7 @@ if __name__=="__main__":
     
     print(f"Found motors with ids {get_connected_motors()}")
     
-    
     breakpoint()
-    
     
     '''
     Usage

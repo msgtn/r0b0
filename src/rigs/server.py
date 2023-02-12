@@ -8,7 +8,7 @@ from src.config import \
     CSR_PEM, KEY_PEM
 from src.utils.loaders import load_pickle,dump_pickle
 from src.gadgets import Tape
-from src import logging
+from src import logging, get_timestamp
 
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
@@ -101,7 +101,7 @@ class Host(Thread, SocketIO):
         if data['record']:
             # start recording, make a new Tape
             self.tapes.update({
-                id_event:Tape(f"{time.strftime('%Y%m%d%H%M%S')}_{data['event']}")
+                id_event:Tape(f"{get_timestamp()}_{data['event']}")
             })
         else: 
             # stop recording, get the Tape and save

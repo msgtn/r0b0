@@ -1,36 +1,13 @@
-name: blossom
-type: Robot
+name: mpibuttons
+type: PiButton
 hostname: localhost
 port: 9000
 usb_port: /dev/tty.usbserial-FT1SF1UM
 # usb_port: /dev/tty.usbserial-FT2KQD1N
 baud_rate: 57600
-motors: # use these same names as kwargs to constructors
-- name: tower_1
-  model: xl330-m288
-  id: 1
-  position:
-    reset: 0
-    min: -40
-    max: 140
-- name: tower_2
-  model: xl330-m288
-  id: 2
-  position:
-    reset: 0
-    min: -40
-    max: 140
-- name: tower_3
-  model: xl330-m288
-  id: 3
-  position:
-    reset: 0
-    min: -40
-    max: 140
-- name: base
-  model: xl330-m288
-  id: 4
-  position:
-    reset: 0
-    min: -140
-    max: 140
+buttons:
+  manual_button: 20
+  button: 5
+leds:
+  led: 15
+  

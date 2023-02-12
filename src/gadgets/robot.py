@@ -132,14 +132,21 @@ class Robot(Gadget, DynamixelManager):
             position = [position]
         for _id,_position in zip(motor_id,position):
             self._move_motor_id(_id, _position)
+            
+    # def _set_goal_position(func):
+    #     return func().set_goal_position
         
-    def _move_motor_id(self, id, position):
-        self.motors_by_id[id].set_torque_enable(True)
-        self.motors_by_id[id].set_goal_position(int(position))
+    def _move_motor_id(self, motor_id, position):
+        self.motors_by_id[motor_id].set_torque_enable(True)
+        self.motors_by_id[motor_id].set_profile_acceleration(26)
+        self.motors_by_id[motor_id].set_profile_velocity(26)
+        self.motors_by_id[motor_id].set_goal_position(int(position))
 
     def _move_motor_name(self, name, position):
         self.dxl_dict[name].set_torque_enable(True)
-        self.dxl_dict[name].set_goal_position(position)
+        self.dxl_dict[name].set_profile_acceleration(26)
+        self.dxl_dict[name].set_profile_velocity(26)
+        self.dxl_dict[name].set_goal_position(int(position))
 
     def motor_fn(self, id, fn, **kwargs):
         try:
@@ -168,10 +175,11 @@ class Robot(Gadget, DynamixelManager):
     def reconfig(self, config):
         pass
 
-    def set_param(self,param,id_dict):
-        for old_id,new_id in id_dict.items():
+    def set_param(self,param,motor_id_dict):
+        for motor_id,motor_value in motor_id_dict.items():
             getattr(
-                self.dxl_dict[str(old_id)], f"set_{param}")(new_id)
+                self.dxl_dict[str(motor_id)],
+                f"set_{param}")(motor_value)
 
 
 
