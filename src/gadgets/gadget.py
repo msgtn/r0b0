@@ -70,7 +70,7 @@ class Gadget(Client, Thread):
         # data.update(dict(event=event))
         data.update(dict(event=data.get('event',event)))
         data.update(dict(id=data.get('id',self.sid)))
-        # logging.debug(data)
+        logging.debug(data)
         # logging.debug(self)
         # logging.debug(self.namespaces)
         # breakpoint() # TODO - self does not have any connected namespaces
