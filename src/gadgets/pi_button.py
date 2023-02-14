@@ -42,7 +42,8 @@ class PiButton(Gadget):
     def _emit_button(self,button_name,event='pi_button'):
         return lambda : self.emit(
             event=event,
-            data={'button':button_name})
+            data={'button':button_name},
+            namespace=self.namespace)
 
     def _assign_buttons(self, button_dict):
         # _emit_button = lambda button_name: \

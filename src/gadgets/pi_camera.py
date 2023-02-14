@@ -27,14 +27,20 @@ class PiCamera(Gadget,Picamera2):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
-        self.start = Gadget.start
         Picamera2.start(self)
         self.capture_file(str(TAPES_DIR / 'testshot.jpg'))
 
         self.on('shutter',
-            handler=self.release_shutter)
+            handler=self.release_shutter,
+            # handler=lambda : \
+            #     self.capture_file(
+            #         str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
+            #     )
+            namespace=self.namespace
+            )
         
         self.set_param = self.__dict__.update
+        self.start = lambda: Gadget.start(self)
         
     @load_pickle
     def release_shutter(self, msg, save_dir=TAPES_DIR):
@@ -42,7 +48,10 @@ class PiCamera(Gadget,Picamera2):
         #     'shutter_speed')
         logging.debug(f"Shutter released")
         # logging.debug(f"Shutter released, ss={self.shutter_speed}")
-        
+        self.capture_file(
+            str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
+        )
+
         # self.camera.capture(str(TAPES_DIR / get_timestamp()))
 
     def start(self):
