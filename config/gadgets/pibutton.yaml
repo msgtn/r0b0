@@ -4,14 +4,14 @@ buttons:
   # manual_button: 20
   # shutter: 5
   k1: 21
-  # k2: 20
-  shutter: 20
+  k2: 20
   k3: 16
   d_up: 6
   d_down: 19
   d_left: 5
   d_right: 26
   d_press: 13
+  shutter: 12
 leds:
   led: 15
   
