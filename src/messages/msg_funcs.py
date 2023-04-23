@@ -1,9 +1,10 @@
 import numpy as np
-from src.kinematics.blossom import get_motor_pos
+#from src.kinematics.blossom import get_motor_pos
 import pickle
 
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
+    data = pickle.loads(data['msg'])
     print(data)
     return {
         'event':'position',
@@ -41,4 +42,11 @@ def motion2midi(data=None):
         'note':note,
         'velocity':100,
         'channel':7,
+    }
+
+def button2cam(data=None):
+    if data is None: return {'event':'pi_button'}
+    return {
+        # 'event':'shutter',
+        'event':data['button'],
     }

@@ -1,0 +1,9 @@
+name: up
+gadgets:
+- opz
+- upbot
+messages:
+- msg_func: cc2motor
+  tx_gadget: opz
+  rx_gadget: upbot
+  

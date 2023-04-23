@@ -55,6 +55,7 @@ if __name__=="__main__":
     # test_script(rig)
     
     try:
+        print("Breakpoint")
         breakpoint()
     except KeyboardInterrupt:
         rig.power_off('','')        

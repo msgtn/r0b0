@@ -1,0 +1,11 @@
+name: mpi
+hostname: localhost
+port: 8080
+gadgets:
+  # TODO - pibutton first will call pause
+- pibutton
+- picamera
+messages:
+- msg_func: button2cam
+  tx_gadget: pibutton
+  rx_gadget: picamera

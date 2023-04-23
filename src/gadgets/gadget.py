@@ -59,7 +59,7 @@ class Gadget(Client, Thread):
             url=f"{header}://{hostname}:{port}",
             # "https://r0b0.ngrok.io/",
             namespaces=[self.namespace,"/"],
-            wait=True,
+            # wait=True,
             wait_timeout=1,
             )
         Client.wait(self)
