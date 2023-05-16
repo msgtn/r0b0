@@ -1,0 +1,4 @@
+name: joystick
+gadgets:
+- x3d
+- pygamekeys

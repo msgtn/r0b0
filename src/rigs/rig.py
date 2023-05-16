@@ -10,7 +10,21 @@ from src.messages import msg_funcs
 from multiprocessing import Process
 import pickle
 from  src import logging
+import time
 # logging = logging.getLogger(__name__)
+
+
+import pygame
+from pygame import joystick as pgJoystick, \
+    event as pgEvent, \
+    display as pgDisplay, \
+    time as pgTime
+# from pygame.joystick import Joystick as pgJoystick
+# pgEvent.init()
+pygame.init()
+pgDisplay.init()
+pgJoystick.init()
+pgTime.Clock().tick(1)
 
 class Rig(Host):
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
@@ -19,12 +33,20 @@ class Rig(Host):
         self.hostname = hostname
         self.port = port
         self.power = False
+        self.is_pygame_rig = False
+        self.pygame_gadgets = {}
     
     def add_gadget(self, gadget_name):
         config = loaders.load_gadget(gadget_name)
         gadget = getattr(gadget_shelf, config['type'], None)
         assert gadget is not None, f"Gadget type {config['type']} does not exist"
         gadget = gadget(config)
+        logging.debug(f'{gadget_name}.__bases__ = {gadget.__class__}')
+        if 'pygame' in str(gadget.__class__).lower():
+            self.is_pygame_rig = True
+            self.pygame_gadgets.update({
+                gadget.pygame_name:gadget
+            })
         self.gadgets.update({
             gadget_name:gadget
         })
@@ -46,10 +68,12 @@ class Rig(Host):
             emit_data = self.gadgets[rx_gadget].message(
                 **msg_func(data))
             # print(data)
-            # logging.debug(f"func_emit {data}")
+            logging.debug(f"func_emit {data}")
             self.emit(
                 event=emit_data.event,
-                data={'event':emit_data.event,'msg':pickle.dumps(emit_data)},
+                data={
+                    'event':emit_data.event,
+                    'msg':pickle.dumps(emit_data)},
                 to=None,
                 namespace=rx_namespace
             )
@@ -60,7 +84,47 @@ class Rig(Host):
             namespace=tx_namespace
         )
         
-        
+    def pygame_event_handler(self):
+        T_LAST_EVENT = 0
+        T_COOLDOWN = 300/(10e3)
+        while True:
+            if (time.time()-T_LAST_EVENT)<T_COOLDOWN: continue
+            T_LAST_EVENT = time.time()
+            for event in pgEvent.get():
+                _event_name = pgEvent.event_name(event.type).lower()
+                _event_dict = event.__dict__
+                pygame_name = ''
+                if 'joy' in _event_name:
+                    # print(_event_dict)
+                    # pass
+                    pygame_name = f'joy_{_event_dict.get("joy","")}'
+                    
+                elif 'key' in _event_name:
+                    pygame_name = 'keys'
+                    # pygame_name = ''
+                    pass
+                # logging.debug(pygame_name)
+                event_gadget = self.pygame_gadgets.get(
+                    pygame_name,None)
+                emit_dict =  dict(
+                    event=_event_name,
+                    data=_event_dict,
+                    # namespace=event_gadget.namespace,
+                )
+                # if event_gadget is None:
+                #     continue
+                if event_gadget is not None:
+                    emit_dict.update(dict(
+                        namespace=event_gadget.namespace
+                    ))
+                    event_gadget.emit(**emit_dict)
+                # pygame.time.delay(int(T_COOLDOWN*10e3))
+                # pgEvent.clear()
+                break
+                # if 'axis' not in _event_name:
+                #     logging.debug(emit_dict)
+                    
+                    
     def power_on(self,):
         # breakpoint()
         self.start()

@@ -1,3 +1,4 @@
+import time
 from src.utils.loaders import load_pickle, dump_pickle
 
 from .gadget import Gadget, Message
@@ -17,6 +18,9 @@ BAUD_DICT = {
     9600:0
 }
 
+T_LAST_CMD = 0
+T_COOLDOWN = 300/10e3
+
 class MotorMessage(Message):
     def __init__(self, event, value, motor_id, **kwargs):
         # breakpoint()
@@ -28,7 +32,7 @@ class MotorMessage(Message):
 
 class Robot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
-        Gadget.__init__(self, config, **kwargs)
+        Gadget.__init__(self, config, request_timeout=0.1, **kwargs)
         DynamixelManager.__init__(self,
             # usb_port=self.config['usb_port'],
             usb_port=self.config.get('usb_port', '/dev/tty.usbserial-FT1SF1UM'),
@@ -43,7 +47,23 @@ class Robot(Gadget, DynamixelManager):
         self.motors_by_id.setdefault(None)
         if self.config.get('motors', False):
             self.add_motors_from_config(self.config['motors'])
+            # time.sleep(2)
+        # enabled = False 
+        # while not enabled:            
+        #     try:
+        #         self.ping_all()
+        #         self.enable_all()
+        #         enabled = True
+        #     except:
+        #         continue
         self.power_up()
+        self.enable_all()
+        for _,motor in self.motors_by_id.items():
+            # print(motor)
+            if motor is None: continue
+            # motor.set_torque_enable(True)
+            motor.set_operating_mode(3)
+            
         self.kinematic_function = ''
         self.message = MotorMessage
         print(self.__dict__['namespace'])
@@ -67,13 +87,33 @@ class Robot(Gadget, DynamixelManager):
             msg.value = [msg.value]
         for motor_id, motor_value in zip(msg.motor_id,msg.value):
             motor = self.motors_by_id.get(motor_id,None)
-            if motor is None: 
-                print(f"No motor ID {motor_id} found, skipping")
+            if motor is None:
+                # print(f"No motor ID {motor_id} found, skipping")
                 return
+            # if (time.time()-motor.t_last_cmd) < T_COOLDOWN:
+            #     continue
+            # print(motor_value)
+            logging.debug(motor_value)
+            # logging.debug(motor.get_)
+            
+            # if np.abs(motor_value-motor.believed_position)<4096/360*5:
+            # if motor.get_moving_status():
+            #     continue
+            # try:
+            #     if (motor_value-motor.get_goal_position())<100:
+            #         continue
+            # except:
+            #     continue
+            motor.t_last_cmd = time.time()
             # assert motor is not None, f"Motor {msg.motor_id} does not exist"
             # TODO - set motor control mode
-            motor.set_torque_enable(True)
+            # motor.set_torque_enable(True)
+            # print(motor_value)
+            # motor.set_profile_acceleration(16000)
+            # motor.set_profile_velocity(16000)
+            motor.set_profile_velocity(0)
             motor.set_goal_position(int(motor_value))
+            motor.believed_position = int(motor_value)
 
     # @Gadget.check_msg
     @load_pickle
@@ -93,9 +133,10 @@ class Robot(Gadget, DynamixelManager):
                     dxl_id=motor['id'],
                     dxl_model=motor['model'],
             )
+            dxl_motor = Motor.from_motor(dxl_motor)
             # TODO - set motor control mode
             # https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/
-                   
+            
             # TODO - use something like a DataFrame instead
             # self.motors.update({
             #     motor['name']:dxl_motor
@@ -104,6 +145,8 @@ class Robot(Gadget, DynamixelManager):
             self.motors_by_id.update({
                 motor['id']:dxl_motor
             })
+            # dxl_motor.set_operating_mode(4)
+            # dxl_motor.set_torque_enable(True)
         
     def power_up(self):
         
@@ -138,14 +181,14 @@ class Robot(Gadget, DynamixelManager):
         
     def _move_motor_id(self, motor_id, position):
         self.motors_by_id[motor_id].set_torque_enable(True)
-        self.motors_by_id[motor_id].set_profile_acceleration(26)
-        self.motors_by_id[motor_id].set_profile_velocity(26)
+        self.motors_by_id[motor_id].set_profile_acceleration(16000)
+        self.motors_by_id[motor_id].set_profile_velocity(16000)
         self.motors_by_id[motor_id].set_goal_position(int(position))
 
     def _move_motor_name(self, name, position):
         self.dxl_dict[name].set_torque_enable(True)
-        self.dxl_dict[name].set_profile_acceleration(26)
-        self.dxl_dict[name].set_profile_velocity(26)
+        self.dxl_dict[name].set_profile_acceleration(16000)
+        self.dxl_dict[name].set_profile_velocity(16000)
         self.dxl_dict[name].set_goal_position(int(position))
 
     def motor_fn(self, id, fn, **kwargs):
@@ -184,9 +227,17 @@ class Robot(Gadget, DynamixelManager):
 
 
 class Motor(DynamixelMotor):
-    def __init__(**kwargs):
-        super().__init__(**kwargs)
+    def __init__(self,**kwargs):
+        super().__init__(self,**kwargs)
+        self.t_last_cmd = 0
         
+        
+    @classmethod
+    def from_motor(self, dxl_motor: DynamixelMotor, **kwargs):
+        self = dxl_motor
+        self.t_last_cmd = time.time()
+        self.believed_position = 0
+        return self
         
 # def midicc2motor(tx_msg, ):
 #     return MotorMessage(

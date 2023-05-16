@@ -29,6 +29,7 @@ def main():
         # namespaces=['/','/blossom'],
     )
     for gadget in config['gadgets']:
+        # print(gadget)
         rig.add_gadget(gadget)
     for msg in config.get('messages',[]):
         rig.add_message(**msg)
@@ -50,13 +51,17 @@ def test_script(rig):
     })
 
 if __name__=="__main__":
+    
     rig = main()
     
     # test_script(rig)
     
     try:
-        print("Breakpoint")
-        breakpoint()
+        if rig.is_pygame_rig:
+            rig.pygame_event_handler()
+        else:
+            print("Breakpoint")
+            breakpoint()
     except KeyboardInterrupt:
         rig.power_off('','')        
     

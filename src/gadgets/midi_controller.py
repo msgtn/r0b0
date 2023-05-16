@@ -22,7 +22,8 @@ MIDO_ARGS = [
     'note','velocity',
     'value',
     'program',
-    'pitch'
+    'pitch',
+    'control'
 ]
 
 class MIDIController(Gadget):
@@ -41,8 +42,9 @@ class MIDIController(Gadget):
     def midi_callback(self, mido_msg):
         midi_msg = MIDIMessage.from_mido(mido_msg)
         if midi_msg.type in MUTE_EVENTS: return
-        logging.debug(midi_msg.type)
-        logging.debug(midi_msg.__dict__)
+        # logging.debug(midi_msg.type)
+        # logging.debug(midi_msg.__dict__)
+        # print('midi_msg',midi_msg)
         # print(midi_msg,self.connected,self.echo,midi_msg.event)
         if self.connected:
             if self.echo:
@@ -75,8 +77,9 @@ class MIDIMessage(Message, MidoMessage):
     def __init__(self, **kwargs):
         Message.__init__(self, **kwargs)
         mido_kwargs = {k:v for k,v in kwargs.items() if k in MIDO_ARGS}
-        logging.debug(kwargs)
-        logging.debug(mido_kwargs)
+        # logging.debug(kwargs)
+        # logging.debug(mido_kwargs)
+        # print(mido_kwargs)
         MidoMessage.__init__(self,**mido_kwargs)
         
     @classmethod

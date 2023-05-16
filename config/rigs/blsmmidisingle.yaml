@@ -1,0 +1,17 @@
+name: blsm
+hostname: localhost
+port: 8080
+gadgets:
+- blossomsingle
+- phone
+- opz
+messages:
+- msg_func: note2motor
+  tx_gadget: opz
+  rx_gadget: blossomsingle
+- msg_func: cc2motor
+  tx_gadget: opz
+  rx_gadget: blossomsingle
+- msg_func: motion2motor
+  tx_gadget: phone
+  rx_gadget: blossomsingle

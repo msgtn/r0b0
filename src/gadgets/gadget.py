@@ -36,6 +36,7 @@ class Gadget(Client, Thread):
         )
         self.name = config.get('name','')
         self.namespace = f"/{config.get('namespace',self.name)}"
+        # self.namespace = f"{config.get('namespace',self.name)}"
         # self.namespace = [f"/{config.get('namespace',self.name)}"]
         # self.hostname = config.get('hostname',hostname)
         # self.port = config.get('port',port)
@@ -54,7 +55,7 @@ class Gadget(Client, Thread):
         hostname=self.hostname
         port=self.port
         header='https'
-        logging.debug(f"{self.name} connecting to {header}://{hostname}:{port}/{self.namespace}")
+        logging.debug(f"{self.name} connecting to {header}://{hostname}:{port}{self.namespace}")
         Client.connect(self,
             url=f"{header}://{hostname}:{port}",
             # "https://r0b0.ngrok.io/",
@@ -68,12 +69,18 @@ class Gadget(Client, Thread):
     # @load_pickle
     def emit(self, event, data, **kwargs):
         # data.update(dict(event=event))
+        
+        # overwrite defaults
         data.update(dict(event=data.get('event',event)))
         data.update(dict(id=data.get('id',self.sid)))
         # logging.debug(data)
         # logging.debug(self)
         # logging.debug(self.namespaces)
         # breakpoint() # TODO - self does not have any connected namespaces
+        logging.debug({**dict(
+            event=event,
+            data=data,
+        ), **kwargs})
         Client.emit(self,
             event,
             data,

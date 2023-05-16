@@ -1,0 +1,8 @@
+name: joyblossom
+gadgets:
+- x3d
+- blossomsingle
+messages:
+- msg_func: joy2motor
+  tx_gadget: x3d
+  rx_gadget: blossomsingle
