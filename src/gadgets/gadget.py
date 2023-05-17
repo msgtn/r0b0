@@ -77,10 +77,10 @@ class Gadget(Client, Thread):
         # logging.debug(self)
         # logging.debug(self.namespaces)
         # breakpoint() # TODO - self does not have any connected namespaces
-        logging.debug({**dict(
-            event=event,
-            data=data,
-        ), **kwargs})
+        # logging.debug({**dict(
+        #     event=event,
+        #     data=data,
+        # ), **kwargs})
         Client.emit(self,
             event,
             data,

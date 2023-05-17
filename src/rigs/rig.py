@@ -56,7 +56,7 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
         
     def add_message(self, tx_gadget, rx_gadget, msg_func):
-        logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
+        # logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,

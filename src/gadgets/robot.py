@@ -52,7 +52,7 @@ class Robot(Gadget, DynamixelManager):
         # while not enabled:            
         #     try:
         #         self.ping_all()
-        #         self.enable_all()
+        #         self.enable_all()yeah i 
         #         enabled = True
         #     except:
         #         continue

@@ -6,11 +6,20 @@ from src import logging
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
     data = pickle.loads(data['msg'])
-    print(data)
+    # print(data)
     return {
         'event':'position',
         'value':(data.value*4096)//127,
         'motor_id':(data.control)
+    }
+def cc2ard(data=None):
+    if data is None: return {'event':'midi_cc'}
+    data = pickle.loads(data['msg'])
+    # print(data)
+    return {
+        'event':'position',
+        'value':int(np.interp(data.value,[0,127],[10,160])),
+        'motor_id':10
     }
     
 def note2motor(data=None):

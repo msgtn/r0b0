@@ -2,15 +2,16 @@ name: ardubot
 type: ArduinoBot
 hostname: localhost
 port: 9000
-usb_port: /dev/cu.usbmodem1101
-# usb_port: /dev/cu.usbmodem21201
-# baud_rate: 115200
+# usb_port: /dev/cu.usbmodem1101
+# usb_port: /dev/cu.usbserial-ADAQDbKpQ
+usb_port: /dev/cu.usbmodem212101
+baud_rate: 115200
 # baud_rate: 57600
-baud_rate: 9600
+# baud_rate: 9600
 timeout: 2
 motors: # use these same names as kwargs to constructors
 - name: tower_1
-  id: 9
+  id: 10
   position:
     reset: 0
     min: -40

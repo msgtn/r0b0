@@ -1,6 +1,9 @@
-from .gadget import Gadget, Message, logging
+from .gadget import Gadget, Message
+from src import logging
 from src.utils import loaders
+from src.utils.loaders import load_pickle, dump_pickle
 
+import time
 # from dynamixel_python import \
 #     DynamixelManager, DynamixelMotor, \
 #     ReadError
@@ -8,8 +11,10 @@ import pickle
 from collections import OrderedDict
 from socketio import ClientNamespace
 import numpy as np
-from Arduino import Arduino
+# from Arduino import Arduino
+from pyfirmata import Arduino, util
 
+# Needs to upload the StandardFirmata to the board first
 
 class MotorMessage(Message):
     def __init__(self, event, value, motor_id, **kwargs):
@@ -24,38 +29,53 @@ class ArduinoBot(Gadget, Arduino):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         Arduino.__init__(self,
-            port=self.config['usb_port'],
-            baud=self.config['baud_rate'],
-            timeout=self.config['timeout'])
-        return
-        self.name = config['name']
-        self.motors = {}
-        self.motors.setdefault(None)
+            self.config['usb_port'],
+            # baud=self.config['baud_rate'],
+            # timeout=self.config['timeout'],
+            )
         self.motors_by_id = {}
-        self.motors_by_id.setdefault(None)
+        
         if self.config.get('motors', False):
             self.add_motors_from_config(self.config['motors'])
-        self.power_up()
-        self.kinematic_function = ''
-        self.message = MotorMessage
         self.on('position',
                 handler=self.position_event,
                 namespace=self.namespace)
         self.on('velocity',
                 handler=self.velocity_event,
                 namespace=self.namespace)
+        return
+        self.name = config['name']
+        self.motors = {}
+        self.motors.setdefault(None)
+        self.motors_by_id = {}
+        self.motors_by_id.setdefault(None)
+        self.power_up()
+        self.kinematic_function = ''
+        self.message = MotorMessage
 
-    # @Gadget.check_msg
-    def position_event(self,msg):
-        msg = pickle.loads(msg)
+    @load_pickle
+    def position_event(self,data):
+        # msg = pickle.loads(msg)
         # print(msg.motor_id)
+        # print(msg=msg)
+        msg = data['msg']
+        # logging.debug(msg)
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
-        print(msg)
         for motor_id, motor_value in zip(msg.motor_id,msg.value):
-            # self.Servos.write(motor_id,motor_value)
-            self._move_motor_id(motor_id,motor_value)
+            # motor_value = np.interp(motor_value, [0,4096], [10,160])
+            motor = self.motors_by_id.get(motor_id,None)
+            if motor is None:
+                # print(f"No motor ID {motor_id} found, skipping")
+                logging.debug(f'Motor {motor_id} not found, skipping')
+                return
+            # if (time.time()-motor.t_last_cmd) < T_COOLDOWN:
+            #     continue
+            # print(motor_value)
+            logging.debug('motor_value')
+            logging.debug(motor_value)
+            motor.write(motor_value)
 
     # @Gadget.check_msg
     def velocity_event(self, msg):
@@ -71,12 +91,20 @@ class ArduinoBot(Gadget, Arduino):
         for motor in self.config['motors']:
             motor_id = motor.get('pin',motor['id'])
             logging.debug(f'attaching motor {motor_id}')
-            self.Servos.attach(motor_id)
-            self.motors.update({
-                motor['name']:motor_id
-            })
+            motor = self.get_pin(f'd:{motor_id}:s')
+            
+            # self.Servos.attach(motor_id)
+            # self.motors.update({
+            #     motor['name']:motor_id
+            # })
+            
+            # for i in range(0,150,15):
+            #     motor.write(i)
+            #     logging.debug(i)
+            #     time.sleep(1)
+                
             self.motors_by_id.update({
-                motor_id:motor['name']
+                motor_id:motor
             })
         
     def power_up(self):

@@ -52,6 +52,8 @@ what's in it
 ## TODO
 ### Software
 - [ ] event:callback is 1:1 - need to enable 1:many 
+- [ ] Arduino
+  - [ ] Need to upload StandardFirmata to arduino first
 ### Docs
 - [ ] Add diagram
 - [ ] 
