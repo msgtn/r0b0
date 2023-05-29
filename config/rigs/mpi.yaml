@@ -9,3 +9,6 @@ messages:
 - msg_func: button2cam
   tx_gadget: pibutton
   rx_gadget: picamera
+- msg_func: dpad2shutter
+  tx_gadget: pibutton
+  rx_gadget: picamera

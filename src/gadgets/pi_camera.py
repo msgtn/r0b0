@@ -6,12 +6,12 @@ import os
 
 import picamera
 # native pi version
-from picamera import PiCamera as _PiCamera
+# from picamera import PiCamera as _PiCamera
 from picamera2 import Picamera2, Preview
 # import picamera.array
-from picamera.array import PiRGBArray
 import numpy as np
 from time import sleep
+from functools import partial
 import glob
 
 shutter_speeds = [1/30, 1/250, 1/1000]
@@ -22,13 +22,14 @@ ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE=3
 
+
+
 # def get_file_number(dir):
 #     return 
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir/'*')))
 
-# class PiCamera(Gadget,_PiCamera):
-class PiCamera(Gadget,Picamera2):
+class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
@@ -46,14 +47,10 @@ class PiCamera(Gadget,Picamera2):
 
         self.on('shutter',
             handler=self.release_shutter,
-            # handler=lambda : \
-            #     self.capture_file(
-            #         str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
-            #     )
             namespace=self.namespace
             )
         try:
-            console.log(self.camera_controls)
+            logging.debug(self.camera_controls)
         except:
             pass
 
@@ -68,73 +65,59 @@ class PiCamera(Gadget,Picamera2):
             namespace=self.namespace)        
         self.on('d_left',
             handler=self.shutter1000,
-            namespace=self.namespace)        
+            namespace=self.namespace)  
+        
+        self.on('set_shutter_speed',
+            handler=self.on_set_shutter_speed,
+            namespace=self.namespace)      
         self.set_param = self.__dict__.update
         self.start = lambda: Gadget.start(self)
 
         
     @load_pickle
-    def release_shutter(self, msg, save_dir=TAPES_DIR):
-        # self.shutter_speed = msg.get(
-        #     'shutter_speed')
+    def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
         logging.debug(f"Shutter released")
-        # logging.debug(f"Shutter released, ss={self.shutter_speed}")
+        # TODO - split off into separate subfolders
+        # instead of one large folder
         self.capture_file(
-            # str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
             str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
         )
-
-        # self.camera.capture(str(TAPES_DIR / get_timestamp()))
 
     @load_pickle
     def shutter15(self,msg,):
         logging.debug('Shutter: 1/15')
         self.set_controls({
-            'ExposureTime':int(10e6/15)
+            'ExposureTime':int(10e5/15)
             })
         return
     @load_pickle
     def shutter60(self,msg,):
         logging.debug('Shutter: 1/60')
         self.set_controls({
-            'ExposureTime':int(10e6/60)
+            'ExposureTime':int(10e5/60)
             })
         return
     @load_pickle
     def shutter250(self,msg,):
         logging.debug('Shutter: 1/250')
         self.set_controls({
-            'ExposureTime':int(10e6/250)
+            'ExposureTime':int(10e5/250)
             })
         return
     @load_pickle
     def shutter1000(self,msg,):
         logging.debug('Shutter: 1/1000')
         self.set_controls({
-            'ExposureTime':int(10e6/1000)
+            'ExposureTime':int(10e5/1000)
             })
         return
-
-    def start(self):
-        Gadget.start(self)
-        # input()
-        return
-
-        # with _PiCamera(sensor_mode=SENSOR_MODE) as camera:
-        #     with PiRGBArray(camera) as stream:
-        #         camera.iso = ISO
-        #         shutter_speed = shutter_speeds[0]
-        #         camera.shutter_speed = int(shutter_speeds[shutter_speed_idx]*1000000)
-        #         #camera.awb_mode = 'auto'
-        #         #camera.framerate=90
-        #         logging.debug("Initializing Pi Camera")
-        #         # sleep(1)
-        #         #camera.exposure_mode = 'off'
-        #         camera.still_stats = True
-        #         #camera.framerate = Fraction(1,1)
-        #         camera.framerate = FRAMERATE
-        #         camera.resolution = RESOLUTION
-        #         logging.debug("capturing wth camera")
-        #         camera.capture(str(TAPES_DIR / 'testshot.jpg'))
-
     
+    @load_pickle
+    # def on_set_shutter_speed(self, shutter_speed: float, **kwargs):
+    def on_set_shutter_speed(self, data, **kwargs):
+        msg = data['msg']
+        ss = int(msg.shutter_speed)
+        logging.debug(f'Shutter: {ss}')
+        self.set_controls({
+            'ExposureTime':ss
+        })

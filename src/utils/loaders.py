@@ -1,10 +1,15 @@
 import os
 import yaml
-from src.config import CONFIG_DIR
+from src import logging
+from src.config import CONFIG_DIR, LOCALHOST, SERVER_PORT
+
 from functools import partial
 import pickle
 
 def load_yaml(yaml_file: str):
+    # check both 'yaml' and 'yml
+    if not os.path.exists(yaml_file):
+        yaml_file = yaml_file.replace('.yaml','.yml')
     assert os.path.exists(yaml_file), f"No file {yaml_file}"
     with open(yaml_file,'r') as file:
         return yaml.load(file, Loader=yaml.Loader)
@@ -17,18 +22,22 @@ load_rig = partial(load_config, config_type='rigs')
 '''
 Decorators for dumping and loading pickles
 '''
+# Gadget.emit
 def dump_pickle(func):
     def _inner_func(s,event,data,**kwargs):
-        # print(s,event,data,kwargs)
+        logging.debug(s)
+        logging.debug(event)
+        logging.debug(data)
+        logging.debug(kwargs)
         if data.get('msg',None) is not None:
             data['msg']=pickle.dumps(data['msg'])
         return func(s,event,data,**kwargs)
     return _inner_func
 
-# the callback
+# Gadget handler
 def load_pickle(func):
     def _inner_func(s,data,**kwargs):
-        # print(s,data,kwargs)
+        logging.debug(s,data,kwargs)
         if data.get('msg',None) is not None:
             data['msg']=pickle.loads(data['msg'])
         return func(s,data,**kwargs)

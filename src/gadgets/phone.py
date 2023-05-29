@@ -2,12 +2,12 @@ from src.config import CSR_PEM, KEY_PEM
 from .gadget import Gadget, Message
 
 from collections import OrderedDict
-from socketio import ClientNamespace
+from socketio import Client, ClientNamespace
 import numpy as np
 from threading import Thread
 from flask import render_template
 import time
-from socketio import Client
+
 import pickle
 import logging
 logging.basicConfig(

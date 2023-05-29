@@ -47,10 +47,21 @@ class Rig(Host):
             self.pygame_gadgets.update({
                 gadget.pygame_name:gadget
             })
+        
+        # check that gadget name does not already exist
+        # if so, append index to name
+        # gadget_name_idx = 1
+        # _gadget_name_idx = gadget_name
+        
+        # while self.gadgets.get(_gadget_name_idx,None) is not None:
+            #   _gadget+
+            #   gadget_name_idx += 1
+        
+        
         self.gadgets.update({
             gadget_name:gadget
         })
-        return gadget
+        return self.gadgets
     
     def _get_gadget_namespace(self, gadget):
         return self.gadgets.get(gadget).namespace
@@ -109,31 +120,22 @@ class Rig(Host):
                 emit_dict =  dict(
                     event=_event_name,
                     data=_event_dict,
-                    # namespace=event_gadget.namespace,
                 )
-                # if event_gadget is None:
-                #     continue
                 if event_gadget is not None:
                     emit_dict.update(dict(
                         namespace=event_gadget.namespace
                     ))
                     event_gadget.emit(**emit_dict)
-                # pygame.time.delay(int(T_COOLDOWN*10e3))
-                # pgEvent.clear()
                 break
-                # if 'axis' not in _event_name:
-                #     logging.debug(emit_dict)
-                    
                     
     def power_on(self,):
-        # breakpoint()
         self.start()
-        print(self.gadgets.values())
+        logging.debug(self.gadgets.values())
         [g.start() for g in self.gadgets.values()]
         self.power = True
             
     def power_off(self,*args,**kwargs):
-        assert self.power, "Rig not powered on"
+        assert self.power or self.is_alive(), "Rig not powered on"
         self.disconnect()
         [g.disconnect() for g in self.gadgets.values()]
         self.power = False

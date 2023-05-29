@@ -1,0 +1,4 @@
+name: pygame_keys_test
+gadgets:
+- pygame_keys
+- pygame_keys_output

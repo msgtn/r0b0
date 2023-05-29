@@ -1,5 +1,5 @@
 import unittest
-from .robot import Robot
+from .dxl_robot import Robot
 
 class RobotTestCase(unittest.TestCase):
     def setUp(self):

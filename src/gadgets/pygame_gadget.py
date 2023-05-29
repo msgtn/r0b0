@@ -51,7 +51,7 @@ class PyGameGadget(Gadget):
         # self.joystick = pgJoystick.Joystick.__init__(self,
             # id=self.config.get('id',0))
         
-class Joystick(PyGameGadget):
+class PyGameJoystick(PyGameGadget):
     def __init__(self, config, **kwargs):
         PyGameGadget.__init__(self,config,**kwargs)
         joy_id = self.config.get('id',0)
@@ -90,4 +90,9 @@ class PyGameKeys(PyGameGadget):
     def __init__(self, config, **kwargs):
         PyGameGadget.__init__(self,config,**kwargs)
         self.pygame_name = 'keys'
+        self.on('pygamekey',
+            handler=self.key_event,
+            namespace=self.namespace)
     
+    @load_pickle
+    def key_event

@@ -9,9 +9,15 @@ messages:
 - msg_func: note2motor
   tx_gadget: opz
   rx_gadget: blossom
+  input_event: midi_on
+  output_event: position
 - msg_func: cc2motor
   tx_gadget: opz
   rx_gadget: blossom
+  input_event: midi_cc
+  output_event: position
 - msg_func: motion2motor
   tx_gadget: phone
   rx_gadget: blossom
+  input_event: device_motion
+  output_event: position

@@ -3,8 +3,6 @@ from src.utils.loaders import load_pickle
 from src import logging
 
 
-import picamera
-import picamera.array
 import numpy as np
 from time import sleep
 from gpiozero import Button, LED
@@ -16,7 +14,7 @@ import pickle
 from socketio import Namespace
 import copy
 
-class PiButton(Gadget):
+class PiGadget(Gadget):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         
@@ -36,7 +34,7 @@ class PiButton(Gadget):
             target=pause)
 
         
-    def _assign_pins(self, pin_dict, pin_type=Button):
+    def assign_pins(self, pin_dict, pin_type=Button):
         return {_name: pin_type(_pin) for _name,_pin in pin_dict.items()}
     
     def _emit_button(self,button_name,event='pi_button'):
@@ -46,17 +44,16 @@ class PiButton(Gadget):
             namespace=self.namespace)
 
     def assign_buttons(self, button_dict):
-        # _emit_button = lambda button_name: \
-        #     self.emit(
-        #         event='pi_button',
-        #         data={'button':button_name}
-        #     )
         logging.debug(button_dict)
         for button_name,button in button_dict.items():
-            # _button.when_pressed = _emit_button(_name)
             button.when_pressed = self._emit_button(button_name)
               
     def start(self):
         Gadget.start(self)
         self.pause_thread.start()
         # pause()
+
+
+class PiButton(PiGadget):
+    def __init__(self, **kwargs):
+        PiGadget.__init__(self,**kwargs)

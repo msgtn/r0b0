@@ -1,39 +1,57 @@
 import numpy as np
 from src.kinematics.blossom import get_motor_pos
+from src.utils.loaders import load_pickle, dump_pickle
 import pickle
 from src import logging
 
+# def msg_func(func):
+#     return
+
+def msg_func(data=None, func=None, input_event=None, output_event=None):
+    if data is None:
+        return {'event':input_event}
+    return {
+        'event':output_event,
+        **func(data)
+    }
+
+@load_pickle
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
-    data = pickle.loads(data['msg'])
+    # data = pickle.loads(data['msg'])
     # print(data)
     return {
         'event':'position',
         'value':(data.value*4096)//127,
         'motor_id':(data.control)
     }
+    
+@load_pickle
 def cc2ard(data=None):
     if data is None: return {'event':'midi_cc'}
-    data = pickle.loads(data['msg'])
+    # data = pickle.loads(data['msg'])
     # print(data)
     return {
         'event':'position',
         'value':int(np.interp(data.value,[0,127],[10,160])),
         'motor_id':10
     }
-    
+
+@load_pickle
 def note2motor(data=None):
     '''
     C4 = note value 60
     '''
     if data is None: return {'event':'midi_on'}
-    data = pickle.loads(data['msg'])
+    # data = pickle.loads(data['msg'])
     return {
         'event':'position',
-        'value':int(np.interp(data.note, [53,77], [0,4096])),
+        'value':int(np.interp(
+            data.note, [53,77], [0,4096])),
         'motor_id':(data.channel+1)
     }
 
+@load_pickle
 def motion2motor(data=None):
     if data is None: return {'event':'device_motion'}
     return {
@@ -90,3 +108,6 @@ def joy2motor(data=None):
         # 'motor_id':(data['axis']+1)
         'motor_id':data['axis']
     }
+    
+# def dpad2shutter(data=None):
+#     if data is None: return {'event':''}

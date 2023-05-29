@@ -1,11 +1,10 @@
 from .gadget import Gadget
 from .midi_controller import MIDIController
-from .robot import Robot
-from .arduinobot import ArduinoBot
+from .dxl_robot import DynamixelRobot
+from .arduino import ArduinoGadget, ArduinoRobot
 from .tape import Tape
 from .phone import Phone
-# from .joystick import Joystick
-from .pygame_gadget import PyGameGadget, Joystick, PyGameKeys
+from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
 from src.utils.loaders import load_pickle, dump_pickle
 # import logging
 from src import logging
