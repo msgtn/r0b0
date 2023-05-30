@@ -82,8 +82,10 @@ class PyGameJoystick(PyGameGadget):
                 return
         elif 'button' in event:
             data.update(dict(
-                event_type=event,
+                event_type='joybutton',
+                button_press=event_dict[event]
             ))
+            event='joybutton'
             
         Gadget.emit(self, event, data, **kwargs)
         pass

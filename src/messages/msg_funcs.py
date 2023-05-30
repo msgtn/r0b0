@@ -123,7 +123,8 @@ def joy2mouse_move(data=None):
 
 def joy2mouse_button(data=None):
     if data is None: 
-        return {'event':'joybuttondown'}
+        # return {'event':'joybuttondown'}
+        return {'event':'joybutton'}
     logging.debug(data)
     BUTTON2MOUSE = {
         0:'left',
@@ -131,9 +132,19 @@ def joy2mouse_button(data=None):
         2:'middle',
     }
     BUTTON2MOUSE.setdefault('left')
+    
+
+    mouse_func = {
+        'button_down':'press',
+        'button_up':'release'
+    }[data['button_press']]
+        
     data.update({
         'event':'mouse_button',
-        'button':BUTTON2MOUSE.get(
-            data['button'],'left')
+        'mouse_func':mouse_func,
+        'kwargs':{
+            'button':BUTTON2MOUSE.get(
+                data['button'],'left'),
+        }
     })
     return data

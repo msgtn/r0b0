@@ -106,6 +106,7 @@ what's in it
 - [ ] Loopback events - events to self?
   - [ ] Maybe best to restrict to one gadget per name - make it explicit 
   - [ ] Just use new gadget configs as necessary
+- [ ] DynamixelRobot - motor movement events
 
 #### cleanup
 - [ ] consolidate gadgets
