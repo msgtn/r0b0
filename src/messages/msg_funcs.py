@@ -15,7 +15,7 @@ def msg_func(data=None, func=None, input_event=None, output_event=None):
         **func(data)
     }
 
-@load_pickle
+# @load_pickle
 def cc2motor(data=None):
     if data is None: return {'event':'midi_cc'}
     # data = pickle.loads(data['msg'])
@@ -111,3 +111,29 @@ def joy2motor(data=None):
     
 # def dpad2shutter(data=None):
 #     if data is None: return {'event':''}
+
+def joy2mouse_move(data=None):
+    if data is None: return {'event':'joyaxismotion'}
+    axis,value = data['axis'],data['value']
+    # logging.debug(data)
+    data.update({
+        'event':'mouse_move'
+    })
+    return data
+
+def joy2mouse_button(data=None):
+    if data is None: 
+        return {'event':'joybuttondown'}
+    logging.debug(data)
+    BUTTON2MOUSE = {
+        0:'left',
+        1:'right',
+        2:'middle',
+    }
+    BUTTON2MOUSE.setdefault('left')
+    data.update({
+        'event':'mouse_button',
+        'button':BUTTON2MOUSE.get(
+            data['button'],'left')
+    })
+    return data

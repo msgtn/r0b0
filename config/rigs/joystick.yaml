@@ -1,4 +1,11 @@
 name: joystick
 gadgets:
 - x3d
-- pygamekeys
+- mouse
+messages:
+- msg_func: joy2mouse_move
+  tx_gadget: x3d
+  rx_gadget: mouse
+- msg_func: joy2mouse_button
+  tx_gadget: x3d
+  rx_gadget: mouse

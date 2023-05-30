@@ -72,8 +72,9 @@ class Rig(Host):
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,
             [tx_gadget, rx_gadget])
-        print( tx_namespace, rx_namespace)
         msg_func = getattr(msg_funcs,msg_func)
+        input_event = msg_func()['event']
+        print( tx_namespace, rx_namespace, input_event)
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
             emit_data = self.gadgets[rx_gadget].message(
@@ -90,7 +91,7 @@ class Rig(Host):
             )
         # print('tx',tx_namespace)
         self.on_event(
-            msg_func()['event'],
+            input_event,
             handler=func_emit,
             namespace=tx_namespace
         )
@@ -105,6 +106,7 @@ class Rig(Host):
                 _event_name = pgEvent.event_name(event.type).lower()
                 _event_dict = event.__dict__
                 pygame_name = ''
+                # logging.debug(_event_name)
                 if 'joy' in _event_name:
                     # print(_event_dict)
                     # pass
@@ -121,10 +123,15 @@ class Rig(Host):
                     event=_event_name,
                     data=_event_dict,
                 )
+                # logging.debug(event_gadget)
+                # logging.debug(_event_name)
+                # logging.debug(pygame_name)
                 if event_gadget is not None:
+                    # logging.debug(event_gadget.namespace)
                     emit_dict.update(dict(
                         namespace=event_gadget.namespace
                     ))
+                    # logging.debug(emit_dict)
                     event_gadget.emit(**emit_dict)
                 break
                     

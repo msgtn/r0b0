@@ -12,7 +12,8 @@ import numpy as np
 import pygame
 from pygame import joystick as pgJoystick, \
     event as pgEvent, \
-    display as pgDisplay
+    display as pgDisplay, \
+    mouse as pgMouse
 # from pygame.joystick import Joystick as pgJoystick
 # pgEvent.init()
 pygame.init()
@@ -39,7 +40,7 @@ EVENT_TABLE = {
     getattr(pygame, _py_event):_py_event for _py_event in _py_events
 }
 
-JOY_AXIS_THRESH = 0.0001
+JOY_AXIS_THRESH = 0.01
 # types of pygame gadgets
 # Joystick, 
 
@@ -61,9 +62,11 @@ class PyGameJoystick(PyGameGadget):
             
     def emit(self, event, data, **kwargs):
         event_dict = {
-            'joybuttondown':'note_on',
-            'joybuttonup':'note_off',
+            'joybuttondown':'button_down',
+            'joybuttonup':'button_up',
         }
+        # event_dict.setdefault()
+        # event = event_dict.get(event,event)
         
         # LogiTech Extreme3DPro tables
         # roll, pitch, yaw, throttle(?) = [0,1,2,3]
@@ -79,9 +82,8 @@ class PyGameJoystick(PyGameGadget):
                 return
         elif 'button' in event:
             data.update(dict(
-                event_type=event_dict[event]
+                event_type=event,
             ))
-            event = 'joybutton'
             
         Gadget.emit(self, event, data, **kwargs)
         pass
@@ -90,9 +92,44 @@ class PyGameKeys(PyGameGadget):
     def __init__(self, config, **kwargs):
         PyGameGadget.__init__(self,config,**kwargs)
         self.pygame_name = 'keys'
-        self.on('pygamekey',
+        self.on('pygamekeys',
             handler=self.key_event,
+            namespace=self.namespace)
+        self.on('pygamemouse',
+            handler=self.mouse_event,
             namespace=self.namespace)
     
     @load_pickle
-    def key_event
+    def mouse_event(self,data):
+        msg = data['msg']
+        logging.debug('mouse event')
+        logging.debug(msg.axis)
+        logging.debug(msg.value)
+        # logging.debug(msg.data)
+        # logging.debug(msg.value)
+        # pgMouse.set_pos(msg['pos'])
+        cur_pos = pgMouse.get_pos()
+        logging.debug(cur_pos)
+        tgt_pos = list(pgMouse.get_pos())
+        if int(msg.axis)<len(tgt_pos):
+            tgt_pos[int(msg.axis)] += int(msg.value*10)
+        pgMouse.set_pos(tgt_pos)
+        pass
+    
+    @load_pickle
+    def key_event(self):
+        pass
+    
+            
+class PyGameMouse(PyGameGadget):
+    def __init__(self, config, **kwargs):
+        PyGameGadget.__init__(self,config,**kwargs)
+        self.pygame_name = 'mouse'
+        self.on('pygamemouse',
+            handler=self.mouse_event,
+            namespace=self.namespace)
+    
+    @load_pickle
+    def mouse_event(self):
+        pass
+    

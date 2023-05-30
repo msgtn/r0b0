@@ -1,11 +1,3 @@
 name: x3d
-type: Joystick
+type: PyGameJoystick
 id: 0
-motors: # use these same names as kwargs to constructors
-- name: tower_1
-  model: xl330-m288
-  id: 1
-  position:
-    reset: 0
-    min: -40
-    max: 140

@@ -5,7 +5,10 @@ from .arduino import ArduinoGadget, ArduinoRobot
 from .tape import Tape
 from .phone import Phone
 from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
+from .mouse import Mouse
+
 from src.utils.loaders import load_pickle, dump_pickle
+
 # import logging
 from src import logging
 # logging = logging.getLogger(__name__)

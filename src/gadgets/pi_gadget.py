@@ -57,3 +57,5 @@ class PiGadget(Gadget):
 class PiButton(PiGadget):
     def __init__(self, **kwargs):
         PiGadget.__init__(self,**kwargs)
+        
+    

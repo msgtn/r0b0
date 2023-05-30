@@ -59,6 +59,7 @@ class Gadget(Client, Thread):
             event=event,
             data=data
         ))
+        # logging.debug(kwargs)
         Client.emit(self, **kwargs)
         return kwargs
     

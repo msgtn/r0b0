@@ -25,10 +25,10 @@ Decorators for dumping and loading pickles
 # Gadget.emit
 def dump_pickle(func):
     def _inner_func(s,event,data,**kwargs):
-        logging.debug(s)
-        logging.debug(event)
-        logging.debug(data)
-        logging.debug(kwargs)
+        # logging.debug(s)
+        # logging.debug(event)
+        # logging.debug(data)
+        # logging.debug(kwargs)
         if data.get('msg',None) is not None:
             data['msg']=pickle.dumps(data['msg'])
         return func(s,event,data,**kwargs)
@@ -37,7 +37,7 @@ def dump_pickle(func):
 # Gadget handler
 def load_pickle(func):
     def _inner_func(s,data,**kwargs):
-        logging.debug(s,data,kwargs)
+        # logging.debug(s,data,kwargs)
         if data.get('msg',None) is not None:
             data['msg']=pickle.loads(data['msg'])
         return func(s,data,**kwargs)
