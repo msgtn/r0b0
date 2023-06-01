@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+    <title>Broadcaster</title>
+  </head>
+  <body style="margin:0;">
+  <link rel="stylesheet" href="style.css">
+
+
+
+<!-- <br> -->
+<!--     <video playsinline autoplay muted id="watcherVideo"></video>
+    <video playsinline autoplay muted id="broadcasterVideo"></video> -->
+
+  <div id="videoContainer" align="right">
+    
+    <div id="watcherVideoContainer" align="left" position="relative" display="flex">
+      <!-- <div class="box"> -->
+      <!-- <div> -->
+        <div class="overlay">
+          <video id="videoWebm" z-index="9" r0b0="vid.webm" align="left" width="0px" height="0px" position="absolute"></video>  
+        </div>
+        <video playsinline autoplay muted id="watcherVideo" align="left" position="absolute"></video> 
+      <!-- </div> -->
+      <!-- <div class="box stack-top"> -->
+      <video playsinline autoplay muted id="broadcasterVideo" alight="right"></video>
+      <!-- </div> -->
+    </div>
+
+  </div>
+
+
+    <section class="select">
+      <label for="videoSource">Video source: </label>
+      <select id="videoSource"></select>
+    </section>
+    <section class="select">
+      <label for="audioSource">Audio source: </label>
+      <select id="audioSource"></select>
+    </section>
+    <!-- <iframe id="ytVid" width="0" r0b0="https://www.youtube.com/embed/Nbs-Dy6RThk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+
+    <select id="videoName" name="videoName" class="select-css">
+      <option value="happy_pika">Pika Happy</option>
+      <option value="sad_pika">Pika Sad</option>
+      <option value="anger_pika">Pika Angry</option>
+      <option value="happy_sponge">Sponge Happy</option>
+      <option value="sad_sponge">Sponge Sad</option>
+      <option value="anger_sponge">Sponge Angry</option>
+      <option value="happy_homer">Homer Happy</option>
+      <option value="sad_homer">Homer Sad</option>
+      <option value="anger_homer">Homer Angry</option>
+      <option value="happy_elmo">Elmo Happy</option>
+      <option value="sad_elmo">Elmo Sad</option>
+    </select>
+    <input type="button" class="block" id="newVideo" value="New Video" onclick="newVideo();">
+    <input type="button" class="block" id="hideVideo" value="Hide Video" onclick="hideVideo();">
+
+    <link rel="import" href="embodimentSelect.html">
+
+    <section class="select">
+      <label for="">Embodiment: </label>
+      <select id="embodimentSelect" onchange="showPrompt();" onclick="showPrompt();">
+        <option value="arms0">No arms</option>
+        <option value="arms1">One arm</option>
+        <option value="arms2">Two arms</option>
+      </select>
+    </section>
+    
+    <section class="select">
+      <label for="">Prompt: </label>
+      <select id="promptSelect" onchange="showPrompt();" onclick="showPrompt();"></select>
+    </section>
+
+    <input type="button" class="block" id="generateID" value="Generate ID" onclick="generateID();">
+    <input type="button" class="block" id="sendWatcher" value="Send Watcher" onclick="sendWatcher();">
+    <!-- <input type="button" class="block" id="sendScenarios" value="Send Scenarios" onclick="sendScenarios();"> -->
+
+    <input type="button" class="block" id="recordButton" value="Start Record" onclick="startRecord();">
+    <input type="button" class="block" id="playWebm" value="Play movement" onclick="playWebm();">
+
+
+    <input type="button" class="block" id="saveVidViewDict" value="Save vidViewDict" onclick="saveVidViewDict();">
+
+
+    <div>
+      <input type="checkbox" id="promptCheckbox" value="Show Prompt" onclick="showPrompt();">
+      <label for="webm">Show Prompt</label>
+    </div>
+    <div>
+      <input type="checkbox" id="webmCheckbox" value="Show Webm" onclick="showWebm();">
+      <label for="webm">Show Webm</label>
+    </div>
+    <div>
+      <input type="checkbox" id="surveyCheckbox" value="Show Survey" onclick="showSurvey();">
+      <label for="webm">Show Survey</label>
+    </div>
+
+    <p id="idSpace">User ID will appear here.</p>
+    <p id="promptSpace">Prompt text will appear here.</p>
+
+
+    <script r0b0="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+    <script r0b0="/data.js"></script>
+    <script r0b0="/blossomFunctions.js"></script>
+    <script r0b0="/socket.io/socket.io.js"></script>
+    <script r0b0="/broadcast.js" type="text/javascript"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "node": true,
+  "strict": false,
+  "globalstrict": true,
+  "undef": true,
+  "unused": true,
+  "curly": true,
+  "newcap": true,
+  "noarg": true,
+  "quotmark": "single",
+  "maxparams": 7,
+  "maxdepth": 6,
+  "loopfunc": true,
+  "-W018": true,  // Confusing use of ! as in !! to convert a type to a boolean
+  "-W116": true,  // If statements without curly braces
+  "-W082": true,  // Functions inside if statements
+  "-W030": true,  // Expressions with side effects
+  "predef": [     // Mocha globals
+    "describe",
+    "it",
+    "before",
+    "after",
+    "beforeEach",
+    "afterEach"
+  ]
+}

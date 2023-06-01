@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>r0b0t</title>
+
+  <script r0b0="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+
+  <script r0b0="https://requirejs.org/docs/release/2.3.6/minified/require.js" type="text/javascript"></script>
+
+</head>
+
+<body style="margin:0;">
+
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+<!-- 
+  <section class="select" id="">
+    <select id="videoSource"></select>
+  </section>
+  <section class="select" id="">
+    <select id="audioSource"></select>
+  </section> -->
+  <div id="videoContainer" align="right" z-index="-10">
+
+    <div id="watcherVideoContainer" align="left" position="relative" display="flex">
+      <video playsinline autoplay muted id="watcherVideo" align="left" position="absolute"></video> <!-- </div> -->
+      <div class="overlay">
+        <p id="recordingIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+      </div>
+    </div>
+    <video playsinline autoplay muted id="broadcasterVideo"></video>
+    <div class="overlay">
+      <p id="endpointIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+    </div>
+    <canvas id="touchpad" style="height:0%; width:100%; border:1px solid #000000;">
+      <span class="right">RIGHT ARM</span>
+      <span class="left">LEFT ARM</span>
+    </canvas>
+  </div>
+
+
+  <div id="controlBar">
+    <div id="appendageSwitch" align="left" align-items="center" justify-content="center">
+      <p style="font-family:sans-serif;">arms</p>
+      <label class="switch">
+        <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+        <span class="slider round" style="font-family:sans-serif;"></span>
+      </label>
+    </div>
+
+
+    <button class="button recButton" id="record" value="Record" onclick="onRecord();"></button>
+
+    <div id="controlSwitch" align="right" align-items="center" justify-content="center">
+      <p style="font-family:sans-serif;">HEAD</p>
+      <label class="switch">
+        <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+        <span class="slider round" style="font-family:sans-serif;"></span>
+      </label>
+    </div>
+  </div>
+
+  <div>
+    <label for="tapeName" style="font-family:sans-serif;">Tape name:</label>
+    <input type="text" id="tapeName" name="tapeName"></input>
+    <button class="button" id="loadTape" value="Load" onclick="onLoad();"></button>
+  </div>
+
+  <script r0b0="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.1/angular.min.js"></script>
+  <script r0b0="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  <script r0b0="{{ url_for('static',filename='controller.js') }}"></script>
+
+</body>
+
+</html>

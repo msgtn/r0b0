@@ -1,0 +1,8 @@
+name: blossomsingle
+type: DynamixelRobot
+usb_port: /dev/tty.usbserial-FT1SF1UM
+baud_rate: 57600
+motors: # use these same names as kwargs to constructors
+- name: dxl_motor
+  model: xl330-m288
+  id: 1

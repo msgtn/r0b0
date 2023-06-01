@@ -1,0 +1,14 @@
+name: ardu_dxl_test
+hostname: localhost
+port: 8080
+gadgets:
+- ardubot
+- dxl_motor
+- x3d
+messages:
+- msg_func: joy2ardmotor
+  tx_gadget: x3d
+  rx_gadget: ardubot
+- msg_func: joy2dxlmotor
+  tx_gadget: x3d
+  rx_gadget: dxl_motor

@@ -1,6 +1,6 @@
-from src.rigs.rig import Rig
-from src.utils import loaders
-from src.messages import msg_funcs
+from r0b0.rigs.rig import Rig
+from r0b0.utils import loaders
+from r0b0.messages import msg_funcs
 
 import sys
 from multiprocessing import Process
@@ -13,7 +13,7 @@ logging.basicConfig(
     # level=logging.INFO,
     level=logging.DEBUG,
     )
-from src.config import LOCALHOST, SERVER_PORT
+from r0b0.config import LOCALHOST, SERVER_PORT
 
 # LOCALHOST = 'localhost'
 # SERVER_PORT = 8080
