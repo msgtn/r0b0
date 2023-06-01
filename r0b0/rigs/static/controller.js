@@ -165,6 +165,7 @@ function checkPswd() {
 
   // TODO - set this to a yaml config
   var socketAddr = "r0b0.ngrok.io"
+  console.log(socketAddr)
   socket = io.connect(`https://${socketAddr}`);
 
   let peerConnection;

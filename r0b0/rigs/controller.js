@@ -156,6 +156,7 @@ function checkPswd() {
   recordButton.disabled = false;
 
   var socketAddr = "blossomapp.ngrok.io"
+  console.log(socketAddr)
   if (document.location.href.includes('localhost')) {
     socketAddr = "localhost:8080";
     console.log("Using localhost socket")

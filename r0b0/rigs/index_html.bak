@@ -13,9 +13,9 @@
   <!-- <link rel="stylesheet" href="style.css"> -->
 
 
-  <!-- <script r0b0="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> -->
-  <!-- <script r0b0="data.js"></script> -->
-  <!-- <script r0b0="controller.js"></script> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> -->
+  <!-- <script src="data.js"></script> -->
+  <!-- <script src="controller.js"></script> -->
 
 </body>
 

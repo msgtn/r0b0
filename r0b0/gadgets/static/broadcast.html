@@ -22,7 +22,7 @@
       <!-- <div class="box"> -->
       <!-- <div> -->
         <div class="overlay">
-          <video id="videoWebm" z-index="9" r0b0="vid.webm" align="left" width="0px" height="0px" position="absolute"></video>  
+          <video id="videoWebm" z-index="9" src="vid.webm" align="left" width="0px" height="0px" position="absolute"></video>  
         </div>
         <video playsinline autoplay muted id="watcherVideo" align="left" position="absolute"></video> 
       <!-- </div> -->
@@ -42,7 +42,7 @@
       <label for="audioSource">Audio source: </label>
       <select id="audioSource"></select>
     </section>
-    <!-- <iframe id="ytVid" width="0" r0b0="https://www.youtube.com/embed/Nbs-Dy6RThk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+    <!-- <iframe id="ytVid" width="0" src="https://www.youtube.com/embed/Nbs-Dy6RThk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 
 
     <select id="videoName" name="videoName" class="select-css">
@@ -105,11 +105,11 @@
     <p id="promptSpace">Prompt text will appear here.</p>
 
 
-    <script r0b0="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-    <script r0b0="/data.js"></script>
-    <script r0b0="/blossomFunctions.js"></script>
-    <script r0b0="/socket.io/socket.io.js"></script>
-    <script r0b0="/broadcast.js" type="text/javascript"></script>
+    <script src="/data.js"></script>
+    <script src="/blossomFunctions.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/broadcast.js" type="text/javascript"></script>
   </body>
 </html>
