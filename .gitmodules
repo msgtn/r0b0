@@ -1,0 +1,9 @@
+[submodule "blossom-app"]
+	path = blossom-app
+	url = https://github.com/psychomugs/blossom-app
+[submodule "tracker"]
+	path = tracker
+	url = https://github.com/psychomugs/example-object-tracker
+[submodule "pycoral"]
+	path = pycoral
+	url = https://github.com/psychomugs/pycoral

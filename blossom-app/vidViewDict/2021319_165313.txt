@@ -1,1 +1,0 @@
-{"happy_pika":1,"sad_pika":1,"anger_pika":1,"happy_sponge":0,"sad_sponge":0,"anger_sponge":0,"happy_homer":0,"sad_homer":0,"anger_homer":0,"happy_elmo":1,"sad_elmo":0}
