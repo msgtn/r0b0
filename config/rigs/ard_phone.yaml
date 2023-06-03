@@ -1,0 +1,10 @@
+name: ard_phone
+hostname: localhost
+port: 8080
+gadgets:
+- ardubot
+- phone
+messages:
+- msg_func: motion2ardmotor
+  tx_gadget: phone
+  rx_gadget: ardubot

@@ -3,7 +3,7 @@ from .midi_controller import MIDIController
 from .dxl_robot import DynamixelRobot
 from .arduino import ArduinoGadget, ArduinoRobot
 from .tape import Tape
-from .phone import Phone
+from .page import Page, MobilePage
 from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
 from .mouse import Mouse
 

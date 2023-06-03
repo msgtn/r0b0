@@ -1,18 +1,38 @@
+
+from r0b0 import logging
+
+# import argparse
+# parser = argparse.ArgumentParser()
+# parser.add_argument('--logging',type=str,default='warning')
+# args = parser.parse_args()
+
+logging.basicConfig(
+    encoding='utf-8',
+    # level=logging.DEBUG,
+    # level=getattr(logging,args['logging'])
+    level=logging.WARNING,
+    )
+
 from r0b0.rigs.rig import Rig
 from r0b0.utils import loaders
 from r0b0.messages import msg_funcs
+# parser.add_argument(
+#     '--log', default=sys.stdout, type=argparse.FileType('w'),
+#     help='the file where the sum should be written')
+# args.log.write('%s' % sum(args.integers))
+# args.log.close()
 
 import sys
 from multiprocessing import Process
 import signal
 import numpy as np
-import logging
-logging.basicConfig(
-    # filename='example.log',
-    encoding='utf-8',
-    # level=logging.INFO,
-    level=logging.DEBUG,
-    )
+# import logging
+# logging.basicConfig(
+#     # filename='example.log',
+#     encoding='utf-8',
+#     # level=logging.INFO,
+#     level=logging.DEBUG,
+#     )
 from r0b0.config import LOCALHOST, SERVER_PORT
 
 # LOCALHOST = 'localhost'

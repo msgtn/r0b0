@@ -122,6 +122,17 @@ python3 -m unittest discover -s r0b0.gadgets -t .
 - [ ] Message functions
   - [ ] Rebrand to `rubber bands`?
   - [ ] Split into separate files, in `msg_funcs.__init__.py` import all of the functions in every file in that folder
+- [ ] Docker Image
+
+
+### Document
+- Gadgets
+  - Arduino - pyFirmata setup
+  - DynamixelRobot - how to define motor config.yaml
+  - Page - routing and events, integration with Host/Server
+- ngrok
+  - setting up an account
+  - starting tunnel
 
 #### cleanup
 - [ ] consolidate gadgets
@@ -153,3 +164,10 @@ Steps for setting up r0b0 on an rpi
 	- Gadgets
 	- Rigs
 - message functions
+
+## Cite / Ideas
+- https://www.theverge.com/23539916/sony-ps5-accessibility-controller-leonardo-ces-2023
+- https://www.ifixit.com/News/51614/framework-laptop-teardown-10-10-but-is-it-perfect
+- Robots as bicycles, cars, things that communities can grow from, are utilitarian, but also usable for pure Play
+  - the bicycle of the _______
+

@@ -1,6 +1,6 @@
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
-
+console.log('test');
 var socket = "";
 var lastEvent = 0;
 var initYaw = 0;

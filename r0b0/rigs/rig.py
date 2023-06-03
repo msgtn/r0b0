@@ -1,34 +1,25 @@
-# from r0b0 import gadgets
-# import r0b0.gadgets
 from functools import partial
 from collections import defaultdict
-from r0b0 import gadgets as gadget_shelf, \
-    messages as r0b0_msgs
-from r0b0.config import LOCALHOST, SERVER_PORT
-from r0b0.utils import loaders
-# from r0b0.rigs import logging
-# from r0b0.gadgets.rig import start_server
-from r0b0.rigs.server import Host
-# from r0b0.messages import msg_funcs
 from multiprocessing import Process
 import pickle
-from  r0b0 import logging
 import time
-
-# logging = logging.getLogger(__name__)
-
 
 import pygame
 from pygame import joystick as pgJoystick, \
     event as pgEvent, \
     display as pgDisplay, \
     time as pgTime
-# from pygame.joystick import Joystick as pgJoystick
-# pgEvent.init()
 pygame.init()
 pgDisplay.init()
 pgJoystick.init()
 pgTime.Clock().tick(1)
+
+from r0b0 import gadgets as gadget_shelf, \
+    messages as r0b0_msgs, \
+    logging
+from r0b0.config import LOCALHOST, SERVER_PORT
+from r0b0.utils import loaders
+from r0b0.rigs.host import Host
 
 class Rig(Host):
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
@@ -41,9 +32,7 @@ class Rig(Host):
         self.pygame_gadgets = {}
         
         # trying SIMO event handling
-        self.event_handlers = defaultdict(list)
-        # self.event_handlers.setdefault([])
-        
+        self.event_handlers = defaultdict(list)       
     
     def add_gadget(self, gadget_name):
         config = loaders.load_gadget(gadget_name)

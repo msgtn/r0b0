@@ -4,8 +4,8 @@ import unittest
 # server.start_server('localhost',8080)
 import socketio
 # from r0b0.gadget_socket import Socket, MIDISocket
-from r0b0.gadgets.phone import Phone
-from r0b0.rigs.server import Host
+from r0b0.gadgets.page import Page
+from r0b0.rigs.host import Host
 # from .gadget import Gadget, MIDIController, Robot
 from . import Gadget, MIDIController, Robot
 import mido
@@ -100,7 +100,7 @@ class PhoneTest(GadgetTest):
     def setUp(self):
         super().setUp()
         config = loaders.load_gadget('test_phone')
-        self.gadget = Phone(config)
+        self.gadget = Page(config)
         
     # def test_on_device_motion(self):
     def test_on_record(self):

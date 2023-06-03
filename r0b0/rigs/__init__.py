@@ -1,2 +1,1 @@
-import logging
-logging = logging.getLogger(__name__)
+from r0b0 import logging

@@ -1,0 +1,12 @@
+# name: phone
+type: Page
+route_urls:
+  /: index.html
+  /broadcast: broadcast.html
+event_kwargs:
+  # record:
+  #   namespace: /phone
+  device_motion:
+    # namespace: /
+    namespace: /phone
+  

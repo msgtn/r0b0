@@ -8,6 +8,7 @@ GADGETS_DIR = SRC_DIR / 'gadgets'
 KINEMATICS_DIR = SRC_DIR / 'kinematics'
 UTILS_DIR = SRC_DIR / 'utils'
 MESSAGES_DIR = SRC_DIR / 'messages'
+BROWSER_DIR= SRC_DIR / 'browser'
 
 CSR_PEM = SRC_DIR / 'csr.pem'
 KEY_PEM = SRC_DIR / 'key.pem'
@@ -21,7 +22,3 @@ ROBOT_HOST = LOCALHOST
 SERVER_PORT = 8080
 MIDI_PORT = 9000
 ROBOT_PORT = 9090
-
-# with open(str(ROOT_DIR / 'blossom_todo.md'),'r') as infile:
-#     with open(str(ROOT_DIR / 'blossom_todo_bak.md'),'w') as outfile:
-#         outfile.writelines(infile.readlines())

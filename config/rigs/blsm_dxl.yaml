@@ -1,0 +1,7 @@
+gadgets:
+- blsm_dxl
+- blsm_phone
+messages:
+- msg_func: motion2motor
+  tx_gadget: blsm_phone
+  rx_gadget: blsm_dxl

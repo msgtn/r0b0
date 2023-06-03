@@ -14,7 +14,7 @@ import numpy as np
 # from Arduino import Arduino
 from pyfirmata import Arduino, util
 
-# Needs to upload the StandardFirmata to the board first
+# Needs to upload the StandardFirmata.ino to the board first
 
 # types of sub-gadgets:
 # Servos: digital servo

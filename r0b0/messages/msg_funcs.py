@@ -61,6 +61,15 @@ def motion2motor(data=None):
         'motor_id':[1,2,3,4]
     }
     
+def motion2ardmotor(data=None):
+    if data is None: return {'event':'device_motion'}
+    logging.debug(f'motion2ardmotor {data}')
+    return {
+        'event':'position',        # 'value': # the function that gives
+        'value':[int(np.interp(data['x'],[0,1.5],[20,160]))],
+        'motor_id':[10]
+    }
+    
 def motion2midi(data=None):
     if data is None: return {'event':'device_motion'}
     note = int(np.interp(np.rad2deg(data['x']),[0,180],[40,90]))

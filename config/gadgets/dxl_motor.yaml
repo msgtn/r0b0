@@ -1,4 +1,3 @@
-name: blossomsingle
 type: DynamixelRobot
 usb_port: /dev/tty.usbserial-FT1SF1UM
 baud_rate: 57600
