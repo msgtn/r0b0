@@ -68,28 +68,6 @@ class ArduinoGadget(Gadget, Arduino):
         self.kinematic_function = ''
         self.message = MotorMessage
 
-    @load_pickle
-    def position_event(self,data):
-        # msg = pickle.loads(msg)
-        # print(msg.motor_id)
-        # print(msg=msg)
-        msg = data['msg']
-        # logging.debug(msg)
-        if not isinstance(msg.motor_id,list):
-            msg.motor_id = [msg.motor_id]
-            msg.value = [msg.value]
-        for motor_id, motor_value in zip(msg.motor_id,msg.value):
-            motor = self.pins.get(motor_id,None)
-            # motor = self.pins.get(motor_name,None)
-            if motor is None:
-                # print(f"No motor ID {motor_id} found, skipping")
-                logging.debug(f'Motor {motor_id} not found, skipping')
-                return
-            
-            logging.debug('motor_value')
-            logging.debug(motor_value)
-            motor.write(motor_value)
-            
     def add_pins(self, pins: list):
         self.pins = {}
         self.pins.setdefault(None)
@@ -103,12 +81,6 @@ class ArduinoGadget(Gadget, Arduino):
             })
         
         return self.pins
-
-    # @Gadget.check_msg
-    def velocity_event(self, msg):
-        motor = self.motors_by_id.get(msg.motor_id,None)
-        assert motor is not None, f"Motor {msg.motor_id} does not exist"
-        self._move_motor_id(msg.motor_id, msg.value)
 
     def from_config(self, config): 
         for motor, motor_param in config.items():
@@ -193,9 +165,6 @@ class ArduinoRobot(ArduinoGadget):
         self.on('position',
                 handler=self.position_event,
                 namespace=self.namespace)
-        self.on('velocity',
-                handler=self.velocity_event,
-                namespace=self.namespace)
         
     @load_pickle
     def position_event(self,data):
@@ -205,21 +174,9 @@ class ArduinoRobot(ArduinoGadget):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
         for motor_id, motor_value in zip(msg.motor_id,msg.value):
-            # motor_value = np.interp(motor_value, [0,4096], [10,160])
             motor = self.motors_by_id.get(motor_id,None)
             if motor is None:
                 # print(f"No motor ID {motor_id} found, skipping")
                 logging.debug(f'Motor {motor_id} not found, skipping')
                 return
-            # if (time.time()-motor.t_last_cmd) < T_COOLDOWN:
-            #     continue
-            # print(motor_value)
-            logging.debug('motor_value')
-            logging.debug(motor_value)
             motor.write(motor_value)
-
-    @load_pickle
-    def velocity_event(self, msg):
-        motor = self.motors_by_id.get(msg.motor_id,None)
-        assert motor is not None, f"Motor {msg.motor_id} does not exist"
-        self._move_motor_id(msg.motor_id, msg.value)

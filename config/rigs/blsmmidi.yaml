@@ -5,7 +5,7 @@ gadgets:
 - blossom
 - phone
 - opz
-messages:
+cables:
 - msg_func: note2motor
   tx_gadget: opz
   rx_gadget: blossom

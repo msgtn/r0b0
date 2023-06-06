@@ -5,7 +5,7 @@ gadgets:
 - ardubot
 - phone
 - opz
-messages:
+cables:
 - msg_func: cc2ard
   tx_gadget: opz
   rx_gadget: ardubot

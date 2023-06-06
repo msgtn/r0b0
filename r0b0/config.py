@@ -8,6 +8,7 @@ GADGETS_DIR = SRC_DIR / 'gadgets'
 KINEMATICS_DIR = SRC_DIR / 'kinematics'
 UTILS_DIR = SRC_DIR / 'utils'
 MESSAGES_DIR = SRC_DIR / 'messages'
+CABLES_DIR = SRC_DIR / 'cables'
 BROWSER_DIR= SRC_DIR / 'browser'
 
 CSR_PEM = SRC_DIR / 'csr.pem'

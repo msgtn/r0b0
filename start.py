@@ -15,7 +15,7 @@ logging.basicConfig(
 
 from r0b0.rigs.rig import Rig
 from r0b0.utils import loaders
-from r0b0.messages import msg_funcs
+from r0b0.cables import msg_funcs
 # parser.add_argument(
 #     '--log', default=sys.stdout, type=argparse.FileType('w'),
 #     help='the file where the sum should be written')
@@ -51,7 +51,7 @@ def main():
     for gadget in config['gadgets']:
         # print(gadget)
         rig.add_gadget(gadget)
-    for msg in config.get('messages',[]):
+    for msg in config.get('cables',[]):
         rig.add_message(**msg)
     print('powering')
     rig.power_on()

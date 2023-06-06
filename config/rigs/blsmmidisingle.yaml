@@ -2,7 +2,7 @@ gadgets:
 - dxl_motor
 - phone
 - opz
-messages:
+cables:
 - msg_func: note2motor
   tx_gadget: opz
   rx_gadget: dxl_motor

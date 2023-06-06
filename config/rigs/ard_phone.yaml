@@ -4,7 +4,7 @@ port: 8080
 gadgets:
 - ardubot
 - phone
-messages:
+cables:
 - msg_func: motion2ardmotor
   tx_gadget: phone
   rx_gadget: ardubot

@@ -15,7 +15,7 @@ pgJoystick.init()
 pgTime.Clock().tick(1)
 
 from r0b0 import gadgets as gadget_shelf, \
-    messages as r0b0_msgs, \
+    cables as r0b0_msgs, \
     logging
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.utils import loaders
@@ -40,7 +40,6 @@ class Rig(Host):
             gadget_shelf, config['type'], None)
         assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
         gadget_cls = gadget_cls(config)
-        # logging.debug(f'{gadget_name}.__bases__ = {gadget_cls.__class__}')
         
         # check if gadget class requires pygame
         if 'pygame' in str(gadget_cls.__class__).lower():

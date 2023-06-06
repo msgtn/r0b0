@@ -5,7 +5,7 @@ gadgets:
   # TODO - pibutton first will call pause
 - pibutton
 - picamera
-messages:
+cables:
 - msg_func: button2cam
   tx_gadget: pibutton
   rx_gadget: picamera

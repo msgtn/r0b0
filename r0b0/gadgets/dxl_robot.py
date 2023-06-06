@@ -20,7 +20,6 @@ T_COOLDOWN = 300/10e3
 
 class MotorMessage(Message):
     def __init__(self, event, value, motor_id, **kwargs):
-        # breakpoint()
         Message.__init__(self,**kwargs)
         self.event = event
         self.value = value
@@ -79,8 +78,6 @@ class DynamixelRobot(Gadget, DynamixelManager):
     @load_pickle
     def position_event(self,data):
         msg = data['msg']
-        # logging.debug('position event')
-        # logging.debug(msg)
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
@@ -89,19 +86,12 @@ class DynamixelRobot(Gadget, DynamixelManager):
             if motor is None:
                 logging.debug(f"No motor ID {motor_id} found, skipping")
                 continue
-            # if (time.time()-motor.t_last_cmd) < T_COOLDOWN:
-            #     continue
-            
-            # logging.debug(f'motor_value {motor_value}')
-
             motor.t_last_cmd = time.time()
+            
             # assert motor is not None, f"Motor {msg.motor_id} does not exist"
             # TODO - set motor control mode
             # motor.set_torque_enable(True)
-            # print(motor_value)
-            # motor.set_profile_acceleration(16000)
             motor.set_profile_velocity(16000)
-            # motor.set_profile_velocity(0)
             motor.set_goal_position(int(motor_value))
             motor.believed_position = int(motor_value)
 

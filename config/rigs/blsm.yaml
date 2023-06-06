@@ -1,10 +1,7 @@
-name: blsm
-hostname: localhost
-port: 8080
 gadgets:
-- blossom
-- phone
-messages:
+- blsm_dxl
+- blsm_phone
+cables:
 - msg_func: motion2motor
-  tx_gadget: phone
-  rx_gadget: blossom
+  tx_gadget: blsm_phone
+  rx_gadget: blsm_dxl

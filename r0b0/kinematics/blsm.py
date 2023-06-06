@@ -157,7 +157,7 @@ def integrate(x,x_d,del_t):
 #         super.__init__(**kwargs)
 #         pass
 
-def get_motor_pos(ori, portrait=True, sensitivity=1.0):
+def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
     """
     Get position of the motors given orientation using inverse kinematics
     args:

@@ -4,7 +4,7 @@ port: 8080
 gadgets:
 - opz
 - phone
-messages:
+cables:
 - msg_func: motion2midi
   tx_gadget: phone
   rx_gadget: opz

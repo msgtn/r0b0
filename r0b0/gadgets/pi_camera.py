@@ -4,11 +4,7 @@ from r0b0.utils.loaders import load_pickle
 from r0b0 import logging, get_timestamp
 import os
 
-import picamera
-# native pi version
-# from picamera import PiCamera as _PiCamera
-from picamera2 import Picamera2, Preview
-# import picamera.array
+from picamera2 import Picamera2
 import numpy as np
 from time import sleep
 from functools import partial

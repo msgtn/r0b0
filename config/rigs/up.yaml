@@ -2,7 +2,7 @@ name: up
 gadgets:
 - opz
 - upbot
-messages:
+cables:
 - msg_func: cc2motor
   tx_gadget: opz
   rx_gadget: upbot

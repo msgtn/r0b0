@@ -1,4 +1,4 @@
-from r0b0.kinematics.blossom import get_motor_pos
+from r0b0.kinematics.blsm import device_motion2dxl_motor
 
 # @load_pickle
 def motion2motor(data=None):
@@ -6,7 +6,6 @@ def motion2motor(data=None):
     # logging.debug(f'motion2motor {data}')
     return {
         'event':'position',        # 'value': # the function that gives
-        'value':get_motor_pos(data),
+        'value':device_motion2dxl_motor(data),
         'motor_id':[1,2,3,4]
     }
-    

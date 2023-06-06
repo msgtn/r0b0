@@ -3,7 +3,7 @@ gadgets:
 - x3d
 - opz
 - blossomsingle
-messages:
+cables:
 - msg_func: joy2midi
   tx_gadget: x3d
   rx_gadget: opz

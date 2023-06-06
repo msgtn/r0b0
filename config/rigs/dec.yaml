@@ -2,7 +2,7 @@ name: dec
 gadgets:
 - opz
 - blossom
-messages:
+cables:
 - msg_func: note2motor
   tx_gadget: opz
   rx_gadget: blossom

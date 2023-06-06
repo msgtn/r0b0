@@ -2,7 +2,7 @@ name: joystick
 gadgets:
 - x3d
 - mouse
-messages:
+cables:
 - msg_func: joy2mouse_move
   tx_gadget: x3d
   rx_gadget: mouse
