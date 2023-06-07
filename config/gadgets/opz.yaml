@@ -1,6 +1,3 @@
-name: opz
 type: MIDIController
-hostname: localhost
-port: 9002
 port_name: OP-Z
 channel: 1

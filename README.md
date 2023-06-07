@@ -64,7 +64,8 @@ def cc2motor(midi_cc_msg):
 ### Cables
 Cables (`r0b0.cables`) are the input-output translators for events.
 They translate information from an input event into instructions for an output event.
-The basic skeleton for Cable function is:
+They accept and return `dict`s in the form of [`socketio` events sent through `emit`s](https://python-socketio.readthedocs.io/en/latest/client.html#emitting-events).
+The basic skeleton for `Cable` function is:
 
 ```
 def input2output(data=None):
@@ -83,13 +84,24 @@ def input2output(data=None):
 	}
 ```
 
-To use a message function, define the message function and input/transmitting (`tx`) and output/receiving (`rx`) gadgets in the rig config:
+Alternatively, combine the incoming data with the translated output data by using a dictionary update:
 ```
-name: joyblossom
+...
+  data.update(translation_function_that_outputs_a_dictionary(data))
+
+  return {
+    'event':output_event,
+    'data':data
+  }
+...
+```
+
+To connect `Gadget`s through a `Cable`, define the message function in any file in `r0b0/cables`, the input/transmitting `Gadget` (`tx_gadget`), and the output/receiving `Gadget` (`rx_gadget`) in the `Rig`'s `config.yaml`:
+```
 gadgets:
 - inputGadget
 - outputGadget
-messages:
+cables:
 - msg_func: input2output
   tx_gadget: inputGadget
   rx_gadget: outputGadget
@@ -98,24 +110,15 @@ messages:
 In this example, the rig will connect `inputGadget` to `outputGadget` through the `input2output` function.
 The rig will listen to `input_event`s emitted by `inputGadget`, perform the 'translation' through `input2output`, then emit `output_event`s to `outputGadget`.
 
-## Scripts
-All from the top-level directory.
-
-Start just a server:
-```
-python3 -m r0b0.rigs.server
-```
-
-Start an example rig with `blossom` and `opz`:
-```
-python3 -m start dec
-```
-
-Test
-```
-python3 -m unittest discover -s r0b0.gadgets -t .
-```
-
+### Tapes
+Continuing the music instrument metaphor, records of events can be saved to `Tape`s.
+`Tape`s are raw `*.json` files that are lists of 
+The `Tape` recorder is integrated into `Host`.
+TODO - check over the terminology here
+The recording `Gadget` must send a `record` event to the server.
+TODO - is this integrated yet?
+Playback of `Tape`s should work without the original recording `Gadget` being connected to the current `Rig`.
+`Tape`s are saved with the naming convention: `{date}_{event_name}.json`.
 
 ## TODO
 ### Software

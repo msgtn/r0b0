@@ -32,7 +32,8 @@ class Rig(Host):
         self.pygame_gadgets = {}
         
         # trying SIMO event handling
-        self.event_handlers = defaultdict(list)       
+        self.event_handlers = defaultdict(list)   
+        self.__dict__.update(kwargs)    
     
     def add_gadget(self, gadget_name):
         config = loaders.load_gadget(gadget_name)

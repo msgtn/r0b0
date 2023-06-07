@@ -40,7 +40,7 @@ from r0b0.config import LOCALHOST, SERVER_PORT
 
 def main():
     config = loaders.load_rig(sys.argv[1])
-    print(config)
+    logging.debug(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
@@ -48,12 +48,14 @@ def main():
         namespaces=[f'/{gadget}' for gadget in config['gadgets']],
         # namespaces=['/','/blossom'],
     )
+    
+    # add gadgets
     for gadget in config['gadgets']:
-        # print(gadget)
         rig.add_gadget(gadget)
-    for msg in config.get('cables',[]):
-        rig.add_message(**msg)
-    print('powering')
+    # connect cables
+    for cable in config.get('cables',[]):
+        rig.add_message(**cable)
+    logging.debug('Powering rig')
     rig.power_on()
     return rig
 

@@ -1,4 +1,3 @@
-name: mpibuttons
 type: PiButton
 buttons:
   # manual_button: 20

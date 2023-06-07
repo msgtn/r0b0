@@ -24,7 +24,6 @@ class MotorMessage(Message):
         self.event = event
         self.value = value
         self.motor_id = motor_id    
-    
 
 class DynamixelRobot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
@@ -51,9 +50,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
         self.power_up()
         self.enable_all()
         for _,motor in self.motors_by_id.items():
-            # print(motor)
             if motor is None: continue
-            # motor.set_torque_enable(True)
             motor.set_operating_mode(3)
             
         self.kinematic_function = ''
