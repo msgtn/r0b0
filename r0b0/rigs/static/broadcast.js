@@ -20,34 +20,31 @@ console.log(socket.id);
 socket.on("connect", () => {
   console.log("Connecting");
   // socket.emit("watcher",socket.id);
-  socket.emit("broadcaster",socket.id);
+  // socket.emit("broadcaster",socket.id);
 });
 
 function sendWatcher() {
-  socket.emit("watcher",socket.id);
+  // socket.emit("watcher",socket.id);
   setTimeout(function() {
     socket.emit("broadcaster",socket.id);
   }, 1000);
 };
 
-
-socket.on("answer", (id, description) => {
-  peerConnections[id].setRemoteDescription(description);
-});
-
-socket.on("broadcaster", () => {
-  socket.emit("watcher",socket.id);
-});
-
 socket.on("watcher", async (id) => {
   const peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
+  // peerConnection = peerConnections[id];
   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   stream.getTracks().forEach((track) => {peerConnection.addTrack(track, stream)});
   peerConnection.onicecandidate = event => {
     if (event.candidate) {
       socket.emit("candidate", id, event.candidate);
     }
+  };
+  peerConnection.ontrack = event => {
+    watcherVideo.srcObject = event.streams[0];
+    console.log(event.streams[0]);
+
   };
 
 
@@ -64,12 +61,22 @@ socket.on("watcher", async (id) => {
 });
 
 
+socket.on("answer", (id, description) => {
+  peerConnections[id].setRemoteDescription(description);
+});
+
+socket.on("broadcaster", () => {
+  // necessary to get controller's video feed
+  // socket.emit("watcher",socket.id);
+});
+
+
 socket.on("offer", (id, description) => {
   console.log("Got offer");
   console.log(id)
   console.log(description);
   peerConnection = new RTCPeerConnection(config);
-  peerConnections[id] = peerConnection;
+  // peerConnections[id] = peerConnection;
   peerConnection
     .setRemoteDescription(description)
     .then(() => peerConnection.createAnswer())

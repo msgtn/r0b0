@@ -190,7 +190,7 @@ function startup() {
 
   socket.on("connect", () => {
     socket.emit("watcher", socket.id);
-    socket.emit("broadcaster", socket.id);
+    // socket.emit("broadcaster", socket.id);
   });
 
   socket.on("candidate", (id, candidate) => {
@@ -200,10 +200,25 @@ function startup() {
       .catch((e) => console.error(e));
   });
 
-  socket.on("offer", (id, description) => {
+  socket.on("offer", async (id, description) => {
     console.log("Got offer");
     peerConnection = new RTCPeerConnection(config);
     peerConnections[id] = peerConnection;
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+
+    stream.getTracks().forEach((track) => {
+      peerConnection.addTrack(track, stream);
+    });
+    
+    // peerConnection.onicecandidate = (event) => {
+    //   if (event.candidate) {
+    //     socket.emit("candidate", id, event.candidate);
+    //   }
+    // };
     peerConnection
       .setRemoteDescription(description)
       .then(() => peerConnection.createAnswer())
@@ -229,8 +244,14 @@ function startup() {
 
   socket.on("watcher", async (id) => {
     console.log("Watcher");
-    const peerConnection = new RTCPeerConnection(config);
-    peerConnections[id] = peerConnection;
+
+    // creating a new connection enables monitoring both controller and broadcaster on broadcast.html
+    // const peerConnection = new RTCPeerConnection(config);
+    // peerConnections[id] = peerConnection;
+
+    // but reusing this peerconnection doesnt
+    // as if only 2 streams can be visible at a time
+    peerConnection = peerConnections[id];
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
@@ -262,6 +283,11 @@ function startup() {
 
   socket.on("answer", (id, description) => {
     peerConnections[id].setRemoteDescription(description);
+    peerConnections[id].ontrack = event => {
+      broadcasterVideo.srcObject = event.streams[0];
+      console.log(event.streams[0]);
+  
+    };
   });
 
   socket.on("broadcaster", () => {
@@ -496,18 +522,18 @@ function gotDevices(deviceInfos) {
 }
 
 function getStream() {
-  if (window.stream) {
-    window.stream.getTracks().forEach((track) => {
-      track.stop();
-    });
-  }
+  // if (window.stream) {
+  //   window.stream.getTracks().forEach((track) => {
+  //     track.stop();
+  //   });
+  // }
   const audioSource = audioSelect.value;
   const videoSource = videoSelect.value;
   const constraints = {
     audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
     video: {
       deviceId: videoSource ? { exact: videoSource } : undefined,
-      frameRate: { min: 30 },
+      // frameRate: { min: 30 },
     },
     // video: { deviceId: videoSource ? { exact: videoSource } : undefined }
   };
@@ -518,7 +544,7 @@ function getStream() {
 }
 var _stream;
 function gotStream(stream) {
-  window.stream = stream;
+  // window.stream = stream;
   audioSelect.selectedIndex = [...audioSelect.options].findIndex(
     (option) => option.text === stream.getAudioTracks()[0].label
   );
@@ -526,24 +552,40 @@ function gotStream(stream) {
     (option) => option.text === stream.getVideoTracks()[0].label
   );
   _stream = stream;
+
+  Object.keys(peerConnections).forEach(function(id) {
+    // console.log(key + " " + obj[key]);
+    stream.getTracks().forEach((track) => {
+      peerConnection[id].addTrack(track, stream);
+    });
+ });
+
+  // return stream;
   // stream.addTrack()
   // watcherVideo.srcObject = stream;
-  socket.emit("broadcaster", socket.id);
+
+  // this is what will show the controller video on the broadcaster page
+  // socket.emit("broadcaster", socket.id);
   // console.log(`gotStream ${videoSelect.options[videoSelect.selectedIndex].text}`);
-  socket.emit(
-    "switchedCam",
-    videoSelect.options[videoSelect.selectedIndex].text
-  );
+  // socket.emit(
+  //   "switchedCam",
+  //   // videoSelect.options[videoSelect.selectedIndex].text
+  // );
 }
+
+// function updatePCStreams(stream) {
+
+// }
 
 function handleError(error) {
   console.error("Error: ", error);
 }
 
-startup();
 
 audioSelect.onchange = getStream;
 videoSelect.onchange = getStream;
 
 getStream(audioSelect).then(getDevices).then(gotDevices);
 getStream(videoSelect).then(getDevices).then(gotDevices);
+
+startup();
