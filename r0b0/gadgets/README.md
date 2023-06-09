@@ -90,3 +90,10 @@ Because `pygame` makes it difficult to handle events in non-main threads, using 
 
 `Mouse` is a wrapper for [boppreh's `mouse` library](https://github.com/boppreh/mouse) and enables real-time mouse emulation, including motion and button presses.
 *Note: there may be some macOS-specific installation issues regarding Darwing compatibility; [the solution here worked for me](https://github.com/boppreh/mouse/issues/75).*
+
+## `Tape`
+
+A `Tape` is a special `Gadget` that stores a stream of events as a `json`.
+This is analogous to `rosbag`s but less bespoke to robots.
+
+To start recording

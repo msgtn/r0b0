@@ -27,11 +27,11 @@ class Page(Gadget):
         logging.debug(f'Page {self.name} received {_event}')
         self.emit(**data)
         
-    def add_emit(self,event,**kwargs):
-        self.on(
-            event,
-            **kwargs,
-        )
+    # def add_emit(self,event,**kwargs):
+    #     self.on(
+    #         event,
+    #         **kwargs,
+    #     )
         
     @load_pickle
     def on_record(self,data):

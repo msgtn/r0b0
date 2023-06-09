@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  
-    <title>r0b0 broadcaster</title>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+          <title>r0b0 broadcaster</title>
 
-  </head>
-  <body style="margin:0;">
-  <link rel="stylesheet" href="style.css">
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 
-  <div id="videoContainer" align="right">
-    
-    <div id="watcherVideoContainer" align="left" position="relative" display="flex">
-        <!-- <video playsinline autoplay muted id="watcherVideo" align="left" position="absolute"></video>  -->
-      <video playsinline autoplay muted id="broadcasterVideo" alight="right"></video>
-    </div>
+        </head>
+        <body style="margin:0;">
+          <link rel="stylesheet" href="style.css">
 
-  </div>
+            <div id="videoContainer" align="right">
+
+              <div id="watcherVideoContainer" align="left" position="relative" display="flex">
+                <video playsinline autoplay muted id="watcherVideo" align="left"></video>
+                <video playsinline autoplay muted id="broadcasterVideo" align="right"></video>
+              </div>
+
+            </div>
 
 
-    <section class="select">
-      <label for="videoSource">Video source: </label>
-      <select id="videoSource"></select>
-    </section>
-    <section class="select">
-      <label for="audioSource">Audio source: </label>
-      <select id="audioSource"></select>
-    </section>
+            <section class="select">
+              <label for="videoSource">Video source: </label>
+              <select id="videoSource"></select>
+            </section>
+            <section class="select">
+              <label for="audioSource">Audio source: </label>
+              <select id="audioSource"></select>
+            </section>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="{{ url_for('static',filename='broadcast.js') }}"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+            <script src="{{ url_for('static',filename='broadcast.js') }}"></script>
 
-  </body>
-</html>
+          </body>
+        </html>

@@ -38,6 +38,19 @@ class Tape(Gadget):
             target=self._play,
         )
         
+    @classmethod
+    def load(self,name):
+        filename = str( TAPES_DIR / f"{name}.json")
+        # assert os.path.exists(filename), "No"
+        if os.path.exists(filename):   
+            tape = Tape(name)
+            tape.tape = tape.open(filename)
+            tape._normalize_time()
+            return tape
+        else:
+            logging.warning(f"Tape '{name}' could not be loaded, does it exist in ./tapes/ ?")
+            return None
+        
     def start(self):
         self.namespace = self.tape[0].get('namespace','')
         logging.debug(f"Tape namespace: {self.namespace}")
@@ -68,19 +81,6 @@ class Tape(Gadget):
     def open(self,tape_name,open_mode='r'):
         with open(tape_name,open_mode) as tape_file:
             return json.loads(''.join(tape_file.readlines()))
-        
-    @classmethod
-    def load(self,name):
-        filename = str( TAPES_DIR / f"{name}.json")
-        # assert os.path.exists(filename), "No"
-        if os.path.exists(filename):   
-            tape = Tape(name)
-            tape.tape = tape.open(filename)
-            tape._normalize_time()
-            return tape
-        else:
-            logging.warning(f"Tape '{name}' could not be loaded, does it exist in ./tapes/ ?")
-            return None
             
     def write(self,frame):
         # TODO - check that the frame is valid, e.g. has event name and time is after last time

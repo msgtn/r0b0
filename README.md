@@ -110,6 +110,16 @@ cables:
 In this example, the rig will connect `inputGadget` to `outputGadget` through the `input2output` function.
 The rig will listen to `input_event`s emitted by `inputGadget`, perform the 'translation' through `input2output`, then emit `output_event`s to `outputGadget`.
 
+
+### Environment setup
+Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+```
+conda env create -f env.yaml
+conda activate r0b0
+pip3 install -r req.txt 
+```
+
+
 ### Tapes
 Continuing the music instrument metaphor, records of events can be saved to `Tape`s.
 `Tape`s are raw `*.json` files that are lists of 
@@ -122,10 +132,6 @@ Playback of `Tape`s should work without the original recording `Gadget` being co
 
 ## TODO
 ### Software
-- [ ] event:callback is 1:1 - need to enable 1:many 
-- [ ] Arduino
-  - [ ] Need to upload StandardFirmata to arduino first
-- [ ] Check if underscores in namespaces are fine
 - [ ] Loopback events - events to self?
   - [ ] Maybe best to restrict to one gadget per name - make it explicit 
   - [ ] Just use new gadget configs as necessary
@@ -135,7 +141,11 @@ Playback of `Tape`s should work without the original recording `Gadget` being co
 - [ ] Message functions - rebrand to `Cables`, clarify that can use multiple files in `r0b0/cables`
   - [ ] Split into separate files, in `msg_funcs.__init__.py` import all of the functions in every file in that folder
 - [ ] Docker Image
-
+- [ ] PyGame event loop in Rig - use pygame.event.set_allowed() to filter queueable events
+- [ ] Occasional/eventual disconnects between mobile app controller and broadcaster
+- [ ] In blsm_controller.js, enable reading the socketAddr from some file, i.e. start ngrok, save the tunneling url to a text file, read this tunneling url 
+- [ ] Clean controller.js, broadcast.js
+  - [ ] How to split up javascript files?
 
 ### Document
 - Gadgets

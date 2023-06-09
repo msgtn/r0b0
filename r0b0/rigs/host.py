@@ -145,6 +145,8 @@ class Host(Thread, SocketIO):
         data = {record: true/false, event: str}
         '''
         id_event = f"{data['id']}_{data['event']}"
+        
+        # data['record'] is boolean
         if data['record']:
             # start recording, make a new Tape
             self.tapes.update({
