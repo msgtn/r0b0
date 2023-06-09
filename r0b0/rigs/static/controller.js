@@ -24,6 +24,11 @@ var gestureBar = document.getElementById("gestureBar");
 var broadcasterVideo = document.getElementById("broadcasterVideo");
 var videoContainer = document.getElementById("videoContainer");
 var videoInput = document.getElementById("videoInput");
+var streamConstraints = {
+  video: true,
+  audio: true,
+};
+
 var controlSwitch = document
   .getElementById("controlSwitch")
   .querySelector("#control");
@@ -190,14 +195,19 @@ function startup() {
 
   socket.on("connect", () => {
     socket.emit("watcher", socket.id);
-    // socket.emit("broadcaster", socket.id);
+  });
+
+  socket.on("broadcaster", () => {
+    socket.emit("watcher", socket.id);
   });
 
   socket.on("candidate", (id, candidate) => {
     console.log(id);
-    peerConnections[id]
-      .addIceCandidate(new RTCIceCandidate(candidate))
-      .catch((e) => console.error(e));
+    if (id in peerConnections){
+      peerConnections[id]
+        .addIceCandidate(new RTCIceCandidate(candidate))
+        .catch((e) => console.error(e));
+    }
   });
 
   socket.on("offer", async (id, description) => {
@@ -205,20 +215,12 @@ function startup() {
     peerConnection = new RTCPeerConnection(config);
     peerConnections[id] = peerConnection;
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
+    const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
 
     stream.getTracks().forEach((track) => {
       peerConnection.addTrack(track, stream);
     });
-    
-    // peerConnection.onicecandidate = (event) => {
-    //   if (event.candidate) {
-    //     socket.emit("candidate", id, event.candidate);
-    //   }
-    // };
+
     peerConnection
       .setRemoteDescription(description)
       .then(() => peerConnection.createAnswer())
@@ -242,45 +244,6 @@ function startup() {
     console.log(data);
   });
 
-  socket.on("watcher", async (id) => {
-    console.log("Watcher");
-
-    // creating a new connection enables monitoring both controller and broadcaster on broadcast.html
-    // const peerConnection = new RTCPeerConnection(config);
-    // peerConnections[id] = peerConnection;
-
-    // but reusing this peerconnection doesnt
-    // as if only 2 streams can be visible at a time
-    peerConnection = peerConnections[id];
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-
-    stream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, stream);
-    });
-    console.log(stream);
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        socket.emit("candidate", id, event.candidate);
-      }
-    };
-
-    console.log("Set local descp");
-    console.log(`Sending offer to ${id}`);
-    peerConnection
-      .createOffer()
-      .then((sdp) => peerConnection.setLocalDescription(sdp))
-      .then(() => {
-        socket.emit("offer", id, peerConnection.localDescription);
-        // socket.emit("offer", id, 'dafdsa');
-      })
-      .catch(() => {
-        console.log("Error offering");
-      });
-  });
-
   socket.on("answer", (id, description) => {
     peerConnections[id].setRemoteDescription(description);
     peerConnections[id].ontrack = event => {
@@ -288,10 +251,6 @@ function startup() {
       console.log(event.streams[0]);
   
     };
-  });
-
-  socket.on("broadcaster", () => {
-    socket.emit("watcher", socket.id);
   });
 
   socket.on("disconnectPeer", (id) => {
@@ -522,27 +481,21 @@ function gotDevices(deviceInfos) {
 }
 
 function getStream() {
-  // if (window.stream) {
-  //   window.stream.getTracks().forEach((track) => {
-  //     track.stop();
-  //   });
-  // }
   const audioSource = audioSelect.value;
   const videoSource = videoSelect.value;
-  const constraints = {
+  streamConstraints = {
     audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
     video: {
       deviceId: videoSource ? { exact: videoSource } : undefined,
       // frameRate: { min: 30 },
     },
-    // video: { deviceId: videoSource ? { exact: videoSource } : undefined }
   };
   return navigator.mediaDevices
-    .getUserMedia(constraints)
+    .getUserMedia(streamConstraints)
     .then(gotStream)
     .catch(handleError);
 }
-var _stream;
+
 function gotStream(stream) {
   // window.stream = stream;
   audioSelect.selectedIndex = [...audioSelect.options].findIndex(
@@ -551,31 +504,14 @@ function gotStream(stream) {
   videoSelect.selectedIndex = [...videoSelect.options].findIndex(
     (option) => option.text === stream.getVideoTracks()[0].label
   );
-  _stream = stream;
 
   Object.keys(peerConnections).forEach(function(id) {
-    // console.log(key + " " + obj[key]);
     stream.getTracks().forEach((track) => {
-      peerConnection[id].addTrack(track, stream);
+      peerConnections[id].addTrack(track, stream);
     });
  });
 
-  // return stream;
-  // stream.addTrack()
-  // watcherVideo.srcObject = stream;
-
-  // this is what will show the controller video on the broadcaster page
-  // socket.emit("broadcaster", socket.id);
-  // console.log(`gotStream ${videoSelect.options[videoSelect.selectedIndex].text}`);
-  // socket.emit(
-  //   "switchedCam",
-  //   // videoSelect.options[videoSelect.selectedIndex].text
-  // );
 }
-
-// function updatePCStreams(stream) {
-
-// }
 
 function handleError(error) {
   console.error("Error: ", error);

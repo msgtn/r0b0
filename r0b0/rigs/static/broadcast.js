@@ -44,15 +44,12 @@ socket.on("watcher", async (id) => {
   peerConnection.ontrack = event => {
     watcherVideo.srcObject = event.streams[0];
     console.log(event.streams[0]);
-
   };
-
 
   peerConnection
     .createOffer()
     .then(sdp => peerConnection.setLocalDescription(sdp))
     .then(() => {
-      // console.log(id, peerConnection.localDescription);
       socket.emit("offer", id, peerConnection.localDescription);
     })
     .catch(() => {
@@ -60,66 +57,18 @@ socket.on("watcher", async (id) => {
     });
 });
 
-
-socket.on("answer", (id, description) => {
-  peerConnections[id].setRemoteDescription(description);
-});
-
-socket.on("broadcaster", () => {
-  // necessary to get controller's video feed
-  // socket.emit("watcher",socket.id);
-});
-
-
-socket.on("offer", (id, description) => {
-  console.log("Got offer");
-  console.log(id)
-  console.log(description);
-  peerConnection = new RTCPeerConnection(config);
-  // peerConnections[id] = peerConnection;
-  peerConnection
-    .setRemoteDescription(description)
-    .then(() => peerConnection.createAnswer())
-    .then(sdp => peerConnection.setLocalDescription(sdp))
-    .then(() => {
-      socket.emit("answer", id, peerConnection.localDescription);
-    });
-  console.log("Set peer connection");
-  peerConnection.ontrack = event => {
-    watcherVideo.srcObject = event.streams[0];
-    console.log(event.streams[0]);
-
-  };
-  console.log("Set ontrack");
-  peerConnection.onicecandidate = event => {
-    if (event.candidate) {
-      socket.emit("candidate", id, event.candidate);
-    }
-  };
-  console.log("Set onicecandidate")
-});
-
-
 socket.on("candidate", (id, candidate) => {
   console.log(id,candidate);
   peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
 });
 
+socket.on("answer", (id, description) => {
+  peerConnections[id].setRemoteDescription(description);
+});
 socket.on("disconnectPeer", id => {
   peerConnections[id].close();
   delete peerConnections[id];
 });
-
-// commanded by user to switch cameras
-socket.on("switchCam", (flatSwitchChecked) => {
-  videoSelect.selectedIndex = [...videoSelect.options].findIndex(
-    option => option.text === camList[flatSwitchChecked ? 0 : 1]
-  );
-  getStream(videoSelect)
-    .then(getDevices)
-    .then(gotDevices)
-    .then(socket.emit("switchedCam", videoSelect.options[videoSelect.selectedIndex].text));
-})
 
 window.onunload = window.onbeforeunload = () => {
   socket.close();
@@ -164,7 +113,9 @@ function getStream() {
   const videoSource = videoSelect.value;
   const constraints = {
     audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
-    video: { deviceId: videoSource ? { exact: videoSource } : undefined , frameRate: {min:30}}
+    video: { deviceId: videoSource ? { exact: videoSource } : undefined , 
+      frameRate: {min:30}
+    }
   };
   return navigator.mediaDevices
     .getUserMedia(constraints)
@@ -183,14 +134,9 @@ function gotStream(stream) {
   );
   broadcasterVideo.srcObject = stream;
   socket.emit("broadcaster",socket.id);
-  // socket.emit("watcher");
+  
   console.log("Got stream");
-  console.log(`gotStream ${videoSelect.options[videoSelect.selectedIndex].text}`);
-  socket.emit("switchedCam", videoSelect.options[videoSelect.selectedIndex].text);
-
 }
-
-
 
 function handleError(error) {
   console.error("Error: ", error);
