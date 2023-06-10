@@ -6,9 +6,9 @@ gadgets:
 - dxl_motor
 - x3d
 cables:
-- msg_func: joy2ardmotor
+- cable: joy2ardmotor
   tx_gadget: x3d
   rx_gadget: ardubot
-- msg_func: joy2dxlmotor
+- cable: joy2dxlmotor
   tx_gadget: x3d
   rx_gadget: dxl_motor

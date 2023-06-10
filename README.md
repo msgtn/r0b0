@@ -46,7 +46,7 @@ I've used r0b0 to power not just Blossom, but also other non-robotic platforms.
 Blossom-specific documentation is available [here](/docs/blsm.md).
 
 ### Leica MPi
-The Leica MPi is a Raspberry Pi-powered digital back for my Leica M2 film camera.
+The [Leica MPi](https://psychomugs.github.io/mpi) is a Raspberry Pi-powered digital back for my Leica M2 film camera.
 The hardware includes a Raspberry Pi Zero as the main board, the Raspberry Pi HQ Camera Module as the digital sensor, and an LCD module with buttons as an interface.
 This Rig uses two Gadgets:
 - A `PiButton` Gadget for the buttons on the LCD module and the shutter sync cable. The sync cable connects the flash sync socket to a GPIO pin on the Pi; pressing the mechanical shutter closes the flash sync socket as if it were a physical button.

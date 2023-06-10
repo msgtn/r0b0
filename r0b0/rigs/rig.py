@@ -68,13 +68,13 @@ class Rig(Host):
     def _get_gadget_namespace(self, gadget):
         return self.gadgets.get(gadget).namespace
         
-    def add_message(self, tx_gadget, rx_gadget, msg_func):
+    def add_message(self, tx_gadget, rx_gadget, cable):
         # logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         
         tx_namespace, rx_namespace = map(
             self._get_gadget_namespace,
             [tx_gadget, rx_gadget])
-        msg_func = getattr(r0b0_msgs,msg_func)
+        msg_func = getattr(r0b0_msgs,cable)
         input_event = msg_func()['event']
         print( tx_namespace, rx_namespace, input_event)
         def func_emit(data):

@@ -1,6 +1,6 @@
 # Gadgets
 
-Gadgets, like Rigs, are defined through `*.yaml` files.
+Gadgets are defined through `*.yaml` files.
 `type` is the universally required field and defines the class of Gadget to instantiate from `r0b0.gadgets`.
 
 ```

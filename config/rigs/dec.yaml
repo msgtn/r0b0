@@ -3,7 +3,7 @@ gadgets:
 - opz
 - blossom
 cables:
-- msg_func: note2motor
+- cable: note2motor
   tx_gadget: opz
   rx_gadget: blossom
   

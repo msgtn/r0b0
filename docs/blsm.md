@@ -78,3 +78,14 @@ Time is going downwards.
 | | handles `offer` | The controller reads the broadcaster's stream and updates its video stream with the robot's camera feed | 
 | | creates and emits `answer` | The controller shares details of its own streaming capabilities (i.e. for the remote controller's audio/video to come through on the broadcaster's robot) |
 | handles `answer` | | The broadcaster updates its video stream with the controller's camera feed (probably the phone's front-facing camera) |
+
+
+### Design goals
+Blossom serves as a critical design that questions three facets of robotics.
+The first is aesthetics.
+Most robots are white and LED-illuminated; others including myself have spilled many LaTeX templates over the downsides of this aesthetic conformity.
+The second is utilitarianism.
+No, Blossom won't fold your clothes or clean your room or wash your dishes, but then again, no robot short of unobtainable research prototypes can.
+The third is consumption of robots.
+Consumer robots are advertised and sold as 
+Apart from the inherent ills of advertisement which needs no further bludgeoning, the marketing of robots performing physical or mental feats way above their actual capabilities in overproduced promotional videos is actively hurting robot development.

@@ -14,7 +14,8 @@ Usage:
 from r0b0.messages import *
 '''
 
-for file in glob.glob(str(CABLES_DIR / '*.py')):
+cable_files = sorted(glob.glob(str(CABLES_DIR / '*.py')))
+for file in cable_files:
     if '__init__' in file: continue
     mod_name = basename(file).split('.')[0]
     logging.debug(mod_name)

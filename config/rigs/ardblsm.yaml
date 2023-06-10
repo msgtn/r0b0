@@ -6,9 +6,9 @@ gadgets:
 - phone
 - opz
 cables:
-- msg_func: cc2ard
+- cable: cc2ard
   tx_gadget: opz
   rx_gadget: ardubot
-- msg_func: motion2motor
+- cable: motion2motor
   tx_gadget: phone
   rx_gadget: ardubot

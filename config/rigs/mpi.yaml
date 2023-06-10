@@ -3,9 +3,9 @@ gadgets:
 - mpi_button
 - mpi_camera
 cables:
-- msg_func: button2cam
+- cable: button2cam
   tx_gadget: mpi_button
   rx_gadget: mpi_camera
-- msg_func: dpad2shutter
+- cable: dpad2shutter
   tx_gadget: mpi_button
   rx_gadget: mpi_camera

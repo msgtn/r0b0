@@ -3,12 +3,12 @@ gadgets:
 - phone
 - opz
 cables:
-- msg_func: note2motor
+- cable: note2motor
   tx_gadget: opz
   rx_gadget: dxl_motor
-- msg_func: cc2motor
+- cable: cc2motor
   tx_gadget: opz
   rx_gadget: dxl_motor
-- msg_func: motion2motor
+- cable: motion2motor
   tx_gadget: phone
   rx_gadget: dxl_motor

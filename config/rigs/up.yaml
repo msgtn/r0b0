@@ -3,7 +3,7 @@ gadgets:
 - opz
 - upbot
 cables:
-- msg_func: cc2motor
+- cable: cc2motor
   tx_gadget: opz
   rx_gadget: upbot
   

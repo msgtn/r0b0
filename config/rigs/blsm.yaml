@@ -2,6 +2,6 @@ gadgets:
 - blsm_dxl
 - blsm_phone
 cables:
-- msg_func: motion2motor
+- cable: motion2motor
   tx_gadget: blsm_phone
   rx_gadget: blsm_dxl

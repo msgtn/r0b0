@@ -5,6 +5,6 @@ gadgets:
 - ardubot
 - phone
 cables:
-- msg_func: motion2ardmotor
+- cable: motion2ardmotor
   tx_gadget: phone
   rx_gadget: ardubot

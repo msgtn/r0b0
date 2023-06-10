@@ -5,6 +5,6 @@ gadgets:
 - opz
 - phone
 cables:
-- msg_func: motion2midi
+- cable: motion2midi
   tx_gadget: phone
   rx_gadget: opz
