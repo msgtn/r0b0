@@ -1,15 +1,15 @@
 # `r0b0`
 
 r0b0 is a communication system for connecting human interface device (HID) hardware and system software.
-The system is my general-purpose tool for quickly actualizing the mechatronics projects in my head.
+The system is my general-purpose tool for quickly prototyping mechatronic systems with a bend towards creative applications.
 
 ## Design rationale
 r0b0 started as a refactor of the control software for Blossom, the open-source robot platform that I developed during my PhD.
 Other existing robot-/mechatronic-oriented communication frameworks are very heavy and geared towards technical applications.
 r0b0
 Some design goals:
-- Parity with Blossom's functionality as encapsulated in the last subproject of my PhD: remote motion-based telepresence.
-- Portability: like Blossom's codebase which ran identically on any UNIX-based system, r0b0 should be easy to set up and run whether on a laptop or Raspberry Pi.
+- Parity with Blossom's functionality by the last subproject of my PhD: remote motion-based telepresence.
+- Portability: like Blossom's codebase which ran identically on any UNIX-based system, r0b0 should be easy to set up and run whether on a macOS laptop or Raspberry Pi.
 - Extensibility and modularity: the structure is based on devices (Gadgets) that communicate among each other through messaging functions (Cables) in networked groups (Rigs). Components should be ignorant of each other to enable ease of modification.
 
 ## Structure
@@ -57,8 +57,12 @@ Cables between the Gadgets handle:
 - Using the `PiButton`'s physical buttons to control the `PiCamera` settings, e.g. shutter speed.
 
 ### Joystick-controlled mouse
-I was born too early to actualize my true calling: to become a giant robot pilot.
+I was born too early to actualize my true calling as a giant robot pilot.
 Controlling my computer's mouse with a consumer-grade gaming joystick is a close simulation.
 This Rig uses two Gadgets:
 - A `PyGameJoystick` Gadget to handle events from the physical joystick. On a technical note, the use of `pygame` alters the behavior of the Rig's event loop, which (is/will be) explained in the Rig's README.
 - A `Mouse` Gadget to control the software mouse, including motion and button press/release/click.
+
+Cables between the Gadgets handle:
+- Mapping `PyGameJoystick` absolute position `Mouse` relative motion.
+- Mapping `PyGameJoystick` button presses to `Mouse` left/middle/right presses/releases/clicks.

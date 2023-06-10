@@ -58,3 +58,23 @@ With the prior scripts running (`start.py` and the `ngrok` tunnel), on the deskt
 This page contains the controls for WebRTC media sources.
 Select the connected webcam in the dropdown, which should begin a video feed on the page.
 The video should also appear on the mobile device connected to the `ngrok` page, though you may need to refresh or press the 'play' icon (▶️).
+
+## Appendix
+
+### Telepresence implementation
+WebRTC is a confusing crissing-crossing async shouting match not unlike a political debate on an uncle's Facebook status.
+Here's a table of the signaling that I *think* is going on between the desktop page `blsm_broadcaster.js` and the mobile page `blsm_controller.js`.
+The robot is on the broadcaster's end; the controller is the remote user moving their phone to remotely control the robot.
+Time is going downwards.
+| broadcaster | controller | what's going on |
+|:------------|-----------:|:-|
+| connect | connect | Both devices connect to the same socket |
+| emits `broadcaster` | | The broadcaster signals that it has media to broadcast |
+| | emits `watcher`| the watcher signals that can watch |
+| handles `watcher` | | The broadcaster adds the controller as a new `RTCPeerConnection`, gets its own media devices (i.e. the camer and microphone connected to the robot's computer), and sends this information to the controller |
+| emits `candidate` | | The broadcaster sends information of the shared ICE server that clients on the same socket will use |
+| | handles `candidate` | The controller processes the ICE server information |
+| creates and emits `offer` | | The broadcaster offers details of its streaming capabilities |
+| | handles `offer` | The controller reads the broadcaster's stream and updates its video stream with the robot's camera feed | 
+| | creates and emits `answer` | The controller shares details of its own streaming capabilities (i.e. for the remote controller's audio/video to come through on the broadcaster's robot) |
+| handles `answer` | | The broadcaster updates its video stream with the controller's camera feed (probably the phone's front-facing camera) |
