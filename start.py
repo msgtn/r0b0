@@ -16,7 +16,7 @@ import sys
 from r0b0.config import LOCALHOST, SERVER_PORT
 
 def main():
-    config = loaders.load_rig(sys.argv[1])
+    config = loaders.load_rig(sys.argv[1]) # saw we took out argparse--does load_rig handle null arg? may want to check/throw/log something if no arg
     logging.debug(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
@@ -35,7 +35,7 @@ def main():
     rig.power_on()
     return rig
 
-def test_script(rig):
+def test_script(rig): # MATT - keep this here? it's not called. also, is there a reason to keep redefining tape_name?
     tape_name = '20230131000558_device_motion'
     tape_name = '20230209011442_device_motion'
     tape_name = '20230210224815_device_motion'
@@ -58,7 +58,7 @@ if __name__=="__main__":
         if rig.is_pygame_rig:
             rig.pygame_event_handler()
         else:
-            print("Breakpoint")
+            print("Breakpoint") # MATT - should this be a logger call instead?
             breakpoint()
     except KeyboardInterrupt:
         rig.power_off('','')        
