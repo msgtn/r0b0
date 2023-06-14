@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 from r0b0 import logging
 
 

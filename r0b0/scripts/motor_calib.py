@@ -5,7 +5,8 @@ from dynamixel_python import \
     DynamixelManager, DynamixelMotor, ReadError
     
 MOTOR_ID_LIMIT = 20
-MOTOR_MODEL = 'xl330-m288'
+# MOTOR_MODEL = 'xl330-m288'
+MOTOR_MODEL = 'xl330-m077'
 BAUD_DICT = {
     57600:1,
     115200:2,
@@ -52,7 +53,7 @@ if __name__=="__main__":
     # })
     
     print(f"Found motors with ids {get_connected_motors()}")
-    
+    m1 = dxl_mgr.dxl_dict['1']
     breakpoint()
     
     '''

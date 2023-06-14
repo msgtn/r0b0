@@ -1,6 +1,6 @@
 from .gadget import Gadget, Message
 from r0b0.config import TAPES_DIR
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 from r0b0 import logging, get_timestamp
 import os
 
@@ -70,7 +70,7 @@ class PiCamera(Gadget, Picamera2):
         self.start = lambda: Gadget.start(self)
 
         
-    @load_pickle
+    @load_msg
     def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
         logging.debug(f"Shutter released")
         # TODO - split off into separate subfolders
@@ -79,28 +79,28 @@ class PiCamera(Gadget, Picamera2):
             str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
         )
 
-    @load_pickle
+    @load_msg
     def shutter15(self,msg,):
         logging.debug('Shutter: 1/15')
         self.set_controls({
             'ExposureTime':int(10e5/15)
             })
         return
-    @load_pickle
+    @load_msg
     def shutter60(self,msg,):
         logging.debug('Shutter: 1/60')
         self.set_controls({
             'ExposureTime':int(10e5/60)
             })
         return
-    @load_pickle
+    @load_msg
     def shutter250(self,msg,):
         logging.debug('Shutter: 1/250')
         self.set_controls({
             'ExposureTime':int(10e5/250)
             })
         return
-    @load_pickle
+    @load_msg
     def shutter1000(self,msg,):
         logging.debug('Shutter: 1/1000')
         self.set_controls({
@@ -108,7 +108,7 @@ class PiCamera(Gadget, Picamera2):
             })
         return
     
-    @load_pickle
+    @load_msg
     # def on_set_shutter_speed(self, shutter_speed: float, **kwargs):
     def on_set_shutter_speed(self, data, **kwargs):
         msg = data['msg']

@@ -89,3 +89,13 @@ No, Blossom won't fold your clothes or clean your room or wash your dishes, but 
 The third is consumption of robots.
 Consumer robots are advertised and sold as 
 Apart from the inherent ills of advertisement which needs no further bludgeoning, the marketing of robots performing physical or mental feats way above their actual capabilities in overproduced promotional videos is actively hurting robot development.
+
+## Troubleshooting
+
+### Motor settings
+Setting motor info e.g. IDs needs torque to be disabled.
+For example, to set the ID of motor 1 to 7 in using `r0b0.scripts.motor_calib.py`:
+```
+set_param('torque_enable',{1:False})
+set_param('id',{1:7})
+```

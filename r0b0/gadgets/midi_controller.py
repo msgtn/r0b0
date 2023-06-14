@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 from r0b0 import logging
 
 import mido
@@ -56,7 +56,7 @@ class MIDIController(Gadget):
                     data={'event':midi_msg.event,'msg':midi_msg},
                     namespace=self.namespace)
                     
-    @load_pickle
+    @load_msg
     def on_midi(self,data):
         logging.debug(data)
         self.midi_port.send(

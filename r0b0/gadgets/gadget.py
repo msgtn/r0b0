@@ -7,7 +7,7 @@ Suitability for everyday tasks, allowing for short development times
 '''
 from r0b0 import logging
 from r0b0.config import LOCALHOST, SERVER_PORT
-from r0b0.utils.loaders import load_pickle, dump_pickle
+from r0b0.utils.loaders import load_msg, dump_msg
 
 from socketio import Client, ClientNamespace
 from threading import Thread
@@ -48,7 +48,7 @@ class Gadget(Client, Thread):
             )
         Client.wait(self)
     
-    @dump_pickle
+    @dump_msg
     def emit(self, event, data, **kwargs) -> dict:
         # overwrite defaults
         data.update(dict(
@@ -60,7 +60,13 @@ class Gadget(Client, Thread):
             data=data
         ))
         # logging.debug(kwargs)
-        Client.emit(self, **kwargs)
+        
+        # TODO - kludge to avoid BadNamespaceError
+        # if trying to emit before connected
+        try:
+            Client.emit(self, **kwargs)
+        except:
+            pass
         return kwargs
     
     def disconnect(self) -> None:

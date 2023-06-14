@@ -77,6 +77,7 @@ if __name__=="__main__":
     rig = main()
     
     # test_script(rig)
+    globals().update(**rig.gadgets)
     
     try:
         if rig.is_pygame_rig:

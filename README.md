@@ -1,6 +1,7 @@
 # `r0b0`
 
 r0b0 is a communication system for connecting human interface device (HID) hardware and system software.
+Think of it like [`aconnect`](https://man.archlinux.org/man/aconnect.1.en) for things beyond MIDI devices.
 The system is my general-purpose tool for quickly prototyping mechatronic systems with a bend towards creative applications.
 
 ## Design rationale

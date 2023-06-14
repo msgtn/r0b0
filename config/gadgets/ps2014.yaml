@@ -1,0 +1,8 @@
+type: DynamixelRobot
+usb_port: /dev/tty.usbserial-FT1SF1UM
+baud_rate: 57600
+motors:
+- name: spine
+  model: xl330-m077
+  id: 1
+  mode: position

@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 from r0b0 import logging
 
 import pickle
@@ -23,7 +23,7 @@ class Mouse(Gadget):
         self.velocity = [0,0,0,0]
         
     
-    @load_pickle
+    @load_msg
     def mouse_move_event(self, data):
         msg = data['msg']
         # logging.debug(msg)
@@ -31,7 +31,7 @@ class Mouse(Gadget):
         mouse.move(self.velocity[0],self.velocity[1],absolute=False)
         pass
     
-    @load_pickle
+    @load_msg
     def mouse_button_event(self, data):
         logging.debug(data)
         msg = data['msg']

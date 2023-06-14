@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 from r0b0 import logging
 
 import pickle
@@ -101,7 +101,7 @@ class PyGameKeys(PyGameGadget):
             handler=self.mouse_event,
             namespace=self.namespace)
     
-    @load_pickle
+    @load_msg
     def mouse_event(self,data):
         msg = data['msg']
         logging.debug('mouse event')
@@ -118,7 +118,7 @@ class PyGameKeys(PyGameGadget):
         pgMouse.set_pos(tgt_pos)
         pass
     
-    @load_pickle
+    @load_msg
     def key_event(self):
         pass
     
@@ -131,7 +131,7 @@ class PyGameMouse(PyGameGadget):
             handler=self.mouse_event,
             namespace=self.namespace)
     
-    @load_pickle
+    @load_msg
     def mouse_event(self):
         pass
     

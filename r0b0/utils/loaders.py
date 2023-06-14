@@ -34,7 +34,7 @@ load_rig = partial(load_config, config_type='rigs')
 Decorators for dumping and loading pickles
 '''
 # Gadget.emit
-def dump_pickle(func):
+def dump_msg(func):
     def _inner_func(s,event,data,**kwargs):
         # logging.debug(s)
         # logging.debug(event)
@@ -46,7 +46,7 @@ def dump_pickle(func):
     return _inner_func
 
 # Gadget handler
-def load_pickle(func):
+def load_msg(func):
     def _inner_func(s,data,**kwargs):
         # logging.debug(s,data,kwargs)
         if data.get('msg',None) is not None:

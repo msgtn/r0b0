@@ -1,7 +1,7 @@
 from .gadget import Gadget, Message
 from r0b0 import logging
 from r0b0.utils import loaders
-from r0b0.utils.loaders import load_pickle, dump_pickle
+from r0b0.utils.loaders import load_msg, dump_msg
 
 import time
 # from dynamixel_python import \
@@ -166,7 +166,7 @@ class ArduinoRobot(ArduinoGadget):
                 handler=self.position_event,
                 namespace=self.namespace)
         
-    @load_pickle
+    @load_msg
     def position_event(self,data):
         msg = data['msg']
         # logging.debug(msg)

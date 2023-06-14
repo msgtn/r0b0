@@ -1,7 +1,7 @@
 from r0b0.config import CSR_PEM, KEY_PEM
 from .gadget import Gadget, Message
 from r0b0 import logging
-from r0b0.utils.loaders import load_pickle
+from r0b0.utils.loaders import load_msg
 
 from collections import OrderedDict
 from socketio import Client, ClientNamespace
@@ -21,7 +21,7 @@ class Page(Gadget):
             handler=self.on_catch_all
             )
         
-    @load_pickle
+    @load_msg
     def on_catch_all(self,data):
         _event = data.get('event','unknown event')
         logging.debug(f'Page {self.name} received {_event}')
@@ -33,7 +33,7 @@ class Page(Gadget):
     #         **kwargs,
     #     )
         
-    @load_pickle
+    @load_msg
     def on_record(self,data):
         logging.debug(data)
 
@@ -78,7 +78,7 @@ class MobilePage(Page):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
 
-    @load_pickle
+    @load_msg
     def on_device_motion(self,data):
         self.emit(
             event='device_motion',

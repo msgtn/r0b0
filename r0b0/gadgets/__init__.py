@@ -7,7 +7,7 @@ from .page import Page, MobilePage
 from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
 from .mouse import Mouse
 
-from r0b0.utils.loaders import load_pickle, dump_pickle
+from r0b0.utils.loaders import load_msg, dump_msg
 
 # import logging
 from r0b0 import logging

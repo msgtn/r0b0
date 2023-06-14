@@ -1,0 +1,12 @@
+gadgets:
+- ps2014
+- x3d
+- bslm_dxl
+- blsm_phone
+cables:
+- cable: joy2vel
+  tx_gadget: x3d
+  rx_gadget: ps2014
+- cable: motion2motor
+  tx_gadget: blsm_phone
+  rx_gadget: blsm_dxl

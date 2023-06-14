@@ -5,6 +5,7 @@ motors: # use these same names as kwargs to constructors
 - name: tower_1
   model: xl330-m288
   id: 1
+  mode: position
   position:
     reset: 0
     min: -40
@@ -12,6 +13,7 @@ motors: # use these same names as kwargs to constructors
 - name: tower_2
   model: xl330-m288
   id: 2
+  mode: position
   position:
     reset: 0
     min: -40
@@ -19,6 +21,7 @@ motors: # use these same names as kwargs to constructors
 - name: tower_3
   model: xl330-m288
   id: 3
+  mode: position
   position:
     reset: 0
     min: -40
@@ -26,7 +29,16 @@ motors: # use these same names as kwargs to constructors
 - name: base
   model: xl330-m288
   id: 4
+  mode: position
   position:
     reset: 0
     min: -140
     max: 140
+- name: left_wheel
+  model: xl330-m077
+  id: 7
+  mode: wheel
+- name: right_wheel
+  model: xl330-m077
+  id: 8
+  mode: wheel
