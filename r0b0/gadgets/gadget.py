@@ -59,7 +59,6 @@ class Gadget(Client, Thread):
             event=event,
             data=data
         ))
-        # logging.debug(kwargs)
         
         # TODO - kludge to avoid BadNamespaceError
         # if trying to emit before connected

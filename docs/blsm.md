@@ -49,6 +49,7 @@ Forwarding https://someRandomLettersAndNumbers.ngrok.app -> https://localhost:80
 ```
 
 In a mobile browser (e.g. Safari), navigate to the forwarding URL (`https://someRandomLettersAndNumbers.ngrok.app` in the above example). 
+*Note: since the ssl certificates were self signed, you will probably run into a privacy warning on your browser. [Here's a guide on how to bypass this, since this is being developed locally anyways.](https://www.vultr.com/docs/how-to-bypass-the-https-warning-for-self-signed-ssl-tls-certificates/)*
 
 ### Telepresence with video
 

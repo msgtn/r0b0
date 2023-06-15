@@ -31,6 +31,7 @@ class Host(Thread, SocketIO):
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         self.app = app = Flask(
             __name__,
+            # TODO - was trying to direct templates to a different folder
             # template_folder=str(BROWSER_DIR / 'templates'),
             # template_folder=str(BROWSER_DIR),
             )

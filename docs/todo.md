@@ -1,24 +1,34 @@
 
 
 ## TODO
+'rev of blsm'
 ### Software
 - [ ] Loopback events - events to self?
   - [ ] Maybe best to restrict to one gadget per name - make it explicit 
   - [ ] Just use new gadget configs as necessary
 - [ ] DynamixelRobot - motor movement events
-  - [ ] Implement motor events when moved
+  - [ ] Implement motor events when moved - get/set `moving_threshold`
   - [ ] clean redundant functions
-- [ ] Message functions - rebrand to `Cables`, clarify that can use multiple files in `r0b0/cables`
-  - [ ] Split into separate files, in `msg_funcs.__init__.py` import all of the functions in every file in that folder
+  - [ ] Improve motion smoothness — maybe due to velocity and profiles?
 - [ ] Docker Image
 - [ ] PyGame event loop in Rig - use pygame.event.set_allowed() to filter queueable events
 - [ ] Occasional/eventual disconnects between mobile app controller and broadcaster
 - [ ] In blsm_controller.js, enable reading the socketAddr from some file, i.e. start ngrok, save the tunneling url to a text file, read this tunneling url 
 - [ ] Clean controller.js, broadcast.js
   - [ ] How to split up javascript files?
-- [ ] Blossom Yaw is negated
+  - [ ] Combine redundant funtions (e.g. `getDevices`, `gotStream`)
+  - [ ] scratch-based interface with React?
+- [ ] Blossom
+  - [ ] Yaw is negated
+  - [ ] vertical height control using scrolling, like in a news feed
 - [ ] Add functionality to start just a single gadget, e.g. `python3 start.py single_gadget`, when `config/rigs/single_gadget.yaml` does not exist but `config/gadgets/single_gadget.yaml` does, will create a dummy rig config with `{gadgets: [single_gadget,],}`
 - [ ] Test Blossom and
+- [ ] Motor calibration script (revision of old one)
+  - [ ] Connect one motor at a time
+    - [ ] Maybe call a config.yaml to do this automatically?
+  - [ ] Set: {ID, operating mode}
+  - [ ] Move to calibration position
+  - [ ] Tie string
 
 ### Document
 - Gadgets
@@ -66,3 +76,10 @@ Steps for setting up r0b0 on an rpi
 - Robots as bicycles, cars, things that communities can grow from, are utilitarian, but also usable for pure Play
   - the bicycle of the _______
 
+### Rig ideas
+- midi to keyboard/mouse
+  - Etch-a-sketch controls
+- Tape player 
+  - Inspiration from TE OB4, motorized faders
+  - play -> move motor
+  - physical manipulation

@@ -1,22 +1,13 @@
-
 from r0b0 import logging
-
-
-logging.basicConfig(
-    encoding='utf-8',
-    level=logging.WARNING,
-    )
-
 from r0b0.rigs.rig import Rig
 from r0b0.utils import loaders
+from r0b0.config import LOCALHOST, SERVER_PORT
 
 import sys
 
-
-from r0b0.config import LOCALHOST, SERVER_PORT
-
 def main():
-    config = loaders.load_rig(sys.argv[1]) # saw we took out argparse--does load_rig handle null arg? may want to check/throw/log something if no arg
+    assert len(sys.argv)>1, 'No rig name from /config/rig/ provided, exiting'
+    config = loaders.load_rig(sys.argv[1])
     logging.debug(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
@@ -35,30 +26,17 @@ def main():
     rig.power_on()
     return rig
 
-def test_script(rig): # MATT - keep this here? it's not called. also, is there a reason to keep redefining tape_name?
-    tape_name = '20230131000558_device_motion'
-    tape_name = '20230209011442_device_motion'
-    tape_name = '20230210224815_device_motion'
-    tape_name = '20230210225358_device_motion'
-    tape_name = '20230210225448_device_motion'
-    rig.on_load(
-        {'tapeName':tape_name}
-    )
-    rig.on_play({
-        'tape_name':tape_name
-    })
-
 if __name__=="__main__":
     
     rig = main()
-    
+    # add gadgets from rig to namespace
     globals().update(**rig.gadgets)
     
     try:
         if rig.is_pygame_rig:
             rig.pygame_event_handler()
         else:
-            print("Breakpoint") # MATT - should this be a logger call instead?
+            print("CLI: ",end='')
             breakpoint()
     except KeyboardInterrupt:
         rig.power_off('','')        
