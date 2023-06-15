@@ -67,3 +67,24 @@ This Rig uses two Gadgets:
 Cables between the Gadgets handle:
 - Mapping `PyGameJoystick` absolute position `Mouse` relative motion.
 - Mapping `PyGameJoystick` button presses to `Mouse` left/middle/right presses/releases/clicks.
+
+## Setup
+### Install
+Clone this repo and pull the submodules
+```
+git clone https://github.com/psychomugs/r0b0
+git submodule update --init --recursive
+```
+
+### Environment setup
+Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+```
+conda env create r0b0 -f env.yaml
+conda activate r0b0
+pip3 install -r req.txt 
+```
+
+To enable `https` for the control page, generate some keys with `openssl`.
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout r0b0/key.pem -out r0b0/csr.pem
+```

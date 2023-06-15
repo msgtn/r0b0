@@ -18,8 +18,9 @@ pip3 install -r req.txt
 ```
 
 To enable `https` for the control page, generate some keys with `openssl`.
+Since this is self-signing(*?*), you can safely hit 'Enter' to accept the defaults for all fields.
 ```
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout r0b0/key.pem -out r0b0/csr.pem
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout r0b0/key.pem -out r0b0/csr.pem
 ```
 
 ### `blsm` rig
