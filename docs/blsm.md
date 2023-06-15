@@ -1,6 +1,7 @@
 # Blossom
 
 This page goes over how to build and boot a Blossom robot.
+Still under construction as of 06/2023.
 
 ## Build
 
