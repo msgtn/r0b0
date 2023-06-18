@@ -171,19 +171,20 @@ class Host(Thread, SocketIO):
                 data=d,
                 **data['kwargs'] # namespace arg from the .yaml that defined it
             )
-            id_event = f"{d['id']}_{d['event']}"
-            tape = self.tapes.get(id_event,None)
-            if tape is not None:
-            # if id_event in self.tapes.keys():
-                # record time in milliseconds
-                d.update({
-                    'time':int(time.time()*10e3),
+            if d.get('id',None) is not None:
+                id_event = f"{d['id']}_{d['event']}"
+                tape = self.tapes.get(id_event,None)
+                if tape is not None:
+                # if id_event in self.tapes.keys():
+                    # record time in millis
+                    d.update({
+                        'time':int(time.time()*10e3),
+                        })
+                    tape.write({**{
+                        'event':data['event'],
+                        'data':d},
+                        **data['kwargs'],
                     })
-                tape.write({**{
-                    'event':data['event'],
-                    'data':d},
-                    **data['kwargs'],
-                })
         self.server.on(
             data['event'],
             _emit_record,

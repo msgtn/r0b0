@@ -8,6 +8,7 @@ ngrok*
 tapes/*
 !tapes/blsm_*
 *notes.md
+*DS_Store*
 
 # speech recognition models
 vosk*

@@ -99,3 +99,18 @@ Cables between the Gadgets handle:
 ### Robot Death Star Lamp
 A [motorized IKEA PS2014 lamp](https://msgtn.github.io/ps2014).
 
+## Setup
+### Install
+Clone this repo and pull the submodules
+```
+git clone https://github.com/psychomugs/r0b0
+git submodule update --init --recursive
+```
+
+### Environment setup
+Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+```
+conda env create r0b0 -f env.yaml
+conda activate r0b0
+pip3 install -r req.txt 
+```

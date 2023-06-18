@@ -71,6 +71,9 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 | USB wall adapter | Powering the motors | 1 | Ideally 15W (5V/3A) or greater to supply sufficient power to the motors |
 
 
+### Wiring
+Follow the [wiring instructions](/docs/wiring.md).
+
 ## Software
 
 ### Environment setup
