@@ -1,2 +1,7 @@
 gadgets:
 - ps2014
+- ps_page
+cables:
+- cable: ps2014app
+  tx_gadget: ps_page
+  rx_gadget: ps2014

@@ -65,43 +65,10 @@ if (mobileDevice) {
   // calibrateButton.style.display = "none";
   // touchPad.style.display = "none";
 }
-// heightControl.style.display = "none";
 
-// touchPad.height = window.innerHeight*0.85;
-// touchPad.width = window.innerWidth;
 let tailHeight = 0.2;
 
 var enableHeightControl = true;
-
-// var ctx = touchPad.getContext("2d");
-// ctx.font = "20px Arial";
-// ctx.textAlign="center"
-// var subDiv = enableHeightControl ? 6 : 4
-// if (enableHeightControl) { ctx.fillText("HEIGHT", window.innerWidth/2, 50); };
-// ctx.fillText("LEFT ARM", window.innerWidth/subDiv, 50);
-// ctx.fillText("RIGHT ARM", window.innerWidth/subDiv*(subDiv-1), 50);
-// for (i=1; i<subDiv/2; i++) {
-//   ctx.moveTo(window.innerWidth/(subDiv/2)*i,0);
-//   ctx.lineTo(window.innerWidth/(subDiv/2)*i,touchPad.height*(1-tailHeight));
-//   ctx.stroke();
-// }
-// ctx.moveTo(0,touchPad.height*(1-tailHeight));
-// ctx.lineTo(window.innerWidth,touchPad.height*(1-tailHeight));
-// ctx.stroke();
-
-// ctx.fillText("TAIL", window.innerWidth/2, touchPad.height*(1-tailHeight)+35);
-
-// let blankTouchPad = ctx.getImageData(0,0,touchPad.width,touchPad.height);
-
-// // let rightSlider, leftSlider = 0,0;
-// let rightSlider = 0;
-// let leftSlider = 0;
-// let heightSlider = 0;
-// let tailSlider = 0;
-
-// touchPad.addEventListener("touchmove", function(event) {
-//   event.preventDefault();
-// }, false);
 
 function moveTouch(event) {
   function drawSliders() {

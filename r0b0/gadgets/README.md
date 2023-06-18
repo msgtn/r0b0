@@ -59,18 +59,26 @@ baud_rate: 115200
 ## `Page`
 
 `Page` is a special type of `Gadget` that serves webpages.
-Compared to other Gadgets, `Page` hooks more closely to the `Host`, the medium/server for the whole `Rig`.
+Compared to other Gadgets, `Page` hooks more closely to the server of the Rig.
 Page defines how to route URLs and event emits.
 ```
 type: Page
 route_urls:
   /: index.html
-  /someOtherPage: someOtherPage.html
+  /somepage: somepage.html
+  /someotherpage: someotherpage.html
 event_kwargs:
   some_event:
+  some_other_event:
     kwarg_1: arg_1
     kwarg_2: arg_2
 ```
+For now, the actual html pages are pretty spartan and written in 
+Every event that the webpage emits that should be handled by the backend should be added to `event_kwargs`.
+Arguments are packaged into `data['kwargs']` and are optional, e.g. `some_event` does not need additional arguments and is thus blank.
+<!-- Note that arguments are optional, e.g. `some_event` has -->
+
+When a Page is added, the Rig will use `route_urls` to call [`Flask.add_url_rule`](https://tedboy.github.io/flask/generated/generated/flask.Flask.add_url_rule.html) and `event_kwargs` to set event handlers with [`socketio.Server.on`](https://python-socketio.readthedocs.io/en/latest/server.html#event-callbacks).
 
 ### `MobilePage`
 

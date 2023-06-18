@@ -79,6 +79,7 @@ if __name__=="__main__":
     # test_script(rig)
     globals().update(**rig.gadgets)
     
+    
     try:
         if rig.is_pygame_rig:
             rig.pygame_event_handler()

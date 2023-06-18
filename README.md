@@ -83,8 +83,3 @@ conda env create r0b0 -f env.yaml
 conda activate r0b0
 pip3 install -r req.txt 
 ```
-
-To enable `https` for the control page, generate some keys with `openssl`.
-```
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout r0b0/key.pem -out r0b0/csr.pem
-```

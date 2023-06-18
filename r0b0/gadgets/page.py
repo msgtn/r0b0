@@ -18,14 +18,19 @@ class Page(Gadget):
         self.route_urls = config.get('route_urls',{})
         self.event_kwargs = config.get('event_kwargs',{})
         self.on('*',
-            handler=self.on_catch_all
+            handler=self.on_catch_all,
+            namespace=self.namespace,
             )
         
     @load_msg
     def on_catch_all(self,data):
-        _event = data.get('event','unknown event')
-        logging.debug(f'Page {self.name} received {_event}')
-        self.emit(**data)
+        event = data.get('event','unknown event')
+        logging.debug(f'Page {self.name} received {event}')
+        self.emit(
+            event=event,
+            data=data,
+            namespace=self.namespace,
+        )
         
     # def add_emit(self,event,**kwargs):
     #     self.on(
@@ -41,7 +46,7 @@ class Page(Gadget):
         Thread.start(self)
         
         # sleep to wait until connection is established
-        logging.debug('Connecting Phone...')
+        logging.debug('Connecting Page...')
         time.sleep(2)
         
         # route urls

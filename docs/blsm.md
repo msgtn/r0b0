@@ -8,6 +8,9 @@ Still under construction as of 06/2023.
 Build the robot.
 Files and instructions coming soon.
 
+### Wiring
+Follow the [wiring instructions](/docs/wiring.md).
+
 ## Software
 
 ### Environment setup
@@ -50,6 +53,9 @@ Forwarding https://someRandomLettersAndNumbers.ngrok.app -> https://localhost:80
 ```
 
 In a mobile browser (e.g. Safari), navigate to the forwarding URL (`https://someRandomLettersAndNumbers.ngrok.app` in the above example). 
+Hold the phone vertically, as if you were taking a picture of something in front of you, then turn on the '`Control`' switch.
+You may need to 'allow' device access to the phone's motion sensor.
+The motion of the phone should now be controlling the robot.
 
 ### Telepresence with video
 
@@ -82,22 +88,3 @@ Time is going downwards.
 | handles `answer` | | The broadcaster updates its video stream with the controller's camera feed (probably the phone's front-facing camera) |
 
 
-### Design goals
-Blossom serves as a critical design that questions three facets of robotics.
-The first is aesthetics.
-Most robots are white and LED-illuminated; others including myself have spilled many LaTeX templates over the downsides of this aesthetic conformity.
-The second is utilitarianism.
-No, Blossom won't fold your clothes or clean your room or wash your dishes, but then again, no robot short of unobtainable research prototypes can.
-The third is consumption of robots.
-Consumer robots are advertised and sold as 
-Apart from the inherent ills of advertisement which needs no further bludgeoning, the marketing of robots performing physical or mental feats way above their actual capabilities in overproduced promotional videos is actively hurting robot development.
-
-## Troubleshooting
-
-### Motor settings
-Setting motor info e.g. IDs needs torque to be disabled.
-For example, to set the ID of motor 1 to 7 in using `r0b0.scripts.motor_calib.py`:
-```
-set_param('torque_enable',{1:False})
-set_param('id',{1:7})
-```
