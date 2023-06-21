@@ -1,13 +1,29 @@
 type: ArduinoRobot
 usb_port: /dev/cu.usbserial-ADAQDbKpQ
 baud_rate: 115200
+timeout: 2
 motors: # use these same names as kwargs to constructors
-# available pwm pins on ArduinoUno: 3,5,6,9,10,11
-- name: tower_1
-  id: 10
-- name: tower_2
-  id: 9
-- name: tower_3
-  id: 3
 - name: base
+  id: 9
+  position:
+    reset: 0
+    min: -40
+    max: 140
+- name: tower_1
   id: 5
+  position:
+    reset: 0
+    min: -40
+    max: 140
+- name: tower_2
+  id: 6
+  position:
+    reset: 0
+    min: -40
+    max: 140
+- name: tower_3
+  id: 10
+  position:
+    reset: 0
+    min: -40
+    max: 140

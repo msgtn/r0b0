@@ -67,7 +67,7 @@ def motion2ardmotor(data=None):
     return {
         'event':'position',        # 'value': # the function that gives
         'value':[int(np.interp(data['x'],[0,1.5],[20,160]))],
-        'motor_id':[10]
+        'motor_id':[9]
     }
     
 def motion2midi(data=None):

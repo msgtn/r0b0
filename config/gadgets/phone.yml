@@ -1,8 +1,7 @@
 # name: phone
 type: Page
 route_urls:
-  /: index.html
-  /broadcast: broadcast.html
+  /: blsm_controller.html
 event_kwargs:
   # record:
   #   namespace: /phone

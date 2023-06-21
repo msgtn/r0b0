@@ -157,7 +157,7 @@ def integrate(x,x_d,del_t):
 #         super.__init__(**kwargs)
 #         pass
 
-def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
+def device_motion2motor(ori, portrait=True, sensitivity=1.0):
     """
     Get position of the motors given orientation using inverse kinematics
     args:
@@ -230,16 +230,33 @@ def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
 
     # add the base motor for yaw (-140,140)
     motor_pos = np.append(motor_pos,np.maximum(np.minimum(np.rad2deg(base_mult*alpha),150),-150))
-
+    
+    # 230620 - inverted since motors 2 and 3 swapped
+    # in the refactor to r0b0
+    motor_pos[3] *= -1
+    
     if ori['mirror']:
         motor_pos[1],motor_pos[2]=motor_pos[2],motor_pos[1]
         motor_pos[3] *= -1
-
-
+        
+    return motor_pos
+        
+def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
+    motor_pos = device_motion2motor(ori,portrait,sensitivity)
     motor_pos = list(map(int, map(
         partial(np.interp,
             xp=[-10,140],
             fp=[0,2048]),
+        motor_pos)))
+    return motor_pos
+
+
+def device_motion2arduino_motor(ori, portrait=True, sensitivity=1.0):
+    motor_pos = device_motion2motor(ori,portrait,sensitivity)
+    motor_pos = list(map(int, map(
+        partial(np.interp,
+            xp=[-10,140],
+            fp=[10,180]),
         motor_pos)))
     return motor_pos
 

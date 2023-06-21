@@ -16,7 +16,7 @@ closeButton.onclick = function() {
     socket.emit('button',
         {
             event:'button',
-            value:450000,
+            value:6000,
             id:socket.id
         });
 }
@@ -26,7 +26,7 @@ openButton.onclick = function() {
     socket.emit('button',
         {
             event:'button',
-            value:180000,
+            value:-265000,
             id:socket.id,
         });
 }
