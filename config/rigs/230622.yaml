@@ -1,0 +1,7 @@
+gadgets:
+- pygame_keys
+- mouse
+cables:
+- cable: key2mouse_move
+  tx_gadget: pygame_keys
+  rx_gadget: mouse

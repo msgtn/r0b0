@@ -68,6 +68,16 @@ class Gadget(Client, Thread):
             pass
         return kwargs
     
+    def assign_handlers(self, events_to_handle: list) -> None:
+        for event in events_to_handle:
+            self.on(event,
+                handler=getattr(self, f'{event}_event'),
+                namespace=self.namespace)
+            pass    
+        
+    def unassigned_handler(self, data):
+        logging.debug(f'{self.name} received unhandled event with data {data}')
+    
     def disconnect(self) -> None:
         if self.connected: Client.disconnect(self)
         # if self.is_alive(): self.join()   

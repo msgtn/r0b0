@@ -132,8 +132,8 @@ class Rig(Host):
                     
                 elif 'key' in _event_name:
                     pygame_name = 'keys'
-                    pass
-                # logging.debug(pygame_name)
+                    
+                logging.debug(pygame_name)
                 event_gadget = self.pygame_gadgets.get(
                     pygame_name,None)
                 emit_dict =  dict(
@@ -148,6 +148,7 @@ class Rig(Host):
                     emit_dict.update(dict(
                         namespace=event_gadget.namespace
                     ))
+                    logging.debug(emit_dict)
                     # logging.debug(emit_dict)
                     event_gadget.emit(**emit_dict)
                 break

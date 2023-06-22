@@ -18,20 +18,13 @@ BAUD_DICT = {
 # for xl330-m{288,077}
 # might be different for others
 MODE_DICT = {
-    'position':3,
     'velocity':1,
+    'position':3,
     'extended_position':4,
 }
 
 T_LAST_CMD = 0
 T_COOLDOWN = 300/10e3
-
-class MotorMessage(Message):
-    def __init__(self, **kwargs):
-        Message.__init__(self,**kwargs)
-        # self.event = event
-        # self.value = value
-        # self.motor_id = motor_id    
 
 class DynamixelRobot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
@@ -46,24 +39,27 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 'baud_rate',57600),
             )
         self.name = config['name']
+        
+        # add motors
+        self.motors_by_id = {}
         if self.config.get('motors', False):
             self.motors_by_id = self.add_motors_from_config(
                 self.config['motors'])
-        # TODO - overwrite dxl_dict with this?
-        
 
+        # initialize
         self.power_up = self.init
         self.power_up()
         self.enable,self.disable = self.enable_all,self.disable_all
-        # self.enable = partial(self.set_param,)
         self.enable()
 
-        self.message = MotorMessage
+        # set motor operating modes
+        # this must be done after self.power_up()
+        # so that the connections to the motors are established
+        for _,motor in self.motors_by_id.items():
+            motor.init_mode()
         
-        handled_events = ['param','position',
-                          'velocity'
-                          ]
-        for _event in handled_events:
+        # define event handlers
+        for _event in ['param','position','velocity']:
             self.on(_event,
                 handler=getattr(self,f'{_event}_event'),
                 namespace=self.namespace
@@ -79,6 +75,37 @@ class DynamixelRobot(Gadget, DynamixelManager):
         self.get_param = partial(self.access_param,
             rw_mode='get')
         
+            
+    def add_motors_from_config(self, motor_config: list):
+        self.motors_by_id  = {}
+        self.motors_by_id.setdefault(None)
+        for motor in self.config['motors']:
+            # cannot set operating mode here - must first init
+            # if motor.get('mode',False):
+            #     motor_mode = MODE_DICT.get(motor['mode'],None)
+            #     if motor_mode is None:
+            #         logging.warn(
+            #             f'No mode {motor["mode"]} \
+            #             for motor {motor["name"]}, \
+            #             setting to "position."'
+            #         )
+            #     breakpoint()
+            #     dxl_motor.set_operating_mode(motor_mode)
+            
+            self.motors_by_id.update({
+                int(motor['id']):self.add_motor(
+                    dxl_name=motor['name'],
+                    dxl_id=motor['id'],
+                    dxl_model=motor['model'],
+                )
+            })
+        return self.motors_by_id
+
+    def add_motor(self,**motor_kwargs):
+        return Motor.from_motor(self.add_dynamixel(
+            **motor_kwargs
+            ), **motor_kwargs)
+
     def _motion_thread(self):
         # continuously check the 
         # "is moving" flag and emit events
@@ -182,48 +209,15 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 continue
             motor.t_last_cmd = time.time()
             
-            # assert motor is not None, f"Motor {msg.motor_id} does not exist"
-            # TODO - set motor control mode
-            # motor.set_torque_enable(True)
             motor.set_profile_velocity(16000)
             motor.set_goal_position(int(motor_value))
             motor.believed_position = int(motor_value)
-    
-    def add_motors_from_config(self, motor_config: list):
-        self.motors_by_id  = {}
-        self.motors_by_id.setdefault(None)
-        for motor in self.config['motors']:
-            dxl_motor = self.add_dynamixel(
-                dxl_name=motor['name'],
-                dxl_id=motor['id'],
-                dxl_model=motor['model'],
-            )
-            
-            dxl_motor = Motor.from_motor(dxl_motor)
-            
-            # cannot set operating mode here - must first init
-            # if motor.get('mode',False):
-            #     motor_mode = MODE_DICT.get(motor['mode'],None)
-            #     if motor_mode is None:
-            #         logging.warn(
-            #             f'No mode {motor["mode"]} \
-            #             for motor {motor["name"]}, \
-            #             setting to "position."'
-            #         )
-            #     breakpoint()
-            #     dxl_motor.set_operating_mode(motor_mode)
-            
-            self.motors_by_id.update({
-                int(motor['id']):dxl_motor
-            })
-            
-        return self.motors_by_id
 
     def _deg2dxl(self, deg, deg_range=[-150,150], dxl_range=[0,4096]):
         return int(np.interp(deg, deg_range, dxl_range))
 
 class Motor(DynamixelMotor):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         # super().__init__(self,**kwargs)
         self.__dict__.update(**kwargs)
         self.mode = kwargs.get('mode','position')
@@ -236,15 +230,14 @@ class Motor(DynamixelMotor):
             param='torque_enable',
             value=False)
         
+        # lookup the operating mode IDs
+        self.mode = MODE_DICT[getattr(self,'mode','position')]
+        self.init_mode = partial(self.set_mode,
+            mode=self.mode)
+        
     @classmethod
     def from_motor(cls, dxl_motor: DynamixelMotor, **kwargs):
-        # self.__dict__.update(dxl_motor.__dict__)
-        
-        return cls(**dxl_motor.__dict__)
-        # self.t_last_cmd = time.time()
-        # self.believed_position = 0
-        
-        # return self
+        return cls(**dxl_motor.__dict__, **kwargs)
      
     def set_param(self,param,value):
         getattr(self, f"set_{param}")(value)
@@ -253,3 +246,4 @@ class Motor(DynamixelMotor):
         self.disable()
         self.set_param('operating_mode',mode)
         self.enable()
+        

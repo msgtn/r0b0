@@ -21,14 +21,15 @@
 - [ ] Blossom
   - [ ] Yaw is negated
   - [ ] vertical height control using scrolling, like in a news feed
-- [ ] Add functionality to start just a single gadget, e.g. `python3 start.py single_gadget`, when `config/rigs/single_gadget.yaml` does not exist but `config/gadgets/single_gadget.yaml` does, will create a dummy rig config with `{gadgets: [single_gadget,],}`
-- [ ] Test Blossom and
-- [ ] Motor calibration script (revision of old one)
-  - [ ] Connect one motor at a time
-    - [ ] Maybe call a config.yaml to do this automatically?
-  - [ ] Set: {ID, operating mode}
-  - [ ] Move to calibration position
-  - [ ] Tie string
+- [ ] Test blsm_dxl and blsm_ard at the same time
+- [ ] MediaPipe implementation
+- [ ] Gradio webui
+- [ ] simplify to a cmdline arg
+  - [ ] e.g. `rconnect sender receiver`
+  - [ ] Add functionality to start just a single gadget, e.g. `python3 start.py single_gadget`, when `config/rigs/single_gadget.yaml` does not exist but `config/gadgets/single_gadget.yaml` does, will create a dummy rig config with `{gadgets: [single_gadget,],}`
+- [ ] Test setting the operating mode on start
+- [ ] Need better way to handle impotent events
+  - [ ] e.g. moving a joystick in other axis when you only want something to happen when adjusting pitch
 
 ### Document
 - Gadgets
