@@ -1,5 +1,4 @@
 # Wiring
-TODO - add image of actual board prototyped
 
 The smallest Dynamixel servos (XL330) can now run at 5V, but the U2D2 interface does not provide power.
 To simplify cabling to the motors, we can wire the communication and power connections in parallel.
