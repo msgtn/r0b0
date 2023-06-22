@@ -20,7 +20,8 @@ def motion2arduino_motor(data=None):
     return {
         'event':'position',        # 'value': # the function that gives
         'value':device_motion2arduino_motor(data),
-        'motor_id':[5,6,10,9],
+        # changes these to string keys instead of int ids
+        'motor_id':[10,6,5,9],
         'absolute':True
     }
 

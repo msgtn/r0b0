@@ -3,3 +3,4 @@ venv
 .vscode
 *.DS
 *.pem
+ngrok.sh

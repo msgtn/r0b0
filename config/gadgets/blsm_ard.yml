@@ -1,6 +1,6 @@
 type: ArduinoRobot
 usb_port: /dev/cu.usbserial-ADAQDbKpQ
-baud_rate: 115200
+baud_rate: 57600
 timeout: 2
 motors: # use these same names as kwargs to constructors
 - name: base
@@ -10,7 +10,7 @@ motors: # use these same names as kwargs to constructors
     min: -40
     max: 140
 - name: tower_1
-  id: 5
+  id: 10
   position:
     reset: 0
     min: -40
@@ -22,7 +22,7 @@ motors: # use these same names as kwargs to constructors
     min: -40
     max: 140
 - name: tower_3
-  id: 10
+  id: 5
   position:
     reset: 0
     min: -40
