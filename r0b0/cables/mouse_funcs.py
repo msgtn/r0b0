@@ -1,4 +1,4 @@
-def key2mouse_move(data=None):
+def key2mouse_place(data=None):
     if data is None: return {'event':'keydown'}
     key2pos_dict = {
         'q':[100,100],

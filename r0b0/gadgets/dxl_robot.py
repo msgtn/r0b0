@@ -55,8 +55,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # set motor operating modes
         # this must be done after self.power_up()
         # so that the connections to the motors are established
-        for _,motor in self.motors_by_id.items():
-            motor.init_mode()
+        # for _,motor in self.motors_by_id.items():
+        #     motor.init_mode()
         
         # define event handlers
         for _event in ['param','position','velocity']:

@@ -84,3 +84,4 @@ Steps for setting up r0b0 on an rpi
   - Inspiration from TE OB4, motorized faders
   - play -> move motor
   - physical manipulation
+

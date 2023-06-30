@@ -20,12 +20,18 @@ class Page(Gadget):
         self.on('*',
             handler=self.on_catch_all
             )
+        self.on('test',
+            handler=self.on_catch_all
+            )
         
     @load_msg
     def on_catch_all(self,data):
-        _event = data.get('event','unknown event')
+        if isinstance(data,dict):
+            _event = data.get('event','unknown event')
+        else:
+            _event=data
         logging.debug(f'Page {self.name} received {_event}')
-        self.emit(**data)
+        # self.emit(**data)
         
     # def add_emit(self,event,**kwargs):
     #     self.on(

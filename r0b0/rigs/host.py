@@ -68,6 +68,11 @@ class Host(Thread, SocketIO):
             'add_emit',
             self.add_emit,)
         
+        # catch-all - DOESNT WORK
+        SocketIO.on_event(self,
+            '*',
+            self.emit)
+        
         self._webrtc_setup()
         self._player_setup()
         
@@ -77,6 +82,8 @@ class Host(Thread, SocketIO):
         logging.debug(args)
         logging.debug(kwargs)
         SocketIO.emit(self, *args, **kwargs)
+        
+    
 
     @load_msg
     def add_url(self, data):
@@ -177,36 +184,62 @@ class Host(Thread, SocketIO):
             SocketIO.on_event(self,
                 webrtc_event,
                 getattr(self,webrtc_event))
-            
     def broadcaster(self, sid):
         self.broadcaster_id = sid
+        logging.debug(f'broadcaster from {sid}')
         SocketIO.emit(self,
-            'broadcaster')
+            event='broadcaster',
+            # data={
+            #     'event':'broadcaster',
+            #     'sid':sid}
+            )
     def watcher(self,sid):
         if not self.broadcaster_id: return
+        data = {
+            'sid':request.sid
+        }
         SocketIO.emit(self,
             'watcher',
-            request.sid,
-            to=self.broadcaster_id,
+            # request.sid,
+            data,
+            # to=self.broadcaster_id,
             )
     def offer(self,sid,msg, *args,**kwargs):
+        data={
+            'sid':request.sid,
+            'params':msg
+        }
+        data.update(kwargs)
         SocketIO.emit(self,
             'offer',
-            (request.sid,msg),
-            to=sid,
+            # (request.sid,msg),
+            data
+            # to=sid,
             )
     def answer(self,sid,msg):
         # TODO - handle max connections
+        data={
+            'sid':request.sid,
+            'params':msg
+        }
+        
         SocketIO.emit(self,
             'answer',
-            (request.sid,msg),
-            to=sid,
+            # (request.sid,msg),
+            # to=sid,
+            data,
             )
     def candidate(self,sid,msg):
+        data={
+            'sid':request.sid,
+            'params':msg
+        }
+
         SocketIO.emit(self,
             'candidate',
-            (request.sid,msg),
-            to=sid,
+            # (request.sid,msg),
+            # to=sid,
+            data
         )
 
 if __name__=="__main__":
