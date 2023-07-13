@@ -1,0 +1,7 @@
+gadgets:
+- op1
+- arm
+cables:
+- cable: midi_rel2position
+  tx_gadget: op1
+  rx_gadget: arm
