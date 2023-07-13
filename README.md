@@ -76,6 +76,7 @@ Cables between the Gadgets handle:
 Clone this repo and pull the submodules
 ```
 git clone https://github.com/psychomugs/r0b0
+cd r0b0
 git submodule update --init --recursive
 ```
 
@@ -85,4 +86,12 @@ Set up [conda](https://conda.io), then set up a conda environment and install so
 conda env create r0b0 -f env.yaml
 conda activate r0b0
 pip3 install -r req.txt 
+```
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+pip3 install -r req.txt
+pip3 install -r deps/dynamixel_python/
 ```

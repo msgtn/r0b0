@@ -22,7 +22,6 @@ cryptography==38.0.4
 Cython==0.29.32
 Deprecated==1.2.13
 dnspython==2.2.1
-dynamixel-python @ file:///Users/psychomugs/Developer/r0b0/deps/dynamixel_python
 dynamixel-sdk==3.7.31
 eventlet==0.33.2
 Flask==2.2.2
@@ -51,8 +50,6 @@ Keras-Preprocessing==1.1.2
 Markdown==3.4.1
 MarkupSafe==2.1.1
 mido==1.2.10
-# mouse @ git+https://github.com/boppreh/mouse.git@d2eca88e0439b66b783918c4fd5c639a8f2f10f9
-mouse
 mpmath==1.2.1
 multidict==6.0.3
 netifaces==0.11.0
