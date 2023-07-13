@@ -28,17 +28,20 @@ The main structural metaphor comes from connecting musical instruments, either t
 Gadgets are individual hardware devices or software services, e.g. motors and joysticks (hardware), emulated mice and key presses (software).
 Gadgets can exist as standalone objects, e.g. a single motor controlled manually through the command line.
 Gadgets also exist as nodes in a network of other Gadgets, transmitting and receiving messages through Cables.
+Gadget docs are [here](/r0b0/gadgets/README.md).
 
 ### Cables
 Cables are connections that translate between Gadgets.
 For example, a `midi2motor` Cable could translate incoming MIDI messages from the turning of a MIDI controller knob into the outgoing motor position message to the actuation of a robot's motor.
 Cables are small, lightweight functions that abstract Gadgets from each other, preserving the system's modularity.
 Defining Cables is where most domain knowledge/personal taste comes in.
+Cable docs are [here](/r0b0/cables//README.md).
 
 ### Rigs
 Rigs are networks of Gadgets connected by Cables; they essentially represent the entire system/project.
 Rigs manage the connections and higher-level functionalities required to use the system.
 Rigs are largely static wrappers that should not need much modification on a case-by-case basis.
+
 
 ## Example Rigs
 I've used r0b0 to power not just Blossom, but also other non-robotic platforms.

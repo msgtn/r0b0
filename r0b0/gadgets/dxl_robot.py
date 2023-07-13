@@ -18,20 +18,13 @@ BAUD_DICT = {
 # for xl330-m{288,077}
 # might be different for others
 MODE_DICT = {
-    'position':3,
     'velocity':1,
+    'position':3,
     'extended_position':4,
 }
 
 T_LAST_CMD = 0
 T_COOLDOWN = 300/10e3
-
-class MotorMessage(Message):
-    def __init__(self, **kwargs):
-        Message.__init__(self,**kwargs)
-        # self.event = event
-        # self.value = value
-        # self.motor_id = motor_id    
 
 class DynamixelRobot(Gadget, DynamixelManager):
     def __init__(self, config, **kwargs):
@@ -46,24 +39,34 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 'baud_rate',57600),
             )
         self.name = config['name']
-        if self.config.get('motors', False):
-            self.motors_by_id = self.add_motors_from_config(
-                self.config['motors'])
-        # TODO - overwrite dxl_dict with this?
         
+        # add motors
+        self.motors_by_id,self.motor_configs = {},{}
+        if self.config.get('motors', False):
+            self.motors_by_id,self.motor_configs = self.add_motors_from_config(
+                self.config['motors'])
 
+        # initialize
         self.power_up = self.init
-        self.power_up()
         self.enable,self.disable = self.enable_all,self.disable_all
-        # self.enable = partial(self.set_param,)
+        self.power_up()
+        self.disable()        
+        # for motor_name,motor in self..items():
+        for motor_name in self.motor_configs.keys():
+            self.dxl_dict[motor_name].set_motor_config(
+                self.motor_configs[motor_name]
+            )
+            
         self.enable()
 
-        self.message = MotorMessage
+        # set motor operating modes
+        # this must be done after self.power_up()
+        # so that the connections to the motors are established
+        # for _,motor in self.motors_by_id.items():
+        #     motor.init_mode()
         
-        handled_events = ['param','position',
-                          'velocity'
-                          ]
-        for _event in handled_events:
+        # define event handlers
+        for _event in ['param','position','velocity']:
             self.on(_event,
                 handler=getattr(self,f'{_event}_event'),
                 namespace=self.namespace
@@ -79,12 +82,54 @@ class DynamixelRobot(Gadget, DynamixelManager):
         self.get_param = partial(self.access_param,
             rw_mode='get')
         
+            
+    def add_motors_from_config(self, motor_config: list):
+        self.motors_by_id  = {}
+        motor_configs = {}
+        self.motors_by_id.setdefault(None)
+        for motor_config in self.config['motors']:
+            # cannot set operating mode here - must first init
+            # if motor.get('mode',False):
+            #     motor_mode = MODE_DICT.get(motor['mode'],None)
+            #     if motor_mode is None:
+            #         logging.warn(
+            #             f'No mode {motor["mode"]} \
+            #             for motor {motor["name"]}, \
+            #             setting to "position."'
+            #         )
+            #     breakpoint()
+            #     dxl_motor.set_operating_mode(motor_mode)
+            
+            motor = Motor.from_motor(self.add_motor(
+                    dxl_name=motor_config['name'],
+                    dxl_id=motor_config['id'],
+                    dxl_model=motor_config['model'],))
+            
+            
+            self.motors_by_id.update({
+                int(motor_config['id']):motor
+            })
+            self.dxl_dict.update({
+                motor_config['name']:motor
+            })
+            motor_configs.update({
+                motor_config['name']:motor_config
+            })
+        
+        return self.motors_by_id, motor_configs
+
+    def add_motor(self,**motor_kwargs):
+        return Motor.from_motor(self.add_dynamixel(
+            **motor_kwargs
+            ), **motor_kwargs)
+
     def _motion_thread(self):
         # continuously check the 
         # "is moving" flag and emit events
         pass
     
     def access_param(self,param,motor_id_kwargs,rw_mode='set'):
+        return_dict = {m_id:{} for m_id in motor_id_kwargs.keys()}
         for motor_id,motor_kwargs in motor_id_kwargs.items():
             # _motor = self.dxl_dict.get(str(motor_id),None)
             _motor = self.motors_by_id.get(motor_id,None)
@@ -93,9 +138,10 @@ class DynamixelRobot(Gadget, DynamixelManager):
             # with 'data' as the default arg
             # ps2014.set_param('goal_velocity',{1:{'data':-1600}})
             if _motor is not None:
-                getattr(
+                return_dict.update({motor_id:getattr(
                     _motor,f'{rw_mode}_{param}'
-                    )(**motor_kwargs)
+                    )(**motor_kwargs)})
+        return return_dict
         
     # def turn_to_list(self):
     def _var2list(self,*_vars):
@@ -121,17 +167,33 @@ class DynamixelRobot(Gadget, DynamixelManager):
         }
         
     @load_msg
-    def _position_event(self,data):
+    def position_event(self,data):
         # msg is a data object
         msg = data['msg']
+        logging.debug(msg.value)
         motor_id_kwargs = self._msg2kwargs(msg)
         
-        if not getattr(msg,'absolute')=='absolute':
-            # handle calculation of relative position
-            # get current position
-            # calculate differences
-            # update values
+        # TODO - maybe calcualte this before packing with self._msg2kwargs
+        # that might be cleaner
+        if not getattr(msg,'absolute'):
+        #     # handle calculation of relative position
+        #     # get current position
+            # logging.debug('relative')
+            present_positions = self.get_param(
+                'present_position',
+                {m_id:{} for m_id,_ in motor_id_kwargs.items()}
+            )
+            logging.debug(present_positions)
+            relative_positions = [m_v['data'] for m_v in motor_id_kwargs.values()]
+            motor_ids = list(motor_id_kwargs.keys())
+            # motor_id_kwargs.update({m_id:})
+            motor_id_kwargs.update({
+                m_id:{'data': rel_pos+pres_pos} for m_id,pres_pos,rel_pos in zip(motor_ids, present_positions.values(), relative_positions)
+            })
+        #     # calculate differences
+        #     # update values
             pass
+        logging.debug(motor_id_kwargs)
         self.enable()
         self.set_param(
             'goal_position',
@@ -170,7 +232,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             msg.value = [msg.value]
 
     @load_msg
-    def position_event(self,data):
+    def _position_event(self,data):
         msg = data['msg']
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
@@ -182,48 +244,15 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 continue
             motor.t_last_cmd = time.time()
             
-            # assert motor is not None, f"Motor {msg.motor_id} does not exist"
-            # TODO - set motor control mode
-            # motor.set_torque_enable(True)
             motor.set_profile_velocity(16000)
             motor.set_goal_position(int(motor_value))
             motor.believed_position = int(motor_value)
-    
-    def add_motors_from_config(self, motor_config: list):
-        self.motors_by_id  = {}
-        self.motors_by_id.setdefault(None)
-        for motor in self.config['motors']:
-            dxl_motor = self.add_dynamixel(
-                dxl_name=motor['name'],
-                dxl_id=motor['id'],
-                dxl_model=motor['model'],
-            )
-            
-            dxl_motor = Motor.from_motor(dxl_motor)
-            
-            # cannot set operating mode here - must first init
-            # if motor.get('mode',False):
-            #     motor_mode = MODE_DICT.get(motor['mode'],None)
-            #     if motor_mode is None:
-            #         logging.warn(
-            #             f'No mode {motor["mode"]} \
-            #             for motor {motor["name"]}, \
-            #             setting to "position."'
-            #         )
-            #     breakpoint()
-            #     dxl_motor.set_operating_mode(motor_mode)
-            
-            self.motors_by_id.update({
-                int(motor['id']):dxl_motor
-            })
-            
-        return self.motors_by_id
 
     def _deg2dxl(self, deg, deg_range=[-150,150], dxl_range=[0,4096]):
         return int(np.interp(deg, deg_range, dxl_range))
 
 class Motor(DynamixelMotor):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         # super().__init__(self,**kwargs)
         self.__dict__.update(**kwargs)
         self.mode = kwargs.get('mode','position')
@@ -236,20 +265,39 @@ class Motor(DynamixelMotor):
             param='torque_enable',
             value=False)
         
+        # lookup the operating mode IDs
+        # self.mode = MODE_DICT[getattr(self,'mode','position')]
+        # self.init_mode = partial(self.set_mode,
+            # mode=self.mode)
+        
     @classmethod
     def from_motor(cls, dxl_motor: DynamixelMotor, **kwargs):
-        # self.__dict__.update(dxl_motor.__dict__)
-        
-        return cls(**dxl_motor.__dict__)
-        # self.t_last_cmd = time.time()
-        # self.believed_position = 0
-        
-        # return self
+        return cls(**dxl_motor.__dict__, **kwargs)
      
-    def set_param(self,param,value):
-        getattr(self, f"set_{param}")(value)
+    def set_param(self, param: str, value):
+        self.access_param(param,value,rw_mode='set')
+    def get_param(self, param: str, value):
+        self.access_param(param,rw_mode='get')
+    def access_param(self, param: str, value=None, rw_mode='set'):
+        if rw_mode=='get': value=None
+        if getattr(self, f'{rw_mode}_{param}', False):
+            getattr(self, f"{rw_mode}_{param}")(value)
+        else:
+            logging.warning(f'Motor {self.name} could not {rw_mode} parameter {param}')
 
     def set_mode(self, mode):
         self.disable()
         self.set_param('operating_mode',mode)
         self.enable()
+        
+    def calibrate_homing_offset(self):
+        self.disable()
+        self.set_param(
+            'homing_offset',
+            -self.get_present_position())
+        
+    def set_motor_config(self, config: dict):
+        # pass
+        for param,data in config.items():
+            self.set_param(param, data)
+        

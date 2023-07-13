@@ -5,7 +5,6 @@ logging.basicConfig(
     # level=logging.WARNING,
     )
 
-
 import time
 get_timestamp = lambda: time.strftime('%Y%m%d%H%M%S')
 

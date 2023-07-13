@@ -59,7 +59,6 @@ class Gadget(Client, Thread):
             event=event,
             data=data
         ))
-        # logging.debug(kwargs)
         
         # TODO - kludge to avoid BadNamespaceError
         # if trying to emit before connected
@@ -68,6 +67,16 @@ class Gadget(Client, Thread):
         except:
             pass
         return kwargs
+    
+    def assign_handlers(self, events_to_handle: list) -> None:
+        for event in events_to_handle:
+            self.on(event,
+                handler=getattr(self, f'{event}_event'),
+                namespace=self.namespace)
+            pass    
+        
+    def unassigned_handler(self, data):
+        logging.debug(f'{self.name} received unhandled event with data {data}')
     
     def disconnect(self) -> None:
         if self.connected: Client.disconnect(self)

@@ -6,6 +6,7 @@ from .tape import Tape
 from .page import Page, MobilePage
 from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
 from .mouse import Mouse
+from .rtc import RTCGadget
 
 from r0b0.utils.loaders import load_msg, dump_msg
 

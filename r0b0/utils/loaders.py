@@ -49,7 +49,8 @@ def dump_msg(func):
 def load_msg(func):
     def _inner_func(s,data,**kwargs):
         # logging.debug(s,data,kwargs)
-        if data.get('msg',None) is not None:
+        logging.debug(data)
+        if isinstance(data,dict) and data.get('msg',None) is not None:
             data['msg']=pickle.loads(data['msg'])
         return func(s,data,**kwargs)
     return _inner_func

@@ -1,52 +1,20 @@
-
-from r0b0 import logging
-
-# import argparse
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--logging',type=str,default='warning')
-# args = parser.parse_args()
-
-logging.basicConfig(
-    encoding='utf-8',
-    # level=logging.DEBUG,
-    # level=getattr(logging,args['logging'])
-    level=logging.WARNING,
-    )
-
 from r0b0.rigs.rig import Rig
 from r0b0.utils import loaders
 from r0b0.cables import msg_funcs
-# parser.add_argument(
-#     '--log', default=sys.stdout, type=argparse.FileType('w'),
-#     help='the file where the sum should be written')
-# args.log.write('%s' % sum(args.integers))
-# args.log.close()
+from r0b0.config import LOCALHOST, SERVER_PORT
+from r0b0 import logging
 
 import sys
-from multiprocessing import Process
-import signal
-import numpy as np
-# import logging
-# logging.basicConfig(
-#     # filename='example.log',
-#     encoding='utf-8',
-#     # level=logging.INFO,
-#     level=logging.DEBUG,
-#     )
-from r0b0.config import LOCALHOST, SERVER_PORT
+import argparse
 
-# LOCALHOST = 'localhost'
-# SERVER_PORT = 8080
-
-def main():
-    config = loaders.load_rig(sys.argv[1])
+def main(rig_config):
+    config = loaders.load_rig(rig_config)
     logging.debug(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
         # TODO - get rid of this by adding to rig.add_gadget
         namespaces=[f'/{gadget}' for gadget in config['gadgets']],
-        # namespaces=['/','/blossom'],
     )
     
     # add gadgets
@@ -59,24 +27,24 @@ def main():
     rig.power_on()
     return rig
 
-def test_script(rig):
-    tape_name = '20230131000558_device_motion'
-    tape_name = '20230209011442_device_motion'
-    tape_name = '20230210224815_device_motion'
-    tape_name = '20230210225358_device_motion'
-    tape_name = '20230210225448_device_motion'
-    rig.on_load(
-        {'tapeName':tape_name}
-    )
-    rig.on_play({
-        'tape_name':tape_name
-    })
 
 if __name__=="__main__":
     
-    rig = main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--logging',type=str,default='warning')
+    parser.add_argument('--config',type=str,default=None)
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        encoding='utf-8',
+        level=getattr(logging,args.logging.upper())
+    )
     
-    # test_script(rig)
+    rig_config = args.config if args.config is not None else sys.argv[1]
+    assert rig_config is not None, "No rig config provided, either as sys.argv[1] or with --config"
+    
+    rig = main(rig_config)
+    
     globals().update(**rig.gadgets)
     
     

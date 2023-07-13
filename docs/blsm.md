@@ -1,7 +1,6 @@
 # Blossom
 
 This page goes over how to build and boot a Blossom robot.
-Still under construction as of 06/2023.
 
 ## Build
 
@@ -53,9 +52,6 @@ Forwarding https://someRandomLettersAndNumbers.ngrok.app -> https://localhost:80
 ```
 
 In a mobile browser (e.g. Safari), navigate to the forwarding URL (`https://someRandomLettersAndNumbers.ngrok.app` in the above example). 
-Hold the phone vertically, as if you were taking a picture of something in front of you, then turn on the '`Control`' switch.
-You may need to 'allow' device access to the phone's motion sensor.
-The motion of the phone should now be controlling the robot.
 
 ### Telepresence with video
 

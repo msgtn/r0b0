@@ -4,3 +4,5 @@ venv
 *.DS
 *.pem
 ngrok.sh
+tapes/*
+*notes.md

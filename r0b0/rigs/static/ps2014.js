@@ -26,7 +26,7 @@ openButton.onclick = function() {
     socket.emit('button',
         {
             event:'button',
-            value:-265000,
+            value:6000-270000,
             id:socket.id,
         });
 }

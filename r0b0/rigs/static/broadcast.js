@@ -31,6 +31,7 @@ function sendWatcher() {
 };
 
 socket.on("watcher", async (id) => {
+  console.log(`watcher from ${id}`)
   const peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
   // peerConnection = peerConnections[id];
