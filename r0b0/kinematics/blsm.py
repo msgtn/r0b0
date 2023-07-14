@@ -241,14 +241,31 @@ def device_motion2motor(ori, portrait=True, sensitivity=1.0):
         
     return motor_pos
         
+RAD2DXL = [
+    [[-10,140],[0,2048]],
+    [[-10,140],[0,2048]],
+    [[-10,140],[0,2048]],
+    [[-140,140],[0,4096]],
+]
 def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
     motor_pos = device_motion2motor(ori,portrait,sensitivity)
-    motor_pos = list(map(int, map(
-        partial(np.interp,
-            xp=[-10,140],
-            fp=[0,2048]),
-        motor_pos)))
-    return motor_pos
+    # motor_pos = list(map(int, map(
+    #     partial(np.interp,
+    #         xp=[-10,140],
+    #         fp=[0,2048]),
+    #     motor_pos)))
+    
+    motor_dxl = []
+    for _motor_pos,xp_fp in zip(motor_pos,RAD2DXL):
+        motor_dxl.append(
+            int(np.interp(
+                _motor_pos,
+                xp=xp_fp[0],
+                fp=xp_fp[1]
+            ))
+        )
+    # motor_pos[3] = int(np.interp(motor_pos[3],xp=[-160,160],fp=[0,4090]))
+    return motor_dxl
 
 
 def device_motion2arduino_motor(ori, portrait=True, sensitivity=1.0):

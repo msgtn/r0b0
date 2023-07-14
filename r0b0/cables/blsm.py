@@ -7,6 +7,7 @@ from r0b0.kinematics.blsm import device_motion2dxl_motor, \
 def motion2motor(data=None):
     if data is None: return {'event':'device_motion'}
     # logging.debug(f'motion2motor {data}')
+    logging.debug(device_motion2dxl_motor(data))
     return {
         'event':'position',        # 'value': # the function that gives
         'value':device_motion2dxl_motor(data),

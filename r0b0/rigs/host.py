@@ -1,3 +1,5 @@
+SOCKET_ADDR = "https://r0b0.ngrok.io"
+
 import glob
 # import logging
 
@@ -43,7 +45,7 @@ class Host(Thread, SocketIO):
             self.app,
             cors_allowed_origins=[
                 "*",
-                "https://4ea1-32-221-140-83.ngrok-free.app",
+                SOCKET_ADDR,
                 f"https://{self.hostname}:{self.port}",
             ],
             **kwargs

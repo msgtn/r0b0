@@ -1,12 +1,24 @@
 
 const peerConnections = {};
-
-
 const config = {
   iceServers: [
-    {   urls: [ "stun:us-turn6.xirsys.com" ]},
-    {   username: "uTZru2n264RQqZAwDgHGuAt6tj8GV5cRJGQDrYMi65Hbogw1JEcFjVNnk9W6DzVIAAAAAF-Dv9Vwc3ljaG9tdWdz",   credential: "ee851dfc-0c32-11eb-a231-0242ac140004",   urls: [       "turn:us-turn6.xirsys.com:80?transport=udp",       "turn:us-turn6.xirsys.com:3478?transport=udp",       "turn:us-turn6.xirsys.com:80?transport=tcp",       "turn:us-turn6.xirsys.com:3478?transport=tcp",       "turns:us-turn6.xirsys.com:443?transport=tcp",       "turns:us-turn6.xirsys.com:5349?transport=tcp"   ]}]
+    { urls: ["stun:us-turn8.xirsys.com"] },
+    {
+      username:
+        "LGTr4T-fYrwaB75qalVpHmjJshsXmRmWbz5fScJHQG9aQ0i_2DqL_0LF6MIScX31AAAAAGSwsDdtc3VndWl0YW4=",
+      credential: "94513d7a-21ec-11ee-902b-0242ac140004",
+      urls: [
+        "turn:us-turn8.xirsys.com:80?transport=udp",
+        "turn:us-turn8.xirsys.com:3478?transport=udp",
+        "turn:us-turn8.xirsys.com:80?transport=tcp",
+        "turn:us-turn8.xirsys.com:3478?transport=tcp",
+        "turns:us-turn8.xirsys.com:443?transport=tcp",
+        "turns:us-turn8.xirsys.com:5349?transport=tcp",
+      ],
+    },
+  ],
 };
+
 
 // Get camera and microphone
 const broadcasterVideo = document.getElementById("broadcasterVideo");
