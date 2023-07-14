@@ -6,23 +6,26 @@ motors: # use these same names as kwargs to constructors
   model: xl330-m288
   id: 1
   mode: 3
-  profile_velocity: 200
+  profile_velocity: 300
+  profile_acceleration: 100
 - name: tower_2
   model: xl330-m288
   id: 2
   mode: 3
-  profile_velocity: 200
+  profile_velocity: 300
+  profile_acceleration: 100
 - name: tower_3
   model: xl330-m288
   id: 3
   mode: 3
-  profile_velocity: 200
+  profile_velocity: 300
+  profile_acceleration: 100
 - name: base
   model: xl330-m288
   id: 4
   mode: 3
   profile_velocity: 200
-  profile_acceleration: 200
+  profile_acceleration: 100
 - name: left_wheel
   model: xl330-m077
   id: 7

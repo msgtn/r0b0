@@ -1,3 +1,25 @@
+const socketAddr = "https://r0b0.ngrok.io";
+
+const config = {
+  iceServers: [
+    { urls: ["stun:us-turn8.xirsys.com"] },
+    {
+      username:
+        "LGTr4T-fYrwaB75qalVpHmjJshsXmRmWbz5fScJHQG9aQ0i_2DqL_0LF6MIScX31AAAAAGSwsDdtc3VndWl0YW4=",
+      credential: "94513d7a-21ec-11ee-902b-0242ac140004",
+      urls: [
+        "turn:us-turn8.xirsys.com:80?transport=udp",
+        "turn:us-turn8.xirsys.com:3478?transport=udp",
+        "turn:us-turn8.xirsys.com:80?transport=tcp",
+        "turn:us-turn8.xirsys.com:3478?transport=tcp",
+        "turns:us-turn8.xirsys.com:443?transport=tcp",
+        "turns:us-turn8.xirsys.com:5349?transport=tcp",
+      ],
+    },
+  ],
+};
+
+
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
 var socket = "";
@@ -154,9 +176,7 @@ function startup() {
   // recordButton.disabled = false;
 
   // TODO - set this to a yaml config
-  var socketAddr = "r0b0.ngrok.io";
-  console.log(socketAddr);
-  socket = io.connect(`https://${socketAddr}`);
+  socket = io.connect(socketAddr);
 
   let peerConnection;
 
@@ -170,7 +190,7 @@ function startup() {
 
   socket.on("candidate", (id, candidate) => {
     console.log(id);
-    if (id in peerConnections){
+    if (id in peerConnections) {
       peerConnections[id]
         .addIceCandidate(new RTCIceCandidate(candidate))
         .catch((e) => console.error(e));
@@ -213,10 +233,9 @@ function startup() {
 
   socket.on("answer", (id, description) => {
     peerConnections[id].setRemoteDescription(description);
-    peerConnections[id].ontrack = event => {
+    peerConnections[id].ontrack = (event) => {
       broadcasterVideo.srcObject = event.streams[0];
       console.log(event.streams[0]);
-  
     };
   });
 
@@ -402,25 +421,6 @@ function onLoad() {
   });
 }
 
-const config = {
-  iceServers: [
-    { urls: ["stun:us-turn6.xirsys.com"] },
-    {
-      username:
-        "uTZru2n264RQqZAwDgHGuAt6tj8GV5cRJGQDrYMi65Hbogw1JEcFjVNnk9W6DzVIAAAAAF-Dv9Vwc3ljaG9tdWdz",
-      credential: "ee851dfc-0c32-11eb-a231-0242ac140004",
-      urls: [
-        "turn:us-turn6.xirsys.com:80?transport=udp",
-        "turn:us-turn6.xirsys.com:3478?transport=udp",
-        "turn:us-turn6.xirsys.com:80?transport=tcp",
-        "turn:us-turn6.xirsys.com:3478?transport=tcp",
-        "turns:us-turn6.xirsys.com:443?transport=tcp",
-        "turns:us-turn6.xirsys.com:5349?transport=tcp",
-      ],
-    },
-  ],
-};
-
 window.onunload = window.onbeforeunload = () => {
   socket.close();
 };
@@ -472,18 +472,16 @@ function gotStream(stream) {
     (option) => option.text === stream.getVideoTracks()[0].label
   );
 
-  Object.keys(peerConnections).forEach(function(id) {
+  Object.keys(peerConnections).forEach(function (id) {
     stream.getTracks().forEach((track) => {
       peerConnections[id].addTrack(track, stream);
     });
- });
-
+  });
 }
 
 function handleError(error) {
   console.error("Error: ", error);
 }
-
 
 audioSelect.onchange = getStream;
 videoSelect.onchange = getStream;
