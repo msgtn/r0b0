@@ -25,7 +25,7 @@ dxl_mgr = DynamixelManager(
     baud_rate=BAUD_RATE,
 )
 
-def add_motors(motor_id_limit=MOTOR_ID_LIMIT):
+def add_motors(motor_id_limit=MOTOR_ID_LIMIT) -> None:
     for motor_id in range(motor_id_limit):
         dxl_mgr.add_dynamixel(
             dxl_id=motor_id,
@@ -34,16 +34,16 @@ def add_motors(motor_id_limit=MOTOR_ID_LIMIT):
         )
     dxl_mgr.init()
     
-def get_connected_motors():
+def get_connected_motors() -> list[int]:
     return [int(motor_id) for motor_id,motor in dxl_mgr.dxl_dict.items() if motor.ping()]
 # alias
 gcm = get_connected_motors
 
-def set_ids(id_dict):
+def set_ids(id_dict) -> None:
     for old_id,new_id in id_dict.items():
         dxl_mgr.dxl_dict[str(old_id)].set_id(new_id)
         
-def set_param(param,id_dict):
+def set_param(param,id_dict) -> None:
     for old_id,new_id in id_dict.items():
         getattr(dxl_mgr.dxl_dict[str(old_id)], f"set_{param}")(new_id)
 
@@ -57,7 +57,10 @@ if __name__=="__main__":
     # })
     
     print(f"Found motors with ids {get_connected_motors()}")
-    m1 = dxl_mgr.dxl_dict['1']
+    # m1 = dxl_mgr.dxl_dict['1']
+    globals().update({
+        f'm{m_id}':dxl_mgr.dxl_dict[str(m_id)] for m_id in range(MOTOR_ID_LIMIT)
+    })
     breakpoint()
     
     '''

@@ -92,6 +92,17 @@ pip3 install -r req.txt
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
+```
+On macOS, installing `mouse` requires some other packages. Try:
+```
 pip3 install -r req.txt
-pip3 install -r deps/dynamixel_python/
+```
+If this fails, try just installing `mouse` directly:
+```
+pip3 install mouse
+```
+
+Install the `dynamixel_python` wrapper around the `dynamixel_sdk`:
+```
+pip3 install deps/dynamixel_python/
 ```
