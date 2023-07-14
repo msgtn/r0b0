@@ -68,11 +68,6 @@ class Host(Thread, SocketIO):
             'add_emit',
             self.add_emit,)
         
-        # catch-all - DOESNT WORK
-        SocketIO.on_event(self,
-            '*',
-            self.emit)
-        
         self._webrtc_setup()
         self._player_setup()
         
@@ -82,8 +77,6 @@ class Host(Thread, SocketIO):
         logging.debug(args)
         logging.debug(kwargs)
         SocketIO.emit(self, *args, **kwargs)
-        
-    
 
     @load_msg
     def add_url(self, data):
@@ -107,20 +100,19 @@ class Host(Thread, SocketIO):
                 data=d,
                 **data['kwargs'] # namespace arg from the .yaml that defined it
             )
-            if d.get('id',None) is not None:
-                id_event = f"{d['id']}_{d['event']}"
-                tape = self.tapes.get(id_event,None)
-                if tape is not None:
-                # if id_event in self.tapes.keys():
-                    # record time in millis
-                    d.update({
-                        'time':int(time.time()*10e3),
-                        })
-                    tape.write({**{
-                        'event':data['event'],
-                        'data':d},
-                        **data['kwargs'],
+            id_event = f"{d['id']}_{d['event']}"
+            tape = self.tapes.get(id_event,None)
+            if tape is not None:
+            # if id_event in self.tapes.keys():
+                # record time in millis
+                d.update({
+                    'time':int(time.time()*10e3),
                     })
+                tape.write({**{
+                    'event':data['event'],
+                    'data':d},
+                    **data['kwargs'],
+                })
         self.server.on(
             data['event'],
             _emit_record,
@@ -185,62 +177,36 @@ class Host(Thread, SocketIO):
             SocketIO.on_event(self,
                 webrtc_event,
                 getattr(self,webrtc_event))
+            
     def broadcaster(self, sid):
         self.broadcaster_id = sid
-        logging.debug(f'broadcaster from {sid}')
         SocketIO.emit(self,
-            event='broadcaster',
-            # data={
-            #     'event':'broadcaster',
-            #     'sid':sid}
-            )
+            'broadcaster')
     def watcher(self,sid):
         if not self.broadcaster_id: return
-        data = {
-            'sid':request.sid
-        }
         SocketIO.emit(self,
             'watcher',
-            # request.sid,
-            data,
-            # to=self.broadcaster_id,
+            request.sid,
+            to=self.broadcaster_id,
             )
     def offer(self,sid,msg, *args,**kwargs):
-        data={
-            'sid':request.sid,
-            'params':msg
-        }
-        data.update(kwargs)
         SocketIO.emit(self,
             'offer',
-            # (request.sid,msg),
-            data
-            # to=sid,
+            (request.sid,msg),
+            to=sid,
             )
     def answer(self,sid,msg):
         # TODO - handle max connections
-        data={
-            'sid':request.sid,
-            'params':msg
-        }
-        
         SocketIO.emit(self,
             'answer',
-            # (request.sid,msg),
-            # to=sid,
-            data,
+            (request.sid,msg),
+            to=sid,
             )
     def candidate(self,sid,msg):
-        data={
-            'sid':request.sid,
-            'params':msg
-        }
-
         SocketIO.emit(self,
             'candidate',
-            # (request.sid,msg),
-            # to=sid,
-            data
+            (request.sid,msg),
+            to=sid,
         )
 
 if __name__=="__main__":

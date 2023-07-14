@@ -12,9 +12,9 @@ def midi_rel2position(data=None):
         127:-1
     }
     scale_dict = {
-        1:800,
-        2:800,
-        3:800,
+        1:600,
+        2:600,
+        3:600,
         4:300
     }
     value_scale = scale_dict.get(msg.control,300)
