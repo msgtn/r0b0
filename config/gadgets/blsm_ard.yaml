@@ -2,7 +2,7 @@ type: ArduinoRobot
 usb_port: /dev/cu.usbserial-ADAQDbKpQ
 baud_rate: 57600
 timeout: 2
-motors: # use these same names as kwargs to constructors
+motors:
 - name: base
   id: 9
   position:
