@@ -5,16 +5,14 @@ This page goes over how to build and boot a Blossom robot.
 
 ## Build
 
-Build the robot.
-Files and instructions coming soon.
+The total component cost for the base Dynamixel-powered configuration is less than $200.
+The platform also supports a cheaper configuration using micro servos and an Arduino for approximately $50.
 
-The total component cost is less than $200 for the full Dynamixel-powered configuration.
-The design also supports a cheaper configuration using micro servos and an Arduino.
-The Arduino-powered functionality is similar, though the movement is noisier and less smooth.
 
 ### Parts
 The parts to print in `*.stl` format are [available here](./assets/blsm/).
 The instructions are [available here](./assets/blsm/blsm.pdf).
+TODO - Add Cura configuration files, also links to each part separately.
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
 | blsm_A | Part runner | 1 | [Print](./assets/blsm/blsm_A.stl) | NA |
@@ -24,11 +22,11 @@ The instructions are [available here](./assets/blsm/blsm.pdf).
 | blsm_E | Part runner | 3 | [Print](./assets/blsm/blsm_E.stl) | NA |
 | blsm_F | Part runner | 3 | [Print](./assets/blsm/blsm_F.stl) | NA |
 | blsm_M | Part runner | 4 | [Print](./assets/blsm/blsm_M.stl) | NA |
-| blsm_SR | Slip ring for rotating the upper body | 1 | [Print](./assets/blsm/blsm_SR.stl), or use a [12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
+| blsm_SR | *S*lip *R*ing for rotating the upper body | 1 | [Print the static non-rotating 'dummy' model](./assets/blsm/blsm_SR.stl), or use [the actual 12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
 | String | String for actuating the head | 1 | Purchase (e.g. [fishing line](https://www.powerpro.com/content/powerpro/northamerica/us/en/homepage/PDP.P-POWERPRO.html), [twine](https://www.amazon.com/White-Cotton-Butchers-Twine-String/dp/B09TQXBFYD/)) | $5-$20 |
 | Rubber bands, 4mm diameter | Rubber bands for hanging the head platform | 6 | Purchase (e.g. [black rubber bands](https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/)) | $8 |
 
-### Motors
+### Motors and electronics
 The standard full-featured configuration uses Dynamixel 'smart' servos.
 Dynamixels have a lot of nice features built in, such as different operating modes (position- or velocity-control modes), velocity and acceleration profiles, and PID tweaking.
 | Part |  Description | Quantity | Method | Approximate total cost |
@@ -37,15 +35,24 @@ Dynamixels have a lot of nice features built in, such as different operating mod
 | Dynamixel X3P Cable | Cables (included with XL330 motors) | 6 | [Purchase](https://www.robotis.us/robot-cable-x3p-180mm-10pcs/) | NA (included with XL330 motors — only buy if need spares) |
 | Dynamixel U2D2 | Motor controller | 1 | [Purchase](https://www.robotis.us/u2d2/) | $32.00 |
 
-Arduino configuration:
+The Arduino-powered configuration is much cheaper (around the cost of just one Dynamixel) and more hackable, though the movement is noisier and less smooth.
+The left-right yaw rotation is also limited to ±90°.
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
 | Arduino (or clone) | Microcontroller and cable | 1 | [Purchase](https://www.amazon.com/ELEGOO-Board-ATmega328P-ATMEGA16U2-Compliant/dp/B01EWOE0UU) | $15 |
 | Micro servo | Small servos with basic position control | 4 | [Purchase](https://www.amazon.com/Dorhea-Arduino-Helicopter-Airplane-Walking/dp/B07Q6JGWNV/) | $10 |
 
+### Wiring
+For the Dynamixel-powered configuration, [refer to the wiring documentation to set up the U2D2 controller with an external power supply](./wiring.md).
+For the Arduino-powered design, refer to [this Fritzing diagram](./assets/blsm/blsm_ard.png).
+Either configuration will require USB breakouts for power and some cables.
+
+| Part |  Description | Quantity | Method | Approximate total cost |
+| USB breakout | Breaks out power connections to ease supplying power | 1 | [Purchase](https://www.amazon.com/Treedix-Type-C-Breakout-Connector-Converter/dp/B096M2HQLK) | $6 |
+| Male-Female and Male-Male wires | Connects components | Several | [Purchase](https://www.amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78/), or use spare cables and breadboards | $7 |
+
 ### Hardware
-Below is the minimal M2 hardware required.
-They are all available in [this set](https://www.amazon.com/gp/product/B082XR52P1/) for $10.
+The minimal M2 hardware required is all available in [this set](https://www.amazon.com/gp/product/B082XR52P1/) for $10.
 | Part | Quantity | Notes |
 | ---- | -------- | ----- |
 | M2x8mm | 14 | |
@@ -59,9 +66,6 @@ They are all available in [this set](https://www.amazon.com/gp/product/B082XR52P
 | Electrical wire | Connecting motors | A couple meters worth | |
 | USB wall adapter | Powering the motors | 1 | Ideally 15W (5V/3A) or greater to supply sufficient power to the motors |
 
-### Wiring
-For the Dynamixel-powered configuration, [refer to the wiring documentation to set up the U2D2 controller with an external power supply](./wiring.md).
-For the Arduino-powered design, 
 
 ## Software
 
@@ -118,6 +122,25 @@ Start the `blsm` rig, which contains the `blsm_dxl` robot as a `DynamixelRobot` 
 ```
 python3 start.py --config blsm
 ```
+If using the Arduino configuration, replace `blsm` with `blsm_ard`, and modify [`blsm_ard.yaml`](/config/gadgets/blsm_ard.yaml) with the `usb_port` and motor `id`s based on how the motors are wired to the Arduino:
+```
+type: ArduinoRobot
+usb_port: /dev/cu.usbserial-ADAQDbKpQ # modify this to the port that the Arduino is connected to
+baud_rate: 57600
+timeout: 2
+motors:
+- name: base
+  id: 9         # modify this to the pin that the BASE motor is connected to
+- name: tower_1
+  id: 10        # modify this to the pin that the FRONT head motor is connected to
+- name: tower_2
+  id: 6         # modify this to the pin that the LEFT head motor is connected to
+- name: tower_3
+  id: 5         # modify this to the pin that the RIGHT head motor is connected to
+```
+To find the `usb_port`, you can run `ls /dev/cu.usbserial*` or use the [Arduino IDE](https://www.arduino.cc/en/software).
+You must flash the Arduino with the pyFirmata firmware located at [r0b0/gadgets/Standardfirmata.ino](../r0b0/gadgets/StandardFirmata.ino) — open this file in the Arduino IDE and upload to the board.
+pyFirmata enables the Arduino to be controlled from Python through the [Arduino gadget class](../r0b0/gadgets/arduino.py).
 
 ## Telepresence
 
