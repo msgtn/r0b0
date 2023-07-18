@@ -156,7 +156,7 @@ function startup() {
   // TODO - set this to a yaml config
   var socketAddr = "r0b0.ngrok.io";
   console.log(socketAddr);
-  socket = io.connect(`https://${socketAddr}`);
+  socket = io.connect(`https://4ea1-32-221-140-83.ngrok-free.app`);
 
   let peerConnection;
 

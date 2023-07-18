@@ -43,7 +43,7 @@ class Host(Thread, SocketIO):
             self.app,
             cors_allowed_origins=[
                 "*",
-                "https://r0b0.ngrok.io",
+                "https://4ea1-32-221-140-83.ngrok-free.app",
                 f"https://{self.hostname}:{self.port}",
             ],
             **kwargs
