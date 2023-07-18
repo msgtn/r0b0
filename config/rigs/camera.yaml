@@ -1,0 +1,7 @@
+gadgets:
+- camera
+- pygame_keys
+cables:
+- cable: key2cam
+  tx_gadget: pygame_keys
+  rx_gadget: camera

@@ -1,0 +1,7 @@
+gadgets:
+- microphone
+- pygame_keys
+cables:
+- cable: key2mic
+  tx_gadget: pygame_keys
+  rx_gadget: microphone

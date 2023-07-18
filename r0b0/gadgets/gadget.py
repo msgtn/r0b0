@@ -15,10 +15,14 @@ import urllib3
 urllib3.disable_warnings()
 
 HEADER = 'https'
+EVENTS = []
 
 class Message(object):
     def __init__(self, *args, **kwargs):
         self.__dict__.update(**kwargs)
+        # TODO - this is a kludge
+        if kwargs.get('data',False):
+            self.__dict__.update(**kwargs['data'])
 
 class Gadget(Client, Thread):
     def __init__(self, config: dict, **kwargs):
@@ -47,6 +51,16 @@ class Gadget(Client, Thread):
             wait_timeout=2,
             )
         Client.wait(self)
+        
+    def handle_events(self,EVENTS):
+        for _event in EVENTS:
+            self.on(_event,
+                handler=getattr(
+                    self,
+                    f'{_event}_event'
+                ),
+                namespace=self.namespace
+            )
     
     @dump_msg
     def emit(self, event, data, **kwargs) -> dict:

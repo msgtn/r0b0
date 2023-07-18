@@ -7,6 +7,9 @@ from .page import Page, MobilePage
 from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys
 from .mouse import Mouse
 from .rtc import RTCGadget
+from .camera import Camera
+from .microphone import Microphone
+from .chatbot import ChatBot
 
 from r0b0.utils.loaders import load_msg, dump_msg
 
