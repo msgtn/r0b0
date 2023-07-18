@@ -79,11 +79,12 @@ class Rig(Host):
         print( tx_namespace, rx_namespace, input_event)
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
-            
+            msg_kwargs = msg_func(data)
+            if msg_kwargs is None: return
             # wrap the data into the gadget's expected message object
             emit_data = self.gadgets[
                 rx_gadget].message(
-                **msg_func(data))
+                **msg_kwargs)
             output_event = emit_data.event
             # assemble the output to emit
             emit_kwargs = dict(
@@ -113,6 +114,9 @@ class Rig(Host):
         )
 
     def multi_handler(self,data,input_event):
+        '''
+        Wrapper to handle single-input multiple-output callbacks
+        '''
         for handler_func in self.event_handlers.get(input_event,[]):
             handler_func(data)
         

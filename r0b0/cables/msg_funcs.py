@@ -172,3 +172,28 @@ def joy2mouse_button(data=None):
         }
     })
     return data
+
+def key2cam(data=None):
+    if data is None: return {'event':'keydown'}
+
+    if data['unicode']=='c':
+        return {
+            'event':'read',
+            'save':True
+        }
+    
+def key2mic(data=None):
+    if data is None: return {'event':'keydown'}
+    if data['unicode']=='m':
+        return {
+            'event':'listen',
+        }
+        
+def text2prompt(data=None):
+    if data is None: return {'event':'text'}
+    logging.warning(data)
+    return {
+        'event':'prompt',
+        'prompt':data['text']
+    }
+    

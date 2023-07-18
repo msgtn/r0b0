@@ -6,3 +6,6 @@ venv
 ngrok.sh
 tapes/*
 *notes.md
+
+# speech recognition models
+vosk*

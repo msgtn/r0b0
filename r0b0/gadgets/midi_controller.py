@@ -72,7 +72,6 @@ class MIDINamespace(Namespace):
     def on_midi_cc(self, sid, data):
         pass
 
-# TODO - subclass mido's messages
 class MIDIMessage(Message, MidoMessage):
     def __init__(self, **kwargs):
         Message.__init__(self, **kwargs)

@@ -1,0 +1,11 @@
+gadgets:
+- microphone
+- pygame_keys
+- chatbot
+cables:
+- cable: key2mic
+  tx_gadget: pygame_keys
+  rx_gadget: microphone
+- cable: text2prompt
+  tx_gadget: microphone
+  rx_gadget: chatbot
