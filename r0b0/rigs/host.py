@@ -1,4 +1,4 @@
-SOCKET_ADDR = "https://r0b0.ngrok.io"
+SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 
 import glob
 # import logging

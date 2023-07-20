@@ -50,9 +50,6 @@ pyee==11.0.0
 pygame==2.4.0
 Pygments==2.15.1
 pylibsrtp==0.8.0
-pyobjc-core==9.2
-pyobjc-framework-Cocoa==9.2
-pyobjc-framework-Quartz==9.2
 pyOpenSSL==23.2.0
 pyserial==3.5
 python-dateutil==2.8.2
