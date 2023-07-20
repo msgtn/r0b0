@@ -81,28 +81,29 @@ git submodule update --init --recursive
 ```
 
 ### Environment setup
-Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+Create a Python virtual environment (`venv`) and install from `requirements/requirements.txt`.
+This has been tested on `python3.10.12`.
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements/requirements.txt
+```
+If you run into errors, you may not be on `python3.10`. 
+In that case, change the `venv` initialization from `python3` -> `python3.10`.
+```
+python3.10 -m venv venv
+```
+This will install the base dependencies.
+To avoid clogging the `venv`, specific dependencies for specific gadgets are broken out into separate files in `requirements/`.
+For example, to install the dependencies for the `Mouse` gadget:
+```
+pip3 install -r requirements/mouse.txt
+```
+Peruse `requirements/` for other gadget dependencies to install.
+
+~~Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).~~ It's best to just use a `venv` — keeping this here for backup.
 ```
 conda env create r0b0 -f env.yaml
 conda activate r0b0
 pip3 install -r req.txt 
-```
-
-```
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements.txt
-```
-On macOS, installing `mouse` requires some other packages. Try:
-```
-pip3 install -r req.txt
-```
-If this fails, try just installing `mouse` directly:
-```
-pip3 install mouse
-```
-
-Install the `dynamixel_python` wrapper around the `dynamixel_sdk`:
-```
-pip3 install deps/dynamixel_python/
 ```
