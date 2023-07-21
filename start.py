@@ -3,6 +3,7 @@ from r0b0.utils import loaders
 from r0b0.cables import msg_funcs
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0 import logging
+from functools import partial
 
 import sys
 import argparse
@@ -27,7 +28,6 @@ def main(rig_config):
     rig.power_on()
     return rig
 
-
 if __name__=="__main__":
     
     parser = argparse.ArgumentParser()
@@ -44,9 +44,12 @@ if __name__=="__main__":
     assert rig_config is not None, "No rig config provided, either as sys.argv[1] or with --config"
     
     rig = main(rig_config)
-    
     globals().update(**rig.gadgets)
     
+    tape = rig.on_load({
+        'tape_name':'20230720201152_device_motion'})
+    play_tape = partial(rig.on_play, data={
+        'tape_name':'20230720201152_device_motion'})
     
     try:
         if rig.is_pygame_rig:

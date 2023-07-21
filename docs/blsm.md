@@ -205,3 +205,7 @@ For example, to set the ID of motor 1 to 7 in using `r0b0.scripts.motor_calib.py
 set_param('torque_enable',{1:False})
 set_param('id',{1:7})
 ```
+### Can't control from phone
+On the mobile interface, turning on the control switch should first prompt a request for access to the device orientation.
+If this is not popping up, ensure that `socketAddr`/`SOCKET_ADDR` are defined appropriately in `r0b0/rigs/static/controller.js` and `r0b0/rigs/host.py`.
+They should be set to the `ngrok` address tunnelling to `https://localhost:8080`, e.g. `https://104e-32-221-140-83.ngrok-free.app`.

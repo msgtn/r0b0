@@ -166,4 +166,35 @@ Because `pygame` makes it difficult to handle events in non-main threads, using 
 A `Tape` is a special `Gadget` that stores a stream of events as a `json`.
 This is analogous to `rosbag`s but less bespoke to robots.
 
-To start recording
+The `rig` functions as a tape player with functionality to record, load, and play tapes.
+### Recording
+To start recording, send a `record` event with the `event` to record, e.g. as seen in Blossom's `r0b0/rigs/static/controller.js`:
+```
+socket.emit("record", {
+    record: recording,        // boolean to start (True) or stop (stop)
+    event: "device_motion",   // the event to record
+    id: socket.id,            // a unique identifier for the gadget recording, used by the recorder
+  });
+```
+In the Blossom interface, press the large red 'record' button in the center to start recording, move the phone around, and press the 'record' button again to stop.
+This will save a time-labelled stream of `device_motion` events to `tapes/20230720_device_motion.json`.
+
+### Loading
+In the command line interface:
+```
+rig.on_load({'tape_name':'20230720_device_motion.json'})
+```
+
+### Playing
+In the command line interface:
+```
+rig.on_play({'tape_name':'20230720_device_motion.json'})
+```
+
+### TODO
+
+The docs for this are a work in progress - a TODO is to create a higher-level interface than calling the `rig` functions directly.
+Also, a kludge is that playback requires the original gadget — the one that emitted the events that are recorded — to be connected during playback.
+Another TODO is to spoof this gadget, e.g. recording a sequence with a midi controller, then playing it back without the original midi controller connected.
+The hinges on the Cable functions working without the Gadgets connected — maybe this is already supported? The Cable functions don't need to know whether the Gadgets are connected in the first place; all they are concerned with is the input/output namespace.
+This should be fine with the `blsm` configuration that only has the `blsm_phone` and `blsm_dxl` gadgets, as the `blsm_phone` gadget does not require any hardware.
