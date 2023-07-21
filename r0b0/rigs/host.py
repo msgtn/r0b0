@@ -1,4 +1,5 @@
 SOCKET_ADDR = "https://r0b0.ngrok.io"
+# SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 
 import glob
 # import logging
@@ -136,16 +137,22 @@ class Host(Thread, SocketIO):
     
     def on_load(self, data):
         logging.debug(data)
-        tape_name = data['tapeName']
+        tape_name = data['tape_name']
+        if tape_name in self.tapes.keys():
+            return None
         tape = Tape.load(tape_name)
         if tape:
             self.tapes.update({
                 tape_name:tape
             })
+        return tape
         
     def on_record(self, data):
         '''
-        data = {record: true/false, event: str}
+        data = {
+            record: true(start)/false(stop),
+            event: str
+        }
         '''
         id_event = f"{data['id']}_{data['event']}"
         
@@ -165,7 +172,7 @@ class Host(Thread, SocketIO):
     def on_play(self, data):
         tape = self.tapes.get(data['tape_name'],None)
         if tape is not None:
-            tape.start()            
+            tape.play()
 
     # no metaphor for this one
     def _webrtc_setup(self):

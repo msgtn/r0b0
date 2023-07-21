@@ -37,6 +37,7 @@ class Tape(Gadget):
         self.playing_thread = Thread(
             target=self._play,
         )
+        self.started=False
         
     @classmethod
     def load(self,name):
@@ -63,15 +64,24 @@ class Tape(Gadget):
             logging.debug("Waiting for client connect")
             
         logging.debug(self.namespaces)
+        self.started = True
+        
+    def play(self):
+        if not self.started: self.start()
         self.playing_thread.start()
+        self.playing_thread = Thread(
+            target=self._play,
+        )
         
     def _play(self):
         t_last = 0
         for f,frame in enumerate(self.get_frame()):
+            logging.debug(frame)
             self.emit(**frame)
             # print(frame)
             time.sleep(frame['data']['time']-t_last)
             t_last = frame['data']['time']
+        logging.debug('Done playing tape')
             
     def _normalize_time(self):
         t_0 = self.tape[0]['data']['time']
@@ -97,7 +107,7 @@ class Tape(Gadget):
         assert abs(in_idx)<len(self.tape) and abs(out_idx)<len(self.tape), "Indices longer than tape"
         subtape = self.tape[in_idx:out_idx]
         for f,frame in enumerate(subtape):
-            print(frame['data']['time'])
+            # print(frame['data']['time'])
             # yield [frame, f==(len(subtape)-1)]
             yield frame
         
