@@ -98,12 +98,18 @@ To test if the ID was changed successfully, we can toggle the LED.
 m2.set_led(True)
 m2.set_led(False)
 ```
+To set the motor to the default position:
+```
+# for XL330
+m2.set_goal_position(1000)
+# for XL320
+m2.set_goal_position(700) # for the towers:700 ; for the ears: 0
+```
 To stop the script, type `Ctrl+D`.
 Repeat this for motor IDs 3, 4, and 5.
 
-
 ### Start the robot
-With the motor controller plugged in, start the robot (*Note: replace `blsm` with `blsm_320` if you are using the [older version of Blossom that uses XL320 motors](https://github.com/hrc2/blossom-public), replace `blsm` with `blsm_320`.*):
+With the motor controller plugged in, start the robot (*Note: if you are using the [older version of Blossom that uses XL320 motors](https://github.com/hrc2/blossom-public), replace `blsm` with `blsm_320`.*):
 ```
 python3 start.py --config blsm
 ```

@@ -43,7 +43,6 @@ def set_param(param,id_dict) -> None:
     for old_id,new_id in id_dict.items():
         getattr(dxl_mgr.dxl_dict[str(old_id)], f"set_{param}")(new_id)
 
-
 if __name__=="__main__":
     
     add_motors(MOTOR_ID_LIMIT)
