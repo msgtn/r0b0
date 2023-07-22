@@ -35,6 +35,7 @@ Generate ssl keys for the interface:
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout r0b0/key.pem -out r0b0/csr.pem
 ```
 
+### Motor controller
 We need to figure out the USB port that the motor controller (e.g. U2D2, USB2AX) is connected to.
 Run `ls /dev/tty*` twice, once with the motor controller connected and again with it disconnected, and take note of the port that disappeared, e.g. `/dev/ttyUSB0`.
 Modify `r0b0/config/gadgets/blsm_dxl.yaml` with this `usb_port`:
@@ -43,6 +44,7 @@ type: DynamixelRobot
 usb_port: /dev/ttyUSB0
 ```
 
+### ngrok (for interface)
 Sign up for `ngrok`, then download:
 ```
 wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm64.tgz
@@ -68,7 +70,40 @@ and `r0b0/rigs/static/host.py`:
 SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 ```
 
-With the motor controller plugged in, start the robot:
+### Motor calibration
+Next, we will calibrate the motors.
+Open `r0b0/scripts/motor_calib.py` and select / modify the parameters (motor model, USB port, baud rate) towards the top for your configuration (XL330 for the new version of the robot, XL320 for the old version):
+```
+# for XL330 motors
+MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl330-m288','/dev/tty.usbserial-FT1SF1UM',57600
+# for XL320 motors
+MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbmodem212401',1e6
+```
+With **one motor connected at a time**, run this calibration script:
+```
+python3 -m r0b0.scripts.motor_calib
+```
+This will scan for connected motors, and should find the connected motor, usually with ID 1 if it has not yet been set. 
+The script will pause at `(Pdb)` — this means that the script has started successfully and is now in a debugging loop.
+To set the ID, for example from 1 to 2:
+```
+m1 = dxl_mgr.dxl_dict['1']
+m1.set_torque_enable(False)
+m1.set_id(2)
+m2 = dxl_mgr.dxl_dict['2']
+m2.set_torque_enable(True)
+```
+To test if the ID was changed successfully, we can toggle the LED.
+```
+m2.set_led(True)
+m2.set_led(False)
+```
+To stop the script, type `Ctrl+D`.
+Repeat this for motor IDs 3, 4, and 5.
+
+
+### Start the robot
+With the motor controller plugged in, start the robot (*Note: replace `blsm` with `blsm_320` if you are using the [older version of Blossom that uses XL320 motors](https://github.com/hrc2/blossom-public), replace `blsm` with `blsm_320`.*):
 ```
 python3 start.py --config blsm
 ```

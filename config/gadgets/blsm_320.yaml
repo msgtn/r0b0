@@ -5,36 +5,20 @@ motors: # use these same names as kwargs to constructors
 - name: tower_1
   model: xl320
   id: 1
-  mode: position
-  position:
-    reset: 0
-    min: -40
-    max: 140
+  mode: 3
   moving_speed: 400
 - name: tower_2
   model: xl320
   id: 2
-  mode: position
-  position:
-    reset: 0
-    min: -40
-    max: 140
+  mode: 3
   moving_speed: 400
 - name: tower_3
   model: xl320
   id: 3
-  mode: position
-  position:
-    reset: 0
-    min: -40
-    max: 140
+  mode: 3
   moving_speed: 400
 - name: base
   model: xl320
   id: 4
-  mode: position
-  position:
-    reset: 0
-    min: -40
-    max: 140
+  mode: 3
   moving_speed: 400

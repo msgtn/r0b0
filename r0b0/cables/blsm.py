@@ -1,9 +1,9 @@
 from r0b0 import logging
 import numpy as np
 from r0b0.kinematics.blsm import device_motion2dxl_motor, \
+    device_motion2dxl_motor320, \
     device_motion2arduino_motor
 
-# @load_pickle
 def motion2motor(data=None):
     if data is None: return {'event':'device_motion'}
     # logging.debug(f'motion2motor {data}')
@@ -11,6 +11,17 @@ def motion2motor(data=None):
     return {
         'event':'position',        # 'value': # the function that gives
         'value':device_motion2dxl_motor(data),
+        'motor_id':[1,2,3,4],
+        'absolute':True
+    }
+    
+def motion2motor320(data=None):
+    if data is None: return {'event':'device_motion'}
+    # logging.debug(f'motion2motor {data}')
+    logging.debug(device_motion2dxl_motor320(data))
+    return {
+        'event':'position',        # 'value': # the function that gives
+        'value':device_motion2dxl_motor320(data),
         'motor_id':[1,2,3,4],
         'absolute':True
     }

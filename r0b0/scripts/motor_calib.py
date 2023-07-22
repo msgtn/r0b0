@@ -5,10 +5,10 @@ from dynamixel_python import \
     DynamixelManager, DynamixelMotor, ReadError
     
 MOTOR_ID_LIMIT = 20
+# for XL330 motors
 MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl330-m288','/dev/tty.usbserial-FT1SF1UM',57600
-# MOTOR_MODEL = 'xl330-m077'
-# MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbserial-FT2KQD1N',1e6
-# MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbmodem212401',1e6
+# for XL320 motors
+MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbmodem212401',1e6
 BAUD_DICT = {
     57600:1,
     115200:2,
@@ -18,10 +18,6 @@ BAUD_DICT = {
 
 dxl_mgr = DynamixelManager(
     usb_port=USB_PORT,
-    # usb_port='/dev/tty.usbserial-FT1SF1UM',
-    # usb_port='/dev/tty.usbserial-FT2KQD1N',
-    # usb_port='/dev/tty.usbmodem212401',
-    # baud_rate=57600,
     baud_rate=BAUD_RATE,
 )
 

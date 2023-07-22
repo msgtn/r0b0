@@ -249,14 +249,28 @@ RAD2DXL = [
 ]
 def device_motion2dxl_motor(ori, portrait=True, sensitivity=1.0):
     motor_pos = device_motion2motor(ori,portrait,sensitivity)
-    # motor_pos = list(map(int, map(
-    #     partial(np.interp,
-    #         xp=[-10,140],
-    #         fp=[0,2048]),
-    #     motor_pos)))
-    
     motor_dxl = []
     for _motor_pos,xp_fp in zip(motor_pos,RAD2DXL):
+        motor_dxl.append(
+            int(np.interp(
+                _motor_pos,
+                xp=xp_fp[0],
+                fp=xp_fp[1]
+            ))
+        )
+    # motor_pos[3] = int(np.interp(motor_pos[3],xp=[-160,160],fp=[0,4090]))
+    return motor_dxl
+
+RAD2DXL320 = [
+    [[-10,140],[0,500]],
+    [[-10,140],[0,500]],
+    [[-10,140],[0,500]],
+    [[-140,140],[0,1000]],
+]
+def device_motion2dxl_motor320(ori, portrait=True, sensitivity=1.0):
+    motor_pos = device_motion2motor(ori,portrait,sensitivity)
+    motor_dxl = []
+    for _motor_pos,xp_fp in zip(motor_pos,RAD2DXL320):
         motor_dxl.append(
             int(np.interp(
                 _motor_pos,

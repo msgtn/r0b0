@@ -1,0 +1,10 @@
+type: MobilePage
+route_urls:
+  /: react_test.html
+event_kwargs:
+  # record:
+  #   namespace: /phone
+  device_motion:
+    # namespace: /
+    # namespace: /blsm_phone
+  

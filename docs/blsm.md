@@ -118,7 +118,9 @@ SOCKET_ADDR = "https://someRandomLettersAndNumbers.ngrok.app"
 
 
 ### `blsm` rig
-Start the `blsm` rig, which contains the `blsm_dxl` robot as a `DynamixelRobot` and the `bslm_phone` browser-based interface as a `Page`. The `motion2motor` cable translates `device_motion` events from the page (when accessed from a mobile browser) into `position` events for the motor.
+Start the `blsm` rig, which contains the `blsm_dxl` robot as a `DynamixelRobot` and the `bslm_phone` browser-based interface as a `Page`.
+The `motion2motor` cable translates `device_motion` events from the page (when accessed from a mobile browser) into `position` events for the motor.
+*Note: if using the older Blossom
 ```
 python3 start.py --config blsm
 ```

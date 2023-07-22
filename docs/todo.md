@@ -9,7 +9,6 @@
 - [ ] DynamixelRobot - motor movement events
   - [ ] Implement motor events when moved - get/set `moving_threshold`
   - [ ] clean redundant functions
-  - [ ] Improve motion smoothness — maybe due to velocity and profiles?
 - [ ] Docker Image
 - [ ] PyGame event loop in Rig - use pygame.event.set_allowed() to filter queueable events
 - [ ] Occasional/eventual disconnects between mobile app controller and broadcaster
