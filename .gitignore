@@ -5,7 +5,7 @@ venv*
 *.pem
 ngrok.sh
 tapes/*
-!tapes
+!tapes/blsm_*
 *notes.md
 
 # speech recognition models

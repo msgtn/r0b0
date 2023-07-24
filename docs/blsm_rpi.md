@@ -103,7 +103,7 @@ To set the motor to the default position:
 # for XL330
 m2.set_goal_position(1000)
 # for XL320
-m2.set_goal_position(700) # for the towers:700 ; for the ears: 0
+m2.set_goal_position(700) # for the towers:700 ; for the ears:-; for the base: 500
 ```
 To stop the script, type `Ctrl+D`.
 Repeat this for motor IDs 3, 4, and 5.

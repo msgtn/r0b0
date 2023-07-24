@@ -13,6 +13,7 @@ from r0b0.utils.loaders import load_msg,dump_msg
 from r0b0.gadgets import Tape
 from r0b0 import logging, get_timestamp
 
+import os
 from aiohttp import web
 from socketio import AsyncServer, Server, Namespace
 import pickle
@@ -133,20 +134,28 @@ class Host(Thread, SocketIO):
         for player_event in player_events:
             SocketIO.on_event(self,
                 player_event,
-                getattr(self,f"on_{player_event}"))
+                getattr(self,f"on_{player_event}"))   
+        self.app.add_url_rule(
+            '/tapes',
+            view_func=self.get_tapes,
+        )
+
+    def get_tapes(self):
+        # tapes = send_from_directory()
+        return sorted(os.listdir(TAPES_DIR))
     
     def on_load(self, data):
         logging.debug(data)
         tape_name = data['tape_name']
         if tape_name in self.tapes.keys():
-            return None
+            return self.tapes[tape_name]
         tape = Tape.load(tape_name)
         if tape:
             self.tapes.update({
                 tape_name:tape
             })
         return tape
-        
+    
     def on_record(self, data):
         '''
         data = {
@@ -170,9 +179,19 @@ class Host(Thread, SocketIO):
         logging.debug(self.tapes)
         
     def on_play(self, data):
+        logging.debug(data)
         tape = self.tapes.get(data['tape_name'],None)
+        # tape is loaded, so play
         if tape is not None:
             tape.play()
+        else:
+            # try to load tape
+            tape = self.on_load(data)
+            if tape is not None:
+                tape.play()
+            # could not load tape
+            else:
+                logging.warning(f"No tape {data['tape_name']}, cannot play")
 
     # no metaphor for this one
     def _webrtc_setup(self):

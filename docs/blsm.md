@@ -116,6 +116,9 @@ In `host.py`:
 SOCKET_ADDR = "https://someRandomLettersAndNumbers.ngrok.app"
 ```
 
+### Motor calibration
+With **one motor connected at a time**, 
+
 
 ### `blsm` rig
 Start the `blsm` rig, which contains the `blsm_dxl` robot as a `DynamixelRobot` and the `bslm_phone` browser-based interface as a `Page`.
@@ -165,6 +168,19 @@ You should see video feed from the webcam selected in `https://localhost:8080/br
 Hold the phone straight in front of you, as if you were taking a picture of something directly in front of you. 
 Toggle the 'head' switch to turn on control and begin transmitting the phone orientation to the robot.
 The U2D2 motor controller should start blinking blue: this indicates that it is sending motor commands.
+
+### Recording movements
+To begin recording a movement, click the large red recording button in the center.
+Move the phone to control the robot, then click the recording button again to stop.
+This will save the motion as a `Tape` in the `/tapes` directory(more documentation [here](/r0b0/gadgets/README.md)).
+
+### Player
+Another page enables playback of `Tapes`.
+In either the desktop or mobile browser, navigate to `https://someRandomLettersAndNumbers.ngrok.app/player`.
+Click 'Update' to populate the dropdown with the tape files in `/tapes`.
+Select a tape and click 'Play' to begin playback.
+If you create new movement recordings using the controller interface, you can repopulate the dropdown by clicking 'Update' without having to refresh the page.
+Note that tapes are only loaded once in the backend, so if you manually rename files, you must restart the whole `start.py` script to override the cached tape.
 
 
 ## Appendix

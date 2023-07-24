@@ -57,11 +57,12 @@ class Tape(Gadget):
         logging.debug(f"Tape namespace: {self.namespace}")
         # connect to server
         Gadget.start(self)
-        logging.debug(self)
         # while len(self.namespaces)==0:
-        while self.namespaces.get(self.namespace,None) is None:
+        max_retries = 100
+        while max_retries>0 and self.namespaces.get(self.namespace,None) is None:
             # continue
             logging.debug("Waiting for client connect")
+            max_retries -= 1
             
         logging.debug(self.namespaces)
         self.started = True
