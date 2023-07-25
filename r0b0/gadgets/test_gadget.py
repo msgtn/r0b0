@@ -1,26 +1,15 @@
 import unittest
-# from .gadget_socket import *
-# from .gadget_socket import Socket
-# server.start_server('localhost',8080)
 import socketio
-# from r0b0.gadget_socket import Socket, MIDISocket
-from r0b0.gadgets.page import Page
-from r0b0.rigs.host import Host
-# from .gadget import Gadget, MIDIController, Robot
-from . import Gadget, MIDIController, Robot
-import mido
-import json
-from r0b0.utils import loaders
 import time
-import random
-import copy
-import asyncio
+from r0b0.gadgets import Gadget, MIDIController
+from r0b0.rigs.host import Host
+from r0b0.utils import loaders
 from r0b0.config import \
     CONFIG_DIR, \
     LOCALHOST, MIDI_HOST, ROBOT_HOST, \
     SERVER_PORT, MIDI_PORT, ROBOT_PORT
 
-port_ctr = 9000
+# port_ctr = 9000
 
 sio = socketio.Client()
 host = Host(
@@ -37,7 +26,7 @@ class GadgetTest(unittest.TestCase):
         # port_ctr += 2
         # self.port_ctr = port_ctr
         self.gadget = Gadget(
-            config=loaders.load_gadget('testgadget'),
+            config=loaders.load_gadget('gadget'),
             hostname=LOCALHOST,
             port=SERVER_PORT,
             )
@@ -94,18 +83,3 @@ class MIDIGadgetTest(GadgetTest):
     
     def tearDown(self):
         super().tearDown()
-
-@unittest.skip('')            
-class PhoneTest(GadgetTest):
-    def setUp(self):
-        super().setUp()
-        config = loaders.load_gadget('test_phone')
-        self.gadget = Page(config)
-        
-    # def test_on_device_motion(self):
-    def test_on_record(self):
-        self.gadget.on_record('test')
-        
-    @unittest.expectedFailure
-    def test_on_record_no_msg(self):
-        self.gadget.on_record()

@@ -1,4 +1,8 @@
-const socketAddr = "https://r0b0.ngrok.io";
+// const socketAddr = "https://r0b0.ngrok.io";
+const socketAddr = "https://a6f7039dadaa.ngrok.app";
+
+
+
 // const socketAddr = "https://104e-32-221-140-83.ngrok-free.app";
 
 const config = {

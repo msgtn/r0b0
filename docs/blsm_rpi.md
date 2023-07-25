@@ -60,6 +60,7 @@ ngrok http https://localhost:8080
 ```
 This will start tunneling from some randomly generated address, e.g.
 `https://104e-32-221-140-83.ngrok-free.app`.
+Note that `ngrok` must be running in a separate terminal — start it, then open another terminal to continue the instructions.
 
 Modify this into the top lines of `r0b0/rigs/static/controller.js` :
 ```

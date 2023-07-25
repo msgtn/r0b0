@@ -84,3 +84,18 @@ def joy2vel(data=None):
         'value':value,
         'absolute':True,
     }
+   
+def response2blsm(data=None):
+    if data is None: return {'event':'response'}
+    logging.warning(data)
+    res = data['response']
+    # blsm_tape = f"blsm_{res.split('.')[0].lower()}"
+    
+    # logging.warning(tape)
+    return {
+        'event':'play',
+        'tape_name':f"blsm_{res.split('.')[0].lower()}"
+    }
+    
+    
+    

@@ -1,4 +1,7 @@
 SOCKET_ADDR = "https://r0b0.ngrok.io"
+SOCKET_ADDR = "https://a6f7039dadaa.ngrok.app"
+
+
 # SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 
 import glob
@@ -31,6 +34,12 @@ import time
 import json
 # TODO - try to remove dependency of having to import Thread first
 # to call the correct *.run()
+
+
+PLAYER_EVENTS = [
+    'load','play','record',
+]
+
 class Host(Thread, SocketIO):      
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         self.app = app = Flask(
@@ -77,10 +86,14 @@ class Host(Thread, SocketIO):
         
         # self.power_on, self.power_off = self.start, self.join
     
+    # @dump_msg
     def emit(self, *args, **kwargs):
         logging.debug(args)
         logging.debug(kwargs)
-        SocketIO.emit(self, *args, **kwargs)
+        if kwargs['event'] in PLAYER_EVENTS:
+            getattr(self,f"on_{kwargs['event']}")(*args, **kwargs)
+        else:
+            SocketIO.emit(self, *args, **kwargs)
 
     @load_msg
     def add_url(self, data):
@@ -128,10 +141,7 @@ class Host(Thread, SocketIO):
     # metaphor - VCR player
     def _player_setup(self):
         self.tapes = OrderedDict()
-        player_events = [
-            'load','play','record',
-        ]
-        for player_event in player_events:
+        for player_event in PLAYER_EVENTS:
             SocketIO.on_event(self,
                 player_event,
                 getattr(self,f"on_{player_event}"))   
@@ -178,10 +188,19 @@ class Host(Thread, SocketIO):
                 tape.save()
         logging.debug(self.tapes)
         
-    def on_play(self, data):
+    @load_msg
+    def on_play(self, data, **kwargs):
         logging.debug(data)
+        if 'msg' in data:
+            data.update(data['msg'].__dict__)
         tape = self.tapes.get(data['tape_name'],None)
-        # tape is loaded, so play
+        if tape is None and 'msg' in data:
+            # tape = self.tapes.getattr(data['msg'],'tape_name',None)
+            tape = self.tapes.get(
+                getattr(data['msg'],'tape_name',None),None
+            )
+        logging.debug(f"tape {tape}")
+            
         if tape is not None:
             tape.play()
         else:

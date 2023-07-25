@@ -25,7 +25,7 @@ motors: # use these same names as kwargs to constructors
   model: xl330-m288
   id: 4
   mode: 3
-  profile_velocity: 200
+  profile_velocity: 300
   profile_acceleration: 100
 - name: left_wheel
   model: xl330-m077

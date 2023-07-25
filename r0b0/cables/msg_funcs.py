@@ -197,3 +197,13 @@ def text2prompt(data=None):
         'prompt':data['text']
     }
     
+        
+def text2yes_no_prompt(data=None):
+    if data is None: return {'event':'text'}
+    logging.warning(data)
+    data['text'] += "? Respond with either yes or no."
+    logging.warning(data['text'])
+    return {
+        'event':'prompt',
+        'prompt':data['text']
+    }

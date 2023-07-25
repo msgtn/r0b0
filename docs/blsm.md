@@ -116,6 +116,8 @@ In `host.py`:
 SOCKET_ADDR = "https://someRandomLettersAndNumbers.ngrok.app"
 ```
 
+Note that `ngrok` must be running in a separate terminal — start it, then open another terminal to continue the instructions.
+
 ### Motor calibration
 With **one motor connected at a time**, 
 

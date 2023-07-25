@@ -17,6 +17,7 @@ pgTime.Clock().tick(1)
 from r0b0 import gadgets as gadget_shelf, \
     cables as r0b0_msgs, \
     logging
+from r0b0.gadgets.gadget import Message
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.utils import loaders
 from r0b0.rigs.host import Host
@@ -66,9 +67,11 @@ class Rig(Host):
         return self.gadgets
     
     def _get_gadget_namespace(self, gadget):
+        # if gadget is None: return '/'
+        if gadget is None: return None
         return self.gadgets.get(gadget).namespace
         
-    def add_message(self, tx_gadget, rx_gadget, cable):
+    def add_message(self, cable, tx_gadget=None, rx_gadget=None):
         # logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         
         tx_namespace, rx_namespace = map(
@@ -76,15 +79,20 @@ class Rig(Host):
             [tx_gadget, rx_gadget])
         msg_func = getattr(r0b0_msgs,cable)
         input_event = msg_func()['event']
-        print( tx_namespace, rx_namespace, input_event)
+        logging.debug( tx_namespace, rx_namespace, input_event )
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
             msg_kwargs = msg_func(data)
             if msg_kwargs is None: return
             # wrap the data into the gadget's expected message object
-            emit_data = self.gadgets[
-                rx_gadget].message(
-                **msg_kwargs)
+            if rx_gadget is None:
+                emit_data = Message(**msg_kwargs)
+                include_self=True
+            else:
+                emit_data = self.gadgets[
+                    rx_gadget].message(
+                    **msg_kwargs)
+                include_self=False
             output_event = emit_data.event
             # assemble the output to emit
             emit_kwargs = dict(
@@ -93,6 +101,7 @@ class Rig(Host):
                     'event':output_event,
                     'msg':pickle.dumps(emit_data)},
                 to=None,
+                include_self=include_self,
                 namespace=rx_namespace
             )
             logging.debug(f'func_emit {emit_kwargs}')

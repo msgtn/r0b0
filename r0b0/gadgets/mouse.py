@@ -11,6 +11,10 @@ import numpy as np
 
 import mouse
 
+EVENTS = [
+    'mouse_move','mouse_button','mouse_place'
+]
+
 '''
 Mouse move events:
 - axis: 0 (x, horizontal), 1 (y, vertical)
@@ -33,9 +37,7 @@ class Mouse(Gadget):
         #     namespace=self.namespace)
         # self.on('mouse_place',
         #     handler=)
-        self.assign_handlers([
-            'mouse_move','mouse_button','mouse_place'
-        ])
+        self.handle_events(EVENTS)
         
         self.velocity = [0,0,0,0]
         

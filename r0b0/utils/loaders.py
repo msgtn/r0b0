@@ -40,7 +40,8 @@ def dump_msg(func):
         # logging.debug(event)
         # logging.debug(data)
         # logging.debug(kwargs)
-        if data.get('msg',None) is not None:
+        # if data.get('msg',None) is not None:
+        if 'msg' in data:
             data['msg']=pickle.dumps(data['msg'])
         return func(s,event,data,**kwargs)
     return _inner_func

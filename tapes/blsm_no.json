@@ -3,9 +3,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4955434184826755,
-            "y": 0.7101788574021041,
-            "z": 6.262383845571458,
+            "x": 1.4743044225230202,
+            "y": -0.018549290339975166,
+            "z": 0.034263218766248715,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -17,9 +17,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306280254,
+            "time": 16903020550543,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -27,9 +27,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4879130502066986,
-            "y": 0.656599123186208,
-            "z": 6.265025590899169,
+            "x": 1.4724111221914677,
+            "y": -0.06339078685773826,
+            "z": 0.045344488822695324,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -41,9 +41,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306280917,
+            "time": 16903020551241,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -51,9 +51,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4678411242147762,
-            "y": 0.5838764783088504,
-            "z": 6.265784744246859,
+            "x": 1.4687998370652502,
+            "y": -0.07935272090319168,
+            "z": 0.05365904184156727,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -65,9 +65,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306281438,
+            "time": 16903020551904,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -75,9 +75,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4411073005111086,
-            "y": 0.5523338305718823,
-            "z": 0.017896419182982366,
+            "x": 1.4667015247731952,
+            "y": -0.09871163579362616,
+            "z": 0.0742998702163865,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -89,9 +89,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306282085,
+            "time": 16903020552571,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -99,9 +99,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4029545239617949,
-            "y": 0.4895551058408585,
-            "z": 0.07631967815325733,
+            "x": 1.4693900219140397,
+            "y": -0.031406244418024615,
+            "z": 0.1555065460923191,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -113,9 +113,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306282621,
+            "time": 16903020553221,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -123,9 +123,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.3799646951896674,
-            "y": 0.7265534522640382,
-            "z": 0.22832726238613293,
+            "x": 1.4797836662439443,
+            "y": 0.1426765611642685,
+            "z": 0.34534485093642114,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -137,9 +137,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306283249,
+            "time": 16903020553737,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -147,9 +147,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.6817496688246178,
-            "y": -1.0583275076192078,
-            "z": 0.43389539054317533,
+            "x": 1.5141497857819817,
+            "y": 0.011993371953003743,
+            "z": 0.7025343414969076,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -161,9 +161,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306283926,
+            "time": 16903020554226,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -171,9 +171,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.9302369695861952,
-            "y": -0.1950827497464355,
-            "z": 0.7636883176678326,
+            "x": 1.5400960439797218,
+            "y": -0.9449816523125409,
+            "z": 1.08758223027302,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -185,9 +185,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306284620,
+            "time": 16903020554730,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -195,9 +195,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.178353514684886,
-            "y": -0.3527440162790302,
-            "z": 1.0925150175873661,
+            "x": 1.5905112241251753,
+            "y": 1.535084496247944,
+            "z": 1.417655485625181,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -209,9 +209,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306285098,
+            "time": 16903020555409,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -219,9 +219,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.3581028816003324,
-            "y": -0.46605923187259907,
-            "z": 1.3243885406779918,
+            "x": 1.5812761171954965,
+            "y": 1.5123697241811969,
+            "z": 1.5050365369398038,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -233,9 +233,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306285744,
+            "time": 16903020556050,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -243,9 +243,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.3894443531623426,
-            "y": -0.41368127842250874,
-            "z": 1.296658127703555,
+            "x": 1.5596369512796555,
+            "y": -0.7545514883406675,
+            "z": 1.4395005075203613,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -257,9 +257,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306286287,
+            "time": 16903020556734,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -267,9 +267,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.4018276844042594,
-            "y": -0.30489951779817986,
-            "z": 1.2193113404854115,
+            "x": 1.5642116313392425,
+            "y": -0.29671368326865416,
+            "z": 1.3454448043544414,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -281,9 +281,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306286935,
+            "time": 16903020557226,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -291,9 +291,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.39883635645526,
-            "y": -0.2526600324601703,
-            "z": 1.1666349697690988,
+            "x": 1.533568825301412,
+            "y": 0.46593795022667545,
+            "z": 1.0997710876313398,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -305,9 +305,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306287449,
+            "time": 16903020557887,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -315,9 +315,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.3897043505402675,
-            "y": -0.24354734682817114,
-            "z": 1.153789610299969,
+            "x": 1.49576251852578,
+            "y": 0.6458989816389128,
+            "z": 0.735615002712114,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -329,9 +329,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306288097,
+            "time": 16903020558576,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -339,9 +339,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.382566901618465,
-            "y": -0.2642678332684226,
-            "z": 1.1701160586814494,
+            "x": 1.4143071095984459,
+            "y": 0.6486834447177701,
+            "z": 0.19872210514047128,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -353,9 +353,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306288774,
+            "time": 16903020559248,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -363,9 +363,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.378002812439736,
-            "y": -0.2761727292356056,
-            "z": 1.1797821661380707,
+            "x": 1.3847534591825175,
+            "y": 0.7827966539951384,
+            "z": 6.039763944773204,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -377,9 +377,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306289455,
+            "time": 16903020559700,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -387,9 +387,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.3730454335961237,
-            "y": -0.28765541960469687,
-            "z": 1.1792039526204483,
+            "x": 1.4148562775499944,
+            "y": 0.9256307876815417,
+            "z": 5.631209747538186,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -401,9 +401,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306290130,
+            "time": 16903020560415,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -411,9 +411,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.3482204626207333,
-            "y": -0.2940610892024301,
-            "z": 1.1454813104409427,
+            "x": 1.4435583515241304,
+            "y": 0.9337855753620278,
+            "z": 5.324368075712625,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -425,9 +425,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306290770,
+            "time": 16903020561067,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -435,9 +435,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.2396185026638937,
-            "y": -0.31551801983367245,
-            "z": 1.0270445898519205,
+            "x": 1.4530329399394215,
+            "y": 0.9935488821725766,
+            "z": 5.1042869721672695,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -449,9 +449,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306291470,
+            "time": 16903020561571,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -459,9 +459,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.9960134557086873,
-            "y": -0.34273114163950924,
-            "z": 0.659539834626413,
+            "x": 1.4626954716140694,
+            "y": 1.2120906986940818,
+            "z": 4.9204640865047455,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -473,9 +473,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306292105,
+            "time": 16903020562225,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -483,9 +483,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.7748880732080068,
-            "y": -0.7567434930455581,
-            "z": 0.24005244917122093,
+            "x": 1.4766700016331584,
+            "y": 1.5332473528890154,
+            "z": 4.86024499807363,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -497,9 +497,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306292611,
+            "time": 16903020562889,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -507,9 +507,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.236046900688264,
-            "y": 0.9017438786341816,
-            "z": 6.049551931340359,
+            "x": 1.6725784348465582,
+            "y": -1.4459715777140922,
+            "z": 4.858094185608795,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -521,9 +521,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306293255,
+            "time": 16903020563562,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -531,9 +531,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.040278851902108,
-            "y": 0.5745258331548329,
-            "z": 5.806225471482145,
+            "x": 1.6808012322079102,
+            "y": -1.5102987208344234,
+            "z": 4.914601667970815,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -545,9 +545,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306293967,
+            "time": 16903020564256,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -555,9 +555,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.9850243205433709,
-            "y": 0.42687750460068197,
-            "z": 5.585248074642057,
+            "x": 1.4589338669456207,
+            "y": 1.4948906327983378,
+            "z": 5.038275793571767,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -569,9 +569,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306294610,
+            "time": 16903020564706,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -579,9 +579,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.9806060640700399,
-            "y": 0.2730604506948087,
-            "z": 5.477435557392327,
+            "x": 1.4578371508323846,
+            "y": 1.1200494574956155,
+            "z": 5.381307788777686,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -593,9 +593,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306295089,
+            "time": 16903020565412,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -603,9 +603,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.0545696217858294,
-            "y": 0.031479490743069584,
-            "z": 5.324890233628767,
+            "x": 1.495228490079512,
+            "y": 1.0328630625350357,
+            "z": 6.100043912333878,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -617,9 +617,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306295739,
+            "time": 16903020566058,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -627,9 +627,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.0400371903111088,
-            "y": -0.1245004415161413,
-            "z": 5.2523740222907955,
+            "x": 1.5285020432541563,
+            "y": 0.22513131078444787,
+            "z": 0.4889053751190262,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -641,9 +641,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306296273,
+            "time": 16903020566729,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -651,9 +651,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.9510124208548179,
-            "y": -0.08238636857036544,
-            "z": 5.235922583597562,
+            "x": 1.58632818074365,
+            "y": -0.14140687575481536,
+            "z": 1.1932772787350712,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -665,9 +665,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306296906,
+            "time": 16903020567379,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -675,9 +675,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.889227986772,
-            "y": -0.030952619463554636,
-            "z": 5.24067382593197,
+            "x": 1.5128279419364905,
+            "y": 0.09150949439964838,
+            "z": 1.4152768958039836,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -689,9 +689,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306297426,
+            "time": 16903020568092,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -699,9 +699,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.8231559562712124,
-            "y": -0.00044968549372921784,
-            "z": 5.238078083031991,
+            "x": 1.4929108158424798,
+            "y": 0.42612341584179586,
+            "z": 1.5508672231098322,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -713,9 +713,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306298104,
+            "time": 16903020568696,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -723,9 +723,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.7919430836340274,
-            "y": 0.025571806595643207,
-            "z": 5.228188563363988,
+            "x": 1.49169393911858,
+            "y": 0.49701089425585504,
+            "z": 1.540403412247374,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -737,9 +737,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306298640,
+            "time": 16903020569250,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -747,9 +747,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.7737897770570327,
-            "y": 0.049243440594297146,
-            "z": 5.214536262085388,
+            "x": 1.4888776264410832,
+            "y": 0.48890715174139215,
+            "z": 1.4817653327141576,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -761,9 +761,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306299262,
+            "time": 16903020569864,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -771,9 +771,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.7743805230970928,
-            "y": 0.0483714231773129,
-            "z": 5.219883103580195,
+            "x": 1.4800947212509812,
+            "y": 0.38907234839069027,
+            "z": 1.2911623104983858,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -785,9 +785,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306299927,
+            "time": 16903020570568,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -795,9 +795,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.77731189367096,
-            "y": 0.04748962454618947,
-            "z": 5.245651801591815,
+            "x": 1.4516471682275722,
+            "y": 0.3573590176549587,
+            "z": 1.0491586156605646,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -809,9 +809,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306300598,
+            "time": 16903020571125,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -819,9 +819,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.8231288772263159,
-            "y": 0.059004784139957384,
-            "z": 5.313187737150614,
+            "x": 1.392914790729802,
+            "y": 0.45815758771655474,
+            "z": 0.6560538007191723,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -833,9 +833,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306301116,
+            "time": 16903020571773,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -843,9 +843,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 0.9811853110079154,
-            "y": 0.06822763153521406,
-            "z": 5.554858195333536,
+            "x": 1.3549814927292936,
+            "y": 0.5749317681594506,
+            "z": 0.262339684221142,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -857,9 +857,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306301797,
+            "time": 16903020572383,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -867,9 +867,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.1927342619118502,
-            "y": 0.07473263433945075,
-            "z": 5.853421413878179,
+            "x": 1.3324577212879138,
+            "y": 0.6602918779195975,
+            "z": 6.194357522413298,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -881,9 +881,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306302304,
+            "time": 16903020573041,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -891,9 +891,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4302980712161333,
-            "y": 0.5741147525151032,
-            "z": 0.11595419912103358,
+            "x": 1.3363612162604364,
+            "y": 0.7379142854694347,
+            "z": 5.954406280630229,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -905,9 +905,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306302963,
+            "time": 16903020573547,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -915,9 +915,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.7522717492984876,
-            "y": -1.0954406898604754,
-            "z": 0.6210663860931579,
+            "x": 1.3551105230719853,
+            "y": 0.8166065995100308,
+            "z": 5.6209690646032,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -929,9 +929,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306303645,
+            "time": 16903020574218,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -939,9 +939,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8522737841440227,
-            "y": -1.0384112298275232,
-            "z": 0.9491163887289867,
+            "x": 1.3686259748857645,
+            "y": 0.8966046753151237,
+            "z": 5.37529624631649,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -953,9 +953,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306304307,
+            "time": 16903020574714,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -963,9 +963,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8883998740969123,
-            "y": -0.9871686517834541,
-            "z": 1.1314078058752022,
+            "x": 1.4099839166125157,
+            "y": 1.1215720222688443,
+            "z": 4.99746877419377,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -977,9 +977,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306304956,
+            "time": 16903020575391,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -987,9 +987,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.9010910196476583,
-            "y": -0.9005767389110848,
-            "z": 1.2441137647797929,
+            "x": 1.425565863406544,
+            "y": 1.2736282728426678,
+            "z": 4.815106314080117,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1001,9 +1001,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306305591,
+            "time": 16903020576033,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1011,9 +1011,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8891153731863397,
-            "y": -0.8751785864349257,
-            "z": 1.2911300980807014,
+            "x": 1.426444584415353,
+            "y": 1.3624285955575237,
+            "z": 4.7778617447857155,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1025,9 +1025,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306306264,
+            "time": 16903020576722,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1035,9 +1035,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8787610276069064,
-            "y": -0.8724463003694021,
-            "z": 1.3003177809754138,
+            "x": 1.4122896238218698,
+            "y": 1.331286735868975,
+            "z": 4.802999778824742,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1049,9 +1049,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306306944,
+            "time": 16903020577385,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1059,9 +1059,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8696348117624448,
-            "y": -0.8875864891397632,
-            "z": 1.2974988712306825,
+            "x": 1.3988934956481633,
+            "y": 1.2639858644718407,
+            "z": 4.819496320112751,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1073,9 +1073,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306307625,
+            "time": 16903020577920,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1083,9 +1083,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8631874077248667,
-            "y": -0.8961418638211681,
-            "z": 1.2974184600827703,
+            "x": 1.3892850631489544,
+            "y": 1.2186648336045185,
+            "z": 4.834682108432323,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1097,9 +1097,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306308276,
+            "time": 16903020578549,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1107,9 +1107,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.856007098249505,
-            "y": -0.9068432945216836,
-            "z": 1.2953897688235034,
+            "x": 1.3870757217476322,
+            "y": 1.1651436286403543,
+            "z": 4.887632228525501,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1121,9 +1121,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306308949,
+            "time": 16903020579234,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1131,9 +1131,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.836860148727742,
-            "y": -0.9211579860839164,
-            "z": 1.2712064541635775,
+            "x": 1.3824852849887392,
+            "y": 1.0848610753251664,
+            "z": 4.9872848312129126,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1145,9 +1145,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306309596,
+            "time": 16903020579732,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1155,9 +1155,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8068476598135104,
-            "y": -0.9455436099058702,
-            "z": 1.2179694670714398,
+            "x": 1.367349580672166,
+            "y": 0.9095531504555114,
+            "z": 5.2182567748652255,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1169,9 +1169,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306310103,
+            "time": 16903020580383,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1179,9 +1179,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.7465323402576123,
-            "y": -1.0889520439866425,
-            "z": 1.0800819064762939,
+            "x": 1.3662980029977683,
+            "y": 0.7306518436060333,
+            "z": 5.51002337797513,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1193,9 +1193,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306310784,
+            "time": 16903020581029,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1203,9 +1203,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.7067478698357479,
-            "y": -1.5293465110715778,
-            "z": 0.8537971197721206,
+            "x": 1.3661348823631967,
+            "y": 0.5683744711198794,
+            "z": 5.763862218882351,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1217,9 +1217,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306311448,
+            "time": 16903020581761,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1227,9 +1227,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.443740987323459,
-            "y": 1.1881304261643357,
-            "z": 0.6275932283263381,
+            "x": 1.349265796935977,
+            "y": 0.43872740213872274,
+            "z": 5.913209753975491,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1241,9 +1241,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306311912,
+            "time": 16903020582189,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1251,9 +1251,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.3843082583022484,
-            "y": 0.6116929078587082,
-            "z": 0.3145468432306782,
+            "x": 1.364763406490897,
+            "y": 0.3322455578558993,
+            "z": 6.130513451349845,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1265,9 +1265,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306312689,
+            "time": 16903020582892,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1275,9 +1275,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.2908021875045284,
-            "y": 0.5087136513752818,
-            "z": 6.2619238692241606,
+            "x": 1.4023161728314273,
+            "y": 0.2684627114512824,
+            "z": 0.009963408545510194,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1289,9 +1289,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306313266,
+            "time": 16903020583549,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1299,9 +1299,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.2626856044773906,
-            "y": 0.5764369627697501,
-            "z": 5.874761820845917,
+            "x": 1.4222534854994828,
+            "y": 0.23597291427206346,
+            "z": 0.06868970843963307,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1313,9 +1313,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306313941,
+            "time": 16903020584071,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1323,9 +1323,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.3462939393357376,
-            "y": 0.6389976000434495,
-            "z": 5.557348843601391,
+            "x": 1.453580360534544,
+            "y": 0.2761410931285358,
+            "z": 0.09439497631384706,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1337,9 +1337,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306314703,
+            "time": 16903020584713,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1347,9 +1347,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.4626582395384273,
-            "y": 0.7059738806750141,
-            "z": 5.4394874760741025,
+            "x": 1.4710972287033606,
+            "y": 0.3052033500548307,
+            "z": 0.0730810436354233,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1361,9 +1361,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306315109,
+            "time": 16903020585388,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1371,9 +1371,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.672242054025194,
-            "y": 0.36806821720459315,
-            "z": 5.44986750349033,
+            "x": 1.4741553113980619,
+            "y": 0.29881503971696477,
+            "z": 0.04577703297871543,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1385,9 +1385,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306315753,
+            "time": 16903020586028,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1395,9 +1395,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 1.8430528433218982,
-            "y": 0.28845631051168225,
-            "z": 5.532448563750963,
+            "x": 1.4660081023214446,
+            "y": 0.2725033551707392,
+            "z": 0.03518340049800502,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1409,9 +1409,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306316476,
+            "time": 16903020586716,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1419,9 +1419,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.0100065474166287,
-            "y": 0.22521353222988527,
-            "z": 5.555565607501988,
+            "x": 1.4643707115354665,
+            "y": 0.26635083144826927,
+            "z": 0.025988518418890303,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1433,9 +1433,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306317107,
+            "time": 16903020587257,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1443,9 +1443,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.138958362203695,
-            "y": 0.2216562138497845,
-            "z": 5.530435795674562,
+            "x": 1.4685319365183391,
+            "y": 0.2901398727978702,
+            "z": 0.021990311616116493,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1457,9 +1457,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306317625,
+            "time": 16903020587882,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1467,9 +1467,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.1817731792048622,
-            "y": 0.18951541236847247,
-            "z": 5.53945193232901,
+            "x": 1.470969461940069,
+            "y": 0.3040866508240051,
+            "z": 0.01925028151188576,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1481,9 +1481,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306318269,
+            "time": 16903020588551,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1491,9 +1491,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.1945335312092027,
-            "y": 0.12405728789755312,
-            "z": 5.567898770998505,
+            "x": 1.4727587656255618,
+            "y": 0.2983985099417774,
+            "z": 0.023263353895653163,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1505,9 +1505,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306319156,
+            "time": 16903020589230,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1515,9 +1515,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.2061313533643765,
-            "y": 0.060809814894599815,
-            "z": 5.596073605766768,
+            "x": 1.4730847778332206,
+            "y": 0.2898806090316655,
+            "z": 0.02474498510498052,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1529,9 +1529,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306319592,
+            "time": 16903020589868,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1539,9 +1539,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.1895810229730728,
-            "y": -0.022711873898411686,
-            "z": 5.674267323469678,
+            "x": 1.4736973657059804,
+            "y": 0.3103831448546872,
+            "z": 0.022047332704383707,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1553,9 +1553,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306320122,
+            "time": 16903020590549,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1563,9 +1563,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.12776587967048,
-            "y": -0.18433607744223549,
-            "z": 5.805017925757766,
+            "x": 1.4757036154714396,
+            "y": 0.37162868058749177,
+            "z": 0.01694963915581372,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1577,9 +1577,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306320770,
+            "time": 16903020591191,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     },
@@ -1587,9 +1587,9 @@
         "event": "device_motion",
         "data": {
             "event": "device_motion",
-            "x": 2.021553342447782,
-            "y": -0.42341688101021563,
-            "z": 5.966684638460092,
+            "x": 1.474010536926496,
+            "y": 0.35691541004741306,
+            "z": 0.01607232283012277,
             "ax": 0,
             "ay": 0,
             "az": 0,
@@ -1601,1713 +1601,9 @@
             "heightCtrl": false,
             "headCtrl": true,
             "yaw": 0,
-            "time": 16902306321413,
+            "time": 16903020591715,
             "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.8643067787207261,
-            "y": -0.7949877071977132,
-            "z": 6.1374684136206135,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306322124,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7675594225755569,
-            "y": -1.2405546701749928,
-            "z": 0.04334059842636731,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306322592,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.417663667434384,
-            "y": 0.49529957159966287,
-            "z": 0.45901955435402747,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306323572,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.3582290728970494,
-            "y": -0.3113091524654169,
-            "z": 0.954414487633247,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306323933,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4413587175823488,
-            "y": -0.518245989978836,
-            "z": 1.3390487205437653,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306324620,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.5109195529238018,
-            "y": -0.4227939142369823,
-            "z": 1.5704808770197778,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306325104,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6255854508939709,
-            "y": -1.372797397850729,
-            "z": 1.7482741478840857,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306325770,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6739409662771543,
-            "y": -1.3214846451968594,
-            "z": 1.806304884018014,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306326426,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6824109975906856,
-            "y": -1.3727452591740843,
-            "z": 1.7723805013370262,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306327100,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6780586452179276,
-            "y": -1.4185063352932414,
-            "z": 1.7285582697636326,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306327596,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4803933606394262,
-            "y": 1.555716713765315,
-            "z": 1.6185054945932515,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306328270,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4868556754825353,
-            "y": 1.3601644108658817,
-            "z": 1.4629773803631219,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306328914,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4780886886711913,
-            "y": 1.4721034219417284,
-            "z": 1.2498745326228256,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306329610,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4656408935123106,
-            "y": 1.5303981450004578,
-            "z": 0.8442220746824164,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306330265,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4387593444450588,
-            "y": 1.2862331490373,
-            "z": 0.2273800618554817,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306330935,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4426784155041839,
-            "y": 1.222102322131267,
-            "z": 5.809642267442933,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306331579,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4299420442774413,
-            "y": 1.5406175014225094,
-            "z": 5.535382406671868,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306332286,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.730111908949445,
-            "y": -1.453015131110974,
-            "z": 5.502353129261598,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306332754,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7252717700294227,
-            "y": -1.1794517792417558,
-            "z": 5.400313920201585,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306333463,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7195134837650123,
-            "y": -0.894538977746168,
-            "z": 5.291124330205988,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306334115,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7116376891079057,
-            "y": -0.7339237287576453,
-            "z": 5.231655767235451,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306334776,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7008192829821063,
-            "y": -0.6864629459401851,
-            "z": 5.215688485263873,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306335275,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7004859411960875,
-            "y": -0.6642077317483391,
-            "z": 5.218943952509305,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306335954,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6990517336811464,
-            "y": -0.6694530233748971,
-            "z": 5.217617048096145,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306336591,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.697318023919942,
-            "y": -0.6683991325942352,
-            "z": 5.218735062433039,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306337286,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.69543354748325,
-            "y": -0.6803737534351753,
-            "z": 5.210610698025128,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306337795,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6901321589134612,
-            "y": -0.6417402777567137,
-            "z": 5.180293818634441,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306338473,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6886517197806146,
-            "y": -0.6068069863211699,
-            "z": 5.161406339580103,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306339116,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6882406338686426,
-            "y": -0.6403684978617586,
-            "z": 5.1660779378061985,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306339814,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6884961057292318,
-            "y": -0.6208110012457267,
-            "z": 5.161866745563466,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306340261,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6899832488803355,
-            "y": -0.6211473995423545,
-            "z": 5.157626342579062,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306340938,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6919289559263164,
-            "y": -0.6191290824509391,
-            "z": 5.157357356824121,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306341582,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.695098153701536,
-            "y": -0.6615221437672696,
-            "z": 5.199149897530493,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306342286,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6994222975072995,
-            "y": -0.7932131934796993,
-            "z": 5.304045567756477,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306342783,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.702447457810481,
-            "y": -1.2639893512280203,
-            "z": 5.71322953043883,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306343406,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6573470805624873,
-            "y": -1.2897471419301612,
-            "z": 0.11161023466548614,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306344105,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.5242109747089068,
-            "y": 1.5219250201108872,
-            "z": 0.7056434434499942,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306344781,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6175074271816894,
-            "y": -1.1264188342394716,
-            "z": 1.0736799860375186,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306345267,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6564497825186104,
-            "y": -0.41657642501588305,
-            "z": 1.4141804829974651,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306345943,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6779645680400863,
-            "y": -0.15703691566053835,
-            "z": 1.5492815715982475,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306346586,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.685011805703203,
-            "y": -0.12000626308308705,
-            "z": 1.5788230135860362,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306347287,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6840382068957662,
-            "y": -0.13688063370759287,
-            "z": 1.574221973574152,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306347751,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6842430805985287,
-            "y": -0.14293613610565684,
-            "z": 1.5737606996360818,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306348468,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6794379623854023,
-            "y": -0.11801571765299336,
-            "z": 1.5598262767014386,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306349105,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6674636971731334,
-            "y": -0.11833853702269581,
-            "z": 1.5348692974711702,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306349768,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6439960774988611,
-            "y": -0.23854453338299095,
-            "z": 1.4041265829083929,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306350426,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.632148511335373,
-            "y": -1.5226194692071997,
-            "z": 0.9468531927776359,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306351139,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4088626659767207,
-            "y": 1.0037684913364269,
-            "z": 0.3058005547684431,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306351782,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.379104806805241,
-            "y": 1.0803699188814755,
-            "z": 6.233425182657414,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306352291,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.3877208392586917,
-            "y": 1.2038501011767226,
-            "z": 6.091247375232101,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306352790,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.3923429461432466,
-            "y": 1.407171472761222,
-            "z": 5.994171408707042,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306353423,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.395729958193375,
-            "y": 1.5264044203630505,
-            "z": 5.977316016593295,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306354081,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7400122676058354,
-            "y": -1.5476025099256256,
-            "z": 6.002184131292785,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306354764,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7409178008999213,
-            "y": -1.538774929071331,
-            "z": 6.007611523308129,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306355279,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7435429985072761,
-            "y": -1.515364499606597,
-            "z": 6.050974088329224,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306355962,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4016975111495948,
-            "y": 1.5241419314825764,
-            "z": 6.138896866586297,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306356606,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4248199568019349,
-            "y": 1.3577680978857636,
-            "z": 0.06705628298083278,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306357280,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.4770644799923516,
-            "y": 1.1891098012742125,
-            "z": 0.32749904992909984,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306357769,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.544958552822024,
-            "y": 0.9784876351153682,
-            "z": 0.5696559668186659,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306358447,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.477148983190705,
-            "y": 0.8569783847930288,
-            "z": 0.4247944152628864,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306359136,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6819589139610962,
-            "y": -1.3977598453097155,
-            "z": 0.3451953328674474,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306359807,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7476443363626253,
-            "y": -0.9274503997673081,
-            "z": 0.32694435505098035,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306360455,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7528597453674792,
-            "y": -0.7604623659323394,
-            "z": 0.3236421435350228,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306360965,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7494139077532862,
-            "y": -0.5978773494271864,
-            "z": 0.3153544570852718,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306361608,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7353006891441836,
-            "y": -0.47599198048878816,
-            "z": 0.31428385704050676,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306362287,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.723378529680177,
-            "y": -0.43342498589842926,
-            "z": 0.30558675461082435,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306362796,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.7135597488972627,
-            "y": -0.43733474001340344,
-            "z": 0.29421925287849027,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306363449,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6987425775334577,
-            "y": -0.43029306444920995,
-            "z": 0.2921755740711614,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306364132,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6942059659347704,
-            "y": -0.4592944840243367,
-            "z": 0.2799568704999777,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306364938,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6927786066806894,
-            "y": -0.44687620545798945,
-            "z": 0.26304373779578166,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306365258,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
-        },
-        "namespace": "/blsm_phone"
-    },
-    {
-        "event": "device_motion",
-        "data": {
-            "event": "device_motion",
-            "x": 1.6822830327105436,
-            "y": -0.4258976728686733,
-            "z": 0.2411044466341759,
-            "ax": 0,
-            "ay": 0,
-            "az": 0,
-            "h": 70,
-            "q": 0,
-            "ears": 50,
-            "landscape": false,
-            "mirror": true,
-            "heightCtrl": false,
-            "headCtrl": true,
-            "yaw": 0,
-            "time": 16902306365971,
-            "portrait": true,
-            "id": "ShbppJlyw5_cQAr-AAAu"
+            "id": "kgUBR2KP5e9sNmfvAAAJ"
         },
         "namespace": "/blsm_phone"
     }
