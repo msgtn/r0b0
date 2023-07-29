@@ -2,28 +2,38 @@ from .gadget import Gadget, Message
 from r0b0.utils.loaders import load_msg
 from r0b0 import logging
 
-import cv2
-from cv2 import VideoCapture
+import mediapipe as mp
+mp_pose = mp.solutions.pose
+from mp.solutions.pose import Pose as MediaPipePose
 
 EVENTS = [
     'read'
 ]
 
-# class Camera(Gadget):
-class Camera(Gadget, VideoCapture):
+class MediaPipeGadget(Gadget):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self,config,**kwargs)
-        VideoCapture.__init__(self,config['index'])
-        
-        self.handle_events(EVENTS)
-        
-    def get_frame(self):
-        # self.
-        ret,frame = self.read()
-        if ret:
-            return frame
-        else:
-            logging.warning(
-                f'Camera gadget {self.name} not get frame')
-            return None
         pass
+    
+class MediaPipePoseGadget(MediaPipeGadget, MediaPipePose):
+    def __init__(self, config, **kwargs):
+        MediaPipeGadget.__init__(self,config,**kwargs)
+        MediaPipePose.__init__(self,
+            **{k:config[k] for k in ['min_detection_confidence','min_tracking_confidence']}
+        )
+        self.on('process',
+            handler=self.process_event,
+            namespace=self.namespace)
+        
+    @load_msg
+    def process_event(self, data):
+        msg = data['msg']
+        results = self.process()
+        breakpoint()
+        self.emit(
+            event='process',
+            data={
+                'event':'process',
+                
+            }
+        )

@@ -1,5 +1,5 @@
 SOCKET_ADDR = "https://r0b0.ngrok.io"
-SOCKET_ADDR = "https://a6f7039dadaa.ngrok.app"
+# SOCKET_ADDR = "https://a6f7039dadaa.ngrok.app"
 
 
 # SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"

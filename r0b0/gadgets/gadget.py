@@ -25,7 +25,7 @@ class Message(object):
             self.__dict__.update(**kwargs['data'])
 
 class Gadget(Client, Thread):
-    def __init__(self, config: dict, **kwargs):
+    def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           
             ssl_verify=False,            
             )

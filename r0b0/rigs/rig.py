@@ -24,31 +24,38 @@ from r0b0.rigs.host import Host
 
 class Rig(Host):
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
-        Host.__init__(self, hostname, port, **kwargs)
+        Host.__init__(self, hostname, port, namespaces='*', **kwargs)
         self.gadgets = {}
         self.hostname = hostname
         self.port = port
         self.power = False
         self.is_pygame_rig = False
         self.pygame_gadgets = {}
+        # self.namespaces=namespaces
         
         # trying SIMO event handling
         self.event_handlers = defaultdict(list)   
         self.__dict__.update(kwargs)    
     
-    def add_gadget(self, gadget_name):
-        config = loaders.load_gadget(gadget_name)
-        gadget_cls = getattr(
-            gadget_shelf, config['type'], None)
-        assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
-        gadget_cls = gadget_cls(config)
+    def add_gadget(self, gadget_obj):
+    #     config = loaders.load_gadget(gadget_name)
+    #     gadget_cls = getattr(
+    #         gadget_shelf, config['type'], None)
+    #     assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
+    #     gadget_obj = gadget_cls(config)
         
         # check if gadget class requires pygame
-        if 'pygame' in str(gadget_cls.__class__).lower():
+        if 'pygame' in str(gadget_obj.__class__).lower():
             self.is_pygame_rig = True
             self.pygame_gadgets.update({
-                gadget_cls.pygame_name:gadget_cls
+                gadget_obj.pygame_name:gadget_obj
             })
+            
+        # gadget_namespace = f"/{gadget_obj.name}"
+        # if gadget_namespace not in self.namespaces:
+        #     self.namespaces.append(gadget_namespace)
+        #     self.server_options['namespaces'].append(gadget_namespace)
+            
         
         # TODO - trying to handle multiple gadgets from the same config
         # check that gadget name does not already exist
@@ -62,7 +69,7 @@ class Rig(Host):
         
         
         self.gadgets.update({
-            gadget_name:gadget_cls
+            gadget_obj.name:gadget_obj
         })
         return self.gadgets
     
@@ -71,7 +78,7 @@ class Rig(Host):
         if gadget is None: return None
         return self.gadgets.get(gadget).namespace
         
-    def add_message(self, cable, tx_gadget=None, rx_gadget=None):
+    def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
         # logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         
         tx_namespace, rx_namespace = map(
@@ -174,7 +181,8 @@ class Rig(Host):
             
     def power_off(self,*args,**kwargs):
         assert self.power or self.is_alive(), "Rig not powered on"
-        self.disconnect()
+        # self.disconnect()
+        self.join()
         [g.disconnect() for g in self.gadgets.values()]
         self.power = False
         

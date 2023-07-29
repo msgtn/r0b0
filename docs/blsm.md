@@ -11,17 +11,18 @@ The platform also supports a cheaper configuration using micro servos and an Ard
 
 ### Parts
 The parts to print in `*.stl` format are [available here](./assets/blsm/).
+Each directory contains the whole runner (e.g. [`blsm_A`](./assets/blsm/blsm_A/blsm_A.stl)) or individual parts (e.g. [`A1`](./assets/blsm/blsm_A/A1.stl)).
+I printed the parts on an entry-level [Creality Ender 3](https://www.creality.com/products/ender-3-3d-printer) and sliced the files in Cura using [this profile](./assets/blsm/blsm-020.curaprofile).
 The instructions are [available here](./assets/blsm/blsm.pdf).
-TODO - Add Cura configuration files, also links to each part separately.
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
-| blsm_A | Part runner | 1 | [Print](./assets/blsm/blsm_A.stl) | NA |
-| blsm_B | Part runner | 2 | [Print](./assets/blsm/blsm_B.stl) | NA |
-| blsm_C | Part runner | 2 | [Print](./assets/blsm/blsm_C.stl) | NA |
-| blsm_D | Part runner | 1 | [Print](./assets/blsm/blsm_D.stl) | NA |
-| blsm_E | Part runner | 3 | [Print](./assets/blsm/blsm_E.stl) | NA |
-| blsm_F | Part runner | 3 | [Print](./assets/blsm/blsm_F.stl) | NA |
-| blsm_M | Part runner | 4 | [Print](./assets/blsm/blsm_M.stl) | NA |
+| blsm_A | Part runner | 1 | [Print](./assets/blsm/blsm_A/) | NA |
+| blsm_B | Part runner | 2 | [Print](./assets/blsm/blsm_B/) | NA |
+| blsm_C | Part runner | 2 | [Print](./assets/blsm/blsm_C/) | NA |
+| blsm_D | Part runner | 1 | [Print](./assets/blsm/blsm_D/) | NA |
+| blsm_E | Part runner | 3 | [Print](./assets/blsm/blsm_E/) | NA |
+| blsm_F | Part runner | 3 | [Print](./assets/blsm/blsm_F/) | NA |
+| blsm_M | Part runner | 4 | [Print](./assets/blsm/blsm_M/) | NA |
 | blsm_SR | *S*lip *R*ing for rotating the upper body | 1 | [Print the static non-rotating 'dummy' model](./assets/blsm/blsm_SR.stl), or use [the actual 12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
 | String | String for actuating the head | 1 | Purchase (e.g. [fishing line](https://www.powerpro.com/content/powerpro/northamerica/us/en/homepage/PDP.P-POWERPRO.html), [twine](https://www.amazon.com/White-Cotton-Butchers-Twine-String/dp/B09TQXBFYD/)) | $5-$20 |
 | Rubber bands, 4mm diameter | Rubber bands for hanging the head platform | 6 | Purchase (e.g. [black rubber bands](https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/)) | $8 |
