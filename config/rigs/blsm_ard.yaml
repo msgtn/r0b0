@@ -1,6 +1,6 @@
 gadgets:
-- blsm_dxl
-- blsm_pho
+- blsm_ard
+- blsm_phone
 cables:
 - cable: motion2arduino_motor
   tx_gadget: blsm_phone

@@ -90,6 +90,9 @@ class Host(Thread, SocketIO):
     def emit(self, *args, **kwargs):
         logging.debug(args)
         logging.debug(kwargs)
+        
+        # if the event is a player-related event,
+        # handle it internally
         if kwargs['event'] in PLAYER_EVENTS:
             getattr(self,f"on_{kwargs['event']}")(*args, **kwargs)
         else:
@@ -211,6 +214,12 @@ class Host(Thread, SocketIO):
             # could not load tape
             else:
                 logging.warning(f"No tape {data['tape_name']}, cannot play")
+                
+    # TODO - wrapper play function for CLI usage
+    def play(self, tape_name):
+        self.on_load({'tape_name':tape_name})
+        self.on_play({'tape_name':tape_name})
+        
 
     # no metaphor for this one
     def _webrtc_setup(self):
