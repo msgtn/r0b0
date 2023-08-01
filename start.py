@@ -61,8 +61,7 @@ if __name__=="__main__":
         if rig.is_pygame_rig:
             rig.pygame_event_handler()
         else:
-            print("Breakpoint")
-            breakpoint()
+            breakpoint(header="Starting command-line interface, (Ctrl+D) to exit")
     except KeyboardInterrupt:
         rig.power_off('','')        
     
