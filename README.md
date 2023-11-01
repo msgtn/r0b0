@@ -71,6 +71,9 @@ Cables between the Gadgets handle:
 - Mapping `PyGameJoystick` absolute position `Mouse` relative motion.
 - Mapping `PyGameJoystick` button presses to `Mouse` left/middle/right presses/releases/clicks.
 
+### Robot Death Star Lamp
+A [motorized IKEA PS2014 lamp](https://psychomugs.github.io/ps2014).
+
 ## Setup
 ### Install
 Clone this repo and pull the submodules
