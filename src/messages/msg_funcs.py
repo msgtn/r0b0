@@ -46,5 +46,6 @@ def motion2midi(data=None):
 def button2cam(data=None):
     if data is None: return {'event':'pi_button'}
     return {
-        'event':'shutter',
+        # 'event':'shutter',
+        'event':data['button'],
     }

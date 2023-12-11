@@ -12,6 +12,7 @@ buttons:
   d_right: 26
   d_press: 13
   shutter: 12
+  #shutter: 16
 leds:
   led: 15
   

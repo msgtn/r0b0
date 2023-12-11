@@ -2,6 +2,7 @@ from .gadget import Gadget, Message
 from src.config import TAPES_DIR
 from src.utils.loaders import load_pickle
 from src import logging, get_timestamp
+import os
 
 import picamera
 # native pi version
@@ -11,6 +12,7 @@ from picamera2 import Picamera2, Preview
 from picamera.array import PiRGBArray
 import numpy as np
 from time import sleep
+import glob
 
 shutter_speeds = [1/30, 1/250, 1/1000]
 shutter_speed_idx = 0
@@ -20,6 +22,10 @@ ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE=3
 
+# def get_file_number(dir):
+#     return 
+
+get_file_number = lambda save_dir: len(glob.glob(str(save_dir/'*')))
 
 # class PiCamera(Gadget,_PiCamera):
 class PiCamera(Gadget,Picamera2):
@@ -27,7 +33,15 @@ class PiCamera(Gadget,Picamera2):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
-        Picamera2.start(self)
+        Picamera2.create_still_configuration(self)
+        # self.still_configuration.size = (4056,3040)
+        self.still_configuration.size = (2028,1520)
+        Picamera2.start(self,'still')
+
+        try:
+            os.remove(str(TAPES_DIR / 'testshot.jpg'))
+        except:
+            pass
         self.capture_file(str(TAPES_DIR / 'testshot.jpg'))
 
         self.on('shutter',
@@ -38,9 +52,26 @@ class PiCamera(Gadget,Picamera2):
             #     )
             namespace=self.namespace
             )
-        
+        try:
+            console.log(self.camera_controls)
+        except:
+            pass
+
+        self.on('d_down',
+            handler=self.shutter15,
+            namespace=self.namespace)
+        self.on('d_right',
+            handler=self.shutter60,
+            namespace=self.namespace)
+        self.on('d_up',
+            handler=self.shutter250,
+            namespace=self.namespace)        
+        self.on('d_left',
+            handler=self.shutter1000,
+            namespace=self.namespace)        
         self.set_param = self.__dict__.update
         self.start = lambda: Gadget.start(self)
+
         
     @load_pickle
     def release_shutter(self, msg, save_dir=TAPES_DIR):
@@ -49,30 +80,61 @@ class PiCamera(Gadget,Picamera2):
         logging.debug(f"Shutter released")
         # logging.debug(f"Shutter released, ss={self.shutter_speed}")
         self.capture_file(
-            str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
+            # str(TAPES_DIR / f"{get_timestamp()}_picam.jpg")
+            str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
         )
 
         # self.camera.capture(str(TAPES_DIR / get_timestamp()))
 
-    def start(self):
-        Gadget.start(self)
+    @load_pickle
+    def shutter15(self,msg,):
+        logging.debug('Shutter: 1/15')
+        self.set_controls({
+            'ExposureTime':int(10e5/15)
+            })
+        return
+    @load_pickle
+    def shutter60(self,msg,):
+        logging.debug('Shutter: 1/60')
+        self.set_controls({
+            'ExposureTime':int(10e5/60)
+            })
+        return
+    @load_pickle
+    def shutter250(self,msg,):
+        logging.debug('Shutter: 1/250')
+        self.set_controls({
+            'ExposureTime':int(10e5/250)
+            })
+        return
+    @load_pickle
+    def shutter1000(self,msg,):
+        logging.debug('Shutter: 1/1000')
+        self.set_controls({
+            'ExposureTime':int(10e5/1000)
+            })
         return
 
-        with _PiCamera(sensor_mode=SENSOR_MODE) as camera:
-            with PiRGBArray(camera) as stream:
-                camera.iso = ISO
-                shutter_speed = shutter_speeds[0]
-                camera.shutter_speed = int(shutter_speeds[shutter_speed_idx]*1000000)
-                #camera.awb_mode = 'auto'
-                #camera.framerate=90
-                logging.debug("Initializing Pi Camera")
-                # sleep(1)
-                #camera.exposure_mode = 'off'
-                camera.still_stats = True
-                #camera.framerate = Fraction(1,1)
-                camera.framerate = FRAMERATE
-                camera.resolution = RESOLUTION
-                logging.debug("capturing wth camera")
-                camera.capture(str(TAPES_DIR / 'testshot.jpg'))
+    def start(self):
+        Gadget.start(self)
+        # input()
+        return
+
+        # with _PiCamera(sensor_mode=SENSOR_MODE) as camera:
+        #     with PiRGBArray(camera) as stream:
+        #         camera.iso = ISO
+        #         shutter_speed = shutter_speeds[0]
+        #         camera.shutter_speed = int(shutter_speeds[shutter_speed_idx]*1000000)
+        #         #camera.awb_mode = 'auto'
+        #         #camera.framerate=90
+        #         logging.debug("Initializing Pi Camera")
+        #         # sleep(1)
+        #         #camera.exposure_mode = 'off'
+        #         camera.still_stats = True
+        #         #camera.framerate = Fraction(1,1)
+        #         camera.framerate = FRAMERATE
+        #         camera.resolution = RESOLUTION
+        #         logging.debug("capturing wth camera")
+        #         camera.capture(str(TAPES_DIR / 'testshot.jpg'))
 
     
