@@ -13,6 +13,9 @@ from socketio import Client, ClientNamespace
 from threading import Thread
 import urllib3
 urllib3.disable_warnings()
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 HEADER = 'https'
 EVENTS = []

@@ -1,4 +1,4 @@
-
+const broadcastAudio = false;
 const peerConnections = {};
 const config = {
   iceServers: [
@@ -47,7 +47,7 @@ socket.on("watcher", async (id) => {
   const peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
   // peerConnection = peerConnections[id];
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: broadcastAudio });
   stream.getTracks().forEach((track) => {peerConnection.addTrack(track, stream)});
   peerConnection.onicecandidate = event => {
     if (event.candidate) {
@@ -125,7 +125,7 @@ function getStream() {
   const audioSource = audioSelect.value;
   const videoSource = videoSelect.value;
   const constraints = {
-    audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+    // audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
     video: { deviceId: videoSource ? { exact: videoSource } : undefined , 
       frameRate: {min:30}
     }

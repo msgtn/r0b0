@@ -1,8 +1,8 @@
 gadgets:
-- op1
+- opz
 - open_arm
 cables:
 - cable: midi_rel2position
-  tx_gadget: op1
+  tx_gadget: opz
   rx_gadget: open_arm
   

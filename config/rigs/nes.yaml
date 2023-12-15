@@ -1,0 +1,10 @@
+gadgets:
+- nes
+- mouse
+cables:
+- cable: joy2mouse_move
+  tx_gadget: nes
+  rx_gadget: mouse
+- cable: joy2mouse_button
+  tx_gadget: nes
+  rx_gadget: mouse

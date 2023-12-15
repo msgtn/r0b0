@@ -86,7 +86,7 @@ class Rig(Host):
             [tx_gadget, rx_gadget])
         msg_func = getattr(r0b0_msgs,cable)
         input_event = msg_func()['event']
-        logging.debug( tx_namespace, rx_namespace, input_event )
+        # logging.debug( tx_namespace, rx_namespace, input_event )
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
             msg_kwargs = msg_func(data)
@@ -137,12 +137,17 @@ class Rig(Host):
             handler_func(data)
         
     def pygame_event_handler(self):
+        """
+        Loop to handle a rig with PyGame objects
+        Infinite loop to catch PyGame events
+        """
         T_LAST_EVENT = 0
         T_COOLDOWN = 300/(10e3)
         while True:
             if (time.time()-T_LAST_EVENT)<T_COOLDOWN: continue
             T_LAST_EVENT = time.time()
             for event in pgEvent.get():
+                logging.debug(event)
                 _event_name = pgEvent.event_name(event.type).lower()
                 _event_dict = event.__dict__
                 pygame_name = ''

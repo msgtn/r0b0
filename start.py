@@ -9,6 +9,10 @@ from functools import partial
 import sys
 import argparse
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 def create_gadget(gadget_name):
     config = loaders.load_gadget(gadget_name)
     gadget_cls = getattr(

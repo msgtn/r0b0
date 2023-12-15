@@ -88,6 +88,7 @@ class PyGameJoystick(PyGameGadget):
             event='joybutton'
             
         Gadget.emit(self, event, data, **kwargs)
+        logging.debug(event)
         pass
             
 class PyGameKeys(PyGameGadget):
