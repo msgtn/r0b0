@@ -173,7 +173,7 @@ class Host(Thread, SocketIO):
         '''
         data = {
             record: true(start)/false(stop),
-            event: str
+            event: str,
         }
         '''
         id_event = f"{data['id']}_{data['event']}"

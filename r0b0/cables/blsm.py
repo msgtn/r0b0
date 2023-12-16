@@ -38,6 +38,8 @@ def motion2arduino_motor(data=None):
     }
 
 def joy2rover(data=None):
+    """ Converts joystick axis data to wheel motors for "roving"
+    """
     if data is None: return {'event':'joyaxismotion'}
     
     axis = data['axis']

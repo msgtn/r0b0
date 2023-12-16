@@ -28,3 +28,39 @@ set_param('id',{1:7})
 
 - in using free ngrok account
   - had to update both `host.py` and `controller.js` with the ngrok-generated url (.e.g https://16ac-32-221-140-83.ngrok-free.app)
+
+### 231215
+Set up `sphinx`.
+Rough steps from the top-level directory:
+```
+pip3 install sphinx sphinx-rtd-theme
+cd docs
+sphinx-quickstart
+```
+
+We have to make several updates in `conf.py`.
+First, update the theme by adding:
+```
+html_theme = 'sphinx_rtd_theme'
+```
+Next, add the root directory to the path:
+```
+import os, sys
+sys.path.insert(0, os.path.abspath('..'))
+```
+Add extension support:
+```
+extensions = ['sphinx.ext.autodoc']
+```
+
+Create the source files and build the html:
+```
+sphinx-apidoc -f -o source ../r0b0/
+make html
+```
+
+Serve the page at `localhost:8000`:
+```
+python3 -m http.server -d _build/html
+```
+References: [these](https://www.sphinx-doc.org/en/master/usage/quickstart.html) [guides](https://betterprogramming.pub/auto-documenting-a-python-project-using-sphinx-8878f9ddc6e9).

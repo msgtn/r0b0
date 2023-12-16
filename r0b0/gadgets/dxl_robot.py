@@ -27,6 +27,8 @@ T_LAST_CMD = 0
 T_COOLDOWN = 300/10e3
 
 class DynamixelRobot(Gadget, DynamixelManager):
+    """ A Gadget representing a dynamixel robot
+    """
     def __init__(self, config, **kwargs):
         Gadget.__init__(self,
             config,

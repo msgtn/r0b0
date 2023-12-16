@@ -1,4 +1,4 @@
-import logging
+import logging as logging
 logging.basicConfig(
     encoding='utf-8',
     level=logging.DEBUG,

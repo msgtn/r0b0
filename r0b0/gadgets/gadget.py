@@ -1,9 +1,5 @@
 '''
-GVR's design goals for Python
-An easy and intuitive language just as powerful as major competitors
-Open source, so anyone can contribute to its development
-Code that is as understandable as plain English
-Suitability for everyday tasks, allowing for short development times
+The base Gadget class
 '''
 from r0b0 import logging
 from r0b0.config import LOCALHOST, SERVER_PORT
@@ -28,6 +24,15 @@ class Message(object):
             self.__dict__.update(**kwargs['data'])
 
 class Gadget(Client, Thread):
+    """Class representing a gadget
+
+    More info...
+    Even more info...
+
+    Attributes:
+        name: The name of the Gadget
+        namespace: The namespace of the Gadget for socket connections
+    """
     def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           
             ssl_verify=False,            
@@ -67,6 +72,18 @@ class Gadget(Client, Thread):
     
     @dump_msg
     def emit(self, event, data, **kwargs) -> dict:
+        """
+        Emits a message
+
+        More info
+
+        Args:
+            event: The event to emit
+
+        Returns:
+
+        Raises: 
+        """
         # overwrite defaults
         data.update(dict(
             event=data.get('event',event),
@@ -77,8 +94,8 @@ class Gadget(Client, Thread):
             data=data
         ))
         
-        # TODO - kludge to avoid BadNamespaceError
-        # if trying to emit before connected
+        # TODO - kludge to avoid BadNamespaceError if trying to emit before the gadget is connected
+        # 
         try:
             Client.emit(self, **kwargs)
         except:
