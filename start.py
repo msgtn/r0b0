@@ -14,6 +14,8 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def create_gadget(gadget_name):
+    """Create the gadget
+    """
     config = loaders.load_gadget(gadget_name)
     gadget_cls = getattr(
         gadget_shelf, config['type'], None)

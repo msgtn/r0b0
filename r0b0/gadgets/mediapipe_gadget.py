@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import mediapipe as mp
@@ -25,7 +25,7 @@ class MediaPipePoseGadget(MediaPipeGadget, MediaPipePose):
             handler=self.process_event,
             namespace=self.namespace)
         
-    @load_msg
+    @decode_msg
     def process_event(self, data):
         msg = data['msg']
         results = self.process()

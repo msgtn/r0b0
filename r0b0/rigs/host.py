@@ -12,7 +12,7 @@ from r0b0.config import \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
     LOCALHOST, SERVER_PORT, \
     CSR_PEM, KEY_PEM, BROWSER_DIR
-from r0b0.utils.loaders import load_msg,dump_msg
+from r0b0.utils.loaders import decode_msg,encode_msg
 from r0b0.gadgets import Tape
 from r0b0 import logging, get_timestamp
 
@@ -86,7 +86,7 @@ class Host(Thread, SocketIO):
         
         # self.power_on, self.power_off = self.start, self.join
     
-    # @dump_msg
+    # @encode_msg
     def emit(self, *args, **kwargs):
         logging.debug(args)
         logging.debug(kwargs)
@@ -98,7 +98,7 @@ class Host(Thread, SocketIO):
         else:
             SocketIO.emit(self, *args, **kwargs)
 
-    @load_msg
+    @decode_msg
     def add_url(self, data):
         route_func = lambda: render_template(data['url'])
         route_func.__name__ = \
@@ -106,7 +106,7 @@ class Host(Thread, SocketIO):
         self.app.add_url_rule(
             data['route'],
             view_func=route_func)
-    @load_msg
+    @decode_msg
     def add_emit(self,data):
         logging.debug('add_emit')
         logging.debug(data)
@@ -191,7 +191,7 @@ class Host(Thread, SocketIO):
                 tape.save()
         logging.debug(self.tapes)
         
-    @load_msg
+    @decode_msg
     def on_play(self, data, **kwargs):
         logging.debug(data)
         if 'msg' in data:

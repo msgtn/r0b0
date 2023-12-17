@@ -1,8 +1,8 @@
 from r0b0 import logging
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 import pickle
 
-# @load_msg
+# @decode_msg
 def midi_rel2position(data=None):
     if data is None: return {'event':'midi_cc'}
     msg = pickle.loads(data['msg'])

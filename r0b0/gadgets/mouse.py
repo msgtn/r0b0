@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import pickle
@@ -42,7 +42,7 @@ class Mouse(Gadget):
         self.velocity = [0,0,0,0]
         
     
-    @load_msg
+    @decode_msg
     def mouse_move_event(self, data):
         msg = data['msg']
         self.velocity[int(msg.axis)] = int(msg.value*30)
@@ -52,14 +52,14 @@ class Mouse(Gadget):
             absolute=getattr(msg, 'absolute', False))
         pass
     
-    @load_msg
+    @decode_msg
     def mouse_place_event(self, data):
         msg = data['msg']
         mouse.move(
             msg.x, msg.y, absolute=True
         )
     
-    @load_msg
+    @decode_msg
     def mouse_button_event(self, data):
         logging.debug(data)
         msg = data['msg']

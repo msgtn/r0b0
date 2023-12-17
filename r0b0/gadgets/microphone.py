@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import speech_recognition as sr
@@ -19,7 +19,7 @@ class Microphone(Gadget, ):
             self.rec.adjust_for_ambient_noise(source)
         self.handle_events(EVENTS)
     
-    @load_msg        
+    @decode_msg        
     def listen_event(self,data):
         msg = data['msg']
         logging.warning(f'{self.name} now listening')

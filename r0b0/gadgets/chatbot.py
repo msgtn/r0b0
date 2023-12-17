@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 from simpleaichat import AIChat
@@ -18,7 +18,7 @@ class ChatBot(Gadget):
             console=False)
         self.handle_events(EVENTS)
 
-    @load_msg
+    @decode_msg
     def prompt_event(self,data):
         msg = data['msg']
         logging.warning(data)

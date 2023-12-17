@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import mido
@@ -27,6 +27,13 @@ MIDO_ARGS = [
 ]
 
 class MIDIController(Gadget):
+    """A gadget representing a MIDI controller
+
+    Example 
+
+    Attributes:
+        midi_port: The mido port that connects to the MIDI controller
+    """
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         self.midi_port = mido.open_ioport(
@@ -40,6 +47,8 @@ class MIDIController(Gadget):
             namespace=self.namespace)
         
     def midi_callback(self, mido_msg):
+        """Callback for handling a 
+        """
         midi_msg = MIDIMessage.from_mido(mido_msg)
         if midi_msg.type in MUTE_EVENTS: return
         # logging.debug(midi_msg.type)
@@ -56,8 +65,10 @@ class MIDIController(Gadget):
                     data={'event':midi_msg.event,'msg':midi_msg},
                     namespace=self.namespace)
                     
-    @load_msg
+    @decode_msg
     def on_midi(self,data):
+        """Handles incoming 'midi' messages
+        """
         logging.debug(data)
         self.midi_port.send(
             # TODO - update to self-defined MIDIMessage(**data)
@@ -73,19 +84,25 @@ class MIDINamespace(Namespace):
         pass
 
 class MIDIMessage(Message, MidoMessage):
+    """A MIDI message that subclasses normal Messages and MidoMessages
+
+    """
     def __init__(self, **kwargs):
         Message.__init__(self, **kwargs)
+
+        # Parse the mido-specific arguments
         mido_kwargs = {k:v for k,v in kwargs.items() if k in MIDO_ARGS}
-        # logging.debug(kwargs)
-        # logging.debug(mido_kwargs)
-        # print(mido_kwargs)
-        MidoMessage.__init__(self,**mido_kwargs)
+        MidoMessage.__init__(self, **mido_kwargs)
         
     @classmethod
     def from_mido(self, mido_msg: mido.Message, **kwargs):
+        """
+        Create a message from a MidoMessage
+        """
         self = mido_msg
         mido_dict = {}
-        # update instances with basic fields of types (str,bool,int,float)
+
+        # Update instances with basic fields of types (str,bool,int,float)
         mido_dict.update({
             k:v for k,v in mido_msg.__dict__.items() if isinstance(
                 v,(str,bool,int,float))})

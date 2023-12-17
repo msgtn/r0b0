@@ -42,12 +42,12 @@ For example, to emit a random MIDI note from within a Gadget object:
     }
     self.emit(self,**dict_to_emit)
 ```
-This will call the `Gadget.emit` function, which uses the `@dump_msg` decorator to `pickle.dump` whatever is it `data['msg']`.
+This will call the `Gadget.emit` function, which uses the `@encode_msg` decorator to `pickle.dump` whatever is it `data['msg']`.
 The function definition is [here](/r0b0/utils/loaders.py) — it essentially calls `data['msg']=pickle.dumps(data['msg'])` if `data` does have a `'msg'` to unpack.
-If circumventing the `Gadget.emit` function in any Gadget subclass by calling `Client.emit` directly, make sure to add the `@dump_msg` decorator.
+If circumventing the `Gadget.emit` function in any Gadget subclass by calling `Client.emit` directly, make sure to add the `@encode_msg` decorator.
 ```
   # inside a custom Gadget class
-  @dump_msg
+  @encode_msg
   def emit(self,event,data,**kwargs):
     ...
     Client.emit(self, event, data, **kwargs)
@@ -55,11 +55,11 @@ If circumventing the `Gadget.emit` function in any Gadget subclass by calling `C
 
 ### Handling
 
-Gadget handler functions should be decorated with `@load_msg` to `pickle.load` any potential messages.
-The function definition is [here](/r0b0/utils/loaders.py) — like the inverse of `@dump_msg`, it calls `data['msg']=pickle.loads(data['msg'])` if `data` does have a `'msg'` to pack.
+Gadget handler functions should be decorated with `@decode_msg` to `pickle.load` any potential messages.
+The function definition is [here](/r0b0/utils/loaders.py) — like the inverse of `@encode_msg`, it calls `data['msg']=pickle.loads(data['msg'])` if `data` does have a `'msg'` to pack.
 ```
   # inside a custom Gadget class
-  @load_msg
+  @decode_msg
   def event_handler(self,data):
     msg = data['msg']
     # msg will be of type self.message

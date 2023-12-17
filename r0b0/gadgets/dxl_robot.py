@@ -2,7 +2,7 @@ from threading import Thread
 import time
 import numpy as np
 from functools import partial
-from r0b0.utils.loaders import load_msg, dump_msg
+from r0b0.utils.loaders import decode_msg, encode_msg
 
 from .gadget import Gadget, Message, logging
 from dynamixel_python import \
@@ -168,7 +168,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 motor_ids,motor_kwargs)
         }
         
-    @load_msg
+    @decode_msg
     def position_event(self,data):
         # msg is a data object
         msg = data['msg']
@@ -202,7 +202,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             motor_id_kwargs,
         )
         
-    @load_msg
+    @decode_msg
     def velocity_event(self,data):
         # msg is a data object
         msg = data['msg']
@@ -226,14 +226,14 @@ class DynamixelRobot(Gadget, DynamixelManager):
             # {m_id:{'data':m_k} for m_id,m_k in motor_id_kwargs},
         )
     
-    @load_msg
+    @decode_msg
     def param_event(self,data):
         msg = data['msg']
         if not isinstance(msg.motor_id,list):
             msg.motor_id = [msg.motor_id]
             msg.value = [msg.value]
 
-    @load_msg
+    @decode_msg
     def _position_event(self,data):
         msg = data['msg']
         if not isinstance(msg.motor_id,list):

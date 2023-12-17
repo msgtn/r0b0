@@ -1,2 +1,2 @@
 pyobjc-framework-Quartz
-git+https://github.com/boppreh/mouse.git
+git+https://github.com/msgtn/mouse.git

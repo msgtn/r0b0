@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import cv2
@@ -28,7 +28,7 @@ class Camera(Gadget, VideoCapture):
             return None
         pass
     
-    @load_msg
+    @decode_msg
     def read_event(self,data):
         frame = self.get_frame()
         logging.warning(data)

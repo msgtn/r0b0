@@ -1,5 +1,5 @@
 from .gadget import Gadget, Message
-from r0b0.utils.loaders import load_msg
+from r0b0.utils.loaders import decode_msg
 from r0b0 import logging
 
 import pickle
@@ -18,7 +18,7 @@ class Mouse(Gadget):
         Gadget.__init__(self,config,**kwargs)
         self.handle_events(EVENTS)               
     
-    @load_msg
+    @decode_msg
     def load_event(self, data):
         msg = data['msg']
         self.emit(
@@ -29,7 +29,7 @@ class Mouse(Gadget):
             }            
         )
     
-    @load_msg
+    @decode_msg
     def play_event(self, data):
         msg = data['msg']
         self.emit(

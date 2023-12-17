@@ -7,6 +7,17 @@ from functools import partial
 import pickle
 
 def load_yaml(yaml_file: str, **kwargs):
+    """
+    Load a yaml as a dictionary
+
+    Arguments:
+        yaml_file: The path to the yaml file
+
+    Returns:
+        yaml_dict: The dictionary loaded from the yaml
+
+    Raises:
+    """
     # check both 'yaml' and 'yml
     if not os.path.exists(yaml_file):
         yaml_file = yaml_file.replace('.yaml','.yml')
@@ -15,7 +26,17 @@ def load_yaml(yaml_file: str, **kwargs):
         yaml_dict = yaml.load(file, Loader=yaml.Loader)
         yaml_dict.update(kwargs)
         return yaml_dict
+
+
 def load_config(config_name: str, config_type: str) -> dict:
+    """
+    Load a configuration from a yaml file in the config directory.
+
+
+    Arguments:
+        config_name: The name of the configuration to load
+        config_type: The 
+    """
     config_yaml = load_yaml(
         str(CONFIG_DIR / config_type / f"{config_name}.yaml"),
         )
@@ -34,7 +55,7 @@ load_rig = partial(load_config, config_type='rigs')
 Decorators for dumping and loading pickles
 '''
 # Gadget.emit
-def dump_msg(func):
+def encode_msg(func):
     def _inner_func(s,event,data,**kwargs):
         # logging.debug(s)
         # logging.debug(event)
@@ -47,7 +68,7 @@ def dump_msg(func):
     return _inner_func
 
 # Gadget handler
-def load_msg(func):
+def decode_msg(func):
     def _inner_func(s,data,**kwargs):
         # logging.debug(s,data,kwargs)
         logging.debug(data)

@@ -43,7 +43,7 @@ for pkg,mods in GADGETS.items():
         # import_module(f'.{pkg}.{mod}','r0b0.gadgets')
     # import_module()
 
-from r0b0.utils.loaders import load_msg, dump_msg
+from r0b0.utils.loaders import decode_msg, encode_msg
 
 # import logging
 # logging = logging.getLogger(__name__)

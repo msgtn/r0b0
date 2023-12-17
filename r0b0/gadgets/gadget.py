@@ -3,7 +3,7 @@ The base Gadget class
 '''
 from r0b0 import logging
 from r0b0.config import LOCALHOST, SERVER_PORT
-from r0b0.utils.loaders import load_msg, dump_msg
+from r0b0.utils.loaders import decode_msg, encode_msg
 
 from socketio import Client, ClientNamespace
 from threading import Thread
@@ -17,9 +17,17 @@ HEADER = 'https'
 EVENTS = []
 
 class Message(object):
+    """Base class for representing a message
+    
+    A message encapsulates the packets that is sent through socket connections.
+    Gadgets that require more processing to parse/produce messages should 
+    create their own message object that subclasses this
+    """
     def __init__(self, *args, **kwargs):
         self.__dict__.update(**kwargs)
+
         # TODO - this is a kludge
+        # Set solf dictionary to all information in the packet
         if kwargs.get('data',False):
             self.__dict__.update(**kwargs['data'])
 
@@ -30,8 +38,12 @@ class Gadget(Client, Thread):
     Even more info...
 
     Attributes:
-        name: The name of the Gadget
-        namespace: The namespace of the Gadget for socket connections
+        name: The name of the gadget
+        namespace: The namespace of the gadget for socket connections
+        config: The configuration dictionary that defines the gadget
+        hostname: The hostname that the gadget should connect to
+        port: The port that the gadget should connect to
+        message: The Message type
     """
     def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           
@@ -70,7 +82,7 @@ class Gadget(Client, Thread):
                 namespace=self.namespace
             )
     
-    @dump_msg
+    @encode_msg
     def emit(self, event, data, **kwargs) -> dict:
         """
         Emits a message
