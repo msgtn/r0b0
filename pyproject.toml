@@ -16,10 +16,8 @@ requires-python = "~=3.10"
 [project.urls]
 Repository = "https://github.com/msgtn/r0b0.git"
 
-[tool.setuptools]
-packages = ["r0b0"]
-
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements/requirements.txt"] }
 optional-dependencies.robot = {file = ["requirements/robot.txt"] }
 optional-dependencies.chatbot = {file = ["requirements/chatbot.txt"]}
+

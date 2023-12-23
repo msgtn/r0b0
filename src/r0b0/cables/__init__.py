@@ -1,6 +1,7 @@
 import importlib
 import glob
-from os.path import basename
+import os
+from os.path import basename, dirname
 from r0b0 import logging
 from r0b0.config import MESSAGES_DIR, CABLES_DIR
 # from r0b0.cables.msg_funcs import *
@@ -14,7 +15,8 @@ Usage:
 from r0b0.messages import *
 '''
 
-cable_files = sorted(glob.glob(str(CABLES_DIR / '*.py')))
+# cable_files = sorted(glob.glob(str(CABLES_DIR / '*.py')))
+cable_files = sorted(glob.glob(os.path.join(dirname(__file__), '*.py')))
 for file in cable_files:
     if '__init__' in file: continue
     mod_name = basename(file).split('.')[0]

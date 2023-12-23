@@ -77,8 +77,59 @@ class Rig(Host):
         # if gadget is None: return '/'
         if gadget is None: return None
         return self.gadgets.get(gadget).namespace
-        
+
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
+        if tx_gadget.name not in self.gadgets:
+            self.add_gadget(tx_gadget)
+        if rx_gadget.name not in self.gadgets:
+            self.add_gadget(rx_gadget)
+        tx_namespace, rx_namespace = tx_gadget.namespace, rx_gadget.namespace
+        input_event = cable.input_event
+        def func_emit(data):
+            # if not isinstance(data,dict): data = pickle.loads(data)
+            # msg_kwargs = msg_func(data)
+            msg_kwargs = cable(data)
+            if msg_kwargs is None: return
+            # wrap the data into the gadget's expected message object
+            if rx_gadget is None:
+                emit_data = Message(**msg_kwargs)
+                include_self=True
+            else:
+                emit_data = self.gadgets[
+                    rx_gadget.name].message(
+                    **msg_kwargs)
+                include_self=False
+            output_event = emit_data.event
+            # assemble the output to emit
+            emit_kwargs = dict(
+                event=output_event,
+                data={
+                    'event':output_event,
+                    'msg':pickle.dumps(emit_data)},
+                to=None,
+                include_self=include_self,
+                namespace=rx_namespace
+            )
+            logging.debug(f'func_emit {emit_kwargs}')
+            self.emit(**emit_kwargs)
+            
+        input_handlers = self.event_handlers.get(input_event,[])
+        input_handlers.append(func_emit)
+        self.event_handlers.update({
+            input_event:input_handlers
+        })
+        # 
+        self.on_event(
+            input_event,
+            # handler=func_emit,
+            handler=partial(
+                self.multi_handler,
+                input_event=input_event),
+            namespace=tx_namespace
+        )
+        pass
+        
+    def add_cable_func(self, cable, tx_gadget=None, rx_gadget=None):
         # logging.debug('add_message',tx_gadget, rx_gadget, msg_func)
         
         tx_namespace, rx_namespace = map(
@@ -183,6 +234,8 @@ class Rig(Host):
         logging.debug(self.gadgets.values())
         [g.start() for g in self.gadgets.values()]
         self.power = True
+        if self.is_pygame_rig:
+            self.pygame_event_handler()
             
     def power_off(self,*args,**kwargs):
         assert self.power or self.is_alive(), "Rig not powered on"

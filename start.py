@@ -11,7 +11,7 @@ import argparse
 
 import ssl
 
-ssl._create_default_https_context = ssl._create_unverified_context
+# ssl._create_default_https_context = ssl._create_unverified_context
 
 def create_gadget(gadget_name):
     """Create the gadget
@@ -40,7 +40,7 @@ def main(rig_config):
         gadgets.update({gadget_name:gadget_obj})
     # connect cables
     for cable in config.get('cables',[]):
-        rig.add_cable(**cable)
+        rig.add_cable_func(**cable)
     logging.debug('Powering rig')
     rig.power_on()
     return rig, gadgets

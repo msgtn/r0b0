@@ -41,7 +41,7 @@ PLAYER_EVENTS = [
 ]
 
 class Host(Thread, SocketIO):      
-    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, **kwargs):
         self.app = app = Flask(
             __name__,
             # TODO - was trying to direct templates to a different folder
@@ -61,6 +61,7 @@ class Host(Thread, SocketIO):
             ],
             **kwargs
             )
+        print(certfile, keyfile)
         Thread.__init__(self,
             # TODO - as above, in order for this to work, must subclass Thread before SocketIO
             # because they both have run() functions
@@ -69,8 +70,8 @@ class Host(Thread, SocketIO):
             kwargs={
                 'host':self.hostname,
                 'port':self.port,
-                'certfile':CSR_PEM,
-                'keyfile':KEY_PEM,
+                'certfile':certfile,
+                'keyfile':keyfile,
             })
         
         SocketIO.on_event(self,

@@ -13,6 +13,7 @@
 
 
 from r0b0 import logging
+from r0b0.utils import loaders
 from importlib import import_module
 
 GADGETS = {
@@ -54,3 +55,22 @@ from r0b0.utils.loaders import decode_msg, encode_msg
 #     # level=logging.DEBUG,
 #     )
 
+# def from_config()
+
+def from_config(gadget_yaml_path):
+    """Create the gadget
+
+    Arguments:
+        gadget_yaml_path: The path to the 
+    Returns: 
+        gadget: The gadget
+    Raises:
+        Exception: The gadget class does not exist and cannot be created
+    """
+    config = loaders.load_yaml(gadget_yaml_path)
+    gadget_cls = globals().get(config['type'], None)
+    # gadget_cls = 
+    if gadget_cls is None:
+        raise Exception(f"Gadget type {config['type']} does not exist")
+    # assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
+    return gadget_cls(config)

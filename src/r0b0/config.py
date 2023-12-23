@@ -1,5 +1,7 @@
+from os.path import dirname
 from pathlib import Path
-ROOT_DIR = Path('./').absolute()
+# ROOT_DIR = Path('./').absolute()
+ROOT_DIR = Path(dirname(__file__)).absolute()
 CONFIG_DIR = ROOT_DIR / 'config'
 TAPES_DIR = ROOT_DIR / 'tapes'
 SRC_DIR = ROOT_DIR / 'r0b0'
