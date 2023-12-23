@@ -12,6 +12,14 @@ r0b0.cables.blsm module
    :undoc-members:
    :show-inheritance:
 
+r0b0.cables.cable module
+------------------------
+
+.. automodule:: r0b0.cables.cable
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 r0b0.cables.midi\_funcs module
 ------------------------------
 
