@@ -1,11 +1,12 @@
+from abc import abstractmethod
 
 class Cable(object):
     def __init__(self,):
         self.input_event = ''
-        pass
 
+    @abstractmethod
     def __call__(self, data: dict):
-        pass
+        return {}
 
 class Motion2MotorCable(Cable):
     def __init__(self,):

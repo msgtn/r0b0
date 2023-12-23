@@ -57,10 +57,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-r0b0.config">r0b0.config module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-r0b0">Module contents</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#r0b0.get_timestamp"><code class="docutils literal notranslate"><span class="pre">get_timestamp()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-r0b0">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -110,6 +107,12 @@
 <li class="toctree-l3"><a class="reference internal" href="r0b0.cables.html#r0b0.cables.blsm.response2blsm"><code class="docutils literal notranslate"><span class="pre">response2blsm()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.cables.html#module-r0b0.cables.cable">r0b0.cables.cable module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.cables.html#r0b0.cables.cable.Cable"><code class="docutils literal notranslate"><span class="pre">Cable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.cables.html#r0b0.cables.cable.Key2MouseCable"><code class="docutils literal notranslate"><span class="pre">Key2MouseCable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.cables.html#r0b0.cables.cable.Motion2MotorCable"><code class="docutils literal notranslate"><span class="pre">Motion2MotorCable</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.cables.html#module-r0b0.cables.midi_funcs">r0b0.cables.midi_funcs module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.cables.html#r0b0.cables.midi_funcs.midi_rel2position"><code class="docutils literal notranslate"><span class="pre">midi_rel2position()</span></code></a></li>
 </ul>
@@ -145,30 +148,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="r0b0.gadgets.html">r0b0.gadgets package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.arduino">r0b0.gadgets.arduino module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.add_motors_from_config"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.add_motors_from_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.add_pins"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.add_pins()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.add_sequence"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.add_sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.from_config"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.from_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.get_motor_pos"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.get_motor_pos()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.goto_position"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.goto_position()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.load_sequence"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.load_sequence()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.motor_fn"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.motor_fn()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.move_motor_id"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.move_motor_id()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.move_motor_name"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.move_motor_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.power_up"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.power_up()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.reconfig"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.reconfig()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoGadget.reset_position"><code class="docutils literal notranslate"><span class="pre">ArduinoGadget.reset_position()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoRobot"><code class="docutils literal notranslate"><span class="pre">ArduinoRobot</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.ArduinoRobot.position_event"><code class="docutils literal notranslate"><span class="pre">ArduinoRobot.position_event()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.arduino.MotorMessage"><code class="docutils literal notranslate"><span class="pre">MotorMessage</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-arduino-module">r0b0.gadgets.arduino module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.camera">r0b0.gadgets.camera module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.camera.Camera"><code class="docutils literal notranslate"><span class="pre">Camera</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.camera.Camera.get_frame"><code class="docutils literal notranslate"><span class="pre">Camera.get_frame()</span></code></a></li>
@@ -178,28 +158,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-chatbot-module">r0b0.gadgets.chatbot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.dxl_robot">r0b0.gadgets.dxl_robot module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.access_param"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.access_param()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.add_motor"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.add_motor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.add_motors_from_config"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.add_motors_from_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.param_event"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.param_event()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.position_event"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.position_event()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.DynamixelRobot.velocity_event"><code class="docutils literal notranslate"><span class="pre">DynamixelRobot.velocity_event()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor"><code class="docutils literal notranslate"><span class="pre">Motor</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.access_param"><code class="docutils literal notranslate"><span class="pre">Motor.access_param()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.calibrate_homing_offset"><code class="docutils literal notranslate"><span class="pre">Motor.calibrate_homing_offset()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.from_motor"><code class="docutils literal notranslate"><span class="pre">Motor.from_motor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.get_param"><code class="docutils literal notranslate"><span class="pre">Motor.get_param()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.set_mode"><code class="docutils literal notranslate"><span class="pre">Motor.set_mode()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.set_motor_config"><code class="docutils literal notranslate"><span class="pre">Motor.set_motor_config()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.dxl_robot.Motor.set_param"><code class="docutils literal notranslate"><span class="pre">Motor.set_param()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-dxl-robot-module">r0b0.gadgets.dxl_robot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.gadget">r0b0.gadgets.gadget module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.gadget.Gadget"><code class="docutils literal notranslate"><span class="pre">Gadget</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.gadget.Gadget.assign_handlers"><code class="docutils literal notranslate"><span class="pre">Gadget.assign_handlers()</span></code></a></li>
@@ -216,7 +175,17 @@
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-mediapipe-gadget-module">r0b0.gadgets.mediapipe_gadget module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-microphone-module">r0b0.gadgets.microphone module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-midi-controller-module">r0b0.gadgets.midi_controller module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-mouse-module">r0b0.gadgets.mouse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.mouse">r0b0.gadgets.mouse module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.EVENTS"><code class="docutils literal notranslate"><span class="pre">EVENTS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.Mouse"><code class="docutils literal notranslate"><span class="pre">Mouse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.Mouse.mouse_button_event"><code class="docutils literal notranslate"><span class="pre">Mouse.mouse_button_event()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.Mouse.mouse_move_event"><code class="docutils literal notranslate"><span class="pre">Mouse.mouse_move_event()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.Mouse.mouse_place_event"><code class="docutils literal notranslate"><span class="pre">Mouse.mouse_place_event()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.mouse.MouseMessage"><code class="docutils literal notranslate"><span class="pre">MouseMessage</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.page">r0b0.gadgets.page module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.page.MobilePage"><code class="docutils literal notranslate"><span class="pre">MobilePage</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.page.MobilePage.on_device_motion"><code class="docutils literal notranslate"><span class="pre">MobilePage.on_device_motion()</span></code></a></li>
@@ -251,15 +220,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.rtc">r0b0.gadgets.rtc module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget"><code class="docutils literal notranslate"><span class="pre">RTCGadget</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.handle_offer"><code class="docutils literal notranslate"><span class="pre">RTCGadget.handle_offer()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.negotiate"><code class="docutils literal notranslate"><span class="pre">RTCGadget.negotiate()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.start"><code class="docutils literal notranslate"><span class="pre">RTCGadget.start()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-rtc-module">r0b0.gadgets.rtc module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets.tape">r0b0.gadgets.tape module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.tape.Tape"><code class="docutils literal notranslate"><span class="pre">Tape</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.tape.Tape.get_frame"><code class="docutils literal notranslate"><span class="pre">Tape.get_frame()</span></code></a></li>
@@ -285,7 +246,10 @@
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-test-joystick-module">r0b0.gadgets.test_joystick module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-test-message-module">r0b0.gadgets.test_message module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#r0b0-gadgets-test-robot-module">r0b0.gadgets.test_robot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="r0b0.gadgets.html#module-r0b0.gadgets">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.gadgets.html#r0b0.gadgets.from_config"><code class="docutils literal notranslate"><span class="pre">from_config()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="r0b0.rigs.html">r0b0.rigs package</a><ul>
@@ -312,6 +276,7 @@
 <li class="toctree-l2"><a class="reference internal" href="r0b0.rigs.html#module-r0b0.rigs.rig">r0b0.rigs.rig module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig"><code class="docutils literal notranslate"><span class="pre">Rig</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig.add_cable"><code class="docutils literal notranslate"><span class="pre">Rig.add_cable()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig.add_cable_func"><code class="docutils literal notranslate"><span class="pre">Rig.add_cable_func()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig.add_gadget"><code class="docutils literal notranslate"><span class="pre">Rig.add_gadget()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig.multi_handler"><code class="docutils literal notranslate"><span class="pre">Rig.multi_handler()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="r0b0.rigs.html#r0b0.rigs.rig.Rig.power_off"><code class="docutils literal notranslate"><span class="pre">Rig.power_off()</span></code></a></li>
@@ -327,10 +292,10 @@
 <li class="toctree-l1"><a class="reference internal" href="r0b0.utils.html">r0b0.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.utils.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="r0b0.utils.html#module-r0b0.utils.loaders">r0b0.utils.loaders module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.decode_msg"><code class="docutils literal notranslate"><span class="pre">decode_msg()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.encode_msg"><code class="docutils literal notranslate"><span class="pre">encode_msg()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.load_config"><code class="docutils literal notranslate"><span class="pre">load_config()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.load_gadget"><code class="docutils literal notranslate"><span class="pre">load_gadget()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.decode_msg"><code class="docutils literal notranslate"><span class="pre">decode_msg()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.load_rig"><code class="docutils literal notranslate"><span class="pre">load_rig()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="r0b0.utils.html#r0b0.utils.loaders.load_yaml"><code class="docutils literal notranslate"><span class="pre">load_yaml()</span></code></a></li>
 </ul>
@@ -349,11 +314,6 @@
 </section>
 <section id="module-r0b0">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-r0b0" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="r0b0.get_timestamp">
-<span class="sig-name descname"><span class="pre">get_timestamp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.get_timestamp" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </section>
 </section>
 

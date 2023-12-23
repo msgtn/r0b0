@@ -4,7 +4,7 @@ SOCKET_ADDR = "https://r0b0.ngrok.io"
 
 # SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 
-import glob
+import glob, inspect
 # import logging
 
 from r0b0.config import \
@@ -41,6 +41,10 @@ PLAYER_EVENTS = [
 ]
 
 class Host(Thread, SocketIO):      
+    """
+    A host object that serves socket connections.
+    Host subclasses Thread and SocketIO.
+    """
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, **kwargs):
         self.app = app = Flask(
             __name__,
@@ -61,7 +65,6 @@ class Host(Thread, SocketIO):
             ],
             **kwargs
             )
-        print(certfile, keyfile)
         Thread.__init__(self,
             # TODO - as above, in order for this to work, must subclass Thread before SocketIO
             # because they both have run() functions
@@ -218,6 +221,10 @@ class Host(Thread, SocketIO):
                 
     # TODO - wrapper play function for CLI usage
     def play(self, tape_name):
+        """Play a tape
+
+        :param tape_name: The name of the tape to play
+        """
         self.on_load({'tape_name':tape_name})
         self.on_play({'tape_name':tape_name})
         

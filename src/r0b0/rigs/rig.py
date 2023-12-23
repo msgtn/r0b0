@@ -238,6 +238,7 @@ class Rig(Host):
             self.pygame_event_handler()
             
     def power_off(self,*args,**kwargs):
+
         assert self.power or self.is_alive(), "Rig not powered on"
         # self.disconnect()
         self.join()

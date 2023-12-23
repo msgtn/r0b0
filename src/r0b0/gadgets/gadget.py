@@ -37,13 +37,13 @@ class Gadget(Client, Thread):
     More info...
     Even more info...
 
-    Attributes:
-        name: The name of the gadget
-        namespace: The namespace of the gadget for socket connections
-        config: The configuration dictionary that defines the gadget
-        hostname: The hostname that the gadget should connect to
-        port: The port that the gadget should connect to
-        message: The Message type
+
+    :ivar name: The name of the gadget
+    :ivar namespace: The namespace of the gadget for socket connections
+    :ivar config: The configuration dictionary that defines the gadget
+    :ivar hostname: The hostname that the gadget should connect to
+    :ivar port: The port that the gadget should connect to
+    :ivar message: The Message type
     """
     def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           

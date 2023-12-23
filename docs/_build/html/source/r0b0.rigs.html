@@ -99,8 +99,10 @@
 <span id="r0b0-rigs-host-module"></span><h2>r0b0.rigs.host module<a class="headerlink" href="#module-r0b0.rigs.host" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="r0b0.rigs.host.Host">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8080</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.host.Host" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'localhost'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8080</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/Users/ms/Developer/r0b0/venv/lib/python3.10/site-packages/r0b0/r0b0/csr.pem')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/Users/ms/Developer/r0b0/venv/lib/python3.10/site-packages/r0b0/r0b0/key.pem')</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.host.Host" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SocketIO</span></code></p>
+<p>A host object that serves socket connections.
+Host subclasses Thread and SocketIO.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="r0b0.rigs.host.Host.add_emit">
 <span class="sig-name descname"><span class="pre">add_emit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.host.Host.add_emit" title="Link to this definition"></a></dt>
@@ -203,7 +205,13 @@ event: str,</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="r0b0.rigs.host.Host.play">
 <span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tape_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.host.Host.play" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Play a tape</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tape_name</strong> – The name of the tape to play</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="r0b0.rigs.host.Host.watcher">
@@ -222,6 +230,11 @@ event: str,</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="r0b0.rigs.rig.Rig.add_cable">
 <span class="sig-name descname"><span class="pre">add_cable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_gadget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_gadget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.rig.Rig.add_cable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.rigs.rig.Rig.add_cable_func">
+<span class="sig-name descname"><span class="pre">add_cable_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_gadget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_gadget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.rigs.rig.Rig.add_cable_func" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

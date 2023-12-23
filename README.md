@@ -1,6 +1,6 @@
 # `r0b0`
 
-r0b0 is a communication system for connecting human interface device (HID) hardware and system software.
+r0b0 is a communication library for connecting hardware and software.
 Think of it like [`aconnect`](https://man.archlinux.org/man/aconnect.1.en) for things beyond MIDI devices.
 The system is my general-purpose tool for quickly prototyping mechatronic systems with a bend towards creative applications.
 
@@ -42,15 +42,39 @@ Rigs are networks of Gadgets connected by Cables; they essentially represent the
 Rigs manage the connections and higher-level functionalities required to use the system.
 Rigs are largely static wrappers that should not need much modification on a case-by-case basis.
 
+## Setup
+The package can be installed through PyPi with `pip3 install r0b0-io`, but will be updated infrequently.
+It is best to install from this source.
+
+### Install
+Clone this repo and pull the submodules
+```
+git clone https://github.com/psychomugs/r0b0
+cd r0b0
+```
+
+### Environment setup
+Create a Python virtual environment (`venv`) and install from the `pyproject.toml`.
+This has been tested on `python3.10.12`.
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install .
+```
+
+Some gadgets like mouse and MIDI controllers require additional dependencies. 
+These can be installed with `pip`, e.g. `pip3 install requirements/mouse.txt`.
 
 ## Example Rigs
 I've used r0b0 to power not just Blossom, but also other non-robotic platforms.
+I am currently (231223) refactoring the package to start rigs from scripts instead of config`.yaml`s, in a more Pythonic / functional interface. 
+Examples will be stored in [`examples/`](./examples/)
 
 ### Blossom
-Blossom-specific documentation is available [here](/docs/blsm.md).
+Blossom-specific documentation is available [here](./docs/blsm.md).
 
 ### Leica MPi
-The [Leica MPi](https://psychomugs.github.io/mpi) is a Raspberry Pi-powered digital back for my Leica M2 film camera.
+The [Leica MPi](https://msgtn.github.io/mpi) is a Raspberry Pi-powered digital back for my Leica M2 film camera.
 The hardware includes a Raspberry Pi Zero as the main board, the Raspberry Pi HQ Camera Module as the digital sensor, and an LCD module with buttons as an interface.
 This Rig uses two Gadgets:
 - A `PiButton` Gadget for the buttons on the LCD module and the shutter sync cable. The sync cable connects the flash sync socket to a GPIO pin on the Pi; pressing the mechanical shutter closes the flash sync socket as if it were a physical button.
@@ -72,41 +96,5 @@ Cables between the Gadgets handle:
 - Mapping `PyGameJoystick` button presses to `Mouse` left/middle/right presses/releases/clicks.
 
 ### Robot Death Star Lamp
-A [motorized IKEA PS2014 lamp](https://psychomugs.github.io/ps2014).
+A [motorized IKEA PS2014 lamp](https://msgtn.github.io/ps2014).
 
-## Setup
-### Install
-Clone this repo and pull the submodules
-```
-git clone https://github.com/psychomugs/r0b0
-cd r0b0
-git submodule update --init --recursive
-```
-
-### Environment setup
-Create a Python virtual environment (`venv`) and install from `requirements/requirements.txt`.
-This has been tested on `python3.10.12`.
-```
-python3 -m venv venv
-source venv/bin/activate
-pip3 install -r requirements/requirements.txt
-```
-If you run into errors, you may not be on `python3.10`. 
-In that case, change the `venv` initialization from `python3` -> `python3.10`.
-```
-python3.10 -m venv venv
-```
-This will install the base dependencies.
-To avoid clogging the `venv`, specific dependencies for specific gadgets are broken out into separate files in `requirements/`.
-For example, to install the dependencies for the `Mouse` gadget:
-```
-pip3 install -r requirements/mouse.txt
-```
-Peruse `requirements/` for other gadget dependencies to install.
-
-~~Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).~~ It's best to just use a `venv` — keeping this here for backup.
-```
-conda env create r0b0 -f env.yaml
-conda activate r0b0
-pip3 install -r req.txt 
-```

@@ -95,96 +95,8 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="module-r0b0.gadgets.arduino">
-<span id="r0b0-gadgets-arduino-module"></span><h2>r0b0.gadgets.arduino module<a class="headerlink" href="#module-r0b0.gadgets.arduino" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArduinoGadget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Gadget" title="r0b0.gadgets.gadget.Gadget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gadget</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Arduino</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.add_motors_from_config">
-<span class="sig-name descname"><span class="pre">add_motors_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motor_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.add_motors_from_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.add_pins">
-<span class="sig-name descname"><span class="pre">add_pins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.add_pins" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.add_sequence">
-<span class="sig-name descname"><span class="pre">add_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.add_sequence" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.from_config">
-<span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.from_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.get_motor_pos">
-<span class="sig-name descname"><span class="pre">get_motor_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.get_motor_pos" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.goto_position">
-<span class="sig-name descname"><span class="pre">goto_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motor_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.goto_position" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.load_sequence">
-<span class="sig-name descname"><span class="pre">load_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.load_sequence" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.motor_fn">
-<span class="sig-name descname"><span class="pre">motor_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.motor_fn" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.move_motor_id">
-<span class="sig-name descname"><span class="pre">move_motor_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motor_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.move_motor_id" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.move_motor_name">
-<span class="sig-name descname"><span class="pre">move_motor_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.move_motor_name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.power_up">
-<span class="sig-name descname"><span class="pre">power_up</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.power_up" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.reconfig">
-<span class="sig-name descname"><span class="pre">reconfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.reconfig" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoGadget.reset_position">
-<span class="sig-name descname"><span class="pre">reset_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoGadget.reset_position" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoRobot">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArduinoRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoRobot" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.arduino.ArduinoGadget" title="r0b0.gadgets.arduino.ArduinoGadget"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArduinoGadget</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.ArduinoRobot.position_event">
-<span class="sig-name descname"><span class="pre">position_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.ArduinoRobot.position_event" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.arduino.MotorMessage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MotorMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">motor_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.arduino.MotorMessage" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Message" title="r0b0.gadgets.gadget.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a></p>
-</dd></dl>
-
+<section id="r0b0-gadgets-arduino-module">
+<h2>r0b0.gadgets.arduino module<a class="headerlink" href="#r0b0-gadgets-arduino-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-r0b0.gadgets.camera">
 <span id="r0b0-gadgets-camera-module"></span><h2>r0b0.gadgets.camera module<a class="headerlink" href="#module-r0b0.gadgets.camera" title="Link to this heading"></a></h2>
@@ -208,99 +120,31 @@
 <section id="r0b0-gadgets-chatbot-module">
 <h2>r0b0.gadgets.chatbot module<a class="headerlink" href="#r0b0-gadgets-chatbot-module" title="Link to this heading"></a></h2>
 </section>
-<section id="module-r0b0.gadgets.dxl_robot">
-<span id="r0b0-gadgets-dxl-robot-module"></span><h2>r0b0.gadgets.dxl_robot module<a class="headerlink" href="#module-r0b0.gadgets.dxl_robot" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DynamixelRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Gadget" title="r0b0.gadgets.gadget.Gadget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gadget</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DynamixelManager</span></code></p>
-<p>A Gadget representing a dynamixel robot</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.access_param">
-<span class="sig-name descname"><span class="pre">access_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">motor_id_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rw_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'set'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.access_param" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.add_motor">
-<span class="sig-name descname"><span class="pre">add_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">motor_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.add_motor" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.add_motors_from_config">
-<span class="sig-name descname"><span class="pre">add_motors_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motor_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.add_motors_from_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.param_event">
-<span class="sig-name descname"><span class="pre">param_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.param_event" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.position_event">
-<span class="sig-name descname"><span class="pre">position_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.position_event" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.DynamixelRobot.velocity_event">
-<span class="sig-name descname"><span class="pre">velocity_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.DynamixelRobot.velocity_event" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">DynamixelMotor</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.access_param">
-<span class="sig-name descname"><span class="pre">access_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rw_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'set'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.access_param" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.calibrate_homing_offset">
-<span class="sig-name descname"><span class="pre">calibrate_homing_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.calibrate_homing_offset" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.from_motor">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dxl_motor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DynamixelMotor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.from_motor" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.get_param">
-<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.get_param" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.set_mode">
-<span class="sig-name descname"><span class="pre">set_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.set_mode" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.set_motor_config">
-<span class="sig-name descname"><span class="pre">set_motor_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.set_motor_config" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.dxl_robot.Motor.set_param">
-<span class="sig-name descname"><span class="pre">set_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.dxl_robot.Motor.set_param" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="r0b0-gadgets-dxl-robot-module">
+<h2>r0b0.gadgets.dxl_robot module<a class="headerlink" href="#r0b0-gadgets-dxl-robot-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-r0b0.gadgets.gadget">
 <span id="r0b0-gadgets-gadget-module"></span><h2>r0b0.gadgets.gadget module<a class="headerlink" href="#module-r0b0.gadgets.gadget" title="Link to this heading"></a></h2>
-<p>GVR’s design goals for Python
-An easy and intuitive language just as powerful as major competitors
-Open source, so anyone can contribute to its development
-Code that is as understandable as plain English
-Suitability for everyday tasks, allowing for short development times</p>
+<p>The base Gadget class</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="r0b0.gadgets.gadget.Gadget">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Gadget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'name':</span> <span class="pre">'gadget',</span> <span class="pre">'type':</span> <span class="pre">'Gadget'}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.gadget.Gadget" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Client</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Thread</span></code></p>
 <p>Class representing a gadget</p>
+<p>More info…
+Even more info…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the gadget</p></li>
+<li><p><strong>namespace</strong> – The namespace of the gadget for socket connections</p></li>
+<li><p><strong>config</strong> – The configuration dictionary that defines the gadget</p></li>
+<li><p><strong>hostname</strong> – The hostname that the gadget should connect to</p></li>
+<li><p><strong>port</strong> – The port that the gadget should connect to</p></li>
+<li><p><strong>message</strong> – The Message type</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="r0b0.gadgets.gadget.Gadget.assign_handlers">
 <span class="sig-name descname"><span class="pre">assign_handlers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events_to_handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#r0b0.gadgets.gadget.Gadget.assign_handlers" title="Link to this definition"></a></dt>
@@ -359,6 +203,10 @@ situation.</p>
 <dt class="sig sig-object py" id="r0b0.gadgets.gadget.Message">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.gadget.Message" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for representing a message</p>
+<p>A message encapsulates the packets that is sent through socket connections.
+Gadgets that require more processing to parse/produce messages should 
+create their own message object that subclasses this</p>
 </dd></dl>
 
 <dl class="py function">
@@ -376,8 +224,43 @@ situation.</p>
 <section id="r0b0-gadgets-midi-controller-module">
 <h2>r0b0.gadgets.midi_controller module<a class="headerlink" href="#r0b0-gadgets-midi-controller-module" title="Link to this heading"></a></h2>
 </section>
-<section id="r0b0-gadgets-mouse-module">
-<h2>r0b0.gadgets.mouse module<a class="headerlink" href="#r0b0-gadgets-mouse-module" title="Link to this heading"></a></h2>
+<section id="module-r0b0.gadgets.mouse">
+<span id="r0b0-gadgets-mouse-module"></span><h2>r0b0.gadgets.mouse module<a class="headerlink" href="#module-r0b0.gadgets.mouse" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.EVENTS">
+<span class="sig-name descname"><span class="pre">EVENTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['mouse_move',</span> <span class="pre">'mouse_button',</span> <span class="pre">'mouse_place']</span></em><a class="headerlink" href="#r0b0.gadgets.mouse.EVENTS" title="Link to this definition"></a></dt>
+<dd><p>Mouse move events:
+- axis: 0 (x, horizontal), 1 (y, vertical)
+- value</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.Mouse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Mouse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.mouse.Mouse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Gadget" title="r0b0.gadgets.gadget.Gadget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gadget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.Mouse.mouse_button_event">
+<span class="sig-name descname"><span class="pre">mouse_button_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.mouse.Mouse.mouse_button_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.Mouse.mouse_move_event">
+<span class="sig-name descname"><span class="pre">mouse_move_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.mouse.Mouse.mouse_move_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.Mouse.mouse_place_event">
+<span class="sig-name descname"><span class="pre">mouse_place_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.mouse.Mouse.mouse_place_event" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.gadgets.mouse.MouseMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MouseMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.mouse.MouseMessage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Message" title="r0b0.gadgets.gadget.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a></p>
+</dd></dl>
+
 </section>
 <section id="module-r0b0.gadgets.page">
 <span id="r0b0-gadgets-page-module"></span><h2>r0b0.gadgets.page module<a class="headerlink" href="#module-r0b0.gadgets.page" title="Link to this heading"></a></h2>
@@ -504,34 +387,8 @@ situation.</p>
 </dd></dl>
 
 </section>
-<section id="module-r0b0.gadgets.rtc">
-<span id="r0b0-gadgets-rtc-module"></span><h2>r0b0.gadgets.rtc module<a class="headerlink" href="#module-r0b0.gadgets.rtc" title="Link to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="r0b0.gadgets.rtc.RTCGadget">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RTCGadget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.rtc.RTCGadget" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#r0b0.gadgets.gadget.Gadget" title="r0b0.gadgets.gadget.Gadget"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gadget</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.rtc.RTCGadget.handle_offer">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_offer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.rtc.RTCGadget.handle_offer" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.rtc.RTCGadget.negotiate">
-<span class="sig-name descname"><span class="pre">negotiate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.rtc.RTCGadget.negotiate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="r0b0.gadgets.rtc.RTCGadget.start">
-<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.rtc.RTCGadget.start" title="Link to this definition"></a></dt>
-<dd><p>Start the thread’s activity.</p>
-<p>It must be called at most once per thread object. It arranges for the
-object’s run() method to be invoked in a separate thread of control.</p>
-<p>This method will raise a RuntimeError if called more than once on the
-same thread object.</p>
-</dd></dl>
-
-</dd></dl>
-
+<section id="r0b0-gadgets-rtc-module">
+<h2>r0b0.gadgets.rtc module<a class="headerlink" href="#r0b0-gadgets-rtc-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-r0b0.gadgets.tape">
 <span id="r0b0-gadgets-tape-module"></span><h2>r0b0.gadgets.tape module<a class="headerlink" href="#module-r0b0.gadgets.tape" title="Link to this heading"></a></h2>
@@ -616,6 +473,20 @@ same thread object.</p>
 </section>
 <section id="module-r0b0.gadgets">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-r0b0.gadgets" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.gadgets.from_config">
+<span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gadget_yaml_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#r0b0.gadgets.from_config" title="Link to this definition"></a></dt>
+<dd><p>Create the gadget</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>gadget_yaml_path: The path to the</p>
+</dd>
+<dt>Returns: </dt><dd><p>gadget: The gadget</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception: The gadget class does not exist and cannot be created</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 

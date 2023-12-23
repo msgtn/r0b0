@@ -55,7 +55,7 @@ extensions = ['sphinx.ext.autodoc']
 
 Create the source files and build the html:
 ```
-sphinx-apidoc -f -o source ../r0b0/
+sphinx-apidoc -f -o source ../src/r0b0/
 make html
 ```
 
@@ -64,3 +64,8 @@ Serve the page at `localhost:8000`:
 python3 -m http.server -d _build/html
 ```
 References: [these](https://www.sphinx-doc.org/en/master/usage/quickstart.html) [guides](https://betterprogramming.pub/auto-documenting-a-python-project-using-sphinx-8878f9ddc6e9).
+
+To update the docs at [`msgtn.github.io/r0b0`](msgtn.github.io/r0b0):
+```
+git subtree push --prefix docs/_build/html origin html
+```
