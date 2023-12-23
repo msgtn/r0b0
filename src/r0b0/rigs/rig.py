@@ -23,6 +23,9 @@ from r0b0.utils import loaders
 from r0b0.rigs.host import Host
 
 class Rig(Host):
+    """
+    The Rig object wraps around the Host/server and connects Gadgets.
+    """
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, **kwargs):
         Host.__init__(self, hostname, port, namespaces='*', **kwargs)
         self.gadgets = {}

@@ -42,7 +42,7 @@ PLAYER_EVENTS = [
 
 class Host(Thread, SocketIO):      
     """
-    A host object that serves socket connections.
+    The Host object serves socket connections.
     Host subclasses Thread and SocketIO.
     """
     def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, **kwargs):
