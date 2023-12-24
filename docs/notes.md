@@ -65,7 +65,9 @@ python3 -m http.server -d _build/html
 ```
 References: [these](https://www.sphinx-doc.org/en/master/usage/quickstart.html) [guides](https://betterprogramming.pub/auto-documenting-a-python-project-using-sphinx-8878f9ddc6e9).
 
-To update the docs at [`msgtn.github.io/r0b0`](msgtn.github.io/r0b0):
+To *initialize* the docs at [`msgtn.github.io/r0b0`](msgtn.github.io/r0b0):
 ```
-git subtree push --prefix docs/_build/html origin html
+git subtree push --prefix docs/_build/html origin gh-pages
 ```
+To *update* the docs with subsequent changes, call `make rebuild` from `docs/`, then, per [this guide](https://stephenlee.info/version%20control/2021/01/13/git-force-push-subtree.html):
+

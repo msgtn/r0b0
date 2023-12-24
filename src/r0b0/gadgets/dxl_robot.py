@@ -40,7 +40,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             baud_rate=self.config.get(
                 'baud_rate',57600),
             )
-        self.name = config['name']
+        # self.name = config['name']
         
         # add motors
         self.motors_by_id,self.motor_configs = {},{}

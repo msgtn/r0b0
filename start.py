@@ -6,7 +6,7 @@ from r0b0 import logging, \
     gadgets as gadget_shelf
 from functools import partial
 
-import sys
+import os, sys
 import argparse
 
 import ssl
@@ -16,18 +16,21 @@ import ssl
 def create_gadget(gadget_name):
     """Create the gadget
     """
-    config = loaders.load_gadget(gadget_name)
+    config = loaders.load_yaml(os.path.join(os.path.dirname(__file__), 'config','gadgets', f'{gadget_name}.yaml'))
     gadget_cls = getattr(
         gadget_shelf, config['type'], None)
     assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
     return gadget_cls(config)
 
 def main(rig_config):
-    config = loaders.load_rig(rig_config)
+    config = loaders.load_yaml(rig_config)
     logging.debug(config)
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
+        certfile=os.path.join(os.path.dirname(__file__), 'examples', 'csr.pem'),
+        keyfile=os.path.join(os.path.dirname(__file__), 'examples', 'key.pem'),
+
         # TODO - get rid of this by adding to rig.add_gadget
         # namespaces=[f'/{gadget}' for gadget in config['gadgets']],
     )

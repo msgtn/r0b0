@@ -1,4 +1,4 @@
-# name: phone
+name: blsm_phone
 type: MobilePage
 route_urls:
   /: blsm_controller.html

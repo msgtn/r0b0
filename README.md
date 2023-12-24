@@ -51,6 +51,7 @@ Clone this repo and pull the submodules
 ```
 git clone https://github.com/psychomugs/r0b0
 cd r0b0
+git submodule update --init --recursive
 ```
 
 ### Environment setup

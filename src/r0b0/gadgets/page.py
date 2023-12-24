@@ -85,6 +85,7 @@ class MobilePage(Page):
 
     @decode_msg
     def on_device_motion(self,data):
+        # print('device_motion', data, self.namespace)
         self.emit(
             event='device_motion',
             data=data,

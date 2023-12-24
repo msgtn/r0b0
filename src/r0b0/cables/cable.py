@@ -1,5 +1,9 @@
 from abc import abstractmethod
 
+from r0b0.kinematics.blsm import device_motion2dxl_motor, \
+    device_motion2dxl_motor320, \
+    device_motion2arduino_motor
+
 class Cable(object):
     def __init__(self,):
         self.input_event = ''
@@ -10,11 +14,16 @@ class Cable(object):
 
 class Motion2MotorCable(Cable):
     def __init__(self,):
-        super().__init__()
+        # super().__init__()
+        self.input_event = 'device_motion'
 
-    def __call__(self,):
+    def __call__(self, data):
+        print(data)
         return {
-            'event':'position'
+            'event':'position',        # 'value': # the function that gives
+            'value':device_motion2dxl_motor(data),
+            'motor_id':[1,2,3,4],
+            'absolute':True
         }
 
 class Key2MouseCable(Cable):
