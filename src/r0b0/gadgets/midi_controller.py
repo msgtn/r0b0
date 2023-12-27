@@ -55,6 +55,7 @@ class MIDIController(Gadget):
         # logging.debug(midi_msg.__dict__)
         # print('midi_msg',midi_msg)
         # print(midi_msg,self.connected,self.echo,midi_msg.event)
+        print(midi_msg.event,self.connected,self.echo)
         if self.connected:
             if self.echo:
                 # print(midi_msg,midi_msg.event, )
@@ -69,6 +70,7 @@ class MIDIController(Gadget):
     def on_midi(self,data):
         """Handles incoming 'midi' messages
         """
+        print(data)
         logging.debug(data)
         self.midi_port.send(
             # TODO - update to self-defined MIDIMessage(**data)

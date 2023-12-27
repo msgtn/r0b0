@@ -1,4 +1,5 @@
 from abc import abstractmethod
+import pickle
 
 from r0b0.kinematics.blsm import device_motion2dxl_motor, \
     device_motion2dxl_motor320, \
@@ -10,23 +11,34 @@ class Cable(object):
 
     @abstractmethod
     def __call__(self, data: dict):
+        """
+        When the Cable is called, it will convert an input dictionary into an output dictionary
+
+        :param data: _description_
+        :return: _description_
+        """
         return {}
 
 class Motion2MotorCable(Cable):
+    """
+    Converts phone's device motion into motor positions for Blossom
+    """
     def __init__(self,):
         # super().__init__()
         self.input_event = 'device_motion'
 
     def __call__(self, data):
-        print(data)
         return {
-            'event':'position',        # 'value': # the function that gives
+            'event':'position',
             'value':device_motion2dxl_motor(data),
             'motor_id':[1,2,3,4],
             'absolute':True
         }
 
 class Key2MouseCable(Cable):
+    """
+    Converts key presses to absolute mouse positions
+    """
     def __init__(self,):
         self.input_event = 'keydown'
     
@@ -49,4 +61,37 @@ class Key2MouseCable(Cable):
             'event':'mouse_place',
             'x':x,
             'y':y,
+        }
+
+class MidiRel2PositionCable(Cable):
+    """
+    Converts relative MIDI_CC messages (increment/decrement) into relative motor positions
+    for OpenArm
+    """
+    def __init__(self,):
+        self.input_event = 'midi_cc'
+
+    def __call__(self, data):
+        msg = pickle.loads(data['msg'])
+
+        # Map increment (1) / decrement (127)
+        value_dict = {
+            1:1,
+            127:-1
+        }
+        # Scale the values for each motor
+        scale_dict = {
+            1:600,
+            2:600,
+            3:600,
+            4:300   # Rotate the wrist less
+        }
+        value_scale = scale_dict.get(msg.control,300)
+        value_dict.setdefault(0)
+        
+        return {
+            'event':'position',
+            'value':value_dict.get(msg.value,0)*value_scale,
+            'motor_id':msg.control,
+            'absolute':False
         }

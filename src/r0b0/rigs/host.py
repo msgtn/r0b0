@@ -92,6 +92,7 @@ class Host(Thread, SocketIO):
     
     # @encode_msg
     def emit(self, *args, **kwargs):
+        print(args, kwargs)
         logging.debug(args)
         logging.debug(kwargs)
         
