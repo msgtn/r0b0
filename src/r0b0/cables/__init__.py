@@ -21,6 +21,9 @@ for file in cable_files:
     if '__init__' in file: continue
     mod_name = basename(file).split('.')[0]
     logging.debug(mod_name)
-    mod = importlib.import_module(f'r0b0.cables.{mod_name}')
-    globals().update({mod_name:mod})
-    globals().update({v:getattr(mod,v) for v in dir(mod) if '__' not in v})
+    try:
+        mod = importlib.import_module(f'r0b0.cables.{mod_name}')
+        globals().update({mod_name:mod})
+        globals().update({v:getattr(mod,v) for v in dir(mod) if '__' not in v})
+    except:
+        logging.warning(f'Could not import cables from {file}; dependencies may not have been installed.')

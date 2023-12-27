@@ -1,10 +1,5 @@
 from abc import abstractmethod
 import pickle
-
-from r0b0.kinematics.blsm import device_motion2dxl_motor, \
-    device_motion2dxl_motor320, \
-    device_motion2arduino_motor
-
 class Cable(object):
     def __init__(self,):
         self.input_event = ''
@@ -19,21 +14,6 @@ class Cable(object):
         """
         return {}
 
-class Motion2MotorCable(Cable):
-    """
-    Converts phone's device motion into motor positions for Blossom
-    """
-    def __init__(self,):
-        # super().__init__()
-        self.input_event = 'device_motion'
-
-    def __call__(self, data):
-        return {
-            'event':'position',
-            'value':device_motion2dxl_motor(data),
-            'motor_id':[1,2,3,4],
-            'absolute':True
-        }
 
 class Key2MouseCable(Cable):
     """

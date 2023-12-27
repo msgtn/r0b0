@@ -4,6 +4,23 @@ from r0b0.kinematics.blsm import device_motion2dxl_motor, \
     device_motion2dxl_motor320, \
     device_motion2arduino_motor
 
+
+class Motion2MotorCable(Cable):
+    """
+    Converts phone's device motion into motor positions for Blossom
+    """
+    def __init__(self,):
+        # super().__init__()
+        self.input_event = 'device_motion'
+
+    def __call__(self, data):
+        return {
+            'event':'position',
+            'value':device_motion2dxl_motor(data),
+            'motor_id':[1,2,3,4],
+            'absolute':True
+        }
+
 def motion2motor(data=None):
     if data is None: return {'event':'device_motion'}
     # logging.debug(f'motion2motor {data}')
