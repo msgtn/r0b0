@@ -44,6 +44,7 @@ class Mouse(Gadget):
     
     @decode_msg
     def mouse_move_event(self, data):
+        print(data)
         msg = data['msg']
         self.velocity[int(msg.axis)] = int(msg.value*30)
         mouse.move(

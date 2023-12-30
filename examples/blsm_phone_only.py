@@ -22,18 +22,12 @@ def main():
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
         keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
+        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/'))
     )
 
     # Create the gadgets
-    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_dxl.yaml'))
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-    motion2motor_cable = Motion2MotorCable()
-
-    rig.add_cable(
-        cable=motion2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=blsm_phone,
-        )
+    rig.add_gadget(blsm_phone)
     
     # Power on the rig
     rig.power_on()

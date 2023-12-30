@@ -1,3 +1,6 @@
+import numpy as np
+from r0b0.cables import Cable
+
 def key2mouse_place(data=None):
     if data is None: return {'event':'keydown'}
     key2pos_dict = {
@@ -18,3 +21,25 @@ def key2mouse_place(data=None):
         'x':x,
         'y':y,
     }
+
+
+class Motor2MouseCable(Cable):
+    """
+    Converts key presses to absolute mouse positions
+    """
+    def __init__(self,):
+        self.input_event = 'motor_velocity'
+    
+    def __call__(self, data):
+        # print(data)
+        axis=0
+        # TODO this is a kludge
+        value = data['dxl_motor']
+        # print(axis,value)
+        if np.abs(value)<10. : value = 0
+        value /= -100.
+        return {
+            'event':'mouse_move',
+            'axis':0,
+            'value':value,
+        }

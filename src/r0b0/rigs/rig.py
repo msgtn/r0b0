@@ -82,7 +82,7 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
 
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
-        print(f'Adding {cable}')
+        print(f'Adding {cable} from {tx_gadget} to {rx_gadget}')
         if tx_gadget.name not in self.gadgets:
             self.add_gadget(tx_gadget)
         if rx_gadget.name not in self.gadgets:

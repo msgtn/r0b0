@@ -45,12 +45,20 @@ class Host(Thread, SocketIO):
     The Host object serves socket connections.
     Host subclasses Thread and SocketIO.
     """
-    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, **kwargs):
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, pages_folder=None, **kwargs):
+        flask_kwargs = {}
+        if pages_folder:
+            flask_kwargs.update({
+                'template_folder':os.path.join(pages_folder,'templates'),
+                'static_folder':os.path.join(pages_folder, 'static')
+            })
+        print(flask_kwargs)
         self.app = app = Flask(
             __name__,
             # TODO - was trying to direct templates to a different folder
             # template_folder=str(BROWSER_DIR / 'templates'),
             # template_folder=str(BROWSER_DIR),
+            **flask_kwargs
             )
         CORS(self.app)
         self.hostname = hostname
@@ -105,18 +113,34 @@ class Host(Thread, SocketIO):
 
     @decode_msg
     def add_url(self, data):
+        """Route to a URL.
+        Used only for the Page gadget.
+
+        :param data: The data packet
+        """
         route_func = lambda: render_template(data['url'])
         route_func.__name__ = \
             f"route_{data['url'].split('.')[0]}"
         self.app.add_url_rule(
             data['route'],
             view_func=route_func)
+
     @decode_msg
-    def add_emit(self,data):
+    def add_emit(self, data):
+        """Add an emit function.
+        Used only for the Page gadget.
+
+        :param data: The data packet
+        """
         logging.debug('add_emit')
         logging.debug(data)
         event = data['event']
         def _emit_record(s,d):
+            """Wrapper function that enables recording emitted event
+
+            :param s: _description_
+            :param d: _description_
+            """
             logging.debug(s)
             logging.debug(d)
             
@@ -129,7 +153,7 @@ class Host(Thread, SocketIO):
             tape = self.tapes.get(id_event,None)
             if tape is not None:
             # if id_event in self.tapes.keys():
-                # record time in millis
+                # record time in milliseconds
                 d.update({
                     'time':int(time.time()*10e3),
                     })
@@ -148,6 +172,8 @@ class Host(Thread, SocketIO):
             
     # metaphor - VCR player
     def _player_setup(self):
+        """Set up the tape player
+        """
         self.tapes = OrderedDict()
         for player_event in PLAYER_EVENTS:
             SocketIO.on_event(self,
@@ -159,6 +185,10 @@ class Host(Thread, SocketIO):
         )
 
     def get_tapes(self):
+        """Return a list of available tapes
+
+        :return: A list of available tapes
+        """
         # tapes = send_from_directory()
         return sorted(os.listdir(TAPES_DIR))
     
@@ -181,13 +211,15 @@ class Host(Thread, SocketIO):
             event: str,
         }
         '''
+        # Create an internal identifier of {id}_{event}
         id_event = f"{data['id']}_{data['event']}"
         
         # data['record'] is boolean
         if data['record']:
             # start recording, make a new Tape
+            tape_name = f"{get_timestamp()}_{data['event']}"
             self.tapes.update({
-                id_event:Tape(f"{get_timestamp()}_{data['event']}")
+                id_event:Tape(tape_name)
             })
         else: 
             # stop recording, get the Tape and save
