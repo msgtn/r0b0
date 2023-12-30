@@ -82,11 +82,14 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
 
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
-        print(f'Adding {cable}')
+        print(f'Adding {cable} from {tx_gadget} to {rx_gadget}')
         if tx_gadget.name not in self.gadgets:
             self.add_gadget(tx_gadget)
-        if rx_gadget.name not in self.gadgets:
-            self.add_gadget(rx_gadget)
+        if rx_gadget is not None:
+            if rx_gadget.name not in self.gadgets:
+                self.add_gadget(rx_gadget)
+        else:
+            rx_gadget = tx_gadget
         tx_namespace, rx_namespace = tx_gadget.namespace, rx_gadget.namespace
         input_event = cable.input_event
         def func_emit(data):
@@ -167,7 +170,7 @@ class Rig(Host):
                 namespace=rx_namespace
             )
             logging.debug(f'func_emit {emit_kwargs}')
-            print(emit_kwargs)
+            # print(emit_kwargs)
             self.emit(**emit_kwargs)
             
         input_handlers = self.event_handlers.get(input_event,[])

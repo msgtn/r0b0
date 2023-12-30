@@ -2,7 +2,7 @@ import os
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.blsm import Motion2MotorCable
+from r0b0.cables.eink_cables import SaveImageCable
 
 import logging
 logging.basicConfig(
@@ -23,22 +23,18 @@ def main():
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
         keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
-        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/'))
-
+        # pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/eink/eink/build/'))
+        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/eink/html/'))
     )
 
     # Create the gadgets
-    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_dxl.yaml'))
-    blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-    motion2motor_cable = Motion2MotorCable()
-
+    eink_page = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'eink_page.yaml'))
     rig.add_cable(
-        cable=motion2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=blsm_phone,
-        )
+        cable=SaveImageCable(),
+        tx_gadget=eink_page)
     
     # Power on the rig
+    print(rig._target)
     rig.power_on()
     try:
         # Serve indefinitely 

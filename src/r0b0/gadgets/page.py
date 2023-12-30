@@ -23,9 +23,15 @@ class Page(Gadget):
             )
         
     @decode_msg
-    def on_catch_all(self,data):
-        event = data.get('event','unknown event')
+    def on_catch_all(self, data):
+        """Generic handler for events that do not have defined handler functions
+
+        :param data: The data packet
+        """
+        event = data.get('event','unknown_event')
         logging.debug(f'Page {self.name} received {event}')
+        print(f'Page {self.name} received {event}')
+        
         self.emit(
             event=event,
             data=data,
@@ -56,7 +62,13 @@ class Page(Gadget):
                 data={'route':_route,'url':_url}
             )
             
-        # define event handlers
+        # Define event handlers
+        # These appear as a nested dictionary in the config.yaml
+        # event_kwargs = {
+        #   event_1: {
+        #       event_1_kwarg_1_key: event_1_kwarg_2_value, 
+        #       event_1_kwarg_2_key: event_1_kwarg_2_value
+        # }}
         for _event,_kwargs in self.event_kwargs.items():
             if _kwargs is None: _kwargs={}
             _kwargs.update(dict(
@@ -69,6 +81,10 @@ class Page(Gadget):
                     'event':_event,
                     'kwargs':_kwargs},
             )
+            # The event kwarg should match the function name,
+            # e.g. event_1 will call this object's 'on_event_1' function
+            # If the function is not defined, the event will be handled 
+            # by the default 'on_catch_all' event
             self.on(
                 _event,
                 handler=getattr(self,
@@ -76,6 +92,15 @@ class Page(Gadget):
                     self.on_catch_all),
                     # lambda msg: print(f"Page received {_event} event")),
                 namespace=self.namespace,
+            )
+
+    @decode_msg
+    def on_file_upload(self,data):
+        # print('device_motion', data, self.namespace)
+        self.emit(
+            event='file_upload',
+            data=data,
+            namespace=self.namespace,
             )
         
         

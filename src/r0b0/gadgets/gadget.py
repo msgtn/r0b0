@@ -103,7 +103,7 @@ class Gadget(Client, Thread):
         ))
         kwargs.update(dict(
             event=event,
-            data=data
+            data=data,
         ))
         
         # TODO - kludge to avoid BadNamespaceError if trying to emit before the gadget is connected

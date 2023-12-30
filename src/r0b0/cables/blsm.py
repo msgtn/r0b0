@@ -1,5 +1,6 @@
 from r0b0 import logging
 import numpy as np
+from r0b0.cables import Cable
 from r0b0.kinematics.blsm import device_motion2dxl_motor, \
     device_motion2dxl_motor320, \
     device_motion2arduino_motor

@@ -2,7 +2,7 @@ import os
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.blsm import Motion2MotorCable
+from r0b0.cables.mouse_funcs import Motor2MouseCable
 
 import logging
 logging.basicConfig(
@@ -15,7 +15,6 @@ CONFIG_DIR = os.path.abspath(
 
 def main():
     # Start the server
-    print(LOCALHOST)
     rig = Rig(
         # Default: https://localhost:8080
         hostname=LOCALHOST,
@@ -23,19 +22,22 @@ def main():
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
         keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
-        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/'))
-
     )
-
     # Create the gadgets
-    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_dxl.yaml'))
-    blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-    motion2motor_cable = Motion2MotorCable()
-
+    
+    dxl_motor = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'dxl_motor.yaml'))
+    mouse = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'mouse.yaml'))
+    motor2mouse_cable = Motor2MouseCable()
+    dxl_motor.disable()
+    # for motor in dxl_motor.dxl_dict.values():
+    #     motor.disable()
+    dxl_motor.poll_motion = True
+    dxl_motor.moving_thread.start()
+    
     rig.add_cable(
-        cable=motion2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=blsm_phone,
+        cable=motor2mouse_cable,
+        tx_gadget=dxl_motor,
+        rx_gadget=mouse,
         )
     
     # Power on the rig

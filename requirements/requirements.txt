@@ -8,3 +8,7 @@ pygame==2.4.0
 python-socketio==5.8.0
 urllib3==1.26.13
 Werkzeug==2.3.6
+python-engineio==4.3.4
+requests==2.31.0
+eventlet==0.33.2
+websocket-client==1.6.1

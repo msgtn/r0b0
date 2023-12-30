@@ -74,9 +74,12 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 namespace=self.namespace
             )
         
-        self.motion_thread = Thread(
-            target=self._motion_thread
+        self.moving_thread = Thread(
+            target=self._moving_thread,
+            # daemon=True,
         )
+        self.poll_motion=False
+        # self.motion_thread.start()
         logging.debug(f'namespace {self.namespace}')
         
         self.set_param = partial(self.access_param,
@@ -125,9 +128,32 @@ class DynamixelRobot(Gadget, DynamixelManager):
             **motor_kwargs
             ), **motor_kwargs)
 
-    def _motion_thread(self):
+    def _moving_thread(self):
         # continuously check the 
         # "is moving" flag and emit events
+        while True:
+            if self.poll_motion:
+                moving_dict = {}
+                position_dict = {}
+                velocity_dict = {}
+                for motor_name,motor in self.dxl_dict.items():
+                    moving_dict.update({motor_name:motor.get_moving()*True})
+                    position_dict.update({motor_name:motor.get_present_position()})
+
+                    # Calculate the velocity, which is reported on the range [0, 2**32]
+                    present_velocity = motor.get_present_velocity()
+                    velocity_direction = np.exp2(np.round(np.log2(present_velocity+1e-6)/32.)*32)
+                    present_velocity -= velocity_direction
+                    velocity_dict.update({motor_name:present_velocity})
+
+                if any(moving_dict.values()):
+            # else:
+                # break
+                    self.emit(
+                        event='motor_velocity',
+                        data=velocity_dict,
+                        namespace=self.namespace,
+                    )
         pass
     
     def access_param(self,param,motor_id_kwargs,rw_mode='set'):
@@ -278,7 +304,7 @@ class Motor(DynamixelMotor):
      
     def set_param(self, param: str, value):
         self.access_param(param,value,rw_mode='set')
-    def get_param(self, param: str, value):
+    def get_param(self, param: str, value=None):
         self.access_param(param,rw_mode='get')
     def access_param(self, param: str, value=None, rw_mode='set'):
         if rw_mode=='get': value=None
