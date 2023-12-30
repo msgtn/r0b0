@@ -2,11 +2,6 @@ import os
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-<<<<<<< HEAD
-from r0b0.cables.blsm import Motion2MotorCable
-=======
-# from r0b0.cables.blsm import Motion2MotorCable
->>>>>>> 69f2329cb28a057c2a830efb56aa63038090efdd
 
 import logging
 logging.basicConfig(
@@ -33,6 +28,7 @@ def main():
     # Create the gadgets
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
     rig.add_gadget(blsm_phone)
+    print(blsm_phone._target)
     
     # Power on the rig
     rig.power_on()
