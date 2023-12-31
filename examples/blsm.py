@@ -18,6 +18,7 @@ def main():
     print(LOCALHOST)
     rig = Rig(
         # Default: https://localhost:8080
+        # hostname='0.0.0.0',
         hostname=LOCALHOST,
         port=SERVER_PORT,
         # Point to wherever you created the OpenSSL keys

@@ -11,7 +11,6 @@ authors = [
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 dynamic = ["version", "dependencies", "optional-dependencies"]
-requires-python = "~=3.10"
 
 [project.urls]
 Repository = "https://github.com/msgtn/r0b0.git"

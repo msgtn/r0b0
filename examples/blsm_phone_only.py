@@ -16,7 +16,7 @@ def main():
     # Start the server
     rig = Rig(
         # Default: https://localhost:8080
-        hostname=LOCALHOST,
+        hostname='0.0.0.0',
         port=SERVER_PORT,
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
@@ -33,6 +33,7 @@ def main():
     # Power on the rig
     rig.power_on()
     try:
+        # input()
         # Serve indefinitely 
         breakpoint()
     except KeyboardInterrupt:

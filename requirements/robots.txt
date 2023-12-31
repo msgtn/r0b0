@@ -1,5 +1,3 @@
-aiortc==1.5.0
 dynamixel-sdk==3.7.31
 deps/dynamixel_python
 pyFirmata==1.1.0
-pypot==5.0.2

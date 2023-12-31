@@ -10,9 +10,13 @@ from pygame import joystick as pgJoystick, \
     display as pgDisplay, \
     time as pgTime
 pygame.init()
-pgDisplay.init()
 pgJoystick.init()
 pgTime.Clock().tick(1)
+try: 
+    pgDisplay.init()
+except pygame.error:
+    pass
+
 
 from r0b0 import gadgets as gadget_shelf, \
     cables as r0b0_msgs, \
@@ -21,6 +25,7 @@ from r0b0.gadgets.gadget import Message
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.utils import loaders
 from r0b0.rigs.host import Host
+
 
 class Rig(Host):
     """
