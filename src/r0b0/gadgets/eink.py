@@ -11,7 +11,11 @@ import logging
 from waveshare_epd import epd2in7
 import time
 from PIL import Image,ImageDraw,ImageFont
+import io
 import traceback
+
+from .gadget import Gadget, Message, logging
+from r0b0.utils.loaders import decode_msg, encode_msg
 
 EVENTS = ['draw_image']
 
@@ -25,13 +29,22 @@ class EInk(Gadget):
 
     @decode_msg
     def draw_image_event(self, data):
+        msg = data['msg']
+        print('received image')
         Himage = Image.new('1', (self.epd.height, self.epd.width), 255)  # 255: clear the frame
-
-        image_stream = io.BytesIO(data['image'])
+        if not isinstance(msg.image, bytes):
+            with open(os.path.expanduser('~/image.txt'),'w') as _file:
+                _file.write(msg.image)
+            msg.image = bytes(msg.image,'utf-8')
+        # print(msg.image)
+        image_stream = io.BytesIO(msg.image)
         image = Image.open(image_stream)
+        image = image.convert('1')
+        image = image.rotate(180)
+        image = image.resize((self.epd.height, self.epd.width))
         draw = ImageDraw.Draw(image)
 
         self.epd.display(self.epd.getbuffer(image))
 
-    
+
         pass

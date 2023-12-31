@@ -50,15 +50,10 @@ class Host(Thread, SocketIO):
         flask_kwargs = {}
         if pages_folder:
             flask_kwargs.update({
-<<<<<<< HEAD
-                'template_folder':os.path.join(pages_folder,'templates'),
-                'static_folder':os.path.join(pages_folder, 'static')
-=======
                 # 'template_folder':os.path.join(pages_folder,'templates'),
                 # 'static_folder':os.path.join(pages_folder, 'static'),
                 # 'static_url_path':os.path.join(pages_folder, 'static'),
                 'root_path':pages_folder,
->>>>>>> 69f2329cb28a057c2a830efb56aa63038090efdd
             })
         print(flask_kwargs)
         self.app = app = Flask(

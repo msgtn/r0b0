@@ -5,16 +5,13 @@ from PIL import Image
 import io, os
 
 class SaveImageCable(Cable):
-    """
-    Converts phone's device motion into motor positions for Blossom
-    """
     def __init__(self,):
         # super().__init__()
         self.input_event = 'file_upload'
 
     def __call__(self, data):
         print("Received image")
-        # print(data)
+
         image_stream = io.BytesIO(data['image'])
         image = Image.open(image_stream)
         image.save(os.path.expanduser('~/tmp_image.jpg'))
@@ -24,3 +21,14 @@ class SaveImageCable(Cable):
         #     'motor_id':[1,2,3,4],
         #     'absolute':True
         # }
+
+class Upload2DrawCable(Cable):
+    def __init__(self,):
+        # super().__init__()
+        self.input_event = 'file_upload'
+
+    def __call__(self, data):
+        return {
+            'event':'draw_image',
+            'image':data['image']
+        }

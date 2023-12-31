@@ -2,7 +2,11 @@
 <html>
 <head>
     <title>File Input Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous" type="module"></script>
+    <script type="module" src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+    <script src="/static/js/index.js" type="module"></script>
+    <!-- <script src="{{ url_for('static',filename='node_modules') }}"></script> -->
+
 
 </head>
 <body>
@@ -14,6 +18,5 @@
         <button type="submit">Upload</button>
     </form>
     <!-- <canvas id="canvas" width="400" height="300"></canvas> -->
-    <script src="/static/js/index.js"></script>
 </body>
 </html>

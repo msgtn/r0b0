@@ -28,7 +28,8 @@ GADGETS = {
     'rtc':['RTCGadget'],
     'camera':['Camera'],
     'microphone':['Microphone'],
-    'chatbot':['ChatBot']
+    'chatbot':['ChatBot'],
+    'eink':['EInk']
 }
 for pkg,mods in GADGETS.items():
     try:

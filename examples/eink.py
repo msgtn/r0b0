@@ -2,7 +2,7 @@ import os
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.eink_cables import SaveImageCable
+from r0b0.cables.eink_cables import Upload2DrawCable
 
 import logging
 logging.basicConfig(
@@ -28,10 +28,12 @@ def main():
     )
 
     # Create the gadgets
+    eink = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'eink.yaml'))
     eink_page = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'eink_page.yaml'))
     rig.add_cable(
-        cable=SaveImageCable(),
-        tx_gadget=eink_page)
+        cable=Upload2DrawCable(),
+        tx_gadget=eink_page,
+        rx_gadget=eink)
     
     # Power on the rig
     print(rig._target)
