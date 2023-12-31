@@ -2,7 +2,11 @@ import os
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
+<<<<<<< HEAD
 from r0b0.cables.blsm import Motion2MotorCable
+=======
+# from r0b0.cables.blsm import Motion2MotorCable
+>>>>>>> 69f2329cb28a057c2a830efb56aa63038090efdd
 
 import logging
 logging.basicConfig(
@@ -22,8 +26,9 @@ def main():
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
         keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
-        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/'))
+        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/blsm'))
     )
+    print(rig._target)
 
     # Create the gadgets
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))

@@ -1,4 +1,5 @@
 SOCKET_ADDR = "https://r0b0.ngrok.io"
+# SOCKET_ADDR = "https://localhost:8080"
 # SOCKET_ADDR = "https://a6f7039dadaa.ngrok.app"
 
 
@@ -49,8 +50,15 @@ class Host(Thread, SocketIO):
         flask_kwargs = {}
         if pages_folder:
             flask_kwargs.update({
+<<<<<<< HEAD
                 'template_folder':os.path.join(pages_folder,'templates'),
                 'static_folder':os.path.join(pages_folder, 'static')
+=======
+                # 'template_folder':os.path.join(pages_folder,'templates'),
+                # 'static_folder':os.path.join(pages_folder, 'static'),
+                # 'static_url_path':os.path.join(pages_folder, 'static'),
+                'root_path':pages_folder,
+>>>>>>> 69f2329cb28a057c2a830efb56aa63038090efdd
             })
         print(flask_kwargs)
         self.app = app = Flask(
@@ -92,15 +100,34 @@ class Host(Thread, SocketIO):
         SocketIO.on_event(self,
             'add_emit',
             self.add_emit,)
+        SocketIO.on_event(self,
+            'file_upload',
+            self.on_catch_all,)
         
         self._webrtc_setup()
         self._player_setup()
         
         # self.power_on, self.power_off = self.start, self.join
     
+    @decode_msg
+    def on_catch_all(self, data):
+        """Generic handler for events that do not have defined handler functions
+
+        :param data: The data packet
+        """
+        event = data.get('event','unknown_event')
+        # logging.debug(f'Page {self.name} received {event}')
+        print(f'Page {self.name} received {event}')
+        
+        self.emit(
+            event=event,
+            data=data,
+            namespace=self.namespace,
+        )
+
     # @encode_msg
     def emit(self, *args, **kwargs):
-        print(args, kwargs)
+        # print(args, kwargs)
         logging.debug(args)
         logging.debug(kwargs)
         

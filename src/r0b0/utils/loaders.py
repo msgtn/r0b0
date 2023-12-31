@@ -72,6 +72,7 @@ def decode_msg(func):
     def _inner_func(s,data,**kwargs):
         # logging.debug(s,data,kwargs)
         logging.debug(data)
+        # print(data)
         if isinstance(data,dict) and data.get('msg',None) is not None:
             data['msg']=pickle.loads(data['msg'])
         return func(s,data,**kwargs)

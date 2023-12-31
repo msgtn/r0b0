@@ -30,6 +30,8 @@ class Page(Gadget):
         """
         event = data.get('event','unknown_event')
         logging.debug(f'Page {self.name} received {event}')
+        print(f'Page {self.name} received {event}')
+        
         self.emit(
             event=event,
             data=data,
@@ -90,6 +92,15 @@ class Page(Gadget):
                     self.on_catch_all),
                     # lambda msg: print(f"Page received {_event} event")),
                 namespace=self.namespace,
+            )
+
+    @decode_msg
+    def on_file_upload(self,data):
+        # print('device_motion', data, self.namespace)
+        self.emit(
+            event='file_upload',
+            data=data,
+            namespace=self.namespace,
             )
         
         
