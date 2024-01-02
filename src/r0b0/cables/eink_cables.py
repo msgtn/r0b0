@@ -6,7 +6,7 @@ import io, os
 
 class SaveImageCable(Cable):
     def __init__(self,):
-        # super().__init__()
+        super().__init__()
         self.input_event = 'file_upload'
 
     def __call__(self, data):
@@ -15,16 +15,13 @@ class SaveImageCable(Cable):
         image_stream = io.BytesIO(data['image'])
         image = Image.open(image_stream)
         image.save(os.path.expanduser('~/tmp_image.jpg'))
-        # return {
-        #     'event':'position',
-        #     'value':device_motion2dxl_motor(data),
-        #     'motor_id':[1,2,3,4],
-        #     'absolute':True
-        # }
 
 class Upload2DrawCable(Cable):
+    """
+    Page file_upload to E-Ink draw_image
+    """
     def __init__(self,):
-        # super().__init__()
+        super().__init__()
         self.input_event = 'file_upload'
 
     def __call__(self, data):

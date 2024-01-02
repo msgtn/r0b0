@@ -1,9 +1,3 @@
-SOCKET_ADDR = "https://r0b0.ngrok.io"
-# SOCKET_ADDR = "https://localhost:8080"
-# SOCKET_ADDR = "https://a6f7039dadaa.ngrok.app"
-
-
-# SOCKET_ADDR = "https://104e-32-221-140-83.ngrok-free.app"
 
 import glob, inspect
 # import logging
@@ -12,7 +6,8 @@ from r0b0.config import \
     ROOT_DIR, TAPES_DIR, \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
     LOCALHOST, SERVER_PORT, \
-    CSR_PEM, KEY_PEM, BROWSER_DIR
+    CSR_PEM, KEY_PEM, BROWSER_DIR, \
+    SOCKET_ADDR
 from r0b0.utils.loaders import decode_msg,encode_msg
 from r0b0.gadgets import Tape
 from r0b0 import logging, get_timestamp
@@ -117,7 +112,7 @@ class Host(Thread, SocketIO):
         self.emit(
             event=event,
             data=data,
-            namespace=self.namespace,
+            # namespace=self.namespace,
         )
 
     # @encode_msg

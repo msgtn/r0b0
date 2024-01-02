@@ -1,5 +1,5 @@
 import os, glob
-import logging as logging
+import logging
 logging.basicConfig(
     encoding='utf-8',
     # level=logging.DEBUG,
@@ -23,7 +23,7 @@ if True:
     # for loader, module_name, is_pkg in pkgutil.walk_packages(__path__):
     for loader, module_name, is_pkg in pkgutil.iter_modules(__path__):
     # for loader, module_name, is_pkg in pkgutil.walk_packages(os.path.dirname(module)):
-        print(loader,module_name,is_pkg)
+        logging.debug(loader, module_name, is_pkg)
         __all__.append(module_name)
         _module = loader.find_module(module_name).load_module(module_name)
         globals()[module_name] = _module

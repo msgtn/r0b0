@@ -15,9 +15,7 @@ CONFIG_DIR = os.path.abspath(
 
 def main():
     # Start the server
-    print(LOCALHOST)
     rig = Rig(
-        # Default: https://localhost:8080
         hostname=LOCALHOST,
         port=SERVER_PORT,
         # Point to wherever you created the OpenSSL keys
@@ -36,7 +34,6 @@ def main():
         rx_gadget=eink)
     
     # Power on the rig
-    print(rig._target)
     rig.power_on()
     try:
         # Serve indefinitely 
