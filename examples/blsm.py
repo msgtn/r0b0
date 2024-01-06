@@ -15,7 +15,11 @@ CONFIG_DIR = os.path.abspath(
 
 def main():
     # Start the server
-    print(LOCALHOST)
+    # print(LOCALHOST)
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../ngrok_public_url.txt')), 'r') as _file:
+        socket_addr = _file.readlines()[0].strip()
+    # print(LOCALHOST)
+    
     rig = Rig(
         # Default: https://localhost:8080
         # hostname='0.0.0.0',
@@ -24,8 +28,8 @@ def main():
         # Point to wherever you created the OpenSSL keys
         certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
         keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
-        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/'))
-
+        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/blsm/')),
+        socket_addr=socket_addr,
     )
 
     # Create the gadgets

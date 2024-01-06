@@ -41,7 +41,7 @@ class Host(Thread, SocketIO):
     The Host object serves socket connections.
     Host subclasses Thread and SocketIO.
     """
-    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, pages_folder=None, **kwargs):
+    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, pages_folder=None, socket_addr=SOCKET_ADDR, **kwargs):
         flask_kwargs = {}
         if pages_folder:
             flask_kwargs.update({
@@ -50,23 +50,28 @@ class Host(Thread, SocketIO):
                 # 'static_url_path':os.path.join(pages_folder, 'static'),
                 'root_path':pages_folder,
             })
-        print(flask_kwargs)
+            
+        # Write the socket address to the static folder so it can be imported by the page
+        with open(os.path.join(pages_folder, 'static', 'socket_addr.js'),'w') as _file:
+            print(f"Writing {socket_addr} to {_file}")
+            _file.write(f'let socketAddr = "{socket_addr}";')
+
         self.app = app = Flask(
             __name__,
-            # TODO - was trying to direct templates to a different folder
-            # template_folder=str(BROWSER_DIR / 'templates'),
-            # template_folder=str(BROWSER_DIR),
             **flask_kwargs
             )
         CORS(self.app)
         self.hostname = hostname
         self.port = port
         # print(f'host port {port}')
+        # print(bytes(SOCKET_ADDR,'utf-8'), bytes(socket_addr,'utf-8'))
+        # print(type(SOCKET_ADDR), type(socket_addr))
         SocketIO.__init__(self,
             self.app,
             cors_allowed_origins=[
                 "*",
-                SOCKET_ADDR,
+                # SOCKET_ADDR,
+                socket_addr,
                 f"https://{self.hostname}:{self.port}",
             ],
             **kwargs

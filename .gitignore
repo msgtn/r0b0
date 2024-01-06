@@ -4,6 +4,7 @@ venv*
 *.DS
 *.pem
 ngrok.sh
+ngrok*
 tapes/*
 !tapes/blsm_*
 *notes.md
