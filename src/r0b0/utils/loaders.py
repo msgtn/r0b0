@@ -70,10 +70,24 @@ def encode_msg(func):
 # Gadget handler
 def decode_msg(func):
     def _inner_func(s,data,**kwargs):
+        # print(f'decoding data, {data}')
         # logging.debug(s,data,kwargs)
         logging.debug(data)
         # print(data)
         if isinstance(data,dict) and data.get('msg',None) is not None:
+            # breakpoint()
+            # if isinstance(data['msg'], str):
+            if not isinstance(data['msg'], bytes):
+                print('encoding from str to bytes')
+                # data['msg'] = bytes(data['msg'],'utf-8')
+                # data['msg'] = data['msg'].encode('utf-8')
+                data['msg'] = bytes.fromhex(data['msg'])
+                # breakpoint()
+            print('before', data['msg'])
             data['msg']=pickle.loads(data['msg'])
+            print('after',data['msg'])
+
+        # print(f'decoded data, {data}')
+            
         return func(s,data,**kwargs)
     return _inner_func

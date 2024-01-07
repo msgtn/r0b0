@@ -29,7 +29,8 @@ GADGETS = {
     'camera':['Camera'],
     'microphone':['Microphone'],
     'chatbot':['ChatBot'],
-    'eink':['EInk']
+    'eink':['EInk'],
+    'time_controller':['TimeController']
 }
 for pkg,mods in GADGETS.items():
     try:

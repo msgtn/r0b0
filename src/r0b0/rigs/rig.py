@@ -123,6 +123,7 @@ class Rig(Host):
                 namespace=rx_namespace
             )
             logging.debug(f'func_emit {emit_kwargs}')
+            print('func_emit', emit_kwargs)
             self.emit(**emit_kwargs)
             
         input_handlers = self.event_handlers.get(input_event,[])
@@ -243,10 +244,20 @@ class Rig(Host):
                 break
                     
     def power_on(self,):
+        print('POWER ON')
+
         self.start()
         logging.debug(self.gadgets.values())
         [g.start() for g in self.gadgets.values()]
         self.power = True
+        # self.emit(event='set_mode',data={
+        #         'event':'set_mode',
+        #         'mode':'stopwatch',
+        #         'namespace':'/time_controller'
+        #         },
+        #         # include_self=False,
+        #         namespace='/time_controller'
+        #     )
         if self.is_pygame_rig:
             self.pygame_event_handler()
             

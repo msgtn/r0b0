@@ -43,6 +43,26 @@ class Key2MouseCable(Cable):
             'y':y,
         }
 
+class Key2TimeModeCable(Cable):
+    """
+    Converts key presses to absolute mouse positions
+    """
+    def __init__(self,):
+        self.input_event = 'keydown'
+    
+    def __call__(self, data):
+        key2mode = {
+            'q':'idle',
+            'w':'stopwatch',
+            'e':'timer',
+        }
+        mode = key2mode.get(data['unicode'],'idle')
+        # key2pos_dict.setdefault([500,400])
+        return {
+            'event':'set_mode',
+            'mode':mode
+        }
+
 class MidiRel2PositionCable(Cable):
     """
     Converts relative MIDI_CC messages (increment/decrement) into relative motor positions
