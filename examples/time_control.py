@@ -1,10 +1,14 @@
-import os
+
+
+import os, pickle, time
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
+import socketio
+from socketio import Client
+from r0b0.cables.cable import Key2TimeModeCable
 
 import logging
-
 logging.basicConfig(
     encoding='utf-8',
     level=logging.DEBUG
@@ -32,15 +36,21 @@ def main():
     print(rig._target)
 
     # Create the gadgets
-    blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-    rig.add_gadget(blsm_phone)
-    print(blsm_phone._target)
-    
+    pygame_keys = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'pygame_keys.yaml'))
+    tc = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'time_controller.yaml'))
+    key2mode_cable = Key2TimeModeCable()
+    rig.add_cable(tx_gadget=pygame_keys, rx_gadget=tc, cable=key2mode_cable)
+    breakpoint()
     # Power on the rig
     rig.power_on()
+
+    breakpoint()
+    print(tc.sid, pygame_keys.sid)
     try:
         # input()
         # Serve indefinitely 
+        # test_emit()
+
         breakpoint()
     except KeyboardInterrupt:
         # Power off the rig

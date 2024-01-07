@@ -43,6 +43,8 @@ def main():
         rx_gadget=blsm_dxl,
         tx_gadget=blsm_phone,
         )
+
+    test_emit_dict = {'event': 'position', 'data': {'event': 'position', 'msg': b'\x80\x04\x95y\x00\x00\x00\x00\x00\x00\x00\x8c\x13r0b0.gadgets.gadget\x94\x8c\x07Message\x94\x93\x94)\x81\x94}\x94(\x8c\x05event\x94\x8c\x08position\x94\x8c\x05value\x94]\x94(M/\x03M\x93\x06M\xd8\x06M\xd4\x07e\x8c\x08motor_id\x94]\x94(K\x01K\x02K\x03K\x04e\x8c\x08absolute\x94\x88ub.'}, 'to': None, 'include_self': False, 'namespace': '/blsm_dxl'}
     
     # Power on the rig
     rig.power_on()

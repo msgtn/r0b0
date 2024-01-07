@@ -11,9 +11,13 @@ import urllib3
 urllib3.disable_warnings()
 import ssl
 
+# import eventlet
+# eventlet.monkey_patch()
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 HEADER = 'https'
+# HEADER = 'http'
 EVENTS = []
 
 class Message(object):
@@ -47,12 +51,13 @@ class Gadget(Client, Thread):
     """
     def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           
-            ssl_verify=False,            
+            ssl_verify=False,   
             )
         Thread.__init__(self,
             target=self._connect_thread,
+            # daemon=True,
         )
-        self.name = config.get('name','')
+        self._name = config.get('name','')
         self.namespace = f'/{config.get("namespace",self.name)}'
 
         self.__dict__.update({'config':config})
@@ -61,7 +66,16 @@ class Gadget(Client, Thread):
         self.hostname = self.config.get('hostname',LOCALHOST)
         self.port = self.config.get('port',SERVER_PORT)
         self.message = Message
-    
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+        self.namespace = f'/{value}'
+
     def _connect_thread(self,) -> None:
         url = f'{HEADER}://{self.hostname}:{self.port}{self.namespace}'
         logging.debug(f"{self.name} connecting to {url}")
@@ -70,7 +84,14 @@ class Gadget(Client, Thread):
             namespaces=[self.namespace,"/"],
             wait_timeout=2,
             )
+        # self.emit('forward',data={
+        #     'event':'set_mode',
+        #     'mode':'stopwatch',
+        #     'namespace':'/time_controller'
+        #     },
+        # )
         Client.wait(self)
+    # start=_connect_thread
         
     def handle_events(self,EVENTS):
         for _event in EVENTS:

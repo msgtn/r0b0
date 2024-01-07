@@ -16,6 +16,7 @@ from r0b0 import  get_timestamp
 
 import os
 from aiohttp import web
+import socketio
 from socketio import AsyncServer, Server, Namespace
 import pickle
 from functools import partial, partialmethod, wraps
@@ -28,6 +29,14 @@ from collections import OrderedDict
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
+# import eventlet
+# eventlet.monkey_patch()
+# def listen():
+#     while True:
+#         # bg_emit()
+#         eventlet.sleep(5)
+
+# eventlet.spawn(listen)
 import time
 import json
 # TODO - try to remove dependency of having to import Thread first
@@ -43,7 +52,11 @@ class Host(Thread, SocketIO):
     The Host object serves socket connections.
     Host subclasses Thread and SocketIO.
     """
-    def __init__(self, hostname=LOCALHOST, port=SERVER_PORT, certfile=CSR_PEM, keyfile=KEY_PEM, pages_folder=None, socket_addr=SOCKET_ADDR, **kwargs):
+    def __init__(self,
+            hostname=LOCALHOST, port=SERVER_PORT,
+            # certfile=CSR_PEM, keyfile=KEY_PEM,
+            certfile=None, keyfile=None,
+            pages_folder=None, socket_addr=SOCKET_ADDR, **kwargs):
         flask_kwargs = {}
         if pages_folder:
             flask_kwargs.update({
@@ -75,6 +88,7 @@ class Host(Thread, SocketIO):
                 # SOCKET_ADDR,
                 socket_addr,
                 f"https://{self.hostname}:{self.port}",
+                # f"http://{self.hostname}:{self.port}",
             ],
             # async_mode='threading',
             # async_mode='eventlet',
@@ -86,24 +100,27 @@ class Host(Thread, SocketIO):
         # self.app.wsgi_app = socketio.WSGIApp(self, self.app.wsgi_app)
         self.socketio_run = partial(SocketIO.run, self)
         self.thread_kwargs = {
-            "host": self.hostname,
-            "port": self.port,
-            "certfile": certfile,
-            "keyfile": keyfile,
-        }
-
-        Thread.__init__(
-            self,
-            # TODO - as above, in order for this to work, must subclass Thread before SocketIO
-            # because they both have run() functions
-            target = SocketIO.run,
-            args=(self, self.app),
-            kwargs={
                 'host':self.hostname,
                 'port':self.port,
                 'certfile':certfile,
                 'keyfile':keyfile,
-            })
+            }
+
+
+
+        Thread.__init__(self,
+            # TODO - as above, in order for this to work, must subclass Thread before SocketIO
+            # because they both have run() functions
+            # target = SocketIO.run,
+            target=self.start_wrapper,
+            args=(self, self.app),
+            kwargs=self.thread_kwargs)
+
+
+        SocketIO.on_event(self,
+            'forward',
+            self.on_forward,
+        )
         
         SocketIO.on_event(self,
             'add_url',
@@ -115,12 +132,66 @@ class Host(Thread, SocketIO):
         SocketIO.on_event(self,
             'file_upload',
             self.on_catch_all,)
+        # self.app.add_url_rule(
+        #     '/forward/<namespace>/<event>',
+        #     view_func=self.forward_route
+        # )
         
         self._webrtc_setup()
         self._player_setup()
         
         # self.power_on, self.power_off = self.start, self.join
-    
+
+    def forward_route(self, namespace, event):
+        # request.data = json.loads()
+        print(request.data)
+        # print(request.get_json())
+        data = {
+            'data':json.loads(request.data),
+        }
+        data.update(data['data'])
+        # data.update({'msg':pickle.dumps(data['data']['msg'])})
+        emit_kwargs = {
+            'event':event,
+            # 'data':json.loads(request.data),
+            'data':data,
+            'namespace':f'/{namespace}',
+        }
+        emit_kwargs.update({
+            'to':None,
+            # 'include_self':False,
+        })
+        self.emit(**emit_kwargs)
+        print('emitted from forward route')
+        return 'emitted', 200
+
+    def start_wrapper(self, *args, **kwargs):
+        self.app.add_url_rule(
+            '/forward/<namespace>/<event>',
+            view_func=self.forward_route,
+            methods=['POST']
+        )
+        SocketIO.run(*args, **kwargs)
+
+    def start(self):
+        Thread.start(self)
+
+    def _start(self):
+        def run_wrapper(*args, **kwargs):
+            SocketIO.run(*args, **kwargs)
+            while 1:
+                socketio.sleep(0.01)
+        # run_wrapper(self, self.app, **self.thread_kwargs)
+        SocketIO.start_background_task(self,
+            # target=SocketIO.run,
+            target=run_wrapper,
+            args=(self, self.app),
+            kwargs=self.thread_kwargs,
+        )
+        # while
+        # eventlet.sleep(1000)
+        # SocketIO.sleep(self)
+
     @decode_msg
     def on_catch_all(self, data):
         """Generic handler for events that do not have defined handler functions
@@ -137,9 +208,18 @@ class Host(Thread, SocketIO):
             # namespace=self.namespace,
         )
 
+    @decode_msg
+    def on_forward(self, data,):
+        print('received forward')
+        self.emit(
+            event=data['event'],
+            data=data,
+            namespace=data.get('namespace','/'),
+            # namespace=self.namespace,
+        )
+
     # @encode_msg
     def emit(self, *args, **kwargs):
-        # print(args, kwargs)
         logging.debug(args)
         logging.debug(kwargs)
         
@@ -148,7 +228,10 @@ class Host(Thread, SocketIO):
         if kwargs['event'] in PLAYER_EVENTS:
             getattr(self,f"on_{kwargs['event']}")(*args, **kwargs)
         else:
+            # print('emitting')
+            print(args, kwargs)
             SocketIO.emit(self, *args, **kwargs)
+
 
     @decode_msg
     def add_url(self, data):
