@@ -229,6 +229,7 @@ class Host(Thread, SocketIO):
         else:
             SocketIO.emit(self, event, *args, **kwargs)
 
+
     @decode_msg
     def add_url(self, data):
         """Route to a URL.

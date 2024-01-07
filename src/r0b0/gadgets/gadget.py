@@ -14,6 +14,9 @@ import urllib3
 urllib3.disable_warnings()
 import ssl
 
+# import eventlet
+# eventlet.monkey_patch()
+
 ssl._create_default_https_context = ssl._create_unverified_context
 
 EVENTS = []
