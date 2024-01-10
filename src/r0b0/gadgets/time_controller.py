@@ -25,7 +25,8 @@ class TimeController(Gadget):
 
     @decode_msg
     def set_mode_event(self, data):
-        print('set_mode')
         msg = data['msg']
         self.mode = getattr(TimeMode, msg.mode.upper())
-        print(f'received event for {msg.mode.upper()}')
+
+    # @encode_msg
+    # def 

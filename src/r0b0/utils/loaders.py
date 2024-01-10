@@ -56,34 +56,34 @@ Decorators for dumping and loading pickles
 '''
 # Gadget.emit
 def encode_msg(func):
-    def _inner_func(s,event,data,**kwargs):
-        # logging.debug(s)
-        # logging.debug(event)
-        # logging.debug(data)
-        # logging.debug(kwargs)
-        # if data.get('msg',None) is not None:
+    """Decorator to encode a message with pickle to send
+    non-serializable objects through sockets as strings.
+
+    :param func: A function that emits an event through a socket
+    """
+    def _inner_func(s, event, data, *args, **kwargs):
         if 'msg' in data:
-            data['msg']=pickle.dumps(data['msg'])
-        return func(s,event,data,**kwargs)
+            data['msg'] = pickle.dumps(data['msg']).hex()
+        return func(s, event, data, *args, **kwargs)
     return _inner_func
 
 # Gadget handler
 def decode_msg(func):
-    def _inner_func(s,data,**kwargs):
-        # print(f'decoding data, {data}')
-        # logging.debug(s,data,kwargs)
+    """Decorator to decode a message with pickle.
+    Loads the message into its original Message class.
+    The data['msg'] value will probably be a hex-encoded string.
+    The Message type should be installed in the environment.
+
+    :param func: The handler function (usually a Gadget function)
+    """
+    def _inner_func(s, data, **kwargs):
         logging.debug(data)
-        # print(data)
         if isinstance(data,dict) and data.get('msg',None) is not None:
-            # breakpoint()
-            # if isinstance(data['msg'], str):
+            # Load from a hex-encoded string
+            # TODO - messages *should* be hex encoded if it is sent
+            # from a function decorated with encode_msg
             if not isinstance(data['msg'], bytes):
-                print('encoding from str to bytes')
-                # data['msg'] = bytes(data['msg'],'utf-8')
-                # data['msg'] = data['msg'].encode('utf-8')
                 data['msg'] = bytes.fromhex(data['msg'])
-                # breakpoint()
-            print('before', data['msg'])
             data['msg']=pickle.loads(data['msg'])
             print('after',data['msg'])
 
