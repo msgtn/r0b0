@@ -20,11 +20,6 @@ _rig = Rig(
         # socket_addr=socket_addr,
     )
 
-CONFIG_DIR = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),'../../../config/gadgets/'))
-blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-_rig.add_gadget(blsm_phone)
 @pytest.fixture
 def rig():
     return _rig

@@ -8,7 +8,7 @@ from r0b0.config import \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
     LOCALHOST, SERVER_PORT, \
     CSR_PEM, KEY_PEM, BROWSER_DIR, \
-    SOCKET_ADDR
+    SOCKET_ADDR, HEADER
 from r0b0.utils.loaders import decode_msg,encode_msg
 from r0b0.gadgets import Tape
 from r0b0 import logging
@@ -29,6 +29,7 @@ from collections import OrderedDict
 from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
+import requests
 # import eventlet
 # eventlet.monkey_patch()
 # def listen():
@@ -85,10 +86,9 @@ class Host(Thread, SocketIO):
             self.app,
             cors_allowed_origins=[
                 "*",
-                # SOCKET_ADDR,
                 socket_addr,
-                f"https://{self.hostname}:{self.port}",
-                # f"http://{self.hostname}:{self.port}",
+                f"{HEADER}://{self.hostname}:{self.port}",
+                # f"{HEADER}://{self.hostname}:{self.port}",
             ],
             # async_mode='threading',
             # async_mode='eventlet',
@@ -106,8 +106,6 @@ class Host(Thread, SocketIO):
                 'keyfile':keyfile,
             }
 
-
-
         Thread.__init__(self,
             # TODO - as above, in order for this to work, must subclass Thread before SocketIO
             # because they both have run() functions
@@ -116,12 +114,7 @@ class Host(Thread, SocketIO):
             args=(self, self.app),
             kwargs=self.thread_kwargs)
 
-
-        SocketIO.on_event(self,
-            'forward',
-            self.on_forward,
-        )
-        
+        # Special handlers for Page gadgets
         SocketIO.on_event(self,
             'add_url',
             self.add_url,
@@ -129,108 +122,83 @@ class Host(Thread, SocketIO):
         SocketIO.on_event(self,
             'add_emit',
             self.add_emit,)
-        SocketIO.on_event(self,
-            'file_upload',
-            self.on_catch_all,)
-        # self.app.add_url_rule(
-        #     '/forward/<namespace>/<event>',
-        #     view_func=self.forward_route
-        # )
         
         self._webrtc_setup()
         self._player_setup()
         
         # self.power_on, self.power_off = self.start, self.join
 
-    def forward_route(self, namespace, event):
-        # request.data = json.loads()
-        print(request.data)
-        # print(request.get_json())
-        data = {
-            'data':json.loads(request.data),
-        }
-        data.update(data['data'])
-        # data.update({'msg':pickle.dumps(data['data']['msg'])})
-        emit_kwargs = {
-            'event':event,
-            # 'data':json.loads(request.data),
-            'data':data,
-            'namespace':f'/{namespace}',
-        }
-        emit_kwargs.update({
-            'to':None,
-            # 'include_self':False,
+    @encode_msg
+    def manual_emit(self, event, data, *args, **kwargs):
+        """Manually emit an event.
+        This is a helper function to emit messages without cables,
+        such as in a script or in the CLI.
+        This works around well-documented problems of using
+        threads with sockets.
+
+        :param event: The event to emit
+        """
+        assert data is not None, f'Rig cannot emit event {event} without data'
+        data.update({
+            'args':args,
+            'kwargs':kwargs,
         })
-        self.emit(**emit_kwargs)
-        print('emitted from forward route')
+
+        # Post a request to the Flask server
+        res = requests.post(
+            f'{HEADER}://{self.hostname}:{self.port}/forward',
+            data=json.dumps(data),
+            headers={'Content-Type':'application/json'},
+            verify=False,
+        )
+
+    def _forward_route(self,):
+        """Forwarding route to emit an event manually.
+        This is a helper function that should be posted to by
+        Host.manual_emit().
+
+        :return: Server response
+        """
+
+        data = json.loads(request.data)
+        data_args = data['args']
+        data_kwargs = data['kwargs']
+
+        event = data['event']
+        data_kwargs = {
+            'data':data,
+            **data['kwargs'],
+        }
+        self.emit(event, *data_args, **data_kwargs)
         return 'emitted', 200
 
     def start_wrapper(self, *args, **kwargs):
         self.app.add_url_rule(
-            '/forward/<namespace>/<event>',
-            view_func=self.forward_route,
+            '/forward',
+            view_func=self._forward_route,
             methods=['POST']
         )
         SocketIO.run(*args, **kwargs)
 
-    def start(self):
-        Thread.start(self)
+    # Not using the encode_msg decorator here because
+    # the message should have been encoded in an earlier emit function.
+    def emit(self, event, *args, **kwargs):
+        """Emit an event.
+        Positional and keyword arguments can contain data,
+        namespaces, and whatever else socket.emit() uses.
+        This function is often just a coupling between two gadgets.
 
-    def _start(self):
-        def run_wrapper(*args, **kwargs):
-            SocketIO.run(*args, **kwargs)
-            while 1:
-                socketio.sleep(0.01)
-        # run_wrapper(self, self.app, **self.thread_kwargs)
-        SocketIO.start_background_task(self,
-            # target=SocketIO.run,
-            target=run_wrapper,
-            args=(self, self.app),
-            kwargs=self.thread_kwargs,
-        )
-        # while
-        # eventlet.sleep(1000)
-        # SocketIO.sleep(self)
-
-    @decode_msg
-    def on_catch_all(self, data):
-        """Generic handler for events that do not have defined handler functions
-
-        :param data: The data packet
+        :param event: The event
         """
-        event = data.get('event','unknown_event')
-        # logging.debug(f'Page {self.name} received {event}')
-        print(f'Page {self.name} received {event}')
-        
-        self.emit(
-            event=event,
-            data=data,
-            # namespace=self.namespace,
-        )
-
-    @decode_msg
-    def on_forward(self, data,):
-        print('received forward')
-        self.emit(
-            event=data['event'],
-            data=data,
-            namespace=data.get('namespace','/'),
-            # namespace=self.namespace,
-        )
-
-    # @encode_msg
-    def emit(self, *args, **kwargs):
         logging.debug(args)
         logging.debug(kwargs)
         
         # if the event is a player-related event,
         # handle it internally
-        if kwargs['event'] in PLAYER_EVENTS:
-            getattr(self,f"on_{kwargs['event']}")(*args, **kwargs)
+        if event in PLAYER_EVENTS:
+            getattr(self,f"on_{event}")(*args, **kwargs)
         else:
-            # print('emitting')
-            print(args, kwargs)
-            SocketIO.emit(self, *args, **kwargs)
+            SocketIO.emit(self, event, *args, **kwargs)
 
 
     @decode_msg

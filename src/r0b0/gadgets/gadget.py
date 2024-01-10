@@ -6,18 +6,14 @@ from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.utils.loaders import decode_msg, encode_msg
 
 from socketio import Client, ClientNamespace
+# from socketio import SimpleClient as Client, ClientNamespace
 from threading import Thread
 import urllib3
 urllib3.disable_warnings()
 import ssl
 
-# import eventlet
-# eventlet.monkey_patch()
-
 ssl._create_default_https_context = ssl._create_unverified_context
 
-HEADER = 'https'
-# HEADER = 'http'
 EVENTS = []
 
 class Message(object):
@@ -51,7 +47,8 @@ class Gadget(Client, Thread):
     """
     def __init__(self, config: dict = {'type':'Gadget','name':'gadget'}, **kwargs):
         Client.__init__(self,           
-            ssl_verify=False,   
+            ssl_verify=False, 
+            logger=True,  
             )
         Thread.__init__(self,
             target=self._connect_thread,
@@ -65,7 +62,10 @@ class Gadget(Client, Thread):
         self.config = config
         self.hostname = self.config.get('hostname',LOCALHOST)
         self.port = self.config.get('port',SERVER_PORT)
+        # TODO - refactor to capital-M Message,
+        # because this is a class; lowercase is for functions
         self.message = Message
+        self.Message = Message
 
     @property
     def name(self):
@@ -84,14 +84,12 @@ class Gadget(Client, Thread):
             namespaces=[self.namespace,"/"],
             wait_timeout=2,
             )
-        # self.emit('forward',data={
-        #     'event':'set_mode',
-        #     'mode':'stopwatch',
-        #     'namespace':'/time_controller'
-        #     },
-        # )
         Client.wait(self)
-    # start=_connect_thread
+
+    def _emit_ack(self):
+        """Callback to check that the server 
+        """
+        pass
         
     def handle_events(self,EVENTS):
         for _event in EVENTS:
