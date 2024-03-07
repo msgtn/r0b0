@@ -5,8 +5,8 @@
 # from the environment for the first two.
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = source
-BUILDDIR      = build
+SOURCEDIR     = .
+BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -22,6 +22,3 @@ help:
 rebuild:
 	sphinx-apidoc -f -o source ../src/r0b0
 	make html
-
-serve:
-	python3 -m http.server --directory build/html 7777
