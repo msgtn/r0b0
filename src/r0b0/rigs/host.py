@@ -37,6 +37,7 @@ from flask import Flask, request, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import requests
+
 # import eventlet
 # eventlet.monkey_patch()
 # def listen():
@@ -227,7 +228,6 @@ class Host(Thread, SocketIO):
             getattr(self, f"on_{event}")(*args, **kwargs)
         else:
             SocketIO.emit(self, event, *args, **kwargs)
-
 
     @decode_msg
     def add_url(self, data):

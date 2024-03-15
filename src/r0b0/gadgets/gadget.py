@@ -6,6 +6,7 @@ from r0b0.config import LOCALHOST, SERVER_PORT, HEADER
 from r0b0.utils.loaders import decode_msg, encode_msg
 
 from socketio import Client, ClientNamespace
+
 # from socketio import SimpleClient as Client, ClientNamespace
 from threading import Thread
 import urllib3
