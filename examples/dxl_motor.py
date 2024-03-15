@@ -44,7 +44,7 @@ def main():
     # for motor in dxl_motor.dxl_dict.values():
     #     motor.disable()
     
-    # dxl_motor.poll_motion = True
+    # dxl_motor.POLL_MOVEMENT = True
     # dxl_motor.moving_thread.start()
     
     motor = dxl_motor.dxl_dict['dxl_motor']

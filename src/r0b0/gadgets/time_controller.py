@@ -9,24 +9,28 @@ class TimeMode(Enum):
     STOPWATCH = stopwatch = 2
     TIMER = timer = 3
 
+
 EVENTS = [
-    'set_mode',
+    "set_mode",
 ]
+
 
 class TimeController(Gadget):
     def __init__(self, config, **kwargs):
-        Gadget.__init__(self,
+        Gadget.__init__(
+            self,
             config,
             # request_timeout=0.1,
             # *args,
-            **kwargs)
+            **kwargs
+        )
         self.handle_events(EVENTS)
         self.mode = TimeMode.IDLE
 
     @decode_msg
     def set_mode_event(self, data):
-        msg = data['msg']
+        msg = data["msg"]
         self.mode = getattr(TimeMode, msg.mode.upper())
 
     # @encode_msg
-    # def 
+    # def

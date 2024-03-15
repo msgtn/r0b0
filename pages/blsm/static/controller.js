@@ -303,7 +303,7 @@ const handleOrientation = (e) => {
   // beta<2 because sometimes indicates when just looking up
   // doesnt catch high beta in the endpoints anyways
   // only catches if pitch is not much higher than the horizon
-  if (!inEndpoint && distToEndpoint < endpointThreshold && beta < 2) {
+  if (!inEndpoint && distToEndpoint<endpointThreshold && beta<2) {
     inEndpoint = true;
     if (Math.PI > alpha) {
       endpointIndicator.style.textAlign = "left";
@@ -319,12 +319,13 @@ const handleOrientation = (e) => {
     }
     // increase endpoint to make it harder to get out of it
     // this should reduce the frequency of alerts
-  } else if (inEndpoint && distToEndpoint > 2 * endpointThreshold) {
+  } else if (inEndpoint && distToEndpoint>2*endpointThreshold) {
     inEndpoint = false;
     endpointIndicator.innerHTML = " ";
   }
 
-  if (e.timeStamp - lastEvent > 50) {
+  // if (e.timeStamp - lastEvent > 50) {
+  if (e.timeStamp - lastEvent > 100) {
     lastEvent = e.timeStamp;
     var body = {
       event: "device_motion",

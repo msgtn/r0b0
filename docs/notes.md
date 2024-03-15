@@ -71,3 +71,15 @@ git subtree push --prefix docs/_build/html origin gh-pages
 ```
 To *update* the docs with subsequent changes, call `make rebuild` from `docs/`, then, per [this guide](https://stephenlee.info/version%20control/2021/01/13/git-force-push-subtree.html):
 
+## 240307
+Problem - using the package as installed with `pip` renders the paths in `config.py` (e.g. `CONFIG_DIR`, `TAPES_DIR`) relative to the package's installation location in an environment.
+It would be better to point these to a local user-defined location, relative to where the package is called rather than where it is installed.
+What should this look like
+```
+config = {
+  ...ke
+  'tapes_dir': 'path/to/tapes/to/load'
+  ...
+}
+
+```

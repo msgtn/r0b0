@@ -3,11 +3,11 @@ from numpy import cos, sin, pi
 from scipy.spatial.transform import Rotation
 import time
 
+
 class Kinematics(object):
     def __init__(self):
         pass
-        
-        
+
     # get direction cosine matrix (R) from given euler angles
     # gives O_R_B (rotation from body frame to the inertial frame)
     # def angle2dcm(self, euler: 'np.ndarray[np.float]') -> dcm: 'np.ndarray[np.float]':
