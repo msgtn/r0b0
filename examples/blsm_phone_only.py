@@ -4,6 +4,7 @@ from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
 
 import logging
+
 logging.basicConfig(
     encoding='utf-8',
     level=logging.DEBUG

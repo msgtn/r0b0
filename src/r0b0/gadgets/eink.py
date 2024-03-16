@@ -3,7 +3,7 @@
 import sys
 import os
 
-from r0b0 import logging
+import logging
 from waveshare_epd.epd2in7 import EPD
 import time
 from PIL import Image,ImageDraw,ImageFont

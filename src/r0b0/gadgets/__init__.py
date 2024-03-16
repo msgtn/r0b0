@@ -12,7 +12,7 @@
 # from .chatbot import ChatBot
 
 import os
-from r0b0 import logging
+import logging
 from r0b0.utils import loaders
 from importlib import import_module
 
@@ -48,6 +48,7 @@ for pkg,mods in GADGETS.items():
 from r0b0.utils.loaders import decode_msg, encode_msg
 
 # import logging
+
 # logging = logging.getLogger(__name__)
 # logging.basicConfig(
 # #     # filename='example.log',

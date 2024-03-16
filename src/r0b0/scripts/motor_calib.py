@@ -1,4 +1,5 @@
 import logging
+
 logging.basicConfig()
 
 from dynamixel_python import \

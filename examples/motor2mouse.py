@@ -5,6 +5,7 @@ from r0b0.rigs import Rig
 from r0b0.cables.mouse_funcs import Motor2MouseCable
 
 import logging
+
 logging.basicConfig(
     encoding='utf-8',
     level=logging.DEBUG

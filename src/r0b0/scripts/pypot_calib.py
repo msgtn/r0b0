@@ -1,5 +1,5 @@
 from pypot.dynamixel import Dxl320IO
-from r0b0 import logging
+import logging
 
 if __name__=="__main__":
     dxl = Dxl320IO(

@@ -1,4 +1,4 @@
-from r0b0 import logging
+import logging
 
 def ps2014app(data=None):
     if data is None: return {'event':'button'}

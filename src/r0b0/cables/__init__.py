@@ -2,7 +2,8 @@ import importlib
 import glob
 import os
 from os.path import basename, dirname
-from r0b0 import logging
+import logging
+
 from r0b0.config import MESSAGES_DIR, CABLES_DIR
 # from r0b0.cables.msg_funcs import *
 # print(f'abs: {abspath(".")}, rel: {relpath(".")}')

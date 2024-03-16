@@ -1,6 +1,6 @@
 import os
 import yaml
-from r0b0 import logging
+import logging
 from r0b0.config import CONFIG_DIR, LOCALHOST, SERVER_PORT
 
 from functools import partial

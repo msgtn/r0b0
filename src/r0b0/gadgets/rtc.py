@@ -1,6 +1,6 @@
 from .gadget import Gadget, Message
 from r0b0.utils.loaders import decode_msg
-from r0b0 import logging
+import logging
 
 from threading import Thread
 from aiortc import RTCPeerConnection, RTCSessionDescription

@@ -1,4 +1,4 @@
-from r0b0 import logging
+import logging
 import numpy as np
 from r0b0.cables import Cable
 from r0b0.kinematics.blsm import device_motion2dxl_motor, \

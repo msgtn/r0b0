@@ -2,7 +2,7 @@ import numpy as np
 from r0b0.kinematics.blsm import device_motion2dxl_motor
 from r0b0.utils.loaders import decode_msg, encode_msg
 import pickle
-from r0b0 import logging
+import logging
 
 # def msg_func(func):
 #     return

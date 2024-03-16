@@ -13,6 +13,7 @@ import time
 from socketio import Client
 import pickle
 import logging
+
 logging.basicConfig(
     filename='phone.log',
     encoding='utf-8',

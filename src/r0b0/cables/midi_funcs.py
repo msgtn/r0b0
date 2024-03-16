@@ -1,4 +1,4 @@
-from r0b0 import logging
+import logging
 from r0b0.utils.loaders import decode_msg
 import pickle
 

@@ -2,6 +2,7 @@
 import glob, inspect
 # import logging
 
+
 from r0b0.config import \
     ROOT_DIR, TAPES_DIR, \
     GADGETS_DIR, STATIC_DIR, PUBLIC_DIR, \
@@ -10,7 +11,8 @@ from r0b0.config import \
     SOCKET_ADDR
 from r0b0.utils.loaders import decode_msg,encode_msg
 from r0b0.gadgets import Tape
-from r0b0 import logging, get_timestamp
+from r0b0 import logging
+from r0b0 import  get_timestamp
 
 import os
 from aiohttp import web
@@ -51,10 +53,10 @@ class Host(Thread, SocketIO):
                 'root_path':pages_folder,
             })
             
-        # Write the socket address to the static folder so it can be imported by the page
-        with open(os.path.join(pages_folder, 'static', 'socket_addr.js'),'w') as _file:
-            print(f"Writing {socket_addr} to {_file}")
-            _file.write(f'let socketAddr = "{socket_addr}";')
+            # Write the socket address to the static folder so it can be imported by the page
+            with open(os.path.join(pages_folder, 'static', 'socket_addr.js'),'w') as _file:
+                print(f"Writing {socket_addr} to {_file}")
+                _file.write(f'let socketAddr = "{socket_addr}";')
 
         self.app = app = Flask(
             __name__,
