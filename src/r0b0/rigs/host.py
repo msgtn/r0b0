@@ -74,9 +74,24 @@ class Host(Thread, SocketIO):
                 socket_addr,
                 f"https://{self.hostname}:{self.port}",
             ],
-            **kwargs
-            )
-        Thread.__init__(self,
+            # async_mode='threading',
+            # async_mode='eventlet',
+            max_http_buffer_size=1e8,
+            # max_http_buffer_size=1e4,
+            **kwargs,
+        )
+        # eventlet.monkey_patch()
+        # self.app.wsgi_app = socketio.WSGIApp(self, self.app.wsgi_app)
+        self.socketio_run = partial(SocketIO.run, self)
+        self.thread_kwargs = {
+            "host": self.hostname,
+            "port": self.port,
+            "certfile": certfile,
+            "keyfile": keyfile,
+        }
+
+        Thread.__init__(
+            self,
             # TODO - as above, in order for this to work, must subclass Thread before SocketIO
             # because they both have run() functions
             target = SocketIO.run,

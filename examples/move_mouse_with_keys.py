@@ -20,8 +20,8 @@ def main():
     )
 
     # Create the gadgets and cable
-    pygame_keys = r0b0.gadgets.from_config(os.path.abspath('../config/gadgets/pygame_keys.yaml'))
-    mouse = r0b0.gadgets.from_config(os.path.abspath('../config/gadgets/mouse.yaml'))
+    pygame_keys = r0b0.gadgets.from_config(os.path.abspath('./config/gadgets/pygame_keys.yaml'))
+    mouse = r0b0.gadgets.from_config(os.path.abspath('./config/gadgets/mouse.yaml'))
     key2mouse_cable = Key2MouseCable()
 
     # Add the cable to the rig
