@@ -2,7 +2,7 @@
 The base Gadget class
 """
 import logging
-from r0b0.config import LOCALHOST, SERVER_PORT
+from r0b0.config import LOCALHOST, SERVER_PORT, HEADER
 from r0b0.utils.loaders import decode_msg, encode_msg
 
 from socketio import Client, ClientNamespace

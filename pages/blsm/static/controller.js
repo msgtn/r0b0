@@ -327,6 +327,9 @@ const handleOrientation = (e) => {
   // if (e.timeStamp - lastEvent > 50) {
   if (e.timeStamp - lastEvent > 100) {
     lastEvent = e.timeStamp;
+    let _time = Date.now();
+    let datetime = new Date();
+    let _datetime =  datetime.toISOString();
     var body = {
       event: "device_motion",
       x: beta,
@@ -351,7 +354,8 @@ const handleOrientation = (e) => {
       // armsCtrl: appendageSwitch.checked,
       headCtrl: controlSwitch.checked,
       yaw: 0,
-      time: Date.now(),
+      time: _time,
+      datetime: _datetime,
       portrait: true,
       id: socket.id,
     };

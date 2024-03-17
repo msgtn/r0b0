@@ -1,5 +1,5 @@
 from threading import Thread
-import time
+import time, datetime
 import numpy as np
 from functools import partial
 from r0b0.utils.loaders import decode_msg, encode_msg
@@ -43,6 +43,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
 
         # initialize
         self.power_up = self.init
+        # NOTE - enabling and disabling is slow, use sparingly
         self.enable, self.disable = self.enable_all, self.disable_all
         self.power_up()
         self.disable()
@@ -168,6 +169,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 return_dict.update(
                     {motor_id: getattr(_motor, f"{rw_mode}_{param}")(**motor_kwargs)}
                 )
+        logging.debug(f"{datetime.datetime.now()}, {param}, {motor_id_kwargs}")
         return return_dict
 
     # def turn_to_list(self):
@@ -192,6 +194,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # msg is a data object
         msg = data["msg"]
         logging.debug(msg.value)
+        logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
 
         # TODO - maybe calcualte this before packing with self._msg2kwargs
@@ -219,7 +222,9 @@ class DynamixelRobot(Gadget, DynamixelManager):
             #     # update values
             pass
         logging.debug(motor_id_kwargs)
-        self.enable()
+        logging.debug(f"ENABLE {datetime.datetime.now()}")
+        # self.enable()
+        logging.debug(f"POSITION_EVENT {datetime.datetime.now()}")
         self.set_param(
             "goal_position",
             motor_id_kwargs,

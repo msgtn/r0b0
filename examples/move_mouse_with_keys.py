@@ -1,8 +1,18 @@
 import os
+import logging
+# logging.config.dictConfig()
+logging.basicConfig(
+    encoding='utf-8',
+    level=logging.DEBUG,
+    # level=logging.WARNING,
+)
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
 from r0b0.cables.cable import Key2MouseCable
+
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.DEBUG)
 
 def main():
     """Example rig that maps keys to absolute mouse positions.
