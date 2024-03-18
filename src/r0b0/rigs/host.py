@@ -112,6 +112,7 @@ class Host(Thread, SocketIO):
                 f"{HEADER}://{self.hostname}:{self.port}",
                 # f"{HEADER}://{self.hostname}:{self.port}",
             ],
+            max_http_buffer_size=1e8,
             # async_mode='threading',
             # async_mode='eventlet',
             **kwargs,

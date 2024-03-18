@@ -16,7 +16,6 @@ class Motion2MotorCable(Cable):
 
     def __call__(self, data):
         super().__call__(data)
-        print('call')
         return {
             'event':'position',
             'value':device_motion2dxl_motor(data),

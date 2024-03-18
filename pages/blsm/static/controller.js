@@ -332,9 +332,12 @@ const handleOrientation = (e) => {
     let _datetime =  datetime.toISOString();
     var body = {
       event: "device_motion",
-      x: beta,
-      y: gamma,
-      z: alpha,
+      x: parseFloat(beta.toFixed(2)),
+      y: parseFloat(gamma.toFixed(2)),
+      z: parseFloat(alpha.toFixed(2)),
+      // x: beta,
+      // y: gamma,
+      // z: alpha,
       ax: 0,
       ay: 0,
       az: 0,
