@@ -26,6 +26,7 @@ const config = {
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
 var socket = "";
+var backupSocket = "";
 var lastEvent = 0;
 var initYaw = 0;
 var ctrlAddr = "";
@@ -41,6 +42,7 @@ var controlConsent = false;
 var calibrateEveryControl = true;
 
 var socket = null;
+var backupSocket = null;
 
 var controlBar = document.getElementById("controlBar");
 var calibrateButton = document.getElementById("calibrate");
@@ -180,6 +182,7 @@ function startup() {
 
   // TODO - set this to a yaml config
   socket = io.connect(socketAddr);
+  backupSocket = io.connect(socketAddr);
 
   let peerConnection;
 
@@ -364,6 +367,7 @@ const handleOrientation = (e) => {
     };
 
     socket.emit("device_motion", body);
+    backupSocket.emit("device_motion", body);
     // socket.emit("message", {data: 'test'});
     console.log(body);
   }

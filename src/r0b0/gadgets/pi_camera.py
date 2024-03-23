@@ -19,12 +19,7 @@ ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE = 3
 
-
-# def get_file_number(dir):
-#     return
-
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
-
 
 class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
@@ -48,6 +43,7 @@ class PiCamera(Gadget, Picamera2):
         except:
             pass
 
+        
         self.on("d_down", handler=self.shutter15, namespace=self.namespace)
         self.on("d_right", handler=self.shutter60, namespace=self.namespace)
         self.on("d_up", handler=self.shutter250, namespace=self.namespace)
@@ -69,10 +65,24 @@ class PiCamera(Gadget, Picamera2):
         self.capture_file(str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg"))
 
     @decode_msg
+    def set_shutter(self, shutter_speed):
+        """
+        Set the shutter speed of the camera.
+
+        :param shutter_speed: Shutter speed in milliseconds, i.e. 1e6 / {15, 60, 250}.
+        """
+        logging.debug(f"Shutter speed: 1/{int(1e6 / shutter_speed)}")
+        self.set_controls({
+            "ExposureTime": shutter_speed
+        })
+
+    self
+    @decode_msg
     def shutter15(
         self,
         msg,
     ):
+        s
         logging.debug("Shutter: 1/15")
         self.set_controls({"ExposureTime": int(10e5 / 15)})
         return

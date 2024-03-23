@@ -22,7 +22,7 @@ T_COOLDOWN = 300 / 10e3
 
 class DynamixelRobot(Gadget, DynamixelManager):
     """
-    A Gadget representing a dynamixel robot
+    A Gadget representing a Dynamixel-based robot.
     """
 
     def __init__(self, config, **kwargs):
@@ -262,6 +262,11 @@ class DynamixelRobot(Gadget, DynamixelManager):
 
     @decode_msg
     def _position_event(self, data):
+        """
+        Deprecated.
+
+        :param data: _description_
+        """
         msg = data["msg"]
         if not isinstance(msg.motor_id, list):
             msg.motor_id = [msg.motor_id]
