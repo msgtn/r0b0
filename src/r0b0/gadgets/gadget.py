@@ -74,6 +74,22 @@ class Gadget(Client, Thread):
         # because this is a class; lowercase is for functions
         self.message = Message
         self.Message = Message
+        self.on("call_method",
+            handler=self.call_method_handler,
+            namespace=self.namespace,
+        )
+
+    @decode_msg
+    def call_method_handler(self, msg, *args, **kwargs):
+        """
+        Handler for calling a Gadget's method from an emit.
+
+        :param msg: The message, should contain a "method" attribute. 
+        """
+        if hasattr(self, msg.method):
+            getattr(self, msg.method)(*args, **kwargs)
+        else:
+            logging.debug(f"Gadget {self.name} does not have method {msg.method}()")
 
     @property
     def name(self):

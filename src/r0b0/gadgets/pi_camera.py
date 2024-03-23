@@ -82,7 +82,6 @@ class PiCamera(Gadget, Picamera2):
         self,
         msg,
     ):
-        s
         logging.debug("Shutter: 1/15")
         self.set_controls({"ExposureTime": int(10e5 / 15)})
         return

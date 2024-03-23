@@ -18,35 +18,22 @@ CONFIG_DIR = os.path.abspath(
 
 def main():
     # Start the server
-    # print(LOCALHOST)
-    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../ngrok_public_url.txt')), 'r') as _file:
-        socket_addr = _file.readlines()[0].strip()
-    # print(LOCALHOST)
     
     rig = Rig(
-        # Default: https://localhost:8080
-        # hostname='0.0.0.0',
         hostname=LOCALHOST,
         port=SERVER_PORT,
-        # Point to wherever you created the OpenSSL keys
-        certfile=os.path.join(os.path.dirname(__file__), 'csr.pem'),
-        keyfile=os.path.join(os.path.dirname(__file__), 'key.pem'),
-        pages_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../pages/blsm/')),
-        socket_addr=socket_addr,
     )
 
     # Create the gadgets
-    mpi_camera = r0b0.gadgets.Picamera2()
-    mpi_buttons = r0b0.gadgets.PiButton()
-
-    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_dxl.yaml'))
-    blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'blsm_phone.yaml'))
-    motion2motor_cable = Motion2MotorCable()
-
+    mpi_camera = r0b0.gadgets.from_config(
+        os.path.join(CONFIG_DIR, 'mpi_camera.yaml'))
+    mpi_buttons = r0b0.gadgets.from_config(
+        os.path.join(CONFIG_DIR, 'mpi_buttons.yaml'))
+    mpi_cable = MPiCable()
     rig.add_cable(
-        cable=motion2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=blsm_phone,
+        cable=mpi_cable,
+        rx_gadget=mpi_camera,
+        tx_gadget=mpi_buttons,
         )
     
     # Power on the rig

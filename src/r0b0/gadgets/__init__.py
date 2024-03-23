@@ -64,7 +64,7 @@ from r0b0.utils.loaders import decode_msg, encode_msg
 def from_config(gadget_yaml_path):
     """Create the gadget
 
-    :param gadget_yaml_path: The path to the
+    :param gadget_yaml_path: The path to the gadget's config.yaml
     :returns gadget: The gadget
     :raises Exception: The gadget class does not exist and cannot be created
     """
@@ -75,7 +75,8 @@ def from_config(gadget_yaml_path):
 
     # If the name is not defined, used the filename
     if "name" not in config:
-        gadget_name = os.path.splitext(os.path.basename(gadget_yaml_path))[0]
+        gadget_name = os.path.splitext(
+            os.path.basename(gadget_yaml_path))[0]
         config.update({"name": gadget_name})
     # assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
     return gadget_cls(config)
