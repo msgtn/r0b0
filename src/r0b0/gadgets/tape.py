@@ -6,7 +6,6 @@ import os
 import json
 from collections import OrderedDict
 from socketio import ClientNamespace
-import numpy as np
 from threading import Thread
 from flask import render_template
 import time

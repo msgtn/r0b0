@@ -27,7 +27,7 @@ class PiButton(Gadget):
         )
         self.__dict__.update(
             {
-                pin: self.assign_pins(config[pin], pin_type)
+                pin: self._assign_pins(config[pin], pin_type)
                 for pin, pin_type in pin_types.items()
             }
         )

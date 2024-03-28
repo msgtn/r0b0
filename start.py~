@@ -28,8 +28,8 @@ def main(rig_config):
     rig = Rig(
         hostname=config.get('hostname',LOCALHOST),
         port=config.get('port',SERVER_PORT),
-        certfile=os.path.join(os.path.dirname(__file__), 'examples', 'csr.pem'),
-        keyfile=os.path.join(os.path.dirname(__file__), 'examples', 'key.pem'),
+        # certfile=os.path.join(os.path.dirname(__file__), 'examples', 'csr.pem'),
+        # keyfile=os.path.join(os.path.dirname(__file__), 'examples', 'key.pem'),
 
         # TODO - get rid of this by adding to rig.add_gadget
         # namespaces=[f'/{gadget}' for gadget in config['gadgets']],
