@@ -367,7 +367,7 @@ const handleOrientation = (e) => {
     };
 
     socket.emit("device_motion", body);
-    backupSocket.emit("device_motion", body);
+    // backupSocket.emit("device_motion", body);
     // socket.emit("message", {data: 'test'});
     console.log(body);
   }
