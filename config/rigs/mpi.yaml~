@@ -6,3 +6,6 @@ cables:
 - cable: button2cam
   tx_gadget: mpi_button
   rx_gadget: mpi_camera
+- cable: dpad2shutter
+  tx_gadget: mpi_button
+  rx_gadget: mpi_camera

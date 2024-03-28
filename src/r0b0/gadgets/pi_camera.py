@@ -1,8 +1,7 @@
 from .gadget import Gadget, Message
 from r0b0.config import TAPES_DIR
 from r0b0.utils.loaders import decode_msg
-from r0b0 import logging
-, get_timestamp
+from r0b0 import logging, get_timestamp
 import os
 
 from picamera2 import Picamera2
@@ -76,7 +75,6 @@ class PiCamera(Gadget, Picamera2):
             "ExposureTime": shutter_speed
         })
 
-    self
     @decode_msg
     def shutter15(
         self,

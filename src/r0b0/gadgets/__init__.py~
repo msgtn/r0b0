@@ -22,17 +22,17 @@ GADGETS = {
 #    "dxl_robot": ["DynamixelRobot"],
 #    "arduino": ["ArduinoGadget", "ArduinoRobot"],
     "tape": ["Tape"],
-    "page": ["Page", "MobilePage"],
+#    "page": ["Page", "MobilePage"],
 #    "pygame_gadget": ["PyGameGadget", "PyGameJoystick", "PyGameKeys"],
 #    "mouse": ["Mouse"],
 #    "rtc": ["RTCGadget"],
-    "camera": ["Camera"],
-    "microphone": ["Microphone"],
-    "chatbot": ["ChatBot"],
-    "eink": ["EInk"],
-    "time_controller": ["TimeController"],
+#    "camera": ["Camera"],
+#    "microphone": ["Microphone"],
+#    "chatbot": ["ChatBot"],
+#    "eink": ["EInk"],
+#    "time_controller": ["TimeController"],
     "pi_camera": ["PiCamera"],
-    "pi_button": ["PiButton"],
+    "pi_button": ["PiButton"]
 }
 for pkg, mods in GADGETS.items():
     try:

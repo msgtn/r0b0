@@ -1,5 +1,8 @@
 import numpy as np
-from r0b0.kinematics.blsm import device_motion2dxl_motor
+try:
+    from r0b0.kinematics.blsm import device_motion2dxl_motor
+except:
+    pass
 from r0b0.utils.loaders import decode_msg, encode_msg
 import pickle
 import logging
