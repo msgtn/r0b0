@@ -1,0 +1,7 @@
+r0b0.gadgets.pi\_camera module
+==============================
+
+.. automodule:: r0b0.gadgets.pi_camera
+   :members:
+   :undoc-members:
+   :show-inheritance:

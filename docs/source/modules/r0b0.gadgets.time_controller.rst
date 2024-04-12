@@ -1,0 +1,7 @@
+r0b0.gadgets.time\_controller module
+====================================
+
+.. automodule:: r0b0.gadgets.time_controller
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+r0b0.gadgets.camera module
+==========================
+
+.. automodule:: r0b0.gadgets.camera
+   :members:
+   :undoc-members:
+   :show-inheritance:

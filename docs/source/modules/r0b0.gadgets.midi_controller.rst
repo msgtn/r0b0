@@ -1,0 +1,7 @@
+r0b0.gadgets.midi\_controller module
+====================================
+
+.. automodule:: r0b0.gadgets.midi_controller
+   :members:
+   :undoc-members:
+   :show-inheritance:

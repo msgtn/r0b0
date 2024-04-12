@@ -31,6 +31,8 @@ GADGETS = {
     "chatbot": ["ChatBot"],
     "eink": ["EInk"],
     "time_controller": ["TimeController"],
+    "pi_camera": ["PiCamera"],
+    "pi_button": ["PiButton"],
 }
 for pkg, mods in GADGETS.items():
     try:

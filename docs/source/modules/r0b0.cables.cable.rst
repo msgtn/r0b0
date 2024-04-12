@@ -1,0 +1,7 @@
+r0b0.cables.cable module
+========================
+
+.. automodule:: r0b0.cables.cable
+   :members:
+   :undoc-members:
+   :show-inheritance:

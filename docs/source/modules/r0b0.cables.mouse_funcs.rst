@@ -1,0 +1,7 @@
+r0b0.cables.mouse\_funcs module
+===============================
+
+.. automodule:: r0b0.cables.mouse_funcs
+   :members:
+   :undoc-members:
+   :show-inheritance:

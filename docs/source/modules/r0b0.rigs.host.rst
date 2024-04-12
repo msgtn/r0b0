@@ -1,0 +1,7 @@
+r0b0.rigs.host module
+=====================
+
+.. automodule:: r0b0.rigs.host
+   :members:
+   :undoc-members:
+   :show-inheritance:

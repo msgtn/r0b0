@@ -13,50 +13,55 @@ The platform also supports a cheaper configuration using micro servos and an Ard
 
 
 ### Parts
-The parts to print in `*.stl` format are [available here](./assets/blsm/).
-Each directory contains the whole runner (e.g. [`blsm_A`](./assets/blsm/blsm_A/blsm_A.stl)) or individual parts (e.g. [`A1`](./assets/blsm/blsm_A/A1.stl)).
-I printed the parts on an entry-level [Creality Ender 3](https://www.creality.com/products/ender-3-3d-printer) and sliced the files in Cura using [this profile](./assets/blsm/blsm-020.curaprofile).
-The instructions are [available here](./assets/blsm/blsm.pdf).
+The parts to print in `*.stl` format are [available here](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/).
+Each directory contains the whole runner (e.g. [blsm_A](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/blsm_A.stl) ) or individual parts (e.g. [A1](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/A1.stl)).
+I printed the parts on an entry-level [Creality Ender 3](https://www.creality.com/products/ender-3-3d-printer) and sliced the files in Cura using [this profile](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm-020.curaprofile).
+The instructions are [available here](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm.pdf).
+
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
-| blsm_A | Part runner | 1 | [Print](./assets/blsm/blsm_A/) | NA |
-| blsm_B | Part runner | 2 | [Print](./assets/blsm/blsm_B/) | NA |
-| blsm_C | Part runner | 2 | [Print](./assets/blsm/blsm_C/) | NA |
-| blsm_D | Part runner | 1 | [Print](./assets/blsm/blsm_D/) | NA |
-| blsm_E | Part runner | 3 | [Print](./assets/blsm/blsm_E/) | NA |
-| blsm_F | Part runner | 3 | [Print](./assets/blsm/blsm_F/) | NA |
-| blsm_M | Part runner | 4 | [Print](./assets/blsm/blsm_M/) | NA |
-| blsm_SR | *S*lip *R*ing for rotating the upper body | 1 | [Print the static non-rotating 'dummy' model](./assets/blsm/blsm_SR.stl), or use [the actual 12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
+| blsm_A | Part runner | 1 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/) | NA |
+| blsm_B | Part runner | 2 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_B/) | NA |
+| blsm_C | Part runner | 2 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_C/) | NA |
+| blsm_D | Part runner | 1 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_D/) | NA |
+| blsm_E | Part runner | 3 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_E/) | NA |
+| blsm_F | Part runner | 3 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_F/) | NA |
+| blsm_M | Part runner | 4 | [Print](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_M/) | NA |
+| blsm_SR | *S*lip *R*ing for rotating the upper body | 1 | [Print the static non-rotating 'dummy' model](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_SR.stl), or use [the actual 12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
 | String | String for actuating the head | 1 | Purchase (e.g. [fishing line](https://www.powerpro.com/content/powerpro/northamerica/us/en/homepage/PDP.P-POWERPRO.html), [twine](https://www.amazon.com/White-Cotton-Butchers-Twine-String/dp/B09TQXBFYD/)) | $5-$20 |
-| Rubber bands, 4mm diameter | Rubber bands for hanging the head platform | 6 | Purchase (e.g. [black rubber bands](https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/)) | $8 |
+| Rubber bands, 4mm diameter | Rubber bands for hanging the head platform | 6 | Purchase e.g. [black rubber bands](https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/) | $8 |
 
 ### Motors and electronics
 The standard full-featured configuration uses Dynamixel 'smart' servos.
 Dynamixels have a lot of nice features built in, such as different operating modes (position- or velocity-control modes), velocity and acceleration profiles, and PID tweaking.
+
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
-| Dynamixel XL330-M288 | Motor | 4 | [Purchase](https://www.robotis.us/dynamixel-xl330-m288-t/) | $100 ($25/ea) |
-| Dynamixel X3P Cable | Cables (included with XL330 motors) | 6 | [Purchase](https://www.robotis.us/robot-cable-x3p-180mm-10pcs/) | NA (included with XL330 motors — only buy if need spares) |
+| Dynamixel XL330-M288 | Motor | 4 | [Purchase](https://www.robotis.us/dynamixel-xl330-m288-t) | $100 ($25/ea) |
+| Dynamixel X3P Cable | Cables (included with XL330 motors) | 6 | [Purchase](https://www.robotis.us/robot-cable-x3p-180mm-10pcs) | NA (included with XL330 motors — only buy if need spares) |
 | Dynamixel U2D2 | Motor controller | 1 | [Purchase](https://www.robotis.us/u2d2/) | $32.00 |
 
 The Arduino-powered configuration is much cheaper (around the cost of just one Dynamixel) and more hackable, though the movement is noisier and less smooth.
 The left-right yaw rotation is also limited to ±90°.
+
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
 | Arduino (or clone) | Microcontroller and cable | 1 | [Purchase](https://www.amazon.com/ELEGOO-Board-ATmega328P-ATMEGA16U2-Compliant/dp/B01EWOE0UU) | $15 |
 | Micro servo | Small servos with basic position control | 4 | [Purchase](https://www.amazon.com/Dorhea-Arduino-Helicopter-Airplane-Walking/dp/B07Q6JGWNV/) | $10 |
 
 ### Wiring
-For the Dynamixel-powered configuration, [refer to the wiring documentation to set up the U2D2 controller with an external power supply](./wiring.md).
-For the Arduino-powered design, refer to [this Fritzing diagram](./assets/blsm/blsm_ard.png).
+For the Dynamixel-powered configuration, [refer to the wiring documentation to set up the U2D2 controller with an external power supply](https://github.com/msgtn/r0b0/blob/main/docs/wiring.md).
+For the Arduino-powered design, refer to [this Fritzing diagram](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_ard.png).
 Either configuration will require USB breakouts for power and some cables.
 
 | Part |  Description | Quantity | Method | Approximate total cost |
+| ---- | ------------ | -------- | ------ | ---------------------- |
 | USB breakout | Breaks out power connections to ease supplying power | 1 | [Purchase](https://www.amazon.com/Treedix-Type-C-Breakout-Connector-Converter/dp/B096M2HQLK) | $6 |
-| Male-Female and Male-Male wires | Connects components | Several | [Purchase](https://www.amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78/), or use spare cables and breadboards | $7 |
+| Male-Female and Male-Male wires | Connects components | Several | [Purchase](https://www.amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78) , or use spare cables and breadboards | $7 |
 
 ### Hardware
 The minimal M2 hardware required is all available in [this set](https://www.amazon.com/gp/product/B082XR52P1/) for $10.
+
 | Part | Quantity | Notes |
 | ---- | -------- | ----- |
 | M2x8mm | 14 | |
@@ -64,6 +69,7 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 | M2 nuts | 12 | Only necessary if using SG90 servos |
 
 ### Tools and miscellaneous
+
 | Part | Description | Quantity | Notes |
 | ---- | ----------- | -------- | --- | 
 | Wire cutters | Cutting parts from the runners, cutting wires | 1 | |
@@ -77,7 +83,7 @@ Follow the [wiring instructions](/docs/wiring.md).
 ## Software
 
 ### Environment setup
-Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [`mouse`](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [mouse](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
 ```
 conda env create -f env.yaml
 conda activate r0b0
@@ -179,7 +185,7 @@ Start the `blsm` rig configuration, which contains the `blsm_dxl` robot as a `Dy
 The rig uses the `motion2motor` cable to translate `device_motion` events from the page (when accessed from a mobile browser) into `position` events for the motor.
 <!-- *Note: if using the older Blossom -->
 
-In [`/config/gadgets/blsm_dxl.yaml`](/config/gadgets/blsm_dxl.yaml), modify `usb_port` with the port we found during the motor calibration step:
+In `/config/gadgets/blsm_dxl.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml)), modify `usb_port` with the port we found during the motor calibration step:
 ```
 type: DynamixelRobot
 usb_port: /dev/tty.usbserial-FT1SF1UM   # modify this
@@ -198,8 +204,8 @@ Open [r0b0/gadgets/Standardfirmata.ino](../r0b0/gadgets/StandardFirmata/Standard
 To find the port that the Arduino is connected to, use the Arduino IDE (`Tools` > `Port`).
 Upload the firmware to the board (`Sketch` > `Upload`).
 
-Next, we need to modify the configuration at [`/config/gadgets/blsm_ard.yaml`](/config/gadgets/blsm_ard.yaml) with the `usb_port` and motor `id`s.
-For the motor IDs, refer to the [Fritzing diagram](./assets/blsm/blsm_ard.png) and modify according to your specific build:
+Next, we need to modify the configuration at `/config/gadgets/blsm_ard.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml)) with the `usb_port` and motor `id`s.
+For the motor IDs, refer to the [Fritzing diagram](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_ard.png) and modify according to your specific build:
 ```
 type: ArduinoRobot
 usb_port: /dev/cu.usbserial-ADAQDbKpQ # modify this to the port that the Arduino is connected to
@@ -273,28 +279,17 @@ They should be set to the `ngrok` address tunnelling to `https://localhost:8080`
 There is a bit of lag between the phone control and the robot control, which is to be expected considering the data passing through the network.
 Try the following if the lag is too large for your application.
 
-#### Logging level
-In [`/r0b0/__init__.py`](/r0b0/__init__.py), ensure that the logging level is set to 'warning' to prevent printing out in the terminal:
-```
-import logging
-logging.basicConfig(
-    encoding='utf-8',
-    # level=logging.DEBUG,    # comment this out
-    level=logging.WARNING,    # make sure this is selected
-    )
-```
-
 #### Networking
 Ensure that the phone controller is connected to the same network as the robot's computer.
 
 #### Motor parameters 
-The robot configuration at [`/config/gadgets/blsm_dxl.yaml`](/config/gadgets/blsm_dxl.yaml) contains parameters for the motor movement, such as the goal/profile velocity/acceleration.
-On startup, [`/r0b0/gadgets/dxl_robot.py`](/r0b0/gadgets/dxl_robot.py) configures these parameters during startup. 
+The robot configuration at `/config/gadgets/blsm_dxl.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_dxl.yaml)) contains parameters for the motor movement, such as the goal/profile velocity/acceleration.
+On startup, `/r0b0/gadgets/dxl_robot.py` ([here](https://github.com/msgtn/r0b0/blob/main/src/r0b0/gadgets/dxl_robot.py)) configures these parameters during startup. 
 You can tune these values, and [refer to the motor documentation](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/) for available parameters.
 
 To set motor parameters, add values as entries in the configuration file.
 Any writable parameter can be set in the configuration file — just add the entry as lower cased and underscored (e.g. 'Profile Velocity' -> `profile_velocity`)
-For example, in [`/config/gadgets/blsm_dxl.yaml`](/config/gadgets/blsm_dxl.yaml), to set `tower_1`'s [Profile Velocity](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-velocity) and [Profile Acceleration](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-acceleration) to 300 and 100, respectively:
+For example, in `/config/gadgets/blsm_dxl.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_dxl.yaml)), to set `tower_1`'s [Profile Velocity](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-velocity) and [Profile Acceleration](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-acceleration) to 300 and 100, respectively:
 ```
 - name: tower_1
   model: xl330-m288

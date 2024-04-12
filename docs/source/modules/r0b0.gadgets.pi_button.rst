@@ -1,0 +1,7 @@
+r0b0.gadgets.pi\_button module
+==============================
+
+.. automodule:: r0b0.gadgets.pi_button
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+r0b0.gadgets.mediapipe\_gadget module
+=====================================
+
+.. automodule:: r0b0.gadgets.mediapipe_gadget
+   :members:
+   :undoc-members:
+   :show-inheritance:

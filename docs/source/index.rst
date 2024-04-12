@@ -1,16 +1,42 @@
-.. r0b0 documentation master file, created by
-   sphinx-quickstart on Fri Dec 15 21:24:55 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to r0b0's documentation!
-================================
+r0b0 
+======
 
 .. toctree::
-   :maxdepth: 5
-   :caption: Contents:
+   :maxdepth: 4
+   :caption: Getting started
+   :hidden:
 
-   source/modules
+   README
+
+.. toctree::
+   :maxdepth: 4
+   :caption: Blossom  
+   :hidden:
+
+   blsm
+
+
+.. toctree::
+   :maxdepth: 10
+   :caption: API Reference
+   :hidden:
+
+   modules/r0b0
+
+`Getting started <README.html>`_
+======
+Overview of `r0b0`.
+
+
+`Blossom <blsm.html>`_
+======
+Reference for the Blossom robot.
+
+
+`API Reference <py-modindex.html>`_
+======
+Reference the source code
+
 
 Indices and tables
 ==================

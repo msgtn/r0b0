@@ -1,0 +1,19 @@
+r0b0.rigs package
+=================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   r0b0.rigs.host
+   r0b0.rigs.rig
+
+Module contents
+---------------
+
+.. automodule:: r0b0.rigs
+   :members:
+   :undoc-members:
+   :show-inheritance:

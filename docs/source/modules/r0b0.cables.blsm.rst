@@ -1,0 +1,7 @@
+r0b0.cables.blsm module
+=======================
+
+.. automodule:: r0b0.cables.blsm
+   :members:
+   :undoc-members:
+   :show-inheritance:

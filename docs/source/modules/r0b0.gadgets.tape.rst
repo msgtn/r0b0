@@ -1,0 +1,7 @@
+r0b0.gadgets.tape module
+========================
+
+.. automodule:: r0b0.gadgets.tape
+   :members:
+   :undoc-members:
+   :show-inheritance:
