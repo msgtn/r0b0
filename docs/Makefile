@@ -35,6 +35,5 @@ serve:
 	python3 -m http.server --directory build/html 7777
 
 docpush:
-	- git push origin --delete gh-pages
-	- git branch -d gh-pages
-	cd .. && git subtree push --prefix docs/build/html origin gh-pages
+	make rebuild
+	./deploy.sh

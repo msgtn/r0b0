@@ -2,10 +2,10 @@
 ========
 
 r0b0 is a communication library for connecting hardware and software.
-Think of it like
-```aconnect`` <https://man.archlinux.org/man/aconnect.1.en>`__ for
-things beyond MIDI devices. The system is my general-purpose tool for
-quickly prototyping mechatronic systems with a bend towards creative
+The inspiration is
+`aconnect <https://man.archlinux.org/man/aconnect.1.en>`__ for things
+beyond MIDI devices. The system is my general-purpose tool for quickly
+prototyping mechatronic systems with a bend towards creative
 applications.
 
 Design rationale
@@ -179,8 +179,8 @@ Environment setup
 
 Set up `conda <https://conda.io>`__, then set up a conda environment and
 install some other dependencies with ``pip`` (because of issues with
-```mouse`` <https://github.com/boppreh/mouse/issues/75>`__). Docker
-maybe coming soon (maybe).
+`mouse <https://github.com/boppreh/mouse/issues/75>`__). Docker maybe
+coming soon (maybe).
 
 ::
 
@@ -188,4 +188,4 @@ maybe coming soon (maybe).
    conda activate r0b0
    pip3 install -r req.txt 
 
-.. |Example structure of the r0b0 framework| image:: docs/assets/r0b0.png
+.. |Example structure of the r0b0 framework| image:: https://github.com/msgtn/r0b0/docs/assets/r0b0.png

@@ -2,9 +2,11 @@ Blossom
 =======
 
 *2023-07-14 This page is a work-in-progress.* This page covers the build
-and use of a Blossom robot, specifically: - Building the robot hardware
-- Setting up the software - Controlling the robot using the mobile
-interface
+and use of a Blossom robot, specifically:
+
+-  Building the robot hardware
+-  Setting up the software
+-  Controlling the robot using the mobile interface
 
 Build
 -----
