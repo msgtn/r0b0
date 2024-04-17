@@ -2,7 +2,7 @@
 ========
 
 r0b0 is a communication library for connecting hardware and software.
-Think of it like
+The inspiration is
 `aconnect <https://man.archlinux.org/man/aconnect.1.en>`__ for things
 beyond MIDI devices. The system is my general-purpose tool for quickly
 prototyping mechatronic systems with a bend towards creative
@@ -188,4 +188,4 @@ coming soon (maybe).
    conda activate r0b0
    pip3 install -r req.txt 
 
-.. |Example structure of the r0b0 framework| image:: docs/assets/r0b0.png
+.. |Example structure of the r0b0 framework| image:: ./assets/assets/r0b0.png
