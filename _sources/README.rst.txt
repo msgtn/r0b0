@@ -27,6 +27,10 @@ each other to enable ease of modification.
 Structure
 ---------
 
+.. raw:: html
+
+   <!-- <img src="https://github.com/msgtn/r0b0/blob/main/docs/assets/r0b0.png?raw=true"> -->
+
 |Example structure of the r0b0 framework| *Example ``Rig``
 configuration.*
 
@@ -114,7 +118,7 @@ functional interface. Examples will be stored in
 Blossom
 ~~~~~~~
 
-Blossom-specific documentation is available `here <./docs/blsm.md>`__.
+Blossom-specific documentation is available `here <./blsm.html>`__.
 
 Leica MPi
 ~~~~~~~~~
@@ -188,4 +192,4 @@ coming soon (maybe).
    conda activate r0b0
    pip3 install -r req.txt 
 
-.. |Example structure of the r0b0 framework| image:: ./assets/assets/r0b0.png
+.. |Example structure of the r0b0 framework| image:: https://github.com/msgtn/r0b0/blob/main/docs/assets/r0b0.png?raw=true
