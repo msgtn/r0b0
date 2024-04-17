@@ -184,9 +184,9 @@
 <h1><code class="docutils literal notranslate"><span class="pre">r0b0</span></code><a class="headerlink" href="#r0b0" title="Link to this heading"></a></h1>
 <p>r0b0 is a communication library for connecting hardware and software.
 Think of it like
-<code class="docutils literal notranslate"><span class="pre">`aconnect</span></code> &lt;<a class="reference external" href="https://man.archlinux.org/man/aconnect.1.en">https://man.archlinux.org/man/aconnect.1.en</a>&gt;`__ for
-things beyond MIDI devices. The system is my general-purpose tool for
-quickly prototyping mechatronic systems with a bend towards creative
+<a class="reference external" href="https://man.archlinux.org/man/aconnect.1.en">aconnect</a> for things
+beyond MIDI devices. The system is my general-purpose tool for quickly
+prototyping mechatronic systems with a bend towards creative
 applications.</p>
 <section id="design-rationale">
 <h2>Design rationale<a class="headerlink" href="#design-rationale" title="Link to this heading"></a></h2>
@@ -329,8 +329,8 @@ presses to <code class="docutils literal notranslate"><span class="pre">Mouse</s
 <span id="id3"></span><h3>Environment setup<a class="headerlink" href="#environment-setup-1" title="Link to this heading"></a></h3>
 <p>Set up <a class="reference external" href="https://conda.io">conda</a>, then set up a conda environment and
 install some other dependencies with <code class="docutils literal notranslate"><span class="pre">pip</span></code> (because of issues with
-<code class="docutils literal notranslate"><span class="pre">`mouse</span></code> &lt;<a class="reference external" href="https://github.com/boppreh/mouse/issues/75">https://github.com/boppreh/mouse/issues/75</a>&gt;`__). Docker
-maybe coming soon (maybe).</p>
+<a class="reference external" href="https://github.com/boppreh/mouse/issues/75">mouse</a>). Docker maybe
+coming soon (maybe).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="n">r0b0</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">.</span><span class="n">yaml</span>
 <span class="n">conda</span> <span class="n">activate</span> <span class="n">r0b0</span>
 <span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">req</span><span class="o">.</span><span class="n">txt</span>
