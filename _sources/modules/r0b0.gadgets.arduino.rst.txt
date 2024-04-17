@@ -1,0 +1,7 @@
+r0b0.gadgets.arduino module
+===========================
+
+.. automodule:: r0b0.gadgets.arduino
+   :members:
+   :undoc-members:
+   :show-inheritance:

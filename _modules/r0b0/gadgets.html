@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.gadgets &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">r0b0.gadgets</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.gadgets</h1><div class="highlight"><pre>
+<span></span><span class="c1"># from .gadget import Gadget</span>
+<span class="c1"># from .midi_controller import MIDIController</span>
+<span class="c1"># from .dxl_robot import DynamixelRobot</span>
+<span class="c1"># from .arduino import ArduinoGadget, ArduinoRobot</span>
+<span class="c1"># from .tape import Tape</span>
+<span class="c1"># from .page import Page, MobilePage</span>
+<span class="c1"># from .pygame_gadget import PyGameGadget, PyGameJoystick, PyGameKeys</span>
+<span class="c1"># from .mouse import Mouse</span>
+<span class="c1"># from .rtc import RTCGadget</span>
+<span class="c1"># from .camera import Camera</span>
+<span class="c1"># from .microphone import Microphone</span>
+<span class="c1"># from .chatbot import ChatBot</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">r0b0.utils</span> <span class="kn">import</span> <span class="n">loaders</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
+
+<span class="n">GADGETS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;gadget&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Gadget&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;midi_controller&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MIDIController&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;dxl_robot&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;DynamixelRobot&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;arduino&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ArduinoGadget&quot;</span><span class="p">,</span> <span class="s2">&quot;ArduinoRobot&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;tape&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Tape&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Page&quot;</span><span class="p">,</span> <span class="s2">&quot;MobilePage&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;pygame_gadget&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;PyGameGadget&quot;</span><span class="p">,</span> <span class="s2">&quot;PyGameJoystick&quot;</span><span class="p">,</span> <span class="s2">&quot;PyGameKeys&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;mouse&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mouse&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;rtc&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;RTCGadget&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;camera&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Camera&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;microphone&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Microphone&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;chatbot&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ChatBot&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;eink&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EInk&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;time_controller&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TimeController&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;pi_camera&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;PiCamera&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;pi_button&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;PiButton&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">pkg</span><span class="p">,</span> <span class="n">mods</span> <span class="ow">in</span> <span class="n">GADGETS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_pkg</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;r0b0.gadgets.</span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">mod</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_pkg</span><span class="p">,</span> <span class="n">mod</span><span class="p">)</span> <span class="k">for</span> <span class="n">mod</span> <span class="ow">in</span> <span class="n">mods</span><span class="p">})</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Error importing package </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="s2">; its dependencies may not be installed&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># for mod in mods:</span>
+    <span class="c1">#     globals().update({})</span>
+    <span class="c1"># import_module(f&#39;{mod}&#39;,f&#39;.{pkg}&#39;)</span>
+    <span class="c1"># import_module(f&#39;.{pkg}.{mod}&#39;,&#39;r0b0.gadgets&#39;)</span>
+    <span class="c1"># import_module()</span>
+
+<span class="kn">from</span> <span class="nn">r0b0.utils.loaders</span> <span class="kn">import</span> <span class="n">decode_msg</span><span class="p">,</span> <span class="n">encode_msg</span>
+
+<span class="c1"># import logging</span>
+
+<span class="c1"># logging = logging.getLogger(__name__)</span>
+<span class="c1"># logging.basicConfig(</span>
+<span class="c1"># #     # filename=&#39;example.log&#39;,</span>
+<span class="c1">#     encoding=&#39;utf-8&#39;,</span>
+<span class="c1">#     level=logging.INFO,</span>
+<span class="c1">#     # level=logging.DEBUG,</span>
+<span class="c1">#     )</span>
+
+<span class="c1"># def from_config()</span>
+
+
+<div class="viewcode-block" id="from_config">
+<a class="viewcode-back" href="../../r0b0.gadgets.html#r0b0.gadgets.from_config">[docs]</a>
+<span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="n">gadget_yaml_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the gadget</span>
+
+<span class="sd">    :param gadget_yaml_path: The path to the gadget&#39;s config.yaml</span>
+<span class="sd">    :returns gadget: The gadget</span>
+<span class="sd">    :raises Exception: The gadget class does not exist and cannot be created</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">loaders</span><span class="o">.</span><span class="n">load_yaml</span><span class="p">(</span><span class="n">gadget_yaml_path</span><span class="p">)</span>
+    <span class="n">gadget_cls</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">gadget_cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Gadget type </span><span class="si">{</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+
+    <span class="c1"># If the name is not defined, used the filename</span>
+    <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">gadget_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">gadget_yaml_path</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">gadget_name</span><span class="p">})</span>
+    <span class="c1"># assert gadget_cls is not None, f&quot;Gadget type {config[&#39;type&#39;]} does not exist&quot;</span>
+    <span class="k">return</span> <span class="n">gadget_cls</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

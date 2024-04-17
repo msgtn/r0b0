@@ -1,0 +1,25 @@
+r0b0.cables package
+===================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   r0b0.cables.blsm
+   r0b0.cables.cable
+   r0b0.cables.eink_cables
+   r0b0.cables.midi_funcs
+   r0b0.cables.mouse_funcs
+   r0b0.cables.mpi_cables
+   r0b0.cables.msg_funcs
+   r0b0.cables.ps2014
+
+Module contents
+---------------
+
+.. automodule:: r0b0.cables
+   :members:
+   :undoc-members:
+   :show-inheritance:

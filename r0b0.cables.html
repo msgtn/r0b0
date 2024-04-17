@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.cables package &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">r0b0.cables package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-r0b0.cables.blsm">r0b0.cables.blsm module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.blsm.Motion2MotorCable"><code class="docutils literal notranslate"><span class="pre">Motion2MotorCable</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.joy2rover"><code class="docutils literal notranslate"><span class="pre">joy2rover()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.joy2vel"><code class="docutils literal notranslate"><span class="pre">joy2vel()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.motion2arduino_motor"><code class="docutils literal notranslate"><span class="pre">motion2arduino_motor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.motion2motor"><code class="docutils literal notranslate"><span class="pre">motion2motor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.motion2motor320"><code class="docutils literal notranslate"><span class="pre">motion2motor320()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.motion2velocity"><code class="docutils literal notranslate"><span class="pre">motion2velocity()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.blsm.response2blsm"><code class="docutils literal notranslate"><span class="pre">response2blsm()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.cable">r0b0.cables.cable module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.cable.Cable"><code class="docutils literal notranslate"><span class="pre">Cable</span></code></a><ul>
+<li><a class="reference internal" href="#r0b0.cables.cable.Cable.inner_call"><code class="docutils literal notranslate"><span class="pre">Cable.inner_call()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.cable.Cable.log_data"><code class="docutils literal notranslate"><span class="pre">Cable.log_data()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#r0b0.cables.cable.Key2MouseCable"><code class="docutils literal notranslate"><span class="pre">Key2MouseCable</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.cable.MidiRel2PositionCable"><code class="docutils literal notranslate"><span class="pre">MidiRel2PositionCable</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.eink_cables">r0b0.cables.eink_cables module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.eink_cables.SaveImageCable"><code class="docutils literal notranslate"><span class="pre">SaveImageCable</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.eink_cables.Upload2DrawCable"><code class="docutils literal notranslate"><span class="pre">Upload2DrawCable</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.midi_funcs">r0b0.cables.midi_funcs module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.midi_funcs.midi_rel2position"><code class="docutils literal notranslate"><span class="pre">midi_rel2position()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.mouse_funcs">r0b0.cables.mouse_funcs module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.mouse_funcs.Motor2MouseCable"><code class="docutils literal notranslate"><span class="pre">Motor2MouseCable</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.mouse_funcs.key2mouse_place"><code class="docutils literal notranslate"><span class="pre">key2mouse_place()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.msg_funcs">r0b0.cables.msg_funcs module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.button2cam"><code class="docutils literal notranslate"><span class="pre">button2cam()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.cc2ard"><code class="docutils literal notranslate"><span class="pre">cc2ard()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.cc2motor"><code class="docutils literal notranslate"><span class="pre">cc2motor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.joy2ardmotor"><code class="docutils literal notranslate"><span class="pre">joy2ardmotor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.joy2dxlmotor"><code class="docutils literal notranslate"><span class="pre">joy2dxlmotor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.joy2midi"><code class="docutils literal notranslate"><span class="pre">joy2midi()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.joy2mouse_button"><code class="docutils literal notranslate"><span class="pre">joy2mouse_button()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.joy2mouse_move"><code class="docutils literal notranslate"><span class="pre">joy2mouse_move()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.key2cam"><code class="docutils literal notranslate"><span class="pre">key2cam()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.key2mic"><code class="docutils literal notranslate"><span class="pre">key2mic()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.motion2ardmotor"><code class="docutils literal notranslate"><span class="pre">motion2ardmotor()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.motion2midi"><code class="docutils literal notranslate"><span class="pre">motion2midi()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.msg_func"><code class="docutils literal notranslate"><span class="pre">msg_func()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.text2prompt"><code class="docutils literal notranslate"><span class="pre">text2prompt()</span></code></a></li>
+<li><a class="reference internal" href="#r0b0.cables.msg_funcs.text2yes_no_prompt"><code class="docutils literal notranslate"><span class="pre">text2yes_no_prompt()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables.ps2014">r0b0.cables.ps2014 module</a><ul>
+<li><a class="reference internal" href="#r0b0.cables.ps2014.ps2014app"><code class="docutils literal notranslate"><span class="pre">ps2014app()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-r0b0.cables">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">r0b0.cables package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/r0b0.cables.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="r0b0-cables-package">
+<h1>r0b0.cables package<a class="headerlink" href="#r0b0-cables-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-r0b0.cables.blsm">
+<span id="r0b0-cables-blsm-module"></span><h2>r0b0.cables.blsm module<a class="headerlink" href="#module-r0b0.cables.blsm" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.Motion2MotorCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">Motion2MotorCable</span></span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#Motion2MotorCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.Motion2MotorCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+<p>Converts phone’s device motion into motor positions for Blossom</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.joy2rover">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">joy2rover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#joy2rover"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.joy2rover" title="Link to this definition"></a></dt>
+<dd><p>Converts joystick axis data to wheel motors for “roving”</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.joy2vel">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">joy2vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#joy2vel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.joy2vel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.motion2arduino_motor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">motion2arduino_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#motion2arduino_motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.motion2arduino_motor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.motion2motor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">motion2motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#motion2motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.motion2motor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.motion2motor320">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">motion2motor320</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#motion2motor320"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.motion2motor320" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.motion2velocity">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">motion2velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#motion2velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.motion2velocity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.blsm.response2blsm">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.blsm.</span></span><span class="sig-name descname"><span class="pre">response2blsm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/blsm.html#response2blsm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.blsm.response2blsm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-r0b0.cables.cable">
+<span id="r0b0-cables-cable-module"></span><h2>r0b0.cables.cable module<a class="headerlink" href="#module-r0b0.cables.cable" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.cable.Cable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.cable.</span></span><span class="sig-name descname"><span class="pre">Cable</span></span><a class="reference internal" href="_modules/r0b0/cables/cable.html#Cable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.cable.Cable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.cables.cable.Cable.inner_call">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inner_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/cable.html#Cable.inner_call"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.cable.Cable.inner_call" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="r0b0.cables.cable.Cable.log_data">
+<span class="sig-name descname"><span class="pre">log_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/cable.html#Cable.log_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.cable.Cable.log_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.cable.Key2MouseCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.cable.</span></span><span class="sig-name descname"><span class="pre">Key2MouseCable</span></span><a class="reference internal" href="_modules/r0b0/cables/cable.html#Key2MouseCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.cable.Key2MouseCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+<p>Converts key presses to absolute mouse positions</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.cable.MidiRel2PositionCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.cable.</span></span><span class="sig-name descname"><span class="pre">MidiRel2PositionCable</span></span><a class="reference internal" href="_modules/r0b0/cables/cable.html#MidiRel2PositionCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.cable.MidiRel2PositionCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+<p>Converts relative MIDI_CC messages (increment/decrement) into relative motor positions
+for OpenArm</p>
+</dd></dl>
+
+</section>
+<section id="module-r0b0.cables.eink_cables">
+<span id="r0b0-cables-eink-cables-module"></span><h2>r0b0.cables.eink_cables module<a class="headerlink" href="#module-r0b0.cables.eink_cables" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.eink_cables.SaveImageCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.eink_cables.</span></span><span class="sig-name descname"><span class="pre">SaveImageCable</span></span><a class="reference internal" href="_modules/r0b0/cables/eink_cables.html#SaveImageCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.eink_cables.SaveImageCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.eink_cables.Upload2DrawCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.eink_cables.</span></span><span class="sig-name descname"><span class="pre">Upload2DrawCable</span></span><a class="reference internal" href="_modules/r0b0/cables/eink_cables.html#Upload2DrawCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.eink_cables.Upload2DrawCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+<p>Page file_upload to E-Ink draw_image</p>
+</dd></dl>
+
+</section>
+<section id="module-r0b0.cables.midi_funcs">
+<span id="r0b0-cables-midi-funcs-module"></span><h2>r0b0.cables.midi_funcs module<a class="headerlink" href="#module-r0b0.cables.midi_funcs" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.midi_funcs.midi_rel2position">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.midi_funcs.</span></span><span class="sig-name descname"><span class="pre">midi_rel2position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/midi_funcs.html#midi_rel2position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.midi_funcs.midi_rel2position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-r0b0.cables.mouse_funcs">
+<span id="r0b0-cables-mouse-funcs-module"></span><h2>r0b0.cables.mouse_funcs module<a class="headerlink" href="#module-r0b0.cables.mouse_funcs" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="r0b0.cables.mouse_funcs.Motor2MouseCable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">r0b0.cables.mouse_funcs.</span></span><span class="sig-name descname"><span class="pre">Motor2MouseCable</span></span><a class="reference internal" href="_modules/r0b0/cables/mouse_funcs.html#Motor2MouseCable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.mouse_funcs.Motor2MouseCable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#r0b0.cables.cable.Cable" title="r0b0.cables.cable.Cable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cable</span></code></a></p>
+<p>Converts key presses to absolute mouse positions</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.mouse_funcs.key2mouse_place">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.mouse_funcs.</span></span><span class="sig-name descname"><span class="pre">key2mouse_place</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/mouse_funcs.html#key2mouse_place"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.mouse_funcs.key2mouse_place" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-r0b0.cables.msg_funcs">
+<span id="r0b0-cables-msg-funcs-module"></span><h2>r0b0.cables.msg_funcs module<a class="headerlink" href="#module-r0b0.cables.msg_funcs" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.button2cam">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">button2cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#button2cam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.button2cam" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.cc2ard">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">cc2ard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#cc2ard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.cc2ard" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.cc2motor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">cc2motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#cc2motor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.cc2motor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.joy2ardmotor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">joy2ardmotor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#joy2ardmotor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.joy2ardmotor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.joy2dxlmotor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">joy2dxlmotor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#joy2dxlmotor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.joy2dxlmotor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.joy2midi">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">joy2midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#joy2midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.joy2midi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.joy2mouse_button">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">joy2mouse_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#joy2mouse_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.joy2mouse_button" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.joy2mouse_move">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">joy2mouse_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#joy2mouse_move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.joy2mouse_move" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.key2cam">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">key2cam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#key2cam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.key2cam" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.key2mic">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">key2mic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#key2mic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.key2mic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.motion2ardmotor">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">motion2ardmotor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#motion2ardmotor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.motion2ardmotor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.motion2midi">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">motion2midi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#motion2midi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.motion2midi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.msg_func">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">msg_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_event</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_event</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#msg_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.msg_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.text2prompt">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">text2prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#text2prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.text2prompt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.msg_funcs.text2yes_no_prompt">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.msg_funcs.</span></span><span class="sig-name descname"><span class="pre">text2yes_no_prompt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/msg_funcs.html#text2yes_no_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.msg_funcs.text2yes_no_prompt" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-r0b0.cables.ps2014">
+<span id="r0b0-cables-ps2014-module"></span><h2>r0b0.cables.ps2014 module<a class="headerlink" href="#module-r0b0.cables.ps2014" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="r0b0.cables.ps2014.ps2014app">
+<span class="sig-prename descclassname"><span class="pre">r0b0.cables.ps2014.</span></span><span class="sig-name descname"><span class="pre">ps2014app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/r0b0/cables/ps2014.html#ps2014app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#r0b0.cables.ps2014.ps2014app" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-r0b0.cables">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-r0b0.cables" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

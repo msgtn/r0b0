@@ -1,0 +1,7 @@
+r0b0.gadgets.pi\_screen module
+==============================
+
+.. automodule:: r0b0.gadgets.pi_screen
+   :members:
+   :undoc-members:
+   :show-inheritance:

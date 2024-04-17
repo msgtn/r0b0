@@ -1,0 +1,7 @@
+r0b0.gadgets.page module
+========================
+
+.. automodule:: r0b0.gadgets.page
+   :members:
+   :undoc-members:
+   :show-inheritance:

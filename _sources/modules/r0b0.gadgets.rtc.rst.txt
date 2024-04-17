@@ -1,0 +1,7 @@
+r0b0.gadgets.rtc module
+=======================
+
+.. automodule:: r0b0.gadgets.rtc
+   :members:
+   :undoc-members:
+   :show-inheritance:

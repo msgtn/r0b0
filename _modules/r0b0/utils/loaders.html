@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.utils.loaders &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html"><code class="docutils literal notranslate"><span class="pre">r0b0</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#design-rationale">Design rationale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#gadgets">Gadgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#cables">Cables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#rigs">Rigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#environment-setup">Environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#example-rigs">Example Rigs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#blossom">Blossom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#leica-mpi">Leica MPi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#joystick-controlled-mouse">Joystick-controlled mouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#robot-death-star-lamp">Robot Death Star Lamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#setup-1">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#install-1">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#environment-setup-1">Environment setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Blossom</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../blsm.html">Blossom</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#build">Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#parts">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motors-and-electronics">Motors and electronics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#wiring">Wiring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#hardware">Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#tools-and-miscellaneous">Tools and miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#wiring-1">Wiring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#environment-setup">Environment setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#ngrok-setup">ngrok setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motor-calibration-dynamixel-models-only">Motor calibration (Dynamixel models only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#starting-the-blsm-rig">Starting the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#dynamixel">Dynamixel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#arduino">Arduino</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#telepresence">Telepresence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#video-optional">Video (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#control">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#recording-movements">Recording movements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#player">Player</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motor-settings">Motor settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#interface-issues">Interface issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#slow-control">Slow control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../blsm.html#networking">Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../blsm.html#motor-parameters">Motor parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/r0b0.html">r0b0 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.cables.html">r0b0.cables package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.cables.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.cables.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.gadgets.html">r0b0.gadgets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.gadgets.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.gadgets.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.rigs.html">r0b0.rigs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.rigs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.rigs.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.utils.html">r0b0.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.utils.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.config.html">r0b0.config module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#module-r0b0">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.html#r0b0.get_timestamp"><code class="docutils literal notranslate"><span class="pre">get_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">r0b0.utils.loaders</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.utils.loaders</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">r0b0.config</span> <span class="kn">import</span> <span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="n">LOCALHOST</span><span class="p">,</span> <span class="n">SERVER_PORT</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+
+<div class="viewcode-block" id="load_yaml">
+<a class="viewcode-back" href="../../../r0b0.utils.html#r0b0.utils.loaders.load_yaml">[docs]</a>
+<span class="k">def</span> <span class="nf">load_yaml</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a yaml as a dictionary</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        yaml_file: The path to the yaml file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        yaml_dict: The dictionary loaded from the yaml</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># check both &#39;yaml&#39; and &#39;yml</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">):</span>
+        <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">yaml_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;No file </span><span class="si">{</span><span class="n">yaml_file</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">yaml_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">Loader</span><span class="p">)</span>
+        <span class="n">yaml_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">yaml_dict</span></div>
+
+
+
+<div class="viewcode-block" id="load_config">
+<a class="viewcode-back" href="../../../r0b0.utils.html#r0b0.utils.loaders.load_config">[docs]</a>
+<span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">config_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a configuration from a yaml file in the config directory.</span>
+
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        config_name: The name of the configuration to load</span>
+<span class="sd">        config_type: The</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config_yaml</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">CONFIG_DIR</span> <span class="o">/</span> <span class="n">config_type</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config_name</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">config_yaml</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="n">config_type</span><span class="p">))</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">config_yaml</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">config_yaml</span></div>
+
+
+
+<span class="c1"># wrappers</span>
+<span class="n">load_gadget</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">load_config</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="s2">&quot;gadgets&quot;</span><span class="p">)</span>
+<span class="n">load_rig</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">load_config</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="s2">&quot;rigs&quot;</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Decorators for dumping and loading pickles</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1"># Gadget.emit</span>
+<div class="viewcode-block" id="encode_msg">
+<a class="viewcode-back" href="../../../r0b0.utils.html#r0b0.utils.loaders.encode_msg">[docs]</a>
+<span class="k">def</span> <span class="nf">encode_msg</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to encode a message with pickle to send</span>
+<span class="sd">    non-serializable objects through sockets as strings.</span>
+
+<span class="sd">    :param func: A function that emits an event through a socket</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_inner_func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;msg&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_inner_func</span></div>
+
+
+
+<span class="c1"># Gadget handler</span>
+<div class="viewcode-block" id="decode_msg">
+<a class="viewcode-back" href="../../../r0b0.utils.html#r0b0.utils.loaders.decode_msg">[docs]</a>
+<span class="k">def</span> <span class="nf">decode_msg</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator to decode a message with pickle.</span>
+<span class="sd">    Loads the message into its original Message class.</span>
+<span class="sd">    The data[&#39;msg&#39;] value will probably be a hex-encoded string.</span>
+<span class="sd">    The Message type should be installed in the environment.</span>
+
+<span class="sd">    :param func: The handler function (usually a Gadget function)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_inner_func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Load from a hex-encoded string</span>
+            <span class="c1"># TODO - messages *should* be hex encoded if it is sent</span>
+            <span class="c1"># from a function decorated with encode_msg</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">])</span>
+            <span class="c1"># print(&#39;after&#39;,data[&#39;msg&#39;])</span>
+
+        <span class="c1"># print(f&#39;decoded data, {data}&#39;)</span>
+
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_inner_func</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

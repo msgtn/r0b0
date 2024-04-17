@@ -1,0 +1,7 @@
+r0b0.cables.midi\_funcs module
+==============================
+
+.. automodule:: r0b0.cables.midi_funcs
+   :members:
+   :undoc-members:
+   :show-inheritance:

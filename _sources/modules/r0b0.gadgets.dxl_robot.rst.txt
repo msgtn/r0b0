@@ -1,0 +1,7 @@
+r0b0.gadgets.dxl\_robot module
+==============================
+
+.. automodule:: r0b0.gadgets.dxl_robot
+   :members:
+   :undoc-members:
+   :show-inheritance:

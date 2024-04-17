@@ -1,0 +1,7 @@
+r0b0.gadgets.pi\_gadget module
+==============================
+
+.. automodule:: r0b0.gadgets.pi_gadget
+   :members:
+   :undoc-members:
+   :show-inheritance:

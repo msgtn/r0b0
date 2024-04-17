@@ -1,0 +1,7 @@
+r0b0.gadgets.test\_message module
+=================================
+
+.. automodule:: r0b0.gadgets.test_message
+   :members:
+   :undoc-members:
+   :show-inheritance:

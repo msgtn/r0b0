@@ -1,0 +1,7 @@
+r0b0.gadgets.tape\_player module
+================================
+
+.. automodule:: r0b0.gadgets.tape_player
+   :members:
+   :undoc-members:
+   :show-inheritance:

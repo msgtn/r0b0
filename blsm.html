@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blossom &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="r0b0 package" href="modules/r0b0.html" />
+    <link rel="prev" title="r0b0" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html"><code class="docutils literal notranslate"><span class="pre">r0b0</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="README.html#design-rationale">Design rationale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#gadgets">Gadgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#cables">Cables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#rigs">Rigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#environment-setup">Environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#example-rigs">Example Rigs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#blossom">Blossom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#leica-mpi">Leica MPi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#joystick-controlled-mouse">Joystick-controlled mouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#robot-death-star-lamp">Robot Death Star Lamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="README.html#setup-1">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="README.html#install-1">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="README.html#environment-setup-1">Environment setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Blossom</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Blossom</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#build">Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parts">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#motors-and-electronics">Motors and electronics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wiring">Wiring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hardware">Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools-and-miscellaneous">Tools and miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wiring-1">Wiring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#environment-setup">Environment setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ngrok-setup">ngrok setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#motor-calibration-dynamixel-models-only">Motor calibration (Dynamixel models only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#starting-the-blsm-rig">Starting the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dynamixel">Dynamixel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arduino">Arduino</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#telepresence">Telepresence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#video-optional">Video (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#control">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recording-movements">Recording movements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#player">Player</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#motor-settings">Motor settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#interface-issues">Interface issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#slow-control">Slow control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#networking">Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#motor-parameters">Motor parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/r0b0.html">r0b0 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.cables.html">r0b0.cables package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.cables.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.cables.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.gadgets.html">r0b0.gadgets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.gadgets.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.gadgets.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.rigs.html">r0b0.rigs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.rigs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.rigs.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.utils.html">r0b0.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.utils.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.config.html">r0b0.config module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#module-r0b0">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.html#r0b0.get_timestamp"><code class="docutils literal notranslate"><span class="pre">get_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Blossom</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/blsm.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="blossom">
+<h1>Blossom<a class="headerlink" href="#blossom" title="Link to this heading"></a></h1>
+<p><em>2023-07-14 This page is a work-in-progress.</em> This page covers the build
+and use of a Blossom robot, specifically:</p>
+<ul class="simple">
+<li><p>Building the robot hardware</p></li>
+<li><p>Setting up the software</p></li>
+<li><p>Controlling the robot using the mobile interface</p></li>
+</ul>
+<section id="build">
+<h2>Build<a class="headerlink" href="#build" title="Link to this heading"></a></h2>
+<p>The total component cost for the base Dynamixel-powered configuration is
+less than $200. The platform also supports a cheaper configuration using
+micro servos and an Arduino for approximately $50.</p>
+<section id="parts">
+<h3>Parts<a class="headerlink" href="#parts" title="Link to this heading"></a></h3>
+<p>The parts to print in <code class="docutils literal notranslate"><span class="pre">*.stl</span></code> format are <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/">available
+here</a>.
+Each directory contains the whole runner
+(e.g. <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/blsm_A.stl">blsm_A</a>
+) or individual parts
+(e.g. <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/A1.stl">A1</a>).
+I printed the parts on an entry-level <a class="reference external" href="https://www.creality.com/products/ender-3-3d-printer">Creality Ender
+3</a> and sliced
+the files in Cura using <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm-020.curaprofile">this
+profile</a>.
+The instructions are <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm.pdf">available
+here</a>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>D
+escription</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>Method</p></th>
+<th class="head"><p>A
+pprox
+imate
+total
+cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>blsm_A</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-odd"><td><p>blsm_B</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>2</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_B/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-even"><td><p>blsm_C</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>2</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_C/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-odd"><td><p>blsm_D</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_D/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-even"><td><p>blsm_E</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>3</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_E/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-odd"><td><p>blsm_F</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>3</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_F/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-even"><td><p>blsm_M</p></td>
+<td><p>Part
+runner</p></td>
+<td><p>4</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_M/">Print</a></p></td>
+<td><p>NA</p></td>
+</tr>
+<tr class="row-odd"><td><p>blsm_SR</p></td>
+<td><p><em>S</em>lip
+<em>R</em>ing
+for
+rotating
+the upper
+body</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_SR.stl">Print the
+static
+non-rotating
+‘dummy’
+mo
+del</a>,
+or use <a class="reference external" href="https://www.sparkfun.com/products/13065">the
+actual
+12-wire slip
+ring to
+enable
+continuous
+rotation
+beyond 360
+degrees</a></p></td>
+<td><p>NA or
+$
+22.00</p></td>
+</tr>
+<tr class="row-even"><td><p>String</p></td>
+<td><p>String for
+actuating
+the head</p></td>
+<td><p>1</p></td>
+<td><p>Purchase
+(
+e.g. <a class="reference external" href="https://www.powerpro.com/content/powerpro/northamerica/us/en/homepage/PDP.P-POWERPRO.html">fishing
+line</a>,
+<a class="reference external" href="https://www.amazon.com/White-Cotton-Butchers-Twine-String/dp/B09TQXBFYD/">twine</a>)</p></td>
+<td><p>$
+5-$20</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rubber
+bands,
+4mm
+diameter</p></td>
+<td><p>Rubber
+bands for
+hanging
+the head
+platform</p></td>
+<td><p>6</p></td>
+<td><p>Purchase
+e.g. <a class="reference external" href="https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/">black
+rubber
+bands</a></p></td>
+<td><p>$8</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="motors-and-electronics">
+<h3>Motors and electronics<a class="headerlink" href="#motors-and-electronics" title="Link to this heading"></a></h3>
+<p>The standard full-featured configuration uses Dynamixel ‘smart’ servos.
+Dynamixels have a lot of nice features built in, such as different
+operating modes (position- or velocity-control modes), velocity and
+acceleration profiles, and PID tweaking.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>D
+escription</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>Method</p></th>
+<th class="head"><p>A
+pprox
+imate
+total
+cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>D
+ynamixel
+XL
+330-M288</p></td>
+<td><p>Motor</p></td>
+<td><p>4</p></td>
+<td><p><a class="reference external" href="https://www.robotis.us/dynamixel-xl330-m288-t">Purchas
+e</a></p></td>
+<td><p>$100
+($2
+5/ea)</p></td>
+</tr>
+<tr class="row-odd"><td><p>D
+ynamixel
+X3P
+Cable</p></td>
+<td><p>Cables
+(included
+with XL330
+motors)</p></td>
+<td><p>6</p></td>
+<td><p><a class="reference external" href="https://www.robotis.us/robot-cable-x3p-180mm-10pcs">Purchase</a></p></td>
+<td><p>NA
+(inc
+luded
+with
+XL330
+m
+otors
+—
+only
+buy
+if
+need
+sp
+ares)</p></td>
+</tr>
+<tr class="row-even"><td><p>D
+ynamixel
+U2D2</p></td>
+<td><p>Motor
+controller</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://www.robotis.us/u2d2/">Pur
+chase</a></p></td>
+<td><p>$
+32.00</p></td>
+</tr>
+</tbody>
+</table>
+<p>The Arduino-powered configuration is much cheaper (around the cost of
+just one Dynamixel) and more hackable, though the movement is noisier
+and less smooth. The left-right yaw rotation is also limited to ±90°.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>D
+escription</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>Method</p></th>
+<th class="head"><p>A
+pprox
+imate
+total
+cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Arduino
+(or
+clone)</p></td>
+<td><p>Micro
+controller
+and cable</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://www.amazon.com/ELEGOO-Board-ATmega328P-ATMEGA16U2-Compliant/dp/B01EWOE0UU">Purc
+hase</a></p></td>
+<td><p>$15</p></td>
+</tr>
+<tr class="row-odd"><td><p>Micro
+servo</p></td>
+<td><p>Small
+servos
+with basic
+position
+control</p></td>
+<td><p>4</p></td>
+<td><p><a class="reference external" href="https://www.amazon.com/Dorhea-Arduino-Helicopter-Airplane-Walking/dp/B07Q6JGWNV/">Pur
+chase</a></p></td>
+<td><p>$10</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="wiring">
+<h3>Wiring<a class="headerlink" href="#wiring" title="Link to this heading"></a></h3>
+<p>For the Dynamixel-powered configuration, <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/wiring.md">refer to the wiring
+documentation to set up the U2D2 controller with an external power
+supply</a>. For
+the Arduino-powered design, refer to <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_ard.png">this Fritzing
+diagram</a>.
+Either configuration will require USB breakouts for power and some
+cables.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pa
+rt</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>M
+ethod</p></th>
+<th class="head"><p>Approximate total cost</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>U
+SB
+br
+ea
+ko
+ut</p></td>
+<td><p>Breaks out
+power
+connections
+to ease
+supplying
+power</p></td>
+<td><p>1</p></td>
+<td><p><a class="reference external" href="https://www.amazon.com/Treedix-Type-C-Breakout-Connector-Converter/dp/B096M2HQLK">Purc
+hase</a></p></td>
+<td><p>$6</p></td>
+</tr>
+<tr class="row-odd"><td><p>M
+al
+e-
+Fe
+ma
+le
+a
+nd
+M
+al
+e-
+Ma
+le
+w
+ir
+es</p></td>
+<td><p>Connects
+components</p></td>
+<td><p>Several</p></td>
+<td><p><a class="reference external" href="https://www.amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78">Purc
+hase</a>
+, or
+use
+spare
+c
+ables
+and
+b
+readb
+oards</p></td>
+<td><p>$7</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="hardware">
+<h3>Hardware<a class="headerlink" href="#hardware" title="Link to this heading"></a></h3>
+<p>The minimal M2 hardware required is all available in <a class="reference external" href="https://www.amazon.com/gp/product/B082XR52P1/">this
+set</a> for $10.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>M2x8mm</p></td>
+<td><p>14</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>M2x10mm</p></td>
+<td><p>12</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>M2 nuts</p></td>
+<td><p>12</p></td>
+<td><p>Only necessary if using SG90 servos</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tools-and-miscellaneous">
+<h3>Tools and miscellaneous<a class="headerlink" href="#tools-and-miscellaneous" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Quantity</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Wire
+cutters</p></td>
+<td><p>Cutting parts from the
+runners, cutting wires</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>El
+ectrical
+wire</p></td>
+<td><p>Connecting motors</p></td>
+<td><p>A couple meters
+worth</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>USB wall
+adapter</p></td>
+<td><p>Powering the motors</p></td>
+<td><p>1</p></td>
+<td><p>Id
+eally
+15W
+(5
+V/3A)
+or
+gr
+eater
+to
+s
+upply
+suffi
+cient
+power
+to
+the
+m
+otors</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="wiring-1">
+<span id="id1"></span><h3>Wiring<a class="headerlink" href="#wiring-1" title="Link to this heading"></a></h3>
+<p>Follow the <a class="reference external" href="/docs/wiring.md">wiring instructions</a>.</p>
+</section>
+</section>
+<section id="software">
+<h2>Software<a class="headerlink" href="#software" title="Link to this heading"></a></h2>
+<section id="environment-setup">
+<h3>Environment setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h3>
+<p>Set up <a class="reference external" href="https://conda.io">conda</a>, then set up a conda environment and
+install some other dependencies with <code class="docutils literal notranslate"><span class="pre">pip</span></code> (because of issues with
+<a class="reference external" href="https://github.com/boppreh/mouse/issues/75">mouse</a>). Docker maybe
+coming soon (maybe).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">r0b0</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">req</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>To enable <code class="docutils literal notranslate"><span class="pre">https</span></code> for the control page, generate some keys with
+<code class="docutils literal notranslate"><span class="pre">openssl</span></code>. Since this is self-signing(<em>?</em>), you can safely hit ‘Enter’
+to accept the defaults for all fields.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">req</span> <span class="o">-</span><span class="n">x509</span> <span class="o">-</span><span class="n">nodes</span> <span class="o">-</span><span class="n">days</span> <span class="mi">365</span> <span class="o">-</span><span class="n">newkey</span> <span class="n">rsa</span><span class="p">:</span><span class="mi">2048</span> <span class="o">-</span><span class="n">keyout</span> <span class="n">r0b0</span><span class="o">/</span><span class="n">key</span><span class="o">.</span><span class="n">pem</span> <span class="o">-</span><span class="n">out</span> <span class="n">r0b0</span><span class="o">/</span><span class="n">csr</span><span class="o">.</span><span class="n">pem</span>
+</pre></div>
+</div>
+</section>
+<section id="ngrok-setup">
+<h3>ngrok setup<a class="headerlink" href="#ngrok-setup" title="Link to this heading"></a></h3>
+<p><em>This has only been tested on iOS.</em> Phone-based motion control is
+enabled through <code class="docutils literal notranslate"><span class="pre">ngrok</span></code>. <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> opens a tunnel to a local port
+(e.g. <code class="docutils literal notranslate"><span class="pre">localhost:8080</span></code>) through a URL. Tunneling enables sending data
+transmission even from non-local networks — this enables telepresence by
+sending phone orientation data and WebRTC handshaking through the
+tunnel. If you’re not interested in motion control, you can skip this
+section.</p>
+<p>Sign up for <a class="reference external" href="https://ngrok.com">ngrok</a>. Continue on with the guides
+until you can run <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> as a terminal command - this will probably
+require some <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span></code>ing (Linux) or <code class="docutils literal notranslate"><span class="pre">brew</span></code>ing (macOS) and some
+<code class="docutils literal notranslate"><span class="pre">authtoken</span></code>ing. Start a tunnel to <code class="docutils literal notranslate"><span class="pre">https://{hostname}:{port}</span></code> that
+the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig is running on, e.g. with the defaults of
+<code class="docutils literal notranslate"><span class="pre">hostname=localhost</span></code> and <code class="docutils literal notranslate"><span class="pre">port=8080</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span>
+</pre></div>
+</div>
+<p>The terminal will show you the forwarding URL, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">Forwarding</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">someRandomLettersAndNumbers</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">app</span> <span class="o">-&gt;</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span>
+<span class="n">Forwarding</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">someRandomLettersAndNumbers</span><span class="o">.</span><span class="n">ngrok</span><span class="o">.</span><span class="n">app</span> <span class="o">-&gt;</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p><em>This next part is a kludge.</em> We need to update this address in three
+files: <code class="docutils literal notranslate"><span class="pre">r0b0/rigs/static/controller.js</span></code>,
+<code class="docutils literal notranslate"><span class="pre">r0b0/rigs/static/player.js</span></code>, and <code class="docutils literal notranslate"><span class="pre">r0b0/rigs/host.py</span></code>. This address
+is stored as <code class="docutils literal notranslate"><span class="pre">socketAddr</span></code> and <code class="docutils literal notranslate"><span class="pre">SOCKET_ADDR</span></code> towards the top of each
+file — modify these to
+<code class="docutils literal notranslate"><span class="pre">https://someRandomLettersAndNumbers.ngrok.app</span></code>: In <code class="docutils literal notranslate"><span class="pre">controller.js</span></code>
+and <code class="docutils literal notranslate"><span class="pre">player.js</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">socketAddr</span> <span class="o">=</span> <span class="s2">&quot;https://someRandomLettersAndNumbers.ngrok.app&quot;</span>
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">host.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SOCKET_ADDR</span> <span class="o">=</span> <span class="s2">&quot;https://someRandomLettersAndNumbers.ngrok.app&quot;</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> must be running in a separate terminal — start it,
+then open another terminal to continue the instructions.</p>
+<p>If you have a paid <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> subscription, you can add a <code class="docutils literal notranslate"><span class="pre">--subdomain</span></code>
+argument to the tunnel command to maintain a consistent forwarding URL.
+For example, to set the forwarding URL to
+<code class="docutils literal notranslate"><span class="pre">https://mysubdomain.ngrok.io</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ngrok</span> <span class="n">http</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span> <span class="o">--</span><span class="n">subdomain</span><span class="o">=</span><span class="n">mysubdomain</span>
+</pre></div>
+</div>
+</section>
+<section id="motor-calibration-dynamixel-models-only">
+<h3>Motor calibration (Dynamixel models only)<a class="headerlink" href="#motor-calibration-dynamixel-models-only" title="Link to this heading"></a></h3>
+<p>Next, we will calibrate the motors. This is only necessary for Dynamixel
+motors First, we need to figure out the USB port that the motor
+controller (e.g. U2D2, USB2AX) is connected to. Run <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/dev/tty*</span></code>
+twice, once with the motor controller connected and again with it
+disconnected, and take note of the port that disappeared,
+e.g. <code class="docutils literal notranslate"><span class="pre">/dev/tty.usbserial-FT1SF1UM</span></code>. Open
+<code class="docutils literal notranslate"><span class="pre">r0b0/scripts/motor_calib.py</span></code> and modify the parameters (motor model,
+USB port, baud rate) towards the top for your robot’s configuration
+(XL330 for the new version of the robot, XL320 for the old version):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># an example for XL330 motors</span>
+<span class="n">MOTOR_MODEL</span><span class="p">,</span><span class="n">USB_PORT</span><span class="p">,</span><span class="n">BAUD_RATE</span> <span class="o">=</span> <span class="s1">&#39;xl330-m288&#39;</span><span class="p">,</span><span class="s1">&#39;/dev/tty.usbserial-FT1SF1UM&#39;</span><span class="p">,</span><span class="mi">57600</span>
+<span class="c1"># an example for XL320 motors</span>
+<span class="n">MOTOR_MODEL</span><span class="p">,</span><span class="n">USB_PORT</span><span class="p">,</span><span class="n">BAUD_RATE</span> <span class="o">=</span> <span class="s1">&#39;xl320&#39;</span><span class="p">,</span><span class="s1">&#39;/dev/tty.usbmodem212401&#39;</span><span class="p">,</span><span class="mf">1e6</span>
+</pre></div>
+</div>
+<p>With <strong>one motor connected at a time</strong>, run this calibration script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">r0b0</span><span class="o">.</span><span class="n">scripts</span><span class="o">.</span><span class="n">motor_calib</span>
+</pre></div>
+</div>
+<p>This will scan for connected motors, and should find the connected
+motor, usually with ID 1 if it has not yet been set. The script will
+pause at <code class="docutils literal notranslate"><span class="pre">(Pdb)</span></code> — this means that the script has started successfully
+and is now in a debugging loop. To set the ID, for example from 1 to 2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m1</span> <span class="o">=</span> <span class="n">dxl_mgr</span><span class="o">.</span><span class="n">dxl_dict</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">set_torque_enable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">set_id</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">dxl_mgr</span><span class="o">.</span><span class="n">dxl_dict</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">]</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">set_torque_enable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To test if the ID was changed successfully, we can toggle the LED.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m2</span><span class="o">.</span><span class="n">set_led</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">set_led</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To set the motor to the default position:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for XL330</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">set_goal_position</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span> <span class="c1"># for the towers:1000; for the base: 2000</span>
+<span class="c1"># for XL320</span>
+<span class="n">m2</span><span class="o">.</span><span class="n">set_goal_position</span><span class="p">(</span><span class="mi">700</span><span class="p">)</span> <span class="c1"># for the towers:700 ; for the base: 500</span>
+</pre></div>
+</div>
+<p>To stop the script, type <code class="docutils literal notranslate"><span class="pre">Ctrl+D</span></code>. Repeat this for motor IDs 3 and 4.</p>
+</section>
+</section>
+<section id="starting-the-blsm-rig">
+<h2>Starting the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig<a class="headerlink" href="#starting-the-blsm-rig" title="Link to this heading"></a></h2>
+<section id="dynamixel">
+<h3>Dynamixel<a class="headerlink" href="#dynamixel" title="Link to this heading"></a></h3>
+<p>Start the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig configuration, which contains the <code class="docutils literal notranslate"><span class="pre">blsm_dxl</span></code>
+robot as a <code class="docutils literal notranslate"><span class="pre">DynamixelRobot</span></code> and the <code class="docutils literal notranslate"><span class="pre">bslm_phone</span></code> browser-based
+interface as a <code class="docutils literal notranslate"><span class="pre">Page</span></code>. The rig uses the <code class="docutils literal notranslate"><span class="pre">motion2motor</span></code> cable to
+translate <code class="docutils literal notranslate"><span class="pre">device_motion</span></code> events from the page (when accessed from a
+mobile browser) into <code class="docutils literal notranslate"><span class="pre">position</span></code> events for the motor.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">/config/gadgets/blsm_dxl.yaml</span></code>
+(<a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml">here</a>),
+modify <code class="docutils literal notranslate"><span class="pre">usb_port</span></code> with the port we found during the motor calibration
+step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">:</span> <span class="n">DynamixelRobot</span>
+<span class="n">usb_port</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">tty</span><span class="o">.</span><span class="n">usbserial</span><span class="o">-</span><span class="n">FT1SF1UM</span>   <span class="c1"># modify this</span>
+</pre></div>
+</div>
+<p>In a separate terminal window from the <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> tunnel script,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">start</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">config</span> <span class="n">blsm</span>
+</pre></div>
+</div>
+</section>
+<section id="arduino">
+<h3>Arduino<a class="headerlink" href="#arduino" title="Link to this heading"></a></h3>
+<p>We must first flash the Arduino with the pyFirmata firmware, which
+enables the Arduino to be controlled from Python through the <a class="reference external" href="../r0b0/gadgets/arduino.py">Arduino
+gadget class</a>. Connect the Arduino to the
+computer. Open
+<a class="reference external" href="../r0b0/gadgets/StandardFirmata/StandardFirmata.ino">r0b0/gadgets/Standardfirmata.ino</a>
+in the <a class="reference external" href="https://www.arduino.cc/en/software">Arduino IDE</a>. To find the
+port that the Arduino is connected to, use the Arduino IDE (<code class="docutils literal notranslate"><span class="pre">Tools</span></code> &gt;
+<code class="docutils literal notranslate"><span class="pre">Port</span></code>). Upload the firmware to the board (<code class="docutils literal notranslate"><span class="pre">Sketch</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Upload</span></code>).</p>
+<p>Next, we need to modify the configuration at
+<code class="docutils literal notranslate"><span class="pre">/config/gadgets/blsm_ard.yaml</span></code>
+(<a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml">here</a>)
+with the <code class="docutils literal notranslate"><span class="pre">usb_port</span></code> and motor <code class="docutils literal notranslate"><span class="pre">id</span></code>s. For the motor IDs, refer to
+the <a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_ard.png">Fritzing
+diagram</a>
+and modify according to your specific build:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">:</span> <span class="n">ArduinoRobot</span>
+<span class="n">usb_port</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">cu</span><span class="o">.</span><span class="n">usbserial</span><span class="o">-</span><span class="n">ADAQDbKpQ</span> <span class="c1"># modify this to the port that the Arduino is connected to</span>
+<span class="n">baud_rate</span><span class="p">:</span> <span class="mi">57600</span>
+<span class="n">timeout</span><span class="p">:</span> <span class="mi">2</span>
+<span class="n">motors</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">base</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="mi">9</span>         <span class="c1"># modify this to the pin that the BASE motor is connected to</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">tower_1</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="mi">10</span>        <span class="c1"># modify this to the pin that the FRONT head motor is connected to</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">tower_2</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="mi">6</span>         <span class="c1"># modify this to the pin that the LEFT head motor is connected to</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">tower_3</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="mi">5</span>         <span class="c1"># modify this to the pin that the RIGHT head motor is connected to</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="telepresence">
+<h2>Telepresence<a class="headerlink" href="#telepresence" title="Link to this heading"></a></h2>
+<section id="video-optional">
+<h3>Video (optional)<a class="headerlink" href="#video-optional" title="Link to this heading"></a></h3>
+<p>Connect a USB webcam to your computer. With the prior scripts running
+(<code class="docutils literal notranslate"><span class="pre">start.py</span></code> and the <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> tunnel), on the desktop/laptop computer
+controlling the robot, navigate to
+<code class="docutils literal notranslate"><span class="pre">https://localhost:8080/broadcaster</span></code>. This page contains the controls
+for WebRTC media sources. Select the connected webcam in the dropdown,
+which should begin a video feed on the page.</p>
+</section>
+<section id="control">
+<h3>Control<a class="headerlink" href="#control" title="Link to this heading"></a></h3>
+<p>In a mobile browser (e.g. Safari), navigate to the forwarding URL
+(<code class="docutils literal notranslate"><span class="pre">https://someRandomLettersAndNumbers.ngrok.app</span></code> in the above
+example). <em>Note: since the ssl certificates were self signed, you will
+probably run into a privacy warning on your browser.</em> <a class="reference external" href="https://www.vultr.com/docs/how-to-bypass-the-https-warning-for-self-signed-ssl-tls-certificates/">Here’s a guide on
+how to bypass this, which should be safe since this is being developed
+locally
+anyways.</a></p>
+<p>You should see video feed from the webcam selected in
+<code class="docutils literal notranslate"><span class="pre">https://localhost:8080/broadcaster</span></code>. Hold the phone straight out, as
+if you were taking a picture of something directly in front of you.
+Toggle the ‘head’ switch to turn on control and begin transmitting the
+phone orientation to the robot. The motor controller should start
+blinking blue to indicate that it is sending motor commands. The robot’s
+head should be moving in response to the phone motion.</p>
+</section>
+<section id="recording-movements">
+<h3>Recording movements<a class="headerlink" href="#recording-movements" title="Link to this heading"></a></h3>
+<p>To begin recording a movement, ensure that the control switch is on and
+click the large red recording button in the center. Move the phone to
+control the robot, then click the recording button again to stop. This
+will save the motion as a <code class="docutils literal notranslate"><span class="pre">Tape</span></code> in the <code class="docutils literal notranslate"><span class="pre">/tapes</span></code> directory (more
+documentation <a class="reference external" href="/r0b0/gadgets/README.md">here</a>).</p>
+</section>
+<section id="player">
+<h3>Player<a class="headerlink" href="#player" title="Link to this heading"></a></h3>
+<p>In either the desktop or mobile browser, navigate to the Player page at
+<code class="docutils literal notranslate"><span class="pre">https://someRandomLettersAndNumbers.ngrok.app/player</span></code>. Click ‘Update’
+to populate the dropdown with the tape files in <code class="docutils literal notranslate"><span class="pre">tapes</span></code>. Select a tape
+and click ‘Play’ to begin playback. If you create new movement
+recordings using the controller interface, you can repopulate the
+dropdown by clicking ‘Update’ without having to refresh the page. Note
+that tapes are only loaded once in the backend, so if you manually
+rename files, you must restart the whole <code class="docutils literal notranslate"><span class="pre">start.py</span></code> script to override
+the cached tape.</p>
+<p>You can also call this function from the command line. For example, to
+play <code class="docutils literal notranslate"><span class="pre">tapes/demo_tape.json</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rig</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s1">&#39;demo_tape&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="motor-settings">
+<h3>Motor settings<a class="headerlink" href="#motor-settings" title="Link to this heading"></a></h3>
+<p>Setting motor info e.g. IDs needs torque to be disabled. For example, to
+set the ID of motor 1 to 7 in using <code class="docutils literal notranslate"><span class="pre">r0b0.scripts.motor_calib.py</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_param</span><span class="p">(</span><span class="s1">&#39;torque_enable&#39;</span><span class="p">,{</span><span class="mi">1</span><span class="p">:</span><span class="kc">False</span><span class="p">})</span>
+<span class="n">set_param</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,{</span><span class="mi">1</span><span class="p">:</span><span class="mi">7</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+<section id="interface-issues">
+<h3>Interface issues<a class="headerlink" href="#interface-issues" title="Link to this heading"></a></h3>
+<p>On the mobile interface, turning on the control switch should first
+prompt a request for access to the device orientation. If this is not
+popping up, ensure that <code class="docutils literal notranslate"><span class="pre">socketAddr</span></code>/<code class="docutils literal notranslate"><span class="pre">SOCKET_ADDR</span></code> are defined
+appropriately in <code class="docutils literal notranslate"><span class="pre">r0b0/rigs/static/controller.js</span></code>,
+<code class="docutils literal notranslate"><span class="pre">r0b0/rigs/static/player.js</span></code>, and <code class="docutils literal notranslate"><span class="pre">r0b0/rigs/host.py</span></code>. They should
+be set to the <code class="docutils literal notranslate"><span class="pre">ngrok</span></code> address tunnelling to
+<code class="docutils literal notranslate"><span class="pre">https://localhost:8080</span></code>,
+e.g. <code class="docutils literal notranslate"><span class="pre">https://104e-32-221-140-83.ngrok-free.app</span></code>.</p>
+</section>
+<section id="slow-control">
+<h3>Slow control<a class="headerlink" href="#slow-control" title="Link to this heading"></a></h3>
+<p>There is a bit of lag between the phone control and the robot control,
+which is to be expected considering the data passing through the
+network. Try the following if the lag is too large for your application.</p>
+<section id="networking">
+<h4>Networking<a class="headerlink" href="#networking" title="Link to this heading"></a></h4>
+<p>Ensure that the phone controller is connected to the same network as the
+robot’s computer.</p>
+</section>
+<section id="motor-parameters">
+<h4>Motor parameters<a class="headerlink" href="#motor-parameters" title="Link to this heading"></a></h4>
+<p>The robot configuration at <code class="docutils literal notranslate"><span class="pre">/config/gadgets/blsm_dxl.yaml</span></code>
+(<a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_dxl.yaml">here</a>)
+contains parameters for the motor movement, such as the goal/profile
+velocity/acceleration. On startup, <code class="docutils literal notranslate"><span class="pre">/r0b0/gadgets/dxl_robot.py</span></code>
+(<a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/src/r0b0/gadgets/dxl_robot.py">here</a>)
+configures these parameters during startup. You can tune these values,
+and <a class="reference external" href="https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/">refer to the motor
+documentation</a>
+for available parameters.</p>
+<p>To set motor parameters, add values as entries in the configuration
+file. Any writable parameter can be set in the configuration file — just
+add the entry as lower cased and underscored (e.g. ‘Profile Velocity’ -&gt;
+<code class="docutils literal notranslate"><span class="pre">profile_velocity</span></code>) For example, in <code class="docutils literal notranslate"><span class="pre">/config/gadgets/blsm_dxl.yaml</span></code>
+(<a class="reference external" href="https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_dxl.yaml">here</a>),
+to set <code class="docutils literal notranslate"><span class="pre">tower_1</span></code>’s <a class="reference external" href="https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-velocity">Profile
+Velocity</a>
+and <a class="reference external" href="https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#profile-acceleration">Profile
+Acceleration</a>
+to 300 and 100, respectively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">tower_1</span>
+  <span class="n">model</span><span class="p">:</span> <span class="n">xl330</span><span class="o">-</span><span class="n">m288</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">operating_mode</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="n">profile_velocity</span><span class="p">:</span> <span class="mi">300</span>
+  <span class="n">profile_acceleration</span><span class="p">:</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">operating_mode:</span> <span class="pre">3</span></code> sets the motors to position control mode,
+per the
+<a class="reference external" href="https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#operating-mode">documentation</a>.
+Faster velocity and acceleration will yield snappier movements at the
+risk of jerkiness.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="r0b0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules/r0b0.html" class="btn btn-neutral float-right" title="r0b0 package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

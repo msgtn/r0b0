@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.cables.msg_funcs &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html"><code class="docutils literal notranslate"><span class="pre">r0b0</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#design-rationale">Design rationale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#gadgets">Gadgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#cables">Cables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#rigs">Rigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#environment-setup">Environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#example-rigs">Example Rigs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#blossom">Blossom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#leica-mpi">Leica MPi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#joystick-controlled-mouse">Joystick-controlled mouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#robot-death-star-lamp">Robot Death Star Lamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../README.html#setup-1">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#install-1">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../README.html#environment-setup-1">Environment setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Blossom</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../blsm.html">Blossom</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#build">Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#parts">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motors-and-electronics">Motors and electronics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#wiring">Wiring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#hardware">Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#tools-and-miscellaneous">Tools and miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#wiring-1">Wiring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#environment-setup">Environment setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#ngrok-setup">ngrok setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motor-calibration-dynamixel-models-only">Motor calibration (Dynamixel models only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#starting-the-blsm-rig">Starting the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#dynamixel">Dynamixel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#arduino">Arduino</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#telepresence">Telepresence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#video-optional">Video (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#control">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#recording-movements">Recording movements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#player">Player</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../blsm.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#motor-settings">Motor settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#interface-issues">Interface issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../blsm.html#slow-control">Slow control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../blsm.html#networking">Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../blsm.html#motor-parameters">Motor parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/r0b0.html">r0b0 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.cables.html">r0b0.cables package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.cables.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.cables.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.gadgets.html">r0b0.gadgets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.gadgets.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.gadgets.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.rigs.html">r0b0.rigs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.rigs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.rigs.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.utils.html">r0b0.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../modules/r0b0.utils.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.config.html">r0b0.config module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../modules/r0b0.html#module-r0b0">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../modules/r0b0.html#r0b0.get_timestamp"><code class="docutils literal notranslate"><span class="pre">get_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">r0b0.cables.msg_funcs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.cables.msg_funcs</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">r0b0.kinematics.blsm</span> <span class="kn">import</span> <span class="n">device_motion2dxl_motor</span>
+<span class="kn">from</span> <span class="nn">r0b0.utils.loaders</span> <span class="kn">import</span> <span class="n">decode_msg</span><span class="p">,</span> <span class="n">encode_msg</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># def msg_func(func):</span>
+<span class="c1">#     return</span>
+
+<div class="viewcode-block" id="msg_func">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.msg_func">[docs]</a>
+<span class="k">def</span> <span class="nf">msg_func</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_event</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_event</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="n">input_event</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="n">output_event</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="p">}</span></div>
+
+
+<span class="c1"># @load_pickle</span>
+<div class="viewcode-block" id="cc2motor">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.cc2motor">[docs]</a>
+<span class="k">def</span> <span class="nf">cc2motor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;midi_cc&#39;</span><span class="p">}</span>
+    <span class="c1"># data = pickle.loads(data[&#39;msg&#39;])</span>
+    <span class="c1"># print(data)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:(</span><span class="n">data</span><span class="o">.</span><span class="n">value</span><span class="o">*</span><span class="mi">4096</span><span class="p">)</span><span class="o">//</span><span class="mi">127</span><span class="p">,</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:(</span><span class="n">data</span><span class="o">.</span><span class="n">control</span><span class="p">)</span>
+    <span class="p">}</span></div>
+
+    
+<span class="c1"># @load_pickle</span>
+<div class="viewcode-block" id="cc2ard">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.cc2ard">[docs]</a>
+<span class="k">def</span> <span class="nf">cc2ard</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;midi_cc&#39;</span><span class="p">}</span>
+    <span class="c1"># data = pickle.loads(data[&#39;msg&#39;])</span>
+    <span class="c1"># print(data)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">value</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">127</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mi">160</span><span class="p">])),</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:</span><span class="mi">10</span>
+    <span class="p">}</span></div>
+
+
+<span class="nd">@decode_msg</span>
+<span class="k">def</span> <span class="nf">note2motor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    C4 = note value 60</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;midi_on&#39;</span><span class="p">}</span>
+    <span class="c1"># data = pickle.loads(data[&#39;msg&#39;])</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">note</span><span class="p">,</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span><span class="mi">77</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4096</span><span class="p">])),</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:(</span><span class="n">data</span><span class="o">.</span><span class="n">channel</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="c1"># @load_pickle</span>
+<span class="c1"># def motion2motor(data=None):</span>
+<span class="c1">#     if data is None: return {&#39;event&#39;:&#39;device_motion&#39;}</span>
+<span class="c1">#     # logging.debug(f&#39;motion2motor {data}&#39;)</span>
+<span class="c1">#     return {</span>
+<span class="c1">#         &#39;event&#39;:&#39;position&#39;,        # &#39;value&#39;: # the function that gives</span>
+<span class="c1">#         &#39;value&#39;:device_motion2dxl_motor(data),</span>
+<span class="c1">#         &#39;motor_id&#39;:[1,2,3,4]</span>
+<span class="c1">#     }</span>
+    
+<div class="viewcode-block" id="motion2ardmotor">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.motion2ardmotor">[docs]</a>
+<span class="k">def</span> <span class="nf">motion2ardmotor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;device_motion&#39;</span><span class="p">}</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;motion2ardmotor </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>        <span class="c1"># &#39;value&#39;: # the function that gives</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.5</span><span class="p">],[</span><span class="mi">20</span><span class="p">,</span><span class="mi">160</span><span class="p">]))],</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:[</span><span class="mi">9</span><span class="p">]</span>
+    <span class="p">}</span></div>
+
+    
+<div class="viewcode-block" id="motion2midi">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.motion2midi">[docs]</a>
+<span class="k">def</span> <span class="nf">motion2midi</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;device_motion&#39;</span><span class="p">}</span>
+    <span class="n">note</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]),[</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">],[</span><span class="mi">40</span><span class="p">,</span><span class="mi">90</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;midi&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;note_on&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;note&#39;</span><span class="p">:</span><span class="n">note</span><span class="p">,</span>
+        <span class="s1">&#39;velocity&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;channel&#39;</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="button2cam">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.button2cam">[docs]</a>
+<span class="k">def</span> <span class="nf">button2cam</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;pi_button&#39;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;button&#39;</span><span class="p">],</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="joy2midi">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.joy2midi">[docs]</a>
+<span class="k">def</span> <span class="nf">joy2midi</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;joybutton&#39;</span><span class="p">}</span>
+    <span class="n">event_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;joybuttondown&#39;</span><span class="p">:</span><span class="s1">&#39;note_on&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;joybuttonup&#39;</span><span class="p">:</span><span class="s1">&#39;note_off&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1"># print(&#39;joy2midi&#39;)</span>
+    <span class="c1"># data = pickle.loads(data[&#39;msg&#39;])</span>
+    <span class="c1"># logging.debug(data)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;midi&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;event_type&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;note&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;button&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">40</span><span class="p">,</span>
+        <span class="s1">&#39;velocity&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;channel&#39;</span><span class="p">:</span><span class="mi">4</span>
+    <span class="p">}</span></div>
+
+    
+<div class="viewcode-block" id="joy2dxlmotor">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.joy2dxlmotor">[docs]</a>
+<span class="k">def</span> <span class="nf">joy2dxlmotor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;joyaxismotion&#39;</span><span class="p">}</span>
+    <span class="c1"># if data[&#39;axis&#39;]!=3: return</span>
+    <span class="n">pos_val</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="c1"># pos_val /= np.abs(pos_val)</span>
+    <span class="c1"># pos_val = np.sin(pos_val*np.pi/2)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pos_val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">pos_val</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4096</span><span class="p">])),</span>
+        <span class="c1"># &#39;motor_id&#39;:(data[&#39;axis&#39;]+1)</span>
+        <span class="c1"># &#39;motor_id&#39;:(data[&#39;axis&#39;]+1)</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">]</span>
+    <span class="p">}</span></div>
+
+<div class="viewcode-block" id="joy2ardmotor">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.joy2ardmotor">[docs]</a>
+<span class="k">def</span> <span class="nf">joy2ardmotor</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;joyaxismotion&#39;</span><span class="p">}</span>
+    <span class="c1"># if data[&#39;axis&#39;]!=3: return</span>
+    <span class="n">pos_val</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="c1"># pos_val /= np.abs(pos_val)</span>
+    <span class="c1"># pos_val = np.sin(pos_val*np.pi/2)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pos_val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;position&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">pos_val</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">170</span><span class="p">])),</span>
+        <span class="c1"># &#39;motor_id&#39;:(data[&#39;axis&#39;]+1)</span>
+        <span class="c1"># &#39;motor_id&#39;:(data[&#39;axis&#39;]+1)</span>
+        <span class="s1">&#39;motor_id&#39;</span><span class="p">:</span><span class="mi">10</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">3</span> <span class="k">else</span> <span class="mi">8</span>
+    <span class="p">}</span></div>
+
+    
+<span class="c1"># def dpad2shutter(data=None):</span>
+<span class="c1">#     if data is None: return {&#39;event&#39;:&#39;&#39;}</span>
+
+<div class="viewcode-block" id="joy2mouse_move">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.joy2mouse_move">[docs]</a>
+<span class="k">def</span> <span class="nf">joy2mouse_move</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;joyaxismotion&#39;</span><span class="p">}</span>
+    <span class="n">axis</span><span class="p">,</span><span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;axis&#39;</span><span class="p">],</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="c1"># logging.debug(data)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;mouse_move&#39;</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="joy2mouse_button">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.joy2mouse_button">[docs]</a>
+<span class="k">def</span> <span class="nf">joy2mouse_button</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="c1"># return {&#39;event&#39;:&#39;joybuttondown&#39;}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;joybutton&#39;</span><span class="p">}</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">BUTTON2MOUSE</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">0</span><span class="p">:</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">:</span><span class="s1">&#39;right&#39;</span><span class="p">,</span>
+        <span class="mi">2</span><span class="p">:</span><span class="s1">&#39;middle&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">BUTTON2MOUSE</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    
+
+    <span class="n">mouse_func</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;button_down&#39;</span><span class="p">:</span><span class="s1">&#39;press&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button_up&#39;</span><span class="p">:</span><span class="s1">&#39;release&#39;</span>
+    <span class="p">}[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;button_press&#39;</span><span class="p">]]</span>
+        
+    <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;mouse_button&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mouse_func&#39;</span><span class="p">:</span><span class="n">mouse_func</span><span class="p">,</span>
+        <span class="s1">&#39;kwargs&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;button&#39;</span><span class="p">:</span><span class="n">BUTTON2MOUSE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;button&#39;</span><span class="p">],</span><span class="s1">&#39;left&#39;</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="key2cam">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.key2cam">[docs]</a>
+<span class="k">def</span> <span class="nf">key2cam</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;keydown&#39;</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;unicode&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;c&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;read&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;save&#39;</span><span class="p">:</span><span class="kc">True</span>
+        <span class="p">}</span></div>
+
+    
+<div class="viewcode-block" id="key2mic">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.key2mic">[docs]</a>
+<span class="k">def</span> <span class="nf">key2mic</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;keydown&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;unicode&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;m&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;listen&#39;</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+        
+<div class="viewcode-block" id="text2prompt">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.text2prompt">[docs]</a>
+<span class="k">def</span> <span class="nf">text2prompt</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;text&#39;</span><span class="p">}</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;prompt&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+    <span class="p">}</span></div>
+
+    
+        
+<div class="viewcode-block" id="text2yes_no_prompt">
+<a class="viewcode-back" href="../../../r0b0.cables.html#r0b0.cables.msg_funcs.text2yes_no_prompt">[docs]</a>
+<span class="k">def</span> <span class="nf">text2yes_no_prompt</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;text&#39;</span><span class="p">}</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;? Respond with either yes or no.&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="s1">&#39;prompt&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;prompt&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+    <span class="p">}</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

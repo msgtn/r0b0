@@ -1,0 +1,7 @@
+r0b0.gadgets.test\_joystick module
+==================================
+
+.. automodule:: r0b0.gadgets.test_joystick
+   :members:
+   :undoc-members:
+   :show-inheritance:

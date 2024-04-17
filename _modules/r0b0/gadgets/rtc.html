@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.gadgets.rtc &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../gadgets.html">r0b0.gadgets</a></li>
+      <li class="breadcrumb-item active">r0b0.gadgets.rtc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.gadgets.rtc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.gadget</span> <span class="kn">import</span> <span class="n">Gadget</span><span class="p">,</span> <span class="n">Message</span>
+<span class="kn">from</span> <span class="nn">r0b0.utils.loaders</span> <span class="kn">import</span> <span class="n">decode_msg</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">aiortc</span> <span class="kn">import</span> <span class="n">RTCPeerConnection</span><span class="p">,</span> <span class="n">RTCSessionDescription</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+
+<div class="viewcode-block" id="RTCGadget">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget">[docs]</a>
+<span class="k">class</span> <span class="nc">RTCGadget</span><span class="p">(</span><span class="n">Gadget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Gadget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">negotiate</span><span class="p">()</span>
+        <span class="c1"># self.on(&#39;broadcaster&#39;,</span>
+        <span class="c1">#     handler=partial(print, value=&#39;test&#39;))</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="RTCGadget.start">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.start">[docs]</a>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Thread</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+        <span class="c1"># to page?</span>
+        <span class="c1"># send watcher</span>
+
+<div class="viewcode-block" id="RTCGadget.negotiate">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.negotiate">[docs]</a>
+    <span class="k">def</span> <span class="nf">negotiate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># referencing controller.js and</span>
+        <span class="c1"># https://github.com/aiortc/aiortc/blob/main/examples/webcam/webcam.py</span>
+
+        <span class="c1"># broadcaster.js receives this</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;broadcaster&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">,</span> <span class="n">event</span><span class="o">=</span><span class="s2">&quot;watcher&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{}))</span>
+        <span class="c1"># self.emit(</span>
+        <span class="c1">#     event=&#39;watcher&#39;,</span>
+        <span class="c1">#     data={}</span>
+        <span class="c1"># )</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;emitted watcher&quot;</span><span class="p">)</span>
+
+        <span class="c1"># handle candidate - maybe not necessary?</span>
+        <span class="c1"># self.on(&#39;candidate&#39;,</span>
+
+        <span class="c1">#     )</span>
+
+        <span class="c1"># handle offer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;offer&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_offer</span><span class="p">)</span></div>
+
+
+        <span class="c1"># send answer</span>
+
+<div class="viewcode-block" id="RTCGadget.handle_offer">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.rtc.RTCGadget.handle_offer">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_offer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">]</span>
+        <span class="c1"># logging.debug(data)</span>
+        <span class="n">pc</span> <span class="o">=</span> <span class="n">RTCPeerConnection</span><span class="p">()</span>
+        <span class="n">offer</span> <span class="o">=</span> <span class="n">RTCSessionDescription</span><span class="p">(</span><span class="n">sdp</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;sdp&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pcs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pc</span><span class="p">)</span>
+        <span class="n">pc</span><span class="o">.</span><span class="n">setRemoteDescription</span><span class="p">(</span><span class="n">offer</span><span class="p">)</span>
+
+        <span class="n">answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pc</span><span class="o">.</span><span class="n">createAnswer</span><span class="p">()</span>
+
+        <span class="k">await</span> <span class="n">pc</span><span class="o">.</span><span class="n">setLocalDescription</span><span class="p">(</span><span class="n">answer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                <span class="c1"># &#39;sid&#39;:self.</span>
+                <span class="n">pc</span><span class="o">.</span><span class="n">localDescription</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="nd">@pc</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">&quot;track&quot;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">on_track</span><span class="p">(</span><span class="n">track</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;received track&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

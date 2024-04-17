@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.rigs.host &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">r0b0.rigs.host</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.rigs.host</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">inspect</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">r0b0.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ROOT_DIR</span><span class="p">,</span>
+    <span class="n">TAPES_DIR</span><span class="p">,</span>
+    <span class="n">GADGETS_DIR</span><span class="p">,</span>
+    <span class="n">STATIC_DIR</span><span class="p">,</span>
+    <span class="n">PUBLIC_DIR</span><span class="p">,</span>
+    <span class="n">LOCALHOST</span><span class="p">,</span>
+    <span class="n">SERVER_PORT</span><span class="p">,</span>
+    <span class="n">CSR_PEM</span><span class="p">,</span>
+    <span class="n">KEY_PEM</span><span class="p">,</span>
+    <span class="n">BROWSER_DIR</span><span class="p">,</span>
+    <span class="n">SOCKET_ADDR</span><span class="p">,</span>
+    <span class="n">HEADER</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">r0b0.utils.loaders</span> <span class="kn">import</span> <span class="n">decode_msg</span><span class="p">,</span> <span class="n">encode_msg</span>
+<span class="kn">from</span> <span class="nn">r0b0.gadgets</span> <span class="kn">import</span> <span class="n">Tape</span>
+<span class="kn">from</span> <span class="nn">r0b0</span> <span class="kn">import</span> <span class="n">logging</span><span class="p">,</span> <span class="n">get_timestamp</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">aiohttp</span> <span class="kn">import</span> <span class="n">web</span>
+<span class="kn">import</span> <span class="nn">socketio</span>
+<span class="kn">from</span> <span class="nn">socketio</span> <span class="kn">import</span> <span class="n">AsyncServer</span><span class="p">,</span> <span class="n">Server</span><span class="p">,</span> <span class="n">Namespace</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">partialmethod</span><span class="p">,</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span><span class="p">,</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">sched</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">render_template</span>
+<span class="kn">from</span> <span class="nn">flask_socketio</span> <span class="kn">import</span> <span class="n">SocketIO</span><span class="p">,</span> <span class="n">emit</span>
+<span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c1"># import eventlet</span>
+<span class="c1"># eventlet.monkey_patch()</span>
+<span class="c1"># def listen():</span>
+<span class="c1">#     while True:</span>
+<span class="c1">#         # bg_emit()</span>
+<span class="c1">#         eventlet.sleep(5)</span>
+
+<span class="c1"># eventlet.spawn(listen)</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># TODO - try to remove dependency of having to import Thread first</span>
+<span class="c1"># to call the correct *.run()</span>
+
+
+<span class="n">PLAYER_EVENTS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;load&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;play&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;record&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Host">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host">[docs]</a>
+<span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">Thread</span><span class="p">,</span> <span class="n">SocketIO</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Host object serves socket connections.</span>
+<span class="sd">    Host subclasses Thread and SocketIO.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">hostname</span><span class="o">=</span><span class="n">LOCALHOST</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="n">SERVER_PORT</span><span class="p">,</span>
+        <span class="c1"># certfile=CSR_PEM, keyfile=KEY_PEM,</span>
+        <span class="n">certfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">keyfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pages_folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">socket_addr</span><span class="o">=</span><span class="n">SOCKET_ADDR</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">flask_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">pages_folder</span><span class="p">:</span>
+            <span class="n">flask_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="c1"># &#39;template_folder&#39;:os.path.join(pages_folder,&#39;templates&#39;),</span>
+                    <span class="c1"># &#39;static_folder&#39;:os.path.join(pages_folder, &#39;static&#39;),</span>
+                    <span class="c1"># &#39;static_url_path&#39;:os.path.join(pages_folder, &#39;static&#39;),</span>
+                    <span class="s2">&quot;root_path&quot;</span><span class="p">:</span> <span class="n">pages_folder</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Write the socket address to the static folder so it can be imported by the page</span>
+        <span class="k">if</span> <span class="n">pages_folder</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pages_folder</span><span class="p">,</span> <span class="s2">&quot;static&quot;</span><span class="p">,</span> <span class="s2">&quot;socket_addr.js&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">_file</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing </span><span class="si">{</span><span class="n">socket_addr</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;let socketAddr = &quot;</span><span class="si">{</span><span class="n">socket_addr</span><span class="si">}</span><span class="s1">&quot;;&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="o">**</span><span class="n">flask_kwargs</span><span class="p">)</span>
+        <span class="n">CORS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="c1"># print(f&#39;host port {port}&#39;)</span>
+        <span class="c1"># print(bytes(SOCKET_ADDR,&#39;utf-8&#39;), bytes(socket_addr,&#39;utf-8&#39;))</span>
+        <span class="c1"># print(type(SOCKET_ADDR), type(socket_addr))</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">,</span>
+            <span class="n">cors_allowed_origins</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                <span class="n">socket_addr</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">HEADER</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="c1"># f&quot;{HEADER}://{self.hostname}:{self.port}&quot;,</span>
+            <span class="p">],</span>
+            <span class="n">max_http_buffer_size</span><span class="o">=</span><span class="mf">1e8</span><span class="p">,</span>
+            <span class="c1"># async_mode=&#39;threading&#39;,</span>
+            <span class="c1"># async_mode=&#39;eventlet&#39;,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># eventlet.monkey_patch()</span>
+        <span class="c1"># self.app.wsgi_app = socketio.WSGIApp(self, self.app.wsgi_app)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">socketio_run</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">SocketIO</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
+            <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="s2">&quot;certfile&quot;</span><span class="p">:</span> <span class="n">certfile</span><span class="p">,</span>
+            <span class="s2">&quot;keyfile&quot;</span><span class="p">:</span> <span class="n">keyfile</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">Thread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="c1"># TODO - as above, in order for this to work, must subclass Thread before SocketIO</span>
+            <span class="c1"># because they both have run() functions</span>
+            <span class="c1"># target = SocketIO.run,</span>
+            <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_wrapper</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Special handlers for Page gadgets</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;add_url&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_url</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;add_emit&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_emit</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_webrtc_setup</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_player_setup</span><span class="p">()</span>
+
+        <span class="c1"># self.power_on, self.power_off = self.start, self.join</span>
+
+    <span class="nd">@encode_msg</span>
+    <span class="k">def</span> <span class="nf">manual_emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Manually emit an event.</span>
+<span class="sd">        This is a helper function to emit messages without cables,</span>
+<span class="sd">        such as in a script or in the CLI.</span>
+<span class="sd">        This works around well-documented problems of using</span>
+<span class="sd">        threads with sockets.</span>
+
+<span class="sd">        :param event: The event to emit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Rig cannot emit event </span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s2"> without data&quot;</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="n">args</span><span class="p">,</span>
+                <span class="s2">&quot;kwargs&quot;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Post a request to the Flask server</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">HEADER</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">/forward&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_forward_route</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forwarding route to emit an event manually.</span>
+<span class="sd">        This is a helper function that should be posted to by</span>
+<span class="sd">        Host.manual_emit().</span>
+
+<span class="sd">        :return: Server response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_args</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;args&quot;</span><span class="p">]</span>
+        <span class="n">data_kwargs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">]</span>
+
+        <span class="n">event</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]</span>
+        <span class="n">data_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="o">*</span><span class="n">data_args</span><span class="p">,</span> <span class="o">**</span><span class="n">data_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;emitted&quot;</span><span class="p">,</span> <span class="mi">200</span>
+
+<div class="viewcode-block" id="Host.start_wrapper">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.start_wrapper">[docs]</a>
+    <span class="k">def</span> <span class="nf">start_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span>
+            <span class="s2">&quot;/forward&quot;</span><span class="p">,</span> <span class="n">view_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_forward_route</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Not using the encode_msg decorator here because</span>
+    <span class="c1"># the message should have been encoded in an earlier emit function.</span>
+<div class="viewcode-block" id="Host.emit">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.emit">[docs]</a>
+    <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Emit an event.</span>
+<span class="sd">        Positional and keyword arguments can contain data,</span>
+<span class="sd">        namespaces, and whatever else socket.emit() uses.</span>
+<span class="sd">        This function is often just a coupling between two gadgets.</span>
+
+<span class="sd">        :param event: The event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HOST EMIT </span><span class="si">{</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># if the event is a player-related event,</span>
+        <span class="c1"># handle it internally</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">PLAYER_EVENTS</span><span class="p">:</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;on_</span><span class="si">{</span><span class="n">event</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@decode_msg</span>
+    <span class="k">def</span> <span class="nf">add_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Route to a URL.</span>
+<span class="sd">        Used only for the Page gadget.</span>
+
+<span class="sd">        :param data: The data packet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route_func</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">render_template</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">])</span>
+        <span class="n">route_func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;route_</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;route&quot;</span><span class="p">],</span> <span class="n">view_func</span><span class="o">=</span><span class="n">route_func</span><span class="p">)</span>
+
+    <span class="nd">@decode_msg</span>
+    <span class="k">def</span> <span class="nf">add_emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add an emit function.</span>
+<span class="sd">        Used only for the Page gadget.</span>
+
+<span class="sd">        :param data: The data packet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;add_emit&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">_emit_record</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Wrapper function that enables recording emitted event</span>
+
+<span class="sd">            :param s: _description_</span>
+<span class="sd">            :param d: _description_</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                <span class="n">event</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">],</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;kwargs&quot;</span><span class="p">],</span>  <span class="c1"># namespace arg from the .yaml that defined it</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">id_event</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">tape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_event</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># if id_event in self.tapes.keys():</span>
+                    <span class="c1"># record time in millis</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                        <span class="s1">&#39;time&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">*</span><span class="mf">10e3</span><span class="p">),</span>
+                        <span class="p">})</span>
+                    <span class="n">tape</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="o">**</span><span class="p">{</span>
+                        <span class="s1">&#39;event&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;data&#39;</span><span class="p">:</span><span class="n">d</span><span class="p">},</span>
+                        <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">],</span>
+                    <span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">on</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">],</span>
+            <span class="n">_emit_record</span><span class="p">,</span>
+            <span class="c1"># TODO - figure out how to have this on device-specific namespace</span>
+            <span class="n">namespace</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span>
+            <span class="c1"># **data[&#39;kwargs&#39;]</span>
+        <span class="p">)</span>
+
+    <span class="c1"># metaphor - VCR player</span>
+    <span class="k">def</span> <span class="nf">_player_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up the tape player&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">player_event</span> <span class="ow">in</span> <span class="n">PLAYER_EVENTS</span><span class="p">:</span>
+            <span class="n">SocketIO</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_event</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;on_</span><span class="si">{</span><span class="n">player_event</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">add_url_rule</span><span class="p">(</span>
+            <span class="s2">&quot;/tapes&quot;</span><span class="p">,</span>
+            <span class="n">view_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_tapes</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Host.get_tapes">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.get_tapes">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_tapes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list of available tapes</span>
+
+<span class="sd">        :return: A list of available tapes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># tapes = send_from_directory()</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">TAPES_DIR</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Host.on_load">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.on_load">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">tape_name</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;tape_name&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tape_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="p">[</span><span class="n">tape_name</span><span class="p">]</span>
+        <span class="n">tape</span> <span class="o">=</span> <span class="n">Tape</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tape_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tape</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">tape_name</span><span class="p">:</span> <span class="n">tape</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">tape</span></div>
+
+
+<div class="viewcode-block" id="Host.on_record">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.on_record">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        data = {</span>
+<span class="sd">            record: true(start)/false(stop),</span>
+<span class="sd">            event: str,</span>
+<span class="sd">        }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create an internal identifier of {id}_{event}</span>
+        <span class="n">id_event</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># data[&#39;record&#39;] is boolean</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;record&quot;</span><span class="p">]:</span>
+            <span class="c1"># start recording, make a new Tape</span>
+            <span class="n">tape_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_timestamp</span><span class="p">()</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;event&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">id_event</span><span class="p">:</span> <span class="n">Tape</span><span class="p">(</span><span class="n">tape_name</span><span class="p">)})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># stop recording, get the Tape and save</span>
+            <span class="n">tape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">id_event</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tape</span><span class="p">:</span>
+                <span class="n">tape</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="p">)</span></div>
+
+
+    <span class="nd">@decode_msg</span>
+    <span class="k">def</span> <span class="nf">on_play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;msg&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="n">tape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;tape_name&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tape</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;msg&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="c1"># tape = self.tapes.getattr(data[&#39;msg&#39;],&#39;tape_name&#39;,None)</span>
+            <span class="n">tape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tapes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">],</span> <span class="s2">&quot;tape_name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tape </span><span class="si">{</span><span class="n">tape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tape</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># try to load tape</span>
+            <span class="n">tape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_load</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tape</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tape</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+            <span class="c1"># could not load tape</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No tape </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tape_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, cannot play&quot;</span><span class="p">)</span>
+
+    <span class="c1"># TODO - wrapper play function for CLI usage</span>
+<div class="viewcode-block" id="Host.play">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.play">[docs]</a>
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tape_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Play a tape</span>
+
+<span class="sd">        :param tape_name: The name of the tape to play</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_load</span><span class="p">({</span><span class="s2">&quot;tape_name&quot;</span><span class="p">:</span> <span class="n">tape_name</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">on_play</span><span class="p">({</span><span class="s2">&quot;tape_name&quot;</span><span class="p">:</span> <span class="n">tape_name</span><span class="p">})</span></div>
+
+
+    <span class="c1"># no metaphor for this one</span>
+    <span class="k">def</span> <span class="nf">_webrtc_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">webrtc_events</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;broadcaster&quot;</span><span class="p">,</span> <span class="s2">&quot;watcher&quot;</span><span class="p">,</span> <span class="s2">&quot;offer&quot;</span><span class="p">,</span> <span class="s2">&quot;answer&quot;</span><span class="p">,</span> <span class="s2">&quot;candidate&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">webrtc_event</span> <span class="ow">in</span> <span class="n">webrtc_events</span><span class="p">:</span>
+            <span class="n">SocketIO</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">webrtc_event</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">webrtc_event</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Host.broadcaster">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.broadcaster">[docs]</a>
+    <span class="k">def</span> <span class="nf">broadcaster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster_id</span> <span class="o">=</span> <span class="n">sid</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;broadcaster&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Host.watcher">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.watcher">[docs]</a>
+    <span class="k">def</span> <span class="nf">watcher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster_id</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;watcher&quot;</span><span class="p">,</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span>
+            <span class="n">to</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">broadcaster_id</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Host.offer">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.offer">[docs]</a>
+    <span class="k">def</span> <span class="nf">offer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;offer&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="n">to</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Host.answer">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.answer">[docs]</a>
+    <span class="k">def</span> <span class="nf">answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="c1"># TODO - handle max connections</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;answer&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="n">to</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Host.candidate">
+<a class="viewcode-back" href="../../../r0b0.rigs.html#r0b0.rigs.host.Host.candidate">[docs]</a>
+    <span class="k">def</span> <span class="nf">candidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">SocketIO</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="s2">&quot;candidate&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="n">to</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">()</span>
+    <span class="n">host</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="nb">breakpoint</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0.gadgets.test_gadget &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../gadgets.html">r0b0.gadgets</a></li>
+      <li class="breadcrumb-item active">r0b0.gadgets.test_gadget</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for r0b0.gadgets.test_gadget</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">import</span> <span class="nn">socketio</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">r0b0.gadgets</span> <span class="kn">import</span> <span class="n">Gadget</span><span class="p">,</span> <span class="n">MIDIController</span>
+<span class="kn">from</span> <span class="nn">r0b0.rigs.host</span> <span class="kn">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">r0b0.utils</span> <span class="kn">import</span> <span class="n">loaders</span>
+<span class="kn">from</span> <span class="nn">r0b0.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CONFIG_DIR</span><span class="p">,</span>
+    <span class="n">LOCALHOST</span><span class="p">,</span>
+    <span class="n">MIDI_HOST</span><span class="p">,</span>
+    <span class="n">ROBOT_HOST</span><span class="p">,</span>
+    <span class="n">SERVER_PORT</span><span class="p">,</span>
+    <span class="n">MIDI_PORT</span><span class="p">,</span>
+    <span class="n">ROBOT_PORT</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># port_ctr = 9000</span>
+
+<span class="n">sio</span> <span class="o">=</span> <span class="n">socketio</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+<span class="n">host</span> <span class="o">=</span> <span class="n">Host</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="n">LOCALHOST</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">SERVER_PORT</span><span class="p">)</span>
+<span class="n">host</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<span class="c1"># @unittest.skip(&#39;&#39;)</span>
+<div class="viewcode-block" id="GadgetTest">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest">[docs]</a>
+<span class="k">class</span> <span class="nc">GadgetTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GadgetTest.setUp">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.setUp">[docs]</a>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># global port_ctr</span>
+        <span class="c1"># port_ctr += 2</span>
+        <span class="c1"># self.port_ctr = port_ctr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span> <span class="o">=</span> <span class="n">Gadget</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">loaders</span><span class="o">.</span><span class="n">load_gadget</span><span class="p">(</span><span class="s2">&quot;gadget&quot;</span><span class="p">),</span>
+            <span class="n">hostname</span><span class="o">=</span><span class="n">LOCALHOST</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">SERVER_PORT</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+        <span class="c1"># self.host = Host(port=self.port_ctr)</span>
+        <span class="c1"># self.host.start()</span>
+        <span class="c1"># print(self.gadget.__dict__)</span>
+
+<div class="viewcode-block" id="GadgetTest.test_fail">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.test_fail">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_fail</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># assert False</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="GadgetTest.test_start">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.test_start">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="c1"># time.sleep(1)</span>
+        <span class="n">retry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># while not self.gadget.connected and retry&lt;1000:</span>
+        <span class="c1"># retry += 1</span>
+        <span class="c1"># self.assertTrue(self.gadget.connected)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">is_alive</span><span class="p">())</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">connected</span><span class="p">)</span></div>
+
+        <span class="c1"># self.assertFalse(self.gadget.connected)</span>
+
+<div class="viewcode-block" id="GadgetTest.test_disconnect">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.test_disconnect">[docs]</a>
+    <span class="k">def</span> <span class="nf">test_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">connected</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GadgetTest.test_disconnect_when_not_connected">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.test_disconnect_when_not_connected">[docs]</a>
+    <span class="nd">@unittest</span><span class="o">.</span><span class="n">expectedFailure</span>
+    <span class="k">def</span> <span class="nf">test_disconnect_when_not_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GadgetTest.tearDown">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.GadgetTest.tearDown">[docs]</a>
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># print(self.gadget.__dict__)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+</div>
+
+        <span class="c1"># if host.is_alive(): self.host.join()</span>
+        <span class="c1"># if host.connected: self.host.disconnect()</span>
+
+
+<div class="viewcode-block" id="MIDIGadgetTest">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.MIDIGadgetTest">[docs]</a>
+<span class="nd">@unittest</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MIDIGadgetTest</span><span class="p">(</span><span class="n">GadgetTest</span><span class="p">):</span>
+<div class="viewcode-block" id="MIDIGadgetTest.setUp">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.MIDIGadgetTest.setUp">[docs]</a>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">loaders</span><span class="o">.</span><span class="n">load_gadget</span><span class="p">(</span><span class="s2">&quot;opz&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gadget</span> <span class="o">=</span> <span class="n">MIDIController</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">hostname</span><span class="o">=</span><span class="n">MIDI_HOST</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port_ctr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MIDIGadgetTest.test_recv">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.MIDIGadgetTest.test_recv">[docs]</a>
+    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="s2">&quot;skipping&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_recv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="MIDIGadgetTest.tearDown">
+<a class="viewcode-back" href="../../../r0b0.gadgets.html#r0b0.gadgets.test_gadget.MIDIGadgetTest.tearDown">[docs]</a>
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tearDown</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

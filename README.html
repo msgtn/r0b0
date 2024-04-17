@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>r0b0 &mdash; r0b0  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Blossom" href="blsm.html" />
+    <link rel="prev" title="r0b0" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            r0b0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">r0b0</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#design-rationale">Design rationale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gadgets">Gadgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cables">Cables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rigs">Rigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-setup">Environment setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#example-rigs">Example Rigs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#blossom">Blossom</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#leica-mpi">Leica MPi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#joystick-controlled-mouse">Joystick-controlled mouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#robot-death-star-lamp">Robot Death Star Lamp</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-1">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-1">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-setup-1">Environment setup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Blossom</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="blsm.html">Blossom</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blsm.html#build">Build</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#parts">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#motors-and-electronics">Motors and electronics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#wiring">Wiring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#hardware">Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#tools-and-miscellaneous">Tools and miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#wiring-1">Wiring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blsm.html#software">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#environment-setup">Environment setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#ngrok-setup">ngrok setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#motor-calibration-dynamixel-models-only">Motor calibration (Dynamixel models only)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blsm.html#starting-the-blsm-rig">Starting the <code class="docutils literal notranslate"><span class="pre">blsm</span></code> rig</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#dynamixel">Dynamixel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#arduino">Arduino</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blsm.html#telepresence">Telepresence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#video-optional">Video (optional)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#control">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#recording-movements">Recording movements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#player">Player</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blsm.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#motor-settings">Motor settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#interface-issues">Interface issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="blsm.html#slow-control">Slow control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="blsm.html#networking">Networking</a></li>
+<li class="toctree-l4"><a class="reference internal" href="blsm.html#motor-parameters">Motor parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/r0b0.html">r0b0 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.cables.html">r0b0.cables package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.cables.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.cables.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.gadgets.html">r0b0.gadgets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.gadgets.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.gadgets.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.rigs.html">r0b0.rigs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.rigs.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.rigs.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.utils.html">r0b0.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="modules/r0b0.utils.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.config.html">r0b0.config module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules/r0b0.html#module-r0b0">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="modules/r0b0.html#r0b0.get_timestamp"><code class="docutils literal notranslate"><span class="pre">get_timestamp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">r0b0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">r0b0</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/README.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="r0b0">
+<h1><code class="docutils literal notranslate"><span class="pre">r0b0</span></code><a class="headerlink" href="#r0b0" title="Link to this heading"></a></h1>
+<p>r0b0 is a communication library for connecting hardware and software.
+Think of it like
+<code class="docutils literal notranslate"><span class="pre">`aconnect</span></code> &lt;<a class="reference external" href="https://man.archlinux.org/man/aconnect.1.en">https://man.archlinux.org/man/aconnect.1.en</a>&gt;`__ for
+things beyond MIDI devices. The system is my general-purpose tool for
+quickly prototyping mechatronic systems with a bend towards creative
+applications.</p>
+<section id="design-rationale">
+<h2>Design rationale<a class="headerlink" href="#design-rationale" title="Link to this heading"></a></h2>
+<p>r0b0 started as a refactor of the control software for Blossom, the
+open-source robot platform that I developed during my PhD. Other
+existing robot-/mechatronic-oriented communication frameworks are very
+heavy and geared towards technical applications. r0b0 Some design goals:
+- Parity with Blossom’s functionality by the last subproject of my PhD:
+remote motion-based telepresence. - Portability: like Blossom’s codebase
+which ran identically on any UNIX-based system, r0b0 should be easy to
+set up and run whether on a macOS laptop or Raspberry Pi. -
+Extensibility and modularity: the structure is based on devices
+(Gadgets) that communicate among each other through messaging functions
+(Cables) in networked groups (Rigs). Components should be ignorant of
+each other to enable ease of modification.</p>
+</section>
+<section id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Link to this heading"></a></h2>
+<p><img alt="Example structure of the r0b0 framework" src="docs/assets/r0b0.png" /> <em>Example ``Rig``
+configuration.</em></p>
+<p>This section provides a brief overview of the structure. More technical
+and implementation information is available on the respective READMEs in
+each module.</p>
+<p>The main structural metaphor comes from connecting musical instruments,
+either through MIDI cables or direct audio inputs and outputs.</p>
+<section id="gadgets">
+<h3>Gadgets<a class="headerlink" href="#gadgets" title="Link to this heading"></a></h3>
+<p>Gadgets are individual hardware devices or software services,
+e.g. motors and joysticks (hardware), emulated mice and key presses
+(software). Gadgets can exist as standalone objects, e.g. a single motor
+controlled manually through the command line. Gadgets also exist as
+nodes in a network of other Gadgets, transmitting and receiving messages
+through Cables. Gadget docs are <a class="reference external" href="/r0b0/gadgets/README.md">here</a>.</p>
+</section>
+<section id="cables">
+<h3>Cables<a class="headerlink" href="#cables" title="Link to this heading"></a></h3>
+<p>Cables are connections that translate between Gadgets. For example, a
+<code class="docutils literal notranslate"><span class="pre">midi2motor</span></code> Cable could translate incoming MIDI messages from the
+turning of a MIDI controller knob into the outgoing motor position
+message to the actuation of a robot’s motor. Cables are small,
+lightweight functions that abstract Gadgets from each other, preserving
+the system’s modularity. Defining Cables is where most domain
+knowledge/personal taste comes in. Cable docs are
+<a class="reference external" href="/r0b0/cables//README.md">here</a>.</p>
+</section>
+<section id="rigs">
+<h3>Rigs<a class="headerlink" href="#rigs" title="Link to this heading"></a></h3>
+<p>Rigs are networks of Gadgets connected by Cables; they essentially
+represent the entire system/project. Rigs manage the connections and
+higher-level functionalities required to use the system. Rigs are
+largely static wrappers that should not need much modification on a
+case-by-case basis.</p>
+</section>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
+<p>The package can be installed through PyPi with <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">r0b0-io</span></code>,
+but will be updated infrequently. It is best to install from this
+source.</p>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Link to this heading"></a></h3>
+<p>Clone this repo and pull the submodules</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">psychomugs</span><span class="o">/</span><span class="n">r0b0</span>
+<span class="n">cd</span> <span class="n">r0b0</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span> <span class="o">--</span><span class="n">recursive</span>
+</pre></div>
+</div>
+</section>
+<section id="environment-setup">
+<h3>Environment setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h3>
+<p>Create a Python virtual environment (<code class="docutils literal notranslate"><span class="pre">venv</span></code>) and install from the
+<code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>. This has been tested on <code class="docutils literal notranslate"><span class="pre">python3.10.12</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>Some gadgets like mouse and MIDI controllers require additional
+dependencies. These can be installed with <code class="docutils literal notranslate"><span class="pre">pip</span></code>,
+e.g. <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span> <span class="pre">requirements/mouse.txt</span></code>.</p>
+</section>
+</section>
+<section id="example-rigs">
+<h2>Example Rigs<a class="headerlink" href="#example-rigs" title="Link to this heading"></a></h2>
+<p>I’ve used r0b0 to power not just Blossom, but also other non-robotic
+platforms. I am currently (231223) refactoring the package to start rigs
+from scripts instead of config<code class="docutils literal notranslate"><span class="pre">.yaml</span></code>s, in a more Pythonic /
+functional interface. Examples will be stored in
+<code class="docutils literal notranslate"><span class="pre">`examples/</span></code> &lt;./examples/&gt;`__</p>
+<section id="blossom">
+<h3>Blossom<a class="headerlink" href="#blossom" title="Link to this heading"></a></h3>
+<p>Blossom-specific documentation is available <a class="reference external" href="./docs/blsm.md">here</a>.</p>
+</section>
+<section id="leica-mpi">
+<h3>Leica MPi<a class="headerlink" href="#leica-mpi" title="Link to this heading"></a></h3>
+<p>The <a class="reference external" href="https://msgtn.github.io/mpi">Leica MPi</a> is a Raspberry
+Pi-powered digital back for my Leica M2 film camera. The hardware
+includes a Raspberry Pi Zero as the main board, the Raspberry Pi HQ
+Camera Module as the digital sensor, and an LCD module with buttons as
+an interface. This Rig uses two Gadgets: - A <code class="docutils literal notranslate"><span class="pre">PiButton</span></code> Gadget for the
+buttons on the LCD module and the shutter sync cable. The sync cable
+connects the flash sync socket to a GPIO pin on the Pi; pressing the
+mechanical shutter closes the flash sync socket as if it were a physical
+button. - A <code class="docutils literal notranslate"><span class="pre">PiCamera</span></code> Gadget for the camera module.</p>
+<p>Cables between the Gadgets handle: - Using the flash sync socket as a
+<code class="docutils literal notranslate"><span class="pre">PiButton</span></code> to begin an exposure with the <code class="docutils literal notranslate"><span class="pre">PiCamera</span></code>’s electronic
+shutter. - Using the <code class="docutils literal notranslate"><span class="pre">PiButton</span></code>’s physical buttons to control the
+<code class="docutils literal notranslate"><span class="pre">PiCamera</span></code> settings, e.g. shutter speed.</p>
+</section>
+<section id="joystick-controlled-mouse">
+<h3>Joystick-controlled mouse<a class="headerlink" href="#joystick-controlled-mouse" title="Link to this heading"></a></h3>
+<p>I was born too early to actualize my true calling as a giant robot
+pilot. Controlling my computer’s mouse with a consumer-grade gaming
+joystick is a close simulation. This Rig uses two Gadgets: - A
+<code class="docutils literal notranslate"><span class="pre">PyGameJoystick</span></code> Gadget to handle events from the physical joystick.
+On a technical note, the use of <code class="docutils literal notranslate"><span class="pre">pygame</span></code> alters the behavior of the
+Rig’s event loop, which (is/will be) explained in the Rig’s README. - A
+<code class="docutils literal notranslate"><span class="pre">Mouse</span></code> Gadget to control the software mouse, including motion and
+button press/release/click.</p>
+<p>Cables between the Gadgets handle: - Mapping <code class="docutils literal notranslate"><span class="pre">PyGameJoystick</span></code> absolute
+position <code class="docutils literal notranslate"><span class="pre">Mouse</span></code> relative motion. - Mapping <code class="docutils literal notranslate"><span class="pre">PyGameJoystick</span></code> button
+presses to <code class="docutils literal notranslate"><span class="pre">Mouse</span></code> left/middle/right presses/releases/clicks.</p>
+</section>
+<section id="robot-death-star-lamp">
+<h3>Robot Death Star Lamp<a class="headerlink" href="#robot-death-star-lamp" title="Link to this heading"></a></h3>
+<p>A <a class="reference external" href="https://msgtn.github.io/ps2014">motorized IKEA PS2014 lamp</a>.</p>
+</section>
+</section>
+<section id="setup-1">
+<span id="id1"></span><h2>Setup<a class="headerlink" href="#setup-1" title="Link to this heading"></a></h2>
+<section id="install-1">
+<span id="id2"></span><h3>Install<a class="headerlink" href="#install-1" title="Link to this heading"></a></h3>
+<p>Clone this repo and pull the submodules</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">psychomugs</span><span class="o">/</span><span class="n">r0b0</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span> <span class="o">--</span><span class="n">recursive</span>
+</pre></div>
+</div>
+</section>
+<section id="environment-setup-1">
+<span id="id3"></span><h3>Environment setup<a class="headerlink" href="#environment-setup-1" title="Link to this heading"></a></h3>
+<p>Set up <a class="reference external" href="https://conda.io">conda</a>, then set up a conda environment and
+install some other dependencies with <code class="docutils literal notranslate"><span class="pre">pip</span></code> (because of issues with
+<code class="docutils literal notranslate"><span class="pre">`mouse</span></code> &lt;<a class="reference external" href="https://github.com/boppreh/mouse/issues/75">https://github.com/boppreh/mouse/issues/75</a>&gt;`__). Docker
+maybe coming soon (maybe).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="n">r0b0</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">r0b0</span>
+<span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">req</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="r0b0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="blsm.html" class="btn btn-neutral float-right" title="Blossom" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, msgtn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
