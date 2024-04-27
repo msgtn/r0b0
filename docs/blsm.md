@@ -2,7 +2,6 @@
 
 *2023-07-14 This page is a work-in-progress.*
 This page covers the build and use of a Blossom robot, specifically:
-
 - Building the robot hardware
 - Setting up the software
 - Controlling the robot using the mobile interface
@@ -31,6 +30,7 @@ The instructions are [available here](https://github.com/msgtn/r0b0/blob/main/do
 | blsm_SR | *S*lip *R*ing for rotating the upper body | 1 | [Print the static non-rotating 'dummy' model](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_SR.stl), or use [the actual 12-wire slip ring to enable continuous rotation beyond 360 degrees](https://www.sparkfun.com/products/13065) | NA or $22.00 |
 | String | String for actuating the head | 1 | Purchase (e.g. [fishing line](https://www.powerpro.com/content/powerpro/northamerica/us/en/homepage/PDP.P-POWERPRO.html), [twine](https://www.amazon.com/White-Cotton-Butchers-Twine-String/dp/B09TQXBFYD/)) | $5-$20 |
 | Rubber bands, 4mm diameter | Rubber bands for hanging the head platform | 6 | Purchase e.g. [black rubber bands](https://www.amazon.com/Rubber-200pcs-Elastic-Sturdy-School/dp/B0924HDQXQ/) | $8 |
+| TOTAL | | |  | $13-$50 |
 
 ### Motors and electronics
 The standard full-featured configuration uses Dynamixel 'smart' servos.
@@ -41,14 +41,17 @@ Dynamixels have a lot of nice features built in, such as different operating mod
 | Dynamixel XL330-M288 | Motor | 4 | [Purchase](https://www.robotis.us/dynamixel-xl330-m288-t) | $100 ($25/ea) |
 | Dynamixel X3P Cable | Cables (included with XL330 motors) | 6 | [Purchase](https://www.robotis.us/robot-cable-x3p-180mm-10pcs) | NA (included with XL330 motors — only buy if need spares) |
 | Dynamixel U2D2 | Motor controller | 1 | [Purchase](https://www.robotis.us/u2d2/) | $32.00 |
+| TOTAL | | | | $132 |
 
-The Arduino-powered configuration is much cheaper (around the cost of just one Dynamixel) and more hackable, though the movement is noisier and less smooth.
+The Arduino-powered configuration is much cheaper (the total cost equivalent to just one Dynamixel) and more hackable, but the movement is noisier and less smooth.
 The left-right yaw rotation is also limited to ±90°.
+This version is more readily hackable with whatever can interface with an Arduino.
 
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ----- | -------- | ------ | --- |
 | Arduino (or clone) | Microcontroller and cable | 1 | [Purchase](https://www.amazon.com/ELEGOO-Board-ATmega328P-ATMEGA16U2-Compliant/dp/B01EWOE0UU) | $15 |
 | Micro servo | Small servos with basic position control | 4 | [Purchase](https://www.amazon.com/Dorhea-Arduino-Helicopter-Airplane-Walking/dp/B07Q6JGWNV/) | $10 |
+| TOTAL | | | | $25 |
 
 ### Wiring
 For the Dynamixel-powered configuration, [refer to the wiring documentation to set up the U2D2 controller with an external power supply](https://github.com/msgtn/r0b0/blob/main/docs/wiring.md).
@@ -58,7 +61,8 @@ Either configuration will require USB breakouts for power and some cables.
 | Part |  Description | Quantity | Method | Approximate total cost |
 | ---- | ------------ | -------- | ------ | ---------------------- |
 | USB breakout | Breaks out power connections to ease supplying power | 1 | [Purchase](https://www.amazon.com/Treedix-Type-C-Breakout-Connector-Converter/dp/B096M2HQLK) | $6 |
-| Male-Female and Male-Male wires | Connects components | Several | [Purchase](https://www.amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78) , or use spare cables and breadboards | $7 |
+| Male–Female and Male–Male wires | Connects components | Several | [Purchase](amazon.com/Elegoo-EL-CP-004-Multicolored-Breadboard-arduino/dp/B01EV70C78) or use spare cables and breadboards | $7 |
+| TOTAL | | | | $13 |
 
 ### Hardware
 The minimal M2 hardware required is all available in [this set](https://www.amazon.com/gp/product/B082XR52P1/) for $10.
@@ -79,7 +83,7 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 
 
 ### Wiring
-Follow the [wiring instructions](/docs/wiring.md).
+Follow the [wiring instructions](https://github.com/msgtn/r0b0/blob/main/docs/wiring.md).
 
 ## Software
 
@@ -150,7 +154,7 @@ MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl330-m288','/dev/tty.usbserial-FT1SF1UM',5760
 # an example for XL320 motors
 MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbmodem212401',1e6
 ```
-With **one motor connected at a time**, run this calibration script:
+With one motor connected at a time, run this calibration script:
 ```
 python3 -m r0b0.scripts.motor_calib
 ```
@@ -247,7 +251,7 @@ The robot's head should be moving in response to the phone motion.
 ### Recording movements
 To begin recording a movement, ensure that the control switch is on and click the large red recording button in the center.
 Move the phone to control the robot, then click the recording button again to stop.
-This will save the motion as a `Tape` in the `/tapes` directory (more documentation [here](/r0b0/gadgets/README.md)).
+This will save the motion as a `Tape` in the `/tapes` directory (more documentation [here](https://github.com/msgtn/r0b0/blob/main/r0b0/gadgets/README.md)).
 
 ### Player
 In either the desktop or mobile browser, navigate to the Player page at `https://someRandomLettersAndNumbers.ngrok.app/player`.

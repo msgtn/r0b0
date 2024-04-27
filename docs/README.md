@@ -1,6 +1,6 @@
 # `r0b0`
 r0b0 is a communication library for connecting hardware and software.
-The inspiration is [aconnect](https://man.archlinux.org/man/aconnect.1.en) for things beyond MIDI devices.
+The inspiration is [<code>aconnect</code>](https://man.archlinux.org/man/aconnect.1.en) for things beyond MIDI devices.
 The system is my general-purpose tool for quickly prototyping mechatronic systems with a bend towards creative applications.
 
 ## Design rationale
@@ -14,7 +14,8 @@ Some design goals:
 
 ## Structure
 
-![Example structure of the r0b0 framework](https://github.com/msgtn/r0b0/docs/assets/r0b0.png)
+<!-- <img src="https://github.com/msgtn/r0b0/blob/main/docs/assets/r0b0.png?raw=true"> -->
+![Example structure of the r0b0 framework](https://github.com/msgtn/r0b0/blob/main/docs/assets/r0b0.png?raw=true)
 *Example `Rig` configuration.*
 
 This section provides a brief overview of the structure.
@@ -71,7 +72,7 @@ I am currently (231223) refactoring the package to start rigs from scripts inste
 Examples will be stored in [`examples/`](./examples/)
 
 ### Blossom
-Blossom-specific documentation is available [here](./docs/blsm.md).
+Blossom-specific documentation is available [here](./blsm.html).
 
 ### Leica MPi
 The [Leica MPi](https://msgtn.github.io/mpi) is a Raspberry Pi-powered digital back for my Leica M2 film camera.

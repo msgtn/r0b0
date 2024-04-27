@@ -2,11 +2,9 @@ Blossom
 =======
 
 *2023-07-14 This page is a work-in-progress.* This page covers the build
-and use of a Blossom robot, specifically:
-
--  Building the robot hardware
--  Setting up the software
--  Controlling the robot using the mobile interface
+and use of a Blossom robot, specifically: - Building the robot hardware
+- Setting up the software - Controlling the robot using the mobile
+interface
 
 Build
 -----
@@ -141,6 +139,9 @@ here <https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm.pdf>`__.
 |          |            |                     | -School/dp/B0 |       |
 |          |            |                     | 924HDQXQ/>`__ |       |
 +----------+------------+---------------------+---------------+-------+
+| TOTAL    |            |                     |               | $1    |
+|          |            |                     |               | 3-$50 |
++----------+------------+---------------------+---------------+-------+
 
 Motors and electronics
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -183,10 +184,14 @@ acceleration profiles, and PID tweaking.
 | U2D2     |            |                     | //www.robotis |       |
 |          |            |                     | .us/u2d2/>`__ |       |
 +----------+------------+---------------------+---------------+-------+
+| TOTAL    |            |                     |               | $132  |
++----------+------------+---------------------+---------------+-------+
 
-The Arduino-powered configuration is much cheaper (around the cost of
-just one Dynamixel) and more hackable, though the movement is noisier
-and less smooth. The left-right yaw rotation is also limited to ±90°.
+The Arduino-powered configuration is much cheaper (the total cost
+equivalent to just one Dynamixel) and more hackable, but the movement is
+noisier and less smooth. The left-right yaw rotation is also limited to
+±90°. This version is more readily hackable with whatever can interface
+with an Arduino.
 
 +----------+------------+---------------------+---------------+-------+
 | Part     | D          | Quantity            | Method        | A     |
@@ -212,6 +217,8 @@ and less smooth. The left-right yaw rotation is also limited to ±90°.
 |          |            |                     | ter-Airplane- |       |
 |          |            |                     | Walking/dp/B0 |       |
 |          |            |                     | 7Q6JGWNV/>`__ |       |
++----------+------------+---------------------+---------------+-------+
+| TOTAL    |            |                     |               | $25   |
 +----------+------------+---------------------+---------------+-------+
 
 Wiring
@@ -249,27 +256,25 @@ cables.
 |    |               |          | M2HQL |                             |
 |    |               |          | K>`__ |                             |
 +----+---------------+----------+-------+-----------------------------+
-| M  | Connects      | Several  | `Purc | $7                          |
-| al | components    |          | hase  |                             |
-| e- |               |          | <http |                             |
-| Fe |               |          | s://w |                             |
-| ma |               |          | ww.am |                             |
-| le |               |          | azon. |                             |
-| a  |               |          | com/E |                             |
-| nd |               |          | legoo |                             |
-| M  |               |          | -EL-C |                             |
-| al |               |          | P-004 |                             |
-| e- |               |          | -Mult |                             |
-| Ma |               |          | icolo |                             |
-| le |               |          | red-B |                             |
-| w  |               |          | readb |                             |
-| ir |               |          | oard- |                             |
-| es |               |          | ardui |                             |
-|    |               |          | no/dp |                             |
-|    |               |          | /B01E |                             |
+| M  | Connects      | Several  | `Pu   | $7                          |
+| al | components    |          | rchas |                             |
+| e– |               |          | e <am |                             |
+| Fe |               |          | azon. |                             |
+| ma |               |          | com/E |                             |
+| le |               |          | legoo |                             |
+| a  |               |          | -EL-C |                             |
+| nd |               |          | P-004 |                             |
+| M  |               |          | -Mult |                             |
+| al |               |          | icolo |                             |
+| e– |               |          | red-B |                             |
+| Ma |               |          | readb |                             |
+| le |               |          | oard- |                             |
+| w  |               |          | ardui |                             |
+| ir |               |          | no/dp |                             |
+| es |               |          | /B01E |                             |
 |    |               |          | V70C7 |                             |
 |    |               |          | 8>`__ |                             |
-|    |               |          | , or  |                             |
+|    |               |          | or    |                             |
 |    |               |          | use   |                             |
 |    |               |          | spare |                             |
 |    |               |          | c     |                             |
@@ -278,6 +283,10 @@ cables.
 |    |               |          | b     |                             |
 |    |               |          | readb |                             |
 |    |               |          | oards |                             |
++----+---------------+----------+-------+-----------------------------+
+| T  |               |          |       | $13                         |
+| OT |               |          |       |                             |
+| AL |               |          |       |                             |
 +----+---------------+----------+-------+-----------------------------+
 
 Hardware
@@ -332,7 +341,8 @@ Tools and miscellaneous
 Wiring
 ~~~~~~
 
-Follow the `wiring instructions </docs/wiring.md>`__.
+Follow the `wiring
+instructions <https://github.com/msgtn/r0b0/blob/main/docs/wiring.md>`__.
 
 Software
 --------
@@ -440,7 +450,7 @@ USB port, baud rate) towards the top for your robot’s configuration
    # an example for XL320 motors
    MOTOR_MODEL,USB_PORT,BAUD_RATE = 'xl320','/dev/tty.usbmodem212401',1e6
 
-With **one motor connected at a time**, run this calibration script:
+With one motor connected at a time, run this calibration script:
 
 ::
 
@@ -580,7 +590,8 @@ To begin recording a movement, ensure that the control switch is on and
 click the large red recording button in the center. Move the phone to
 control the robot, then click the recording button again to stop. This
 will save the motion as a ``Tape`` in the ``/tapes`` directory (more
-documentation `here </r0b0/gadgets/README.md>`__).
+documentation
+`here <https://github.com/msgtn/r0b0/blob/main/r0b0/gadgets/README.md>`__).
 
 Player
 ~~~~~~
