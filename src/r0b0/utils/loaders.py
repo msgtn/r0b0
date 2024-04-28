@@ -84,7 +84,8 @@ def decode_msg(func):
 
     def _inner_func(s, data, **kwargs):
         logging.debug(data)
-        if isinstance(data, dict) and data.get("msg", None) is not None:
+        if isinstance(data, dict) and "msg" in data:
+
             # Load from a hex-encoded string
             # TODO - messages *should* be hex encoded if it is sent
             # from a function decorated with encode_msg

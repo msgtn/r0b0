@@ -85,6 +85,9 @@ class Rig(Host):
 
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
         print(f"Adding {cable} from {tx_gadget} to {rx_gadget}")
+        assert not (tx_gadget is None and rx_gadget is None), "Either or both tx_gadget and rx_gadget must be defined when calling add_cable()"
+        if tx_gadget is None:
+            tx_gadget = rx_gadget
         if tx_gadget.name not in self.gadgets:
             self.add_gadget(tx_gadget)
         if rx_gadget is not None:

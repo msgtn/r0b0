@@ -19,13 +19,14 @@ import r0b0
 from r0b0.gadgets import Gadget
 from r0b0.gadgets.dxl_robot import *
 from r0b0.gadgets.time_controller import *
+from r0b0.cables.time_control_cables import Motion2ModeCable
 from flask_socketio import SocketIO, Namespace
 from flask import jsonify
 import socketio
 from timeit import default_timer
 
 CONFIG_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../../../config/gadgets/")
+    os.path.join(os.path.dirname(__file__), "../config/gadgets/")
 )
 TC = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "time_controller.yaml"))
 test_gadget = Gadget()
@@ -64,9 +65,8 @@ def test_get_mode(rig, mode):
     # assert TC.get_mode()
     pass
 
-
 @pytest.mark.parametrize("mode", ["stopwatch", "timer"])
-def test_mode(mode):
+def test_mode(rig, mode):
     # initialize
     # set the motor to idle mode
     TC.mode = TimeMode.IDLE
@@ -110,31 +110,56 @@ def test_mode(mode):
 
     rig.on_event("reset", handler=reset_handler, namespace=TC.namespace)
 
+    dummy_gadget = Gadget()
+    # Add the cables
+    # Motor position to change mode
+    rig.add_cable(
+        cable=Motion2ModeCable(),
+        tx_gadget=dummy_gadget,
+        rx_gadget=TC,
+
+    )
+    rig.power_on()
+    breakpoint()
+
     # simulate motor movement events
     # in the clockwise direction (negative velocities?)
     # for a few seconds
     # then stop
     time_start = default_timer()
-    while (default_timer() - start) < 2.0:
+    motor_kwargs = dict(
+        event="motor_velocity",
+        data={
+            "event": "motor_velocity",
+            "msg": DynamixelRobot.Message(
+                **{
+                    "event": "motor_velocity",
+                    "value": 1 if mode == "stopwatch" else -1,
+                }
+            ),
+        },
+    )
+    # Wait for connection
+    time.sleep(3)
+    # test_emit = partial(dummy_gadget.emit, namespace=dummy_gadget.namespace, **motor_kwargs)
+    while (default_timer() - time_start) < 2.0:
         # emit what comes *out* of the motor event
         # motor_velocity -> Cable -> time_controller_event
         # maybe just passthrough motor_velocity
         # on the time controller end, must keep track of the last
         # motor_velocity input event, to give buffer for when user stopped moving
         rig.manual_emit(
-            event="motor_velocity",
-            data={
-                "event": "motor_velocity",
-                "msg": DynamixelRobot.Message(
-                    **{
-                        "event": "motor_velocity",
-                        "value": 1 if mode == "stopwatch" else -1,
-                    }
-                ),
-            },
+            
+            namespace=dummy_gadget.namespace,
+            **motor_kwargs
         )
-        # check that the motor is in timer mode
-        assert TC.mode == getattr(TimeMode, mode.upper())
+        dummy_gadget.emit(
+            # namespace=dummy_gadget.namespace,
+            **motor_kwargs
+        )
+    breakpoint()
+    # check that the motor is in timer mode
+    assert TC.mode == getattr(TimeMode, mode.upper())
 
     # ensure that the time controller pauses before starting
     # TODO - make this pause time a config param

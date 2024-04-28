@@ -4,7 +4,8 @@ import numpy as np
 from functools import partial
 from r0b0.utils.loaders import decode_msg, encode_msg
 
-from .gadget import Gadget, Message, logging
+from .gadget import Gadget, Message
+import logging
 from dynamixel_python import DynamixelManager, DynamixelMotor, ReadError
 
 BAUD_DICT = {57600: 1, 115200: 2, 1000000: 3, 9600: 0}
@@ -24,6 +25,9 @@ class DynamixelRobot(Gadget, DynamixelManager):
     """
     A Gadget representing a Dynamixel-based robot.
     """
+    @staticmethod
+    def Message(*args, **kwargs):
+        return Message(*args, **kwargs)
 
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, request_timeout=0.1, **kwargs)
@@ -130,31 +134,35 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # continuously check the
         # "is moving" flag and emit events
         while True:
-            if self.POLL_MOVEMENT:
-                moving_dict = {}
-                position_dict = {}
-                velocity_dict = {}
-                for motor_name, motor in self.dxl_dict.items():
-                    moving_dict.update({motor_name: motor.get_moving() * True})
-                    position_dict.update({motor_name: motor.get_present_position()})
+            try:
+                if self.POLL_MOVEMENT:
+                    moving_dict = {}
+                    position_dict = {}
+                    velocity_dict = {}
+                    for motor_name, motor in self.dxl_dict.items():
+                        moving_dict.update({motor_name: motor.get_moving() * True})
+                        position_dict.update({motor_name: motor.get_present_position()})
 
-                    # Calculate the velocity, which is reported on the range [0, 2**32]
-                    present_velocity = motor.get_present_velocity()
-                    velocity_direction = np.exp2(
-                        np.round(np.log2(present_velocity + 1e-6) / 32.0) * 32
-                    )
-                    present_velocity -= velocity_direction
-                    velocity_dict.update({motor_name: present_velocity})
-
-                if any(moving_dict.values()):
-                    # else:
-                    # break
-                    self.emit(
-                        event="motor_velocity",
-                        data=velocity_dict,
-                        namespace=self.namespace,
-                    )
-        pass
+                        # Calculate the velocity, which is reported on the range [0, 2**32]
+                        present_velocity = motor.get_present_velocity()
+                        velocity_direction = np.exp2(
+                            np.round(np.log2(present_velocity + 1e-6) / 32.0) * 32
+                        )
+                        present_velocity -= velocity_direction
+                        velocity_dict.update({motor_name: present_velocity})
+                    # print(moving_dict)
+                    if any(moving_dict.values()):
+                        print("Moving")
+                        logging.debug("Moving")
+                        # else:
+                        # break
+                        self.emit(
+                            event="motor_velocity",
+                            data=velocity_dict,
+                            namespace=self.namespace,
+                        )
+            except:
+                pass
 
     def access_param(self, param, motor_id_kwargs, rw_mode="set"):
         return_dict = {m_id: {} for m_id in motor_id_kwargs.keys()}

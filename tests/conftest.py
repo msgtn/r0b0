@@ -7,7 +7,7 @@ from r0b0.config import LOCALHOST, SERVER_PORT, CONFIG_DIR
 
 with open(
     os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../ngrok_public_url.txt")
+        os.path.join(os.path.dirname(__file__), "../ngrok_public_url.txt")
     ),
     "r",
 ) as _file:
@@ -21,7 +21,7 @@ _rig = Rig(
     certfile=os.path.join(os.path.dirname(__file__), "csr.pem"),
     keyfile=os.path.join(os.path.dirname(__file__), "key.pem"),
     pages_folder=os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../pages/blsm")
+        os.path.join(os.path.dirname(__file__), "../pages/blsm")
     ),
     # socket_addr=f'https://{LOCALHOST}:{SERVER_PORT}/'
     # socket_addr=socket_addr,

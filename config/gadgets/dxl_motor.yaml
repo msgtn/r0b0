@@ -5,3 +5,4 @@ motors: # use these same names as kwargs to constructors
 - name: dxl_motor
   model: xl330-m288
   id: 1
+  operating_mode: 3
