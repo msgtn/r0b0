@@ -6,8 +6,10 @@ from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
 import socketio
 from socketio import Client
+from r0b0.gadgets import DynamixelRobot
 from r0b0.cables.cable import Key2TimeModeCable
-from r0b0.cables.time_control_cables import Motion2ModeCable
+from r0b0.cables.time_control_cables import \
+    Motion2ModeCable, Tick2MotionCable, Position2ModeCable, Motion2DisableCable
 
 import logging
 logging.basicConfig(
@@ -40,12 +42,7 @@ def main():
         os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),'../config/gadgets/dxl_motor.yaml')))
-    dxl_motor.disable()
-    # for motor in dxl_motor.dxl_dict.values():
-    #     motor.disable()
     
-    dxl_motor.POLL_MOVEMENT = True
-    dxl_motor.moving_thread.start()
      
     # Create the gadgets
     tc = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, 'time_controller.yaml'))
@@ -55,12 +52,55 @@ def main():
         cable=Motion2ModeCable(),
         tx_gadget=dxl_motor,
         rx_gadget=tc,
-
+    )
+    rig.add_cable(
+        cable=Tick2MotionCable(),
+        tx_gadget=tc,
+        rx_gadget=dxl_motor,
+    )
+    pos2mode = Position2ModeCable()
+    # rig.add_cable(
+    #     cable=pos2mode,
+    #     tx_gadget=dxl_motor,
+    #     rx_gadget=tc
+    # )
+    rig.add_cable(
+        cable=Motion2DisableCable(),
+        tx_gadget=dxl_motor,
+        rx_gadget=dxl_motor
     )
     # Power on the rig
     rig.power_on()
+    time.sleep(2)
+    dxl_motor.enable()
+    rig.manual_emit(
+        event="position",
+        data={
+            "event": "position",
+            "msg": DynamixelRobot.Message(**{
+                "value": [0],
+                "motor_id": [1],
+                "absolute": True
+            })
+        },
+        namespace=dxl_motor.namespace
+    )
+    time.sleep(3)
+    pos2mode.start_position = 0
+    dxl_motor.disable()
+    # for motor in dxl_motor.dxl_dict.values():
+    #     motor.disable()
+    
+    # dxl_motor.POLL_MOVEMENT = True
+    dxl_motor.moving_thread.start()
 
+    def motor_disable():
+        pos2mode.start_position = 0
+        dxl_motor.disable()
+        dxl_motor.POLL_MOVEMENT = True
+    motor_disable()
     breakpoint()
+
     print(tc.sid, pygame_keys.sid)
     try:
         # input()

@@ -6,6 +6,7 @@ from r0b0.utils.loaders import decode_msg, encode_msg
 
 from .gadget import Gadget, Message
 import logging
+logging = logging.getLogger(__name__)
 from dynamixel_python import DynamixelManager, DynamixelMotor, ReadError
 
 BAUD_DICT = {57600: 1, 115200: 2, 1000000: 3, 9600: 0}
@@ -48,7 +49,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # initialize
         self.power_up = self.init
         # NOTE - enabling and disabling is slow, use sparingly
-        self.enable, self.disable = self.enable_all, self.disable_all
+        # self.enable, self.disable = self.enable_all, self.disable_all
         self.power_up()
         self.disable()
         # for motor_name,motor in self..items():
@@ -70,6 +71,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 handler=getattr(self, f"{_event}_event"),
                 namespace=self.namespace,
             )
+        self.on("enable", handler=self.enable, namespace=self.namespace)
+        self.on("disable", handler=self.disable, namespace=self.namespace)
 
         self.moving_thread = Thread(
             target=self._moving_thread,
@@ -81,6 +84,17 @@ class DynamixelRobot(Gadget, DynamixelManager):
 
         self.set_param = partial(self.access_param, rw_mode="set")
         self.get_param = partial(self.access_param, rw_mode="get")
+
+    def enable(self, *args, **kwargs):
+        # if not self.enabled:
+        print("Enabling")
+        self.POLL_MOVEMENT = False
+        self.enabled = self.enable_all()
+    
+    def disable(self, *args, **kwargs):
+        print("Disabling")
+        self.POLL_MOVEMENT = True
+        self.enabled = not self.disable_all()
 
     def add_motors_from_config(self, motor_config: list):
         """
@@ -140,6 +154,9 @@ class DynamixelRobot(Gadget, DynamixelManager):
                     position_dict = {}
                     velocity_dict = {}
                     for motor_name, motor in self.dxl_dict.items():
+                        # If the torque is on, the motor is probably moving somewhere, so skip
+                        if motor.get_torque_enable():
+                            continue
                         moving_dict.update({motor_name: motor.get_moving() * True})
                         position_dict.update({motor_name: motor.get_present_position()})
 
@@ -153,6 +170,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
                     # print(moving_dict)
                     if any(moving_dict.values()):
                         print("Moving")
+                        print(velocity_dict)
                         logging.debug("Moving")
                         # else:
                         # break
@@ -161,6 +179,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
                             data=velocity_dict,
                             namespace=self.namespace,
                         )
+                    time.sleep(50e-3)
             except:
                 pass
 
@@ -204,6 +223,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
         logging.debug(msg.value)
         logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
+        print("motorkwargs")
+        print(motor_id_kwargs)
 
         # TODO - maybe calcualte this before packing with self._msg2kwargs
         # that might be cleaner
@@ -214,10 +235,15 @@ class DynamixelRobot(Gadget, DynamixelManager):
             present_positions = self.get_param(
                 "present_position", {m_id: {} for m_id, _ in motor_id_kwargs.items()}
             )
+            # Sometimes results in very large number,
+            # That just needs to be modulo'd by 2**12
+            for pos in present_positions.keys():
+                present_positions[pos] %= 4096
             logging.debug(present_positions)
             relative_positions = [m_v["data"] for m_v in motor_id_kwargs.values()]
             motor_ids = list(motor_id_kwargs.keys())
             # motor_id_kwargs.update({m_id:})
+            print(present_positions)
             motor_id_kwargs.update(
                 {
                     m_id: {"data": rel_pos + pres_pos}
@@ -236,6 +262,11 @@ class DynamixelRobot(Gadget, DynamixelManager):
         self.set_param(
             "goal_position",
             motor_id_kwargs,
+        )
+        self.emit(
+            event="position",
+            data=motor_id_kwargs,
+            namespace=self.namespace
         )
 
     @decode_msg

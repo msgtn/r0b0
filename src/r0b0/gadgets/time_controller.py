@@ -42,13 +42,16 @@ class TimeController(Gadget):
                 self.direction = -1
             elif self.mode==TimeMode.TIMER:
                 self.direction = 1
+            elif self.mode==TimeMode.IDLE:
+                self.direction = 0
             if self.tick_thread is not None:
                 self.tick_thread.join()
                 self.tick_thread = None
-            self.tick_thread = Thread(
-                target=partial(self._tick_thread, direction=self.direction)
-            )
-            self.tick_thread.start()
+            if self.mode != TimeMode.IDLE:
+                self.tick_thread = Thread(
+                    target=partial(self._tick_thread, direction=self.direction)
+                )
+                self.tick_thread.start()
 
 
     # What else does this have to do
@@ -60,11 +63,11 @@ class TimeController(Gadget):
     # This should be a thread that is remade after every setting of the mode
     # Not here, but a cable will translate the tick to position events 
 
-    def _tick_thread(self, direction=1, *args, **kwargs):
+    def _tick_thread(self, direction=1, tick_period=1, *args, **kwargs):
         print(f"Starting tick thread with {direction:}")
         last_time = default_timer()
         while self.direction==direction:
-            if default_timer()-last_time >= 1.0:
+            if default_timer()-last_time >= tick_period:
                 self._tick(direction, *args, **kwargs)
                 last_time = default_timer()
 
@@ -74,8 +77,10 @@ class TimeController(Gadget):
             event="tick",
             data={
                 "event":"tick",
+                "direction": direction,
                 "msg": Message(event="tick", direction=direction)
-            }
+            },
+            namespace=self.namespace
         )
 
     # @encode_msg

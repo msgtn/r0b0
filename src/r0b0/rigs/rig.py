@@ -101,28 +101,34 @@ class Rig(Host):
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
             # msg_kwargs = msg_func(data)
-            msg_kwargs = cable(data)
-            if msg_kwargs is None:
-                return
-            # wrap the data into the gadget's expected message object
-            if rx_gadget is None:
-                emit_data = Message(**msg_kwargs)
-                include_self = True
-            else:
-                emit_data = self.gadgets[rx_gadget.name].message(**msg_kwargs)
-                include_self = False
-            output_event = emit_data.event
-            # assemble the output to emit
-            emit_kwargs = dict(
-                event=output_event,
-                data={"event": output_event, "msg": pickle.dumps(emit_data)},
-                to=None,
-                include_self=include_self,
-                namespace=rx_namespace,
-            )
-            logging.debug(f"func_emit {emit_kwargs}")
-            # print('func_emit', emit_kwargs)
-            self.emit(**emit_kwargs)
+            # Handle SEQUENTIAL single-input multiple-output
+            msg_kwargs_list = cable(data)
+            if not isinstance(msg_kwargs_list, list):
+                msg_kwargs_list = [msg_kwargs_list]
+            for msg_kwargs in msg_kwargs_list:
+                print(msg_kwargs)
+                if msg_kwargs is None:
+                    return
+                # wrap the data into the gadget's expected message object
+                if rx_gadget is None or rx_gadget==tx_gadget:
+                    emit_data = Message(**msg_kwargs)
+                    include_self = True
+                else:
+                    emit_data = self.gadgets[rx_gadget.name].message(**msg_kwargs)
+                    include_self = False
+                output_event = emit_data.event
+                # assemble the output to emit
+                emit_kwargs = dict(
+                    event=output_event,
+                    data={"event": output_event, "msg": pickle.dumps(emit_data)},
+                    to=None,
+                    include_self=include_self,
+                    namespace=rx_namespace,
+                )
+                logging.debug(f"func_emit {emit_kwargs}")
+                print('func_emit', emit_kwargs)
+                self.emit(**emit_kwargs)
+                # time.sleep(2)
 
         input_handlers = self.event_handlers.get(input_event, [])
         input_handlers.append(func_emit)
