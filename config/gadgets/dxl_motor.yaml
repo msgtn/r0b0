@@ -11,3 +11,5 @@ motors: # use these same names as kwargs to constructors
   operating_mode: 3
   drive_mode: 8 # 8 will turn on torque_enable when position is commanded
   # drive_mode: 0 # 0 is default and will only move if torque is commanded
+  velocity_limit: 2000
+  goal_velocity: 1800

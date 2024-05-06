@@ -157,8 +157,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
                         # If the torque is on, the motor is probably moving somewhere, so skip
                         if motor.get_torque_enable():
                             continue
-                        moving_dict.update({motor_name: motor.get_moving() * True})
-                        position_dict.update({motor_name: motor.get_present_position()})
+                        # moving_dict.update({motor_name: motor.get_moving() * True})
+                        # position_dict.update({motor_name: motor.get_present_position()})
 
                         # Calculate the velocity, which is reported on the range [0, 2**32]
                         present_velocity = motor.get_present_velocity()
@@ -166,17 +166,23 @@ class DynamixelRobot(Gadget, DynamixelManager):
                             np.round(np.log2(present_velocity + 1e-6) / 32.0) * 32
                         )
                         present_velocity -= velocity_direction
-                        velocity_dict.update({motor_name: present_velocity})
-                    # print(moving_dict)
-                    if any(moving_dict.values()):
-                        print("Moving")
-                        print(velocity_dict)
+                        # velocity_dict.update({motor_name: present_velocity})
+                        moving_dict.update({ motor_name: {
+                            'moving': motor.get_moving() * True,
+                            'position': motor.get_present_position() % 2**12,
+                            'velocity': present_velocity
+                        }})
+                     # print(moving_dict)
+                    if any([v['moving'] for v in moving_dict.values()]):
+                        # print("Moving")
+                        # print(velocity_dict)
                         logging.debug("Moving")
                         # else:
                         # break
                         self.emit(
-                            event="motor_velocity",
-                            data=velocity_dict,
+                            event="motor_motion",
+                            # data=velocity_dict,
+                            data=moving_dict,
                             namespace=self.namespace,
                         )
                     time.sleep(50e-3)
@@ -223,8 +229,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
         logging.debug(msg.value)
         logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
-        print("motorkwargs")
-        print(motor_id_kwargs)
+        # print("motorkwargs")
+        # print(motor_id_kwargs)
 
         # TODO - maybe calcualte this before packing with self._msg2kwargs
         # that might be cleaner
@@ -238,12 +244,12 @@ class DynamixelRobot(Gadget, DynamixelManager):
             # Sometimes results in very large number,
             # That just needs to be modulo'd by 2**12
             for pos in present_positions.keys():
-                present_positions[pos] %= 4096
+                present_positions[pos] %= 2**12 
             logging.debug(present_positions)
             relative_positions = [m_v["data"] for m_v in motor_id_kwargs.values()]
             motor_ids = list(motor_id_kwargs.keys())
             # motor_id_kwargs.update({m_id:})
-            print(present_positions)
+            # print(present_positions)
             motor_id_kwargs.update(
                 {
                     m_id: {"data": rel_pos + pres_pos}
@@ -365,7 +371,7 @@ class Motor(DynamixelMotor):
 
     def calibrate_homing_offset(self):
         self.disable()
-        self.set_param("homing_offset", -self.get_present_position())
+        self.set_param("homing_offset", -(self.get_present_position() % 2**12))
 
     def set_motor_config(self, config: dict):
         # pass

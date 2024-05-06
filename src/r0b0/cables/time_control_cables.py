@@ -7,16 +7,21 @@ import io, os
 class Motion2ModeCable(Cable):
     def __init__(self,):
         super().__init__()
-        self.input_event = "motor_velocity"
+        self.input_event = "motor_motion"
 
     def __call__(self, data):
         # breakpoint()
+        # print(data)
         # TODO - generalize the dictionary / Message that gets sent from velocity events
         data['value'] = data['dxl_motor']
+        if not data['value']['moving']:
+            return
         # Filter small movements
         # if np.abs(data['value']<10):
         #     return
-        direction = 'left' if data['value'] > 0 else 'right'
+        if np.abs(data['value']['velocity']) < 50:
+            return
+        direction = 'left' if data['value']['velocity'] > 0 else 'right'
 
         if direction == 'left':
             mode = 'stopwatch'
@@ -25,6 +30,7 @@ class Motion2ModeCable(Cable):
         return {
             "event": "set_mode",
             "mode": mode,
+            "position": data['value']['position'],
         }
 
 class Tick2MotionCable(Cable):
@@ -39,11 +45,18 @@ class Tick2MotionCable(Cable):
         }
         position_event = {
             "event": "position",
-            "value": [direction*200],
+            "value": [data["position"]],
             # "motor_id": ["dxl_motor"],
             "motor_id": [1],
-            "absolute": False,
+            "absolute": True,
         }
+        # position_event = {
+        #     "event": "position",
+        #     "value": [direction*200],
+        #     # "motor_id": ["dxl_motor"],
+        #     "motor_id": [1],
+        #     "absolute": False,
+        # }
         disable_event = {
             "event": "disable"
         }
@@ -52,6 +65,8 @@ class Tick2MotionCable(Cable):
             position_event,
             # disable_event
             ]
+
+
 class Motion2DisableCable(Cable):
     def __init__(self):
         super().__init__()

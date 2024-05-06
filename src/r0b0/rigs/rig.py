@@ -126,7 +126,7 @@ class Rig(Host):
                     namespace=rx_namespace,
                 )
                 logging.debug(f"func_emit {emit_kwargs}")
-                print('func_emit', emit_kwargs)
+                # print('func_emit', emit_kwargs)
                 self.emit(**emit_kwargs)
                 # time.sleep(2)
 

@@ -73,18 +73,20 @@ def main():
     rig.power_on()
     time.sleep(2)
     dxl_motor.enable()
-    rig.manual_emit(
-        event="position",
-        data={
-            "event": "position",
-            "msg": DynamixelRobot.Message(**{
-                "value": [0],
-                "motor_id": [1],
-                "absolute": True
-            })
-        },
-        namespace=dxl_motor.namespace
-    )
+    # rig.manual_emit(
+    #     event="position",
+    #     data={
+    #         "event": "position",
+    #         "msg": DynamixelRobot.Message(**{
+    #             "value": [0],
+    #             "motor_id": [1],
+    #             "absolute": True
+    #         })
+    #     },
+    #     namespace=dxl_motor.namespace
+    # )
+    motor = dxl_motor.dxl_dict['dxl_motor']
+    motor.set_goal_position(0)
     time.sleep(3)
     pos2mode.start_position = 0
     dxl_motor.disable()
@@ -99,6 +101,7 @@ def main():
         dxl_motor.disable()
         dxl_motor.POLL_MOVEMENT = True
     motor_disable()
+    motor.set_homing_offset(0)
     breakpoint()
 
     print(tc.sid, pygame_keys.sid)
