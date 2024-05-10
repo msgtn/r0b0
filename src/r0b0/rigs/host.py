@@ -219,8 +219,8 @@ class Host(Thread, SocketIO):
         :param event: The event
         """
         logging.debug(f"HOST EMIT {datetime.datetime.now()}")
-        logging.debug(args)
-        logging.debug(kwargs)
+        # logging.debug(args)
+        # logging.debug(kwargs)
 
         # if the event is a player-related event,
         # handle it internally

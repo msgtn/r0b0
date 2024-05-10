@@ -87,12 +87,12 @@ class DynamixelRobot(Gadget, DynamixelManager):
 
     def enable(self, *args, **kwargs):
         # if not self.enabled:
-        print("Enabling")
+        logging.debug("Enabling")
         self.POLL_MOVEMENT = False
         self.enabled = self.enable_all()
     
     def disable(self, *args, **kwargs):
-        print("Disabling")
+        logging.debug("Disabling")
         self.POLL_MOVEMENT = True
         self.enabled = not self.disable_all()
 
@@ -172,10 +172,10 @@ class DynamixelRobot(Gadget, DynamixelManager):
                             'position': motor.get_present_position() % 2**12,
                             'velocity': present_velocity
                         }})
-                     # print(moving_dict)
+                     # logging.debug(moving_dict)
                     if any([v['moving'] for v in moving_dict.values()]):
-                        # print("Moving")
-                        # print(velocity_dict)
+                        # logging.debug("Moving")
+                        # logging.debug(velocity_dict)
                         logging.debug("Moving")
                         # else:
                         # break
@@ -229,8 +229,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
         logging.debug(msg.value)
         logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
-        # print("motorkwargs")
-        # print(motor_id_kwargs)
+        # logging.debug("motorkwargs")
+        # logging.debug(motor_id_kwargs)
 
         # TODO - maybe calcualte this before packing with self._msg2kwargs
         # that might be cleaner
@@ -249,7 +249,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             relative_positions = [m_v["data"] for m_v in motor_id_kwargs.values()]
             motor_ids = list(motor_id_kwargs.keys())
             # motor_id_kwargs.update({m_id:})
-            # print(present_positions)
+            # logging.debug(present_positions)
             motor_id_kwargs.update(
                 {
                     m_id: {"data": rel_pos + pres_pos}

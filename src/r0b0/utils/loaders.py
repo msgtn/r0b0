@@ -83,7 +83,7 @@ def decode_msg(func):
     """
 
     def _inner_func(s, data, **kwargs):
-        logging.debug(data)
+        # logging.debug(data)
         if isinstance(data, dict) and "msg" in data:
 
             # Load from a hex-encoded string

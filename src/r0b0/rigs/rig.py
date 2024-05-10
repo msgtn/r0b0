@@ -125,7 +125,7 @@ class Rig(Host):
                     include_self=include_self,
                     namespace=rx_namespace,
                 )
-                logging.debug(f"func_emit {emit_kwargs}")
+                # logging.debug(f"func_emit {emit_kwargs}")
                 # print('func_emit', emit_kwargs)
                 self.emit(**emit_kwargs)
                 # time.sleep(2)
@@ -230,7 +230,7 @@ class Rig(Host):
                 if event_gadget is not None:
                     # logging.debug(event_gadget.namespace)
                     emit_dict.update(dict(namespace=event_gadget.namespace))
-                    logging.debug(emit_dict)
+                    # logging.debug(emit_dict)
                     # logging.debug(emit_dict)
                     event_gadget.emit(**emit_dict)
                 break

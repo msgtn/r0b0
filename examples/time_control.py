@@ -1,6 +1,14 @@
-
+"""
+python3 -m examples.time_control 
+"""
 
 import os, pickle, time
+# Need to import logging *before* r0b0
+import logging
+logging.basicConfig(
+    encoding='utf-8',
+    level=logging.DEBUG
+)
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
@@ -11,11 +19,6 @@ from r0b0.cables.cable import Key2TimeModeCable
 from r0b0.cables.time_control_cables import \
     Motion2ModeCable, Tick2MotionCable, Position2ModeCable, Motion2DisableCable
 
-import logging
-logging.basicConfig(
-    encoding='utf-8',
-    level=logging.DEBUG
-)
 CONFIG_DIR = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../config/gadgets/'))

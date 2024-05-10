@@ -73,7 +73,7 @@ class Motion2DisableCable(Cable):
         self.input_event = "position"
 
     def __call__(self, data):
-        print(self)
+        # print(self)
         return {
             "event":"disable"
         }
