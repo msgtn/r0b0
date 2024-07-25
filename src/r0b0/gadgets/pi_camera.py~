@@ -31,7 +31,6 @@ class PiCamera(Gadget, Picamera2):
         Picamera2.create_still_configuration(self, transform=ROTATE)
         #self.still_configuration.size = (4056,3040)
         self.still_configuration.size = (2028, 1520)
-        self.still_configuration.transform = ROTATE
         Picamera2.start(self, "still")
 
         try:

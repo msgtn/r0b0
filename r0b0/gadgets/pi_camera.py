@@ -10,7 +10,6 @@ from time import sleep
 from functools import partial
 import glob
 import subprocess
-import libcamera
 
 shutter_speeds = [1 / 30, 1 / 250, 1 / 1000]
 shutter_speed_idx = 0
@@ -19,7 +18,6 @@ FRAMERATE = 15
 ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE = 3
-ROTATE = libcamera.Transform(hflip=1, vflip=1)
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
 
@@ -28,10 +26,9 @@ class PiCamera(Gadget, Picamera2):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
-        Picamera2.create_still_configuration(self, transform=ROTATE)
+        Picamera2.create_still_configuration(self)
         #self.still_configuration.size = (4056,3040)
         self.still_configuration.size = (2028, 1520)
-        self.still_configuration.transform = ROTATE
         Picamera2.start(self, "still")
 
         try:
