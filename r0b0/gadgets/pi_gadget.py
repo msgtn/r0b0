@@ -1,15 +1,101 @@
 from .gadget import Gadget, Message
-from r0b0.config import TAPES_DIR
+import logging
 from r0b0.utils.loaders import decode_msg
-from r0b0 import logging, get_timestamp
-import os
+from r0b0.config import TAPES_DIR
 
-from picamera2 import Picamera2
 import numpy as np
 from time import sleep
+from signal import pause
+from threading import Thread
 from functools import partial
-import glob
-import subprocess
+
+from picamera2 import Picamera2
+from gpiozero import Button, LED
+
+import pickle
+from socketio import Namespace
+import copy
+
+
+class PiGadget(Gadget):
+    def __init__(self, config, **kwargs):
+        Gadget.__init__(self, config, **kwargs)
+
+        pin_types = dict(
+            buttons=Button,
+            leds=LED,
+        )
+        self.__dict__.update(
+            {
+                pin: self.assign_pins(config[pin], pin_type)
+                for pin, pin_type in pin_types.items()
+            }
+        )
+        self.assign_buttons(self.__dict__.get("buttons", {}))
+        logging.debug(self.__dict__.get("buttons", "No buttons"))
+        self.pause_thread = Thread(target=pause)
+
+    def assign_pins(self, pin_dict, pin_type=Button):
+        return {_name: pin_type(_pin) for _name, _pin in pin_dict.items()}
+
+    def _emit_button(self, button_name, event="pi_button"):
+        return lambda: self.emit(
+            event=event, data={"button": button_name}, namespace=self.namespace
+        )
+
+    def assign_buttons(self, button_dict):
+        logging.debug(button_dict)
+        for button_name, button in button_dict.items():
+            button.when_pressed = self._emit_button(button_name)
+
+    def start(self):
+        Gadget.start(self)
+        self.pause_thread.start()
+        # pause()
+
+
+class PiButton(PiGadget):
+    def __init__(self, config, **kwargs):
+        Gadget.__init__(self, config, **kwargs)
+
+        pin_types = dict(
+            buttons=Button,
+            leds=LED,
+        )
+        self.__dict__.update(
+            {
+                pin: self.assign_pins(config[pin], pin_type)
+                for pin, pin_type in pin_types.items()
+            }
+        )
+        self.assign_buttons(self.__dict__.get("buttons", {}))
+        logging.debug(self.__dict__.get("buttons", "No buttons"))
+        self.pause_thread = Thread(target=pause)
+
+    def _assign_pins(self, pin_dict, pin_type=Button):
+        return {_name: pin_type(_pin) for _name, _pin in pin_dict.items()}
+
+    def _emit_button(self, button_name, event="pi_button"):
+        return lambda: self.emit(
+            event=event, data={"button": button_name}, namespace=self.namespace
+        )
+
+    def assign_buttons(self, button_dict):
+        # _emit_button = lambda button_name: \
+        #     self.emit(
+        #         event='pi_button',
+        #         data={'button':button_name}
+        #     )
+        logging.debug(button_dict)
+        for button_name, button in button_dict.items():
+            # _button.when_pressed = _emit_button(_name)
+            button.when_pressed = self._emit_button(button_name)
+
+    def start(self):
+        Gadget.start(self)
+        self.pause_thread.start()
+        # pause()
+
 
 shutter_speeds = [1 / 30, 1 / 250, 1 / 1000]
 shutter_speed_idx = 0
@@ -18,8 +104,8 @@ FRAMERATE = 15
 ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE = 3
-
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
+
 
 class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
@@ -27,7 +113,7 @@ class PiCamera(Gadget, Picamera2):
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
         Picamera2.create_still_configuration(self)
-        #self.still_configuration.size = (4056,3040)
+        # self.still_configuration.size = (4056,3040)
         self.still_configuration.size = (2028, 1520)
         Picamera2.start(self, "still")
 
@@ -43,7 +129,6 @@ class PiCamera(Gadget, Picamera2):
         except:
             pass
 
-        
         self.on("d_down", handler=self.shutter15, namespace=self.namespace)
         self.on("d_right", handler=self.shutter60, namespace=self.namespace)
         self.on("d_up", handler=self.shutter250, namespace=self.namespace)
@@ -59,23 +144,10 @@ class PiCamera(Gadget, Picamera2):
 
     @decode_msg
     def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
-        subprocess.call(['raspi-gpio', 'set', '47', 'dh'])
         logging.debug(f"Shutter released")
         # TODO - split off into separate subfolders
         # instead of one large folder
         self.capture_file(str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg"))
-
-    @decode_msg
-    def set_shutter(self, shutter_speed):
-        """
-        Set the shutter speed of the camera.
-
-        :param shutter_speed: Shutter speed in milliseconds, i.e. 1e6 / {15, 60, 250}.
-        """
-        logging.debug(f"Shutter speed: 1/{int(1e6 / shutter_speed)}")
-        self.set_controls({
-            "ExposureTime": shutter_speed
-        })
 
     @decode_msg
     def shutter15(

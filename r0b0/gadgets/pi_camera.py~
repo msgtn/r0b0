@@ -27,7 +27,7 @@ class PiCamera(Gadget, Picamera2):
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
         Picamera2.create_still_configuration(self)
-        #self.still_configuration.size = (4056,3040)
+        # self.still_configuration.size = (4056,3040)
         self.still_configuration.size = (2028, 1520)
         Picamera2.start(self, "still")
 
