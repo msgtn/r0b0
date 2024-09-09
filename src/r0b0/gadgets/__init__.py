@@ -10,12 +10,12 @@
 # from .camera import Camera
 # from .microphone import Microphone
 # from .chatbot import ChatBot
-
+breakpoint()
 import os
 import logging
 from r0b0.utils import loaders
 from importlib import import_module
-
+breakpoint()
 GADGETS = {
     "gadget": ["Gadget"],
 #    "midi_controller": ["MIDIController"],
@@ -27,12 +27,14 @@ GADGETS = {
 #    "mouse": ["Mouse"],
 #    "rtc": ["RTCGadget"],
     "camera": ["Camera"],
-    "microphone": ["Microphone"],
-    "chatbot": ["ChatBot"],
-    "eink": ["EInk"],
-    "time_controller": ["TimeController"],
+#    "microphone": ["Microphone"],
+#    "chatbot": ["ChatBot"],
+#    "eink": ["EInk"],
+#    "time_controller": ["TimeController"],
+    "language_model": ["LanguageModel"],
+#    "time_controller": ["TimeController"],
     "pi_camera": ["PiCamera"],
-    "pi_button": ["PiButton"],
+    "pi_button": ["PiButton"]
 }
 for pkg, mods in GADGETS.items():
     try:
