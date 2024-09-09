@@ -10,12 +10,12 @@
 # from .camera import Camera
 # from .microphone import Microphone
 # from .chatbot import ChatBot
-
+breakpoint()
 import os
 import logging
 from r0b0.utils import loaders
 from importlib import import_module
-
+breakpoint()
 GADGETS = {
     "gadget": ["Gadget"],
 #    "midi_controller": ["MIDIController"],
@@ -30,6 +30,8 @@ GADGETS = {
 #    "microphone": ["Microphone"],
 #    "chatbot": ["ChatBot"],
 #    "eink": ["EInk"],
+#    "time_controller": ["TimeController"],
+    "language_model": ["LanguageModel"],
 #    "time_controller": ["TimeController"],
     "pi_camera": ["PiCamera"],
     "pi_button": ["PiButton"]
