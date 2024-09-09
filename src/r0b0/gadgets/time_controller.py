@@ -146,6 +146,13 @@ class TimeController(Gadget):
                 last_time = default_timer()
         self.mode = TimeMode.IDLE
         self.ticking = False
+        self.emit(
+            event="idle",
+            data={
+                "event":"idle",
+            },
+            namespace=self.namespace,
+        )
         time.sleep(2)
         # self.tick_thread.join()
 

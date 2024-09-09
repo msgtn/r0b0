@@ -47,7 +47,7 @@ socket.on("watcher", async (id) => {
   console.log(`watcher from ${id}`)
   var peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
-  peerConnection = peerConnections[id];
+  // peerConnection = peerConnections[id];
   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: broadcastAudio });
   stream.getTracks().forEach((track) => {peerConnection.addTrack(track, stream)});
   peerConnection.onicecandidate = event => {

@@ -480,7 +480,7 @@ function getStream() {
 }
 
 function gotStream(stream) {
-  window.stream = stream;
+  // window.stream = stream;
   audioSelect.selectedIndex = [...audioSelect.options].findIndex(
     (option) => option.text === stream.getAudioTracks()[0].label
   );

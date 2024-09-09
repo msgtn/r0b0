@@ -67,6 +67,7 @@ class Tick2MotionCable(Cable):
             ]
 
 
+
 class Motion2DisableCable(Cable):
     def __init__(self):
         super().__init__()
@@ -77,6 +78,22 @@ class Motion2DisableCable(Cable):
         return {
             "event":"disable"
         }
+
+
+class Idle2ResetCable(Coble):
+    def __init__(self):
+        super().__init__()
+        self.input_event = "idle"
+        self.position_event = {
+            "event": "position",
+            "value": [0],
+            "motor_id": [1],
+            "absolute": True,
+        }
+
+    def __call__(self, data):
+        return self.position_event
+
 
 class Position2ModeCable(Cable):
     """
@@ -112,31 +129,3 @@ class Position2ModeCable(Cable):
                 }
        
 
-class SaveImageCable(Cable):
-    def __init__(
-        self,
-    ):
-        super().__init__()
-        self.input_event = "file_upload"
-
-    def __call__(self, data):
-        print("Received image")
-
-        image_stream = io.BytesIO(data["image"])
-        image = Image.open(image_stream)
-        image.save(os.path.expanduser("~/tmp_image.jpg"))
-
-
-class Upload2DrawCable(Cable):
-    """
-    Page file_upload to E-Ink draw_image
-    """
-
-    def __init__(
-        self,
-    ):
-        super().__init__()
-        self.input_event = "file_upload"
-
-    def __call__(self, data):
-        return {"event": "draw_image", "image": data["image"]}

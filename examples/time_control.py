@@ -1,5 +1,13 @@
 """
 python3 -m examples.time_control 
+
+Turn CW for Timer (countdown)
+Turn CCW for stopwatch (counting up)
+To reset to idle, rotate the hand between ticks 
+slightly sustained, for ~1sec to make sure the motion is picked up
+
+- [ ] Implement different time scales with more rotations (e.g. seconds in the first revolution, minutes in the second, hours in the third, etc)
+- [ ] When resetting to Idle, reset the hand position
 """
 
 import os, pickle, time
@@ -17,14 +25,15 @@ from socketio import Client
 from r0b0.gadgets import DynamixelRobot
 from r0b0.cables.cable import Key2TimeModeCable
 from r0b0.cables.time_control_cables import \
-    Motion2ModeCable, Tick2MotionCable, Position2ModeCable, Motion2DisableCable
+    Motion2ModeCable, Tick2MotionCable, \
+    Position2ModeCable, Motion2DisableCable, \
+    Idle2ResetCable
 
 CONFIG_DIR = os.path.abspath(
     os.path.join(
         os.path.dirname(__file__),'../config/gadgets/'))
 
 def main():
-
 
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../ngrok_public_url.txt')), 'r') as _file:
         socket_addr = _file.readlines()[0].strip()
@@ -62,6 +71,7 @@ def main():
         rx_gadget=dxl_motor,
     )
     pos2mode = Position2ModeCable()
+    idle2reset = Idle2ResetCable()
     # rig.add_cable(
     #     cable=pos2mode,
     #     tx_gadget=dxl_motor,
