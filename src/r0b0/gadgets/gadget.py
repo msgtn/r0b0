@@ -73,7 +73,6 @@ class Gadget(Client, Thread):
         # TODO - refactor to capital-M Message,
         # because this is a class; lowercase is for functions
         self.message = Message
-        self.Message = Message
         self.on("call_method",
             handler=self.call_method_handler,
             namespace=self.namespace,

@@ -10,12 +10,10 @@
 # from .camera import Camera
 # from .microphone import Microphone
 # from .chatbot import ChatBot
-breakpoint()
 import os
 import logging
 from r0b0.utils import loaders
 from importlib import import_module
-breakpoint()
 GADGETS = {
     "gadget": ["Gadget"],
 #    "midi_controller": ["MIDIController"],
@@ -23,11 +21,11 @@ GADGETS = {
 #    "arduino": ["ArduinoGadget", "ArduinoRobot"],
     "tape": ["Tape"],
     "page": ["Page", "MobilePage"],
-#    "pygame_gadget": ["PyGameGadget", "PyGameJoystick", "PyGameKeys"],
-#    "mouse": ["Mouse"],
+   "pygame_gadget": ["PyGameGadget", "PyGameJoystick", "PyGameKeys"],
+   "mouse": ["Mouse"],
 #    "rtc": ["RTCGadget"],
     "camera": ["Camera"],
-#    "microphone": ["Microphone"],
+   "microphone": ["Microphone"],
 #    "chatbot": ["ChatBot"],
 #    "eink": ["EInk"],
 #    "time_controller": ["TimeController"],
