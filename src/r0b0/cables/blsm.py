@@ -35,6 +35,7 @@ class Microphone2PromptCable(Cable):
     def __call__(self, data):
         super().__call__(data)
         print("mic2prompt")
+        print(data["text"])
         return {
             "event": "prompt",
             "prompt_string": data["text"]

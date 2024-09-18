@@ -3,8 +3,8 @@ import logging
 
 logging.basicConfig(
     encoding='utf-8',
-    # level=logging.DEBUG,
-    level=logging.WARNING,
+    level=logging.DEBUG,
+    # level=logging.WARNING,
 )
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
@@ -37,6 +37,7 @@ def main():
 
 
     microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "microphone.yaml"))
+    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "xreal_mic.yaml"))
     lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
     pygame_keys = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "pygame_keys.yaml"))
     key2mic_cable = Key2MicCable()

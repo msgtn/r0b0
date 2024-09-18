@@ -56,6 +56,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
         for motor_name in self.motor_configs.keys():
             self.dxl_dict[motor_name].set_motor_config(self.motor_configs[motor_name])
 
+        # breakpoint()
         self.enable()
 
         # set motor operating modes

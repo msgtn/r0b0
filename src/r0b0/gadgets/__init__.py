@@ -16,8 +16,8 @@ from r0b0.utils import loaders
 from importlib import import_module
 GADGETS = {
     "gadget": ["Gadget"],
-#    "midi_controller": ["MIDIController"],
-#    "dxl_robot": ["DynamixelRobot"],
+   "midi_controller": ["MIDIController"],
+   "dxl_robot": ["DynamixelRobot"],
 #    "arduino": ["ArduinoGadget", "ArduinoRobot"],
     "tape": ["Tape"],
     "page": ["Page", "MobilePage"],

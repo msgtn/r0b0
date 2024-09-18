@@ -124,3 +124,12 @@ class MidiRel2PositionCable(Cable):
             "motor_id": msg.control,
             "absolute": False,
         }
+
+class MIDI2MicCable(Cable):
+    def __init__(self):
+        self.input_event = "midi_on"
+
+    def __call__(self, data):
+        return {
+            "event": "listen"
+        }
