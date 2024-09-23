@@ -84,7 +84,7 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
 
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
-        print(f"Adding {cable} from {tx_gadget} to {rx_gadget}")
+        logging.info(f"Adding {cable} from {tx_gadget} to {rx_gadget}")
         assert not (tx_gadget is None and rx_gadget is None), "Either or both tx_gadget and rx_gadget must be defined when calling add_cable()"
         if tx_gadget is None:
             tx_gadget = rx_gadget
@@ -106,7 +106,7 @@ class Rig(Host):
             if not isinstance(msg_kwargs_list, list):
                 msg_kwargs_list = [msg_kwargs_list]
             for msg_kwargs in msg_kwargs_list:
-                print(msg_kwargs)
+                logging.debug(msg_kwargs)
                 if msg_kwargs is None:
                     return
                 # wrap the data into the gadget's expected message object
@@ -238,7 +238,7 @@ class Rig(Host):
     def power_on(
         self,
     ):
-        print("POWER ON")
+        logging.info("POWER ON")
 
         self.start()
         logging.debug(self.gadgets.values())

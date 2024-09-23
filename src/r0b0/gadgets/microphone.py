@@ -3,6 +3,8 @@ from r0b0.utils.loaders import decode_msg
 import logging, ast
 
 import speech_recognition as sr
+from vosk import SetLogLevel
+SetLogLevel(-1)
 
 EVENTS = ["listen"]
 
@@ -41,8 +43,14 @@ class Microphone(
     @decode_msg
     def listen_event(self, data):
         msg = data["msg"]
-        logging.warning(f"{self.name} now listening")
+        if self.mic.stream is not None:
+            logging.warning("Microphone is already listening!")
+            return
+
+        
         with self.mic as source:
+            self.rec.adjust_for_ambient_noise(source)
+            logging.warning(f"{self.name} now listening")
             res = self.rec.recognize_vosk(self.rec.listen(source))
             text = ast.literal_eval(res)["text"]
             self.emit(

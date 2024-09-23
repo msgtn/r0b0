@@ -133,3 +133,39 @@ class MIDI2MicCable(Cable):
         return {
             "event": "listen"
         }
+
+class Wav2MotorCable(Cable):
+    def __init__(self):
+        self.input_event = "wav"
+
+    def __call__(self, data):
+        # Will be float normalized between 0.-1.
+        wav_value = data["value"]
+        motor_value = int(wav_value**3*4096)
+        # logging.info(motor_value)
+        return {
+            "event": "position",
+            "value": motor_value,
+            "motor_id": 1,
+            "absolute": True
+        }
+
+class Ser2MicCable(Cable):
+    def __init__(self):
+        self.input_event="serial"
+
+    def __call__(self, data):
+        super().__call__(data)
+        return {
+            "event": "listen",
+        }
+
+class Response2ListenCable(Cable):
+    def __init__(self):
+        self.input_event="response"
+    
+    def __call__(self, data):
+        super().__call__(data)
+        return {
+            "event": "listen",
+        }

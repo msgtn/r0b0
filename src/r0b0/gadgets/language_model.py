@@ -18,10 +18,19 @@ DEFAULT_CONFIG = {
     "model": "llama3"
 }
 EVENTS = ["prompt"]
-SYSPROMPT = """
-Answer as concisely as possible, in one sentence.
-Be brusque if necessary; sardonic, optionally.
-"""
+SYSPROMPT = '. '.join([
+    "You are a robot named Blossom",
+    "You are not designed for anything in particular",
+    "You are a social companion robot, just existing",
+    "You are a floating head with no limbs or actuators",
+    "You can't hear very well so if something sounds confusing, reiterate it",
+    "You have bad eyesight and need glasses to see",
+    "You were created by someone named Michael for their PhD project",
+    "Michael is right next to you",
+    "You are not a language model",
+    "Answer as concisely as possible, in one sentence",
+    # "Be brusque if necessary; sardonic, optionally.",
+])
 
 SOUNDS_DIR = os.path.join(os.path.dirname(__file__), "sounds")
 
@@ -43,6 +52,11 @@ class LanguageModel(Gadget):
         res = self.prompt(msg.prompt_string)
         if vocalize:
             self.vocalize(res)
+        self.emit(
+            event="response",
+            data={"event":"response"},
+            namespace=self.namespace
+        )
 
     def vocalize(self, text):
         # TODO - cut up by sentence to compensate for drift between voice and text?
@@ -65,32 +79,35 @@ class LanguageModel(Gadget):
             target=partial(pydub.playback.play, wav),
         )
         # breakpoint()
-        playback_thread.start()
+        # playback_thread.start()
         stream_thread.start()
         self.print_typewriter(input_string=text)
 
-        playback_thread.join()
-        stream_thread.join()
+        # playback_thread.join()
+        # stream_thread.join()
+        
 
     def convert_audiosegment2array(self, audio_segment):
         audio_data = np.frombuffer(audio_segment.raw_data, dtype=np.uint8)
         audio_data = audio_data / 255
         window_length = 2000
         polyorder = 3
-        audio_filtered = savgol_filter(audio_data, window_length=window_length, polyorder=polyorder)
-        return audio_filtered
+        for _ in range(2):
+            audio_data = savgol_filter(audio_data, window_length=window_length, polyorder=polyorder)
+        return audio_data
 
     def stream_wav_values(self, wav_array, frame_rate):
-        downsample = 1000
+        downsample = 4000
         wav_array = wav_array[::downsample]
         for i,frame in enumerate(wav_array):
             # logging.info(frame)
             # logging.debug(frame)
-            logging.debug(f"{i:08d}/{len(wav_array)}, {frame:.2f}")
+            # logging.debug(f"{i:08d}/{len(wav_array)}, {frame:.2f}")
             # print(frame)
             self.emit(
                 event="wav",
-                data={"event": "wav", "value": frame}
+                data={"event": "wav", "value": frame},
+                namespace=self.namespace,
             )
             # time.sleep(1/frame_rate*downsample)
             # NOTE - maybe there's a minimum sleep length?

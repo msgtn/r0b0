@@ -18,6 +18,7 @@ GADGETS = {
     "gadget": ["Gadget"],
    "midi_controller": ["MIDIController"],
    "dxl_robot": ["DynamixelRobot"],
+   "serial_gadget": ["SerialGadget"],
 #    "arduino": ["ArduinoGadget", "ArduinoRobot"],
     "tape": ["Tape"],
     "page": ["Page", "MobilePage"],
