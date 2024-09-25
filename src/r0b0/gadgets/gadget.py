@@ -1,6 +1,7 @@
 """
 The base Gadget class
 """
+
 import logging
 from r0b0.config import LOCALHOST, SERVER_PORT, HEADER
 from r0b0.utils.loaders import decode_msg, encode_msg
@@ -73,7 +74,8 @@ class Gadget(Client, Thread):
         # TODO - refactor to capital-M Message,
         # because this is a class; lowercase is for functions
         self.message = Message
-        self.on("call_method",
+        self.on(
+            "call_method",
             handler=self.call_method_handler,
             namespace=self.namespace,
         )
@@ -83,7 +85,7 @@ class Gadget(Client, Thread):
         """
         Handler for calling a Gadget's method from an emit.
 
-        :param msg: The message, should contain a "method" attribute. 
+        :param msg: The message, should contain a "method" attribute.
         """
         if hasattr(self, msg.method):
             getattr(self, msg.method)(*args, **kwargs)

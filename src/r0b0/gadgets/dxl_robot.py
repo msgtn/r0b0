@@ -6,6 +6,7 @@ from r0b0.utils.loaders import decode_msg, encode_msg
 
 from .gadget import Gadget, Message
 import logging
+
 logging = logging.getLogger(__name__)
 from dynamixel_python import DynamixelManager, DynamixelMotor, ReadError
 
@@ -26,6 +27,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
     """
     A Gadget representing a Dynamixel-based robot.
     """
+
     @staticmethod
     def Message(*args, **kwargs):
         return Message(*args, **kwargs)
@@ -91,7 +93,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
         logging.debug("Enabling")
         self.POLL_MOVEMENT = False
         self.enabled = self.enable_all()
-    
+
     def disable(self, *args, **kwargs):
         logging.debug("Disabling")
         self.POLL_MOVEMENT = True
@@ -168,13 +170,17 @@ class DynamixelRobot(Gadget, DynamixelManager):
                         )
                         present_velocity -= velocity_direction
                         # velocity_dict.update({motor_name: present_velocity})
-                        moving_dict.update({ motor_name: {
-                            'moving': motor.get_moving() * True,
-                            'position': motor.get_present_position() % 2**12,
-                            'velocity': present_velocity
-                        }})
-                     # logging.debug(moving_dict)
-                    if any([v['moving'] for v in moving_dict.values()]):
+                        moving_dict.update(
+                            {
+                                motor_name: {
+                                    "moving": motor.get_moving() * True,
+                                    "position": motor.get_present_position() % 2**12,
+                                    "velocity": present_velocity,
+                                }
+                            }
+                        )
+                    # logging.debug(moving_dict)
+                    if any([v["moving"] for v in moving_dict.values()]):
                         # logging.debug("Moving")
                         # logging.debug(velocity_dict)
                         logging.debug("Moving")
@@ -245,7 +251,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             # Sometimes results in very large number,
             # That just needs to be modulo'd by 2**12
             for pos in present_positions.keys():
-                present_positions[pos] %= 2**12 
+                present_positions[pos] %= 2**12
             logging.debug(present_positions)
             relative_positions = [m_v["data"] for m_v in motor_id_kwargs.values()]
             motor_ids = list(motor_id_kwargs.keys())
@@ -270,11 +276,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             "goal_position",
             motor_id_kwargs,
         )
-        self.emit(
-            event="position",
-            data=motor_id_kwargs,
-            namespace=self.namespace
-        )
+        self.emit(event="position", data=motor_id_kwargs, namespace=self.namespace)
 
     @decode_msg
     def velocity_event(self, data):

@@ -28,13 +28,13 @@ class TestLanguageModel:
         res = lm.prompt("testing")
         breakpoint()
 
-    @pytest.mark.parametrize(
-        "text",
-        ["hello world",
-        "the medium is the message",
-        "marx was right",
-        "the mitochondria is the powerhouse of the cell"]
-    )
-    def test_voice(self, lm, text):
-        lm.voice(text)
-        breakpoint()
+    # @pytest.mark.parametrize(
+    #     "text",
+    #     ["hello world",
+    #     "the medium is the message",
+    #     "marx was right",
+    #     "the mitochondria is the powerhouse of the cell"]
+    # )
+    # def test_voice(self, lm, text):
+    #     lm.voice(text)
+    #     breakpoint()

@@ -1,4 +1,5 @@
 import numpy as np
+
 try:
     from r0b0.kinematics.blsm import device_motion2dxl_motor
 except:

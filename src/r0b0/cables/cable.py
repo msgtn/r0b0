@@ -1,14 +1,17 @@
 from abc import abstractmethod
 import pickle
 import logging
+
 logger = logging.getLogger(__name__)
 import datetime
 
 
 class Cable(object):
-    def __init__(self,):
-        self.input_event = ''
-    
+    def __init__(
+        self,
+    ):
+        self.input_event = ""
+
     def log_data(func, *args, **kwargs):
         def log_func(self, *args, **kwargs):
             # logging.debug(datetime.datetime.now())
@@ -17,10 +20,10 @@ class Cable(object):
             # logging.debug(kwargs)
             # logging.debug(self.__class__)
             return func(self, *args, **kwargs)
-        return log_func
-            # if 'data' in kwargs:
-                # logging.debug()
 
+        return log_func
+        # if 'data' in kwargs:
+        # logging.debug()
 
     # @abstractmetod
     @log_data
@@ -31,7 +34,7 @@ class Cable(object):
         :param data: _description_
         :return: _description_
         """
-        logging.debug(f'LOG_DATA {datetime.datetime.now()}')
+        logging.debug(f"LOG_DATA {datetime.datetime.now()}")
         # logging.debug(args)
         # logging.debug(kwa rgs)
         logging.debug(self.__class__)
@@ -42,18 +45,22 @@ class Cable(object):
     def inner_call(self, *args, **kwargs):
         return {}
 
+
 class Key2MouseCable(Cable):
     """
     Converts key presses to absolute mouse positions
     """
-    def __init__(self,):
-        self.input_event = 'keydown'
-    
+
+    def __init__(
+        self,
+    ):
+        self.input_event = "keydown"
+
     # @Cable.log_data
     def __call__(self, data):
         super().__call__(data)
 
-    # def inner_call(self, data):
+        # def inner_call(self, data):
         key2pos_dict = {
             "q": [100, 100],
             "w": [500, 100],
@@ -66,7 +73,7 @@ class Key2MouseCable(Cable):
             "c": [900, 700],
         }
         # key2pos_dict.setdefault([500,400])
-        [x,y] = key2pos_dict.get(data['unicode'],[500,400])
+        [x, y] = key2pos_dict.get(data["unicode"], [500, 400])
         # print(x,y)
         # logger.debug(f"{x}, {y}")
         return {
@@ -125,14 +132,14 @@ class MidiRel2PositionCable(Cable):
             "absolute": False,
         }
 
+
 class MIDI2MicCable(Cable):
     def __init__(self):
         self.input_event = "midi_on"
 
     def __call__(self, data):
-        return {
-            "event": "listen"
-        }
+        return {"event": "listen"}
+
 
 class Wav2MotorCable(Cable):
     def __init__(self):
@@ -141,18 +148,19 @@ class Wav2MotorCable(Cable):
     def __call__(self, data):
         # Will be float normalized between 0.-1.
         wav_value = data["value"]
-        motor_value = int(wav_value**3*4096)
+        motor_value = int(wav_value**3 * 4096)
         # logging.info(motor_value)
         return {
             "event": "position",
             "value": motor_value,
             "motor_id": 1,
-            "absolute": True
+            "absolute": True,
         }
+
 
 class Ser2MicCable(Cable):
     def __init__(self):
-        self.input_event="serial"
+        self.input_event = "serial"
 
     def __call__(self, data):
         super().__call__(data)
@@ -160,10 +168,11 @@ class Ser2MicCable(Cable):
             "event": "listen",
         }
 
+
 class Response2ListenCable(Cable):
     def __init__(self):
-        self.input_event="response"
-    
+        self.input_event = "response"
+
     def __call__(self, data):
         super().__call__(data)
         return {

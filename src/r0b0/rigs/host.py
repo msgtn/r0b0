@@ -1,6 +1,8 @@
 import glob, inspect
 
 import logging
+
+logging = logging.getLogger(__name__)
 import datetime
 
 from r0b0.config import (
@@ -218,7 +220,7 @@ class Host(Thread, SocketIO):
 
         :param event: The event
         """
-        logging.debug(f"HOST EMIT {datetime.datetime.now()}")
+        logging.debug(f"HOST EMIT {event} {datetime.datetime.now()}")
         # logging.debug(args)
         # logging.debug(kwargs)
 
@@ -265,20 +267,24 @@ class Host(Thread, SocketIO):
                 data=d,
                 **data["kwargs"],  # namespace arg from the .yaml that defined it
             )
-            if d.get('id',None) is not None:
+            if d.get("id", None) is not None:
                 id_event = f"{d['id']}_{d['event']}"
-                tape = self.tapes.get(id_event,None)
+                tape = self.tapes.get(id_event, None)
                 if tape is not None:
-                # if id_event in self.tapes.keys():
+                    # if id_event in self.tapes.keys():
                     # record time in millis
-                    d.update({
-                        'time':int(time.time()*10e3),
-                        })
-                    tape.write({**{
-                        'event':data['event'],
-                        'data':d},
-                        **data['kwargs'],
-                    })
+                    d.update(
+                        {
+                            "time": int(time.time() * 10e3),
+                        }
+                    )
+                    tape.write(
+                        {
+                            **{"event": data["event"], "data": d},
+                            **data["kwargs"],
+                        }
+                    )
+
         self.server.on(
             data["event"],
             _emit_record,

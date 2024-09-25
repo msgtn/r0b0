@@ -3,6 +3,7 @@ import glob
 import os
 from os.path import basename, dirname
 import logging
+
 logger = logging.getLogger(__name__)
 
 from r0b0.config import MESSAGES_DIR, CABLES_DIR

@@ -28,18 +28,17 @@ class Motion2MotorCable(Cable):
             "absolute": True,
         }
 
+
 class Microphone2PromptCable(Cable):
     def __init__(self):
         self.input_event = "text"
-    
+
     def __call__(self, data):
         super().__call__(data)
         print("mic2prompt")
         print(data["text"])
-        return {
-            "event": "prompt",
-            "prompt_string": data["text"]
-        }
+        return {"event": "prompt", "prompt_string": data["text"]}
+
 
 def key2mic(data=None):
     if data is None:
@@ -49,9 +48,10 @@ def key2mic(data=None):
             "event": "listen",
         }
 
+
 class Key2MicCable(Cable):
     def __init__(self):
-        self.input_event="keydown"
+        self.input_event = "keydown"
 
     def __call__(self, data):
         super().__call__(data)

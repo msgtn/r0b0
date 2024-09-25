@@ -14,26 +14,27 @@ import os
 import logging
 from r0b0.utils import loaders
 from importlib import import_module
+
 GADGETS = {
     "gadget": ["Gadget"],
-   "midi_controller": ["MIDIController"],
-   "dxl_robot": ["DynamixelRobot"],
-   "serial_gadget": ["SerialGadget"],
-#    "arduino": ["ArduinoGadget", "ArduinoRobot"],
+    "midi_controller": ["MIDIController"],
+    "dxl_robot": ["DynamixelRobot"],
+    "serial_gadget": ["SerialGadget"],
+    #    "arduino": ["ArduinoGadget", "ArduinoRobot"],
     "tape": ["Tape"],
     "page": ["Page", "MobilePage"],
-   "pygame_gadget": ["PyGameGadget", "PyGameJoystick", "PyGameKeys"],
-   "mouse": ["Mouse"],
-#    "rtc": ["RTCGadget"],
+    "pygame_gadget": ["PyGameGadget", "PyGameJoystick", "PyGameKeys"],
+    "mouse": ["Mouse"],
+    #    "rtc": ["RTCGadget"],
     "camera": ["Camera"],
-   "microphone": ["Microphone"],
-#    "chatbot": ["ChatBot"],
-#    "eink": ["EInk"],
-#    "time_controller": ["TimeController"],
+    "microphone": ["Microphone"],
+    #    "chatbot": ["ChatBot"],
+    #    "eink": ["EInk"],
+    #    "time_controller": ["TimeController"],
     "language_model": ["LanguageModel"],
-#    "time_controller": ["TimeController"],
+    #    "time_controller": ["TimeController"],
     "pi_camera": ["PiCamera"],
-    "pi_button": ["PiButton"]
+    "pi_button": ["PiButton"],
 }
 for pkg, mods in GADGETS.items():
     try:
@@ -72,14 +73,17 @@ def from_config(gadget_yaml_path):
     :raises Exception: The gadget class does not exist and cannot be created
     """
     config = loaders.load_yaml(gadget_yaml_path)
+    if "name" not in config:
+        gadget_name = os.path.splitext(os.path.basename(gadget_yaml_path))[0]
+        config.update({"name": gadget_name})
+    return from_dict(config)
+
+def from_dict(config):
     gadget_cls = globals().get(config["type"], None)
     if gadget_cls is None:
         raise Exception(f"Gadget type {config['type']} does not exist")
 
     # If the name is not defined, used the filename
-    if "name" not in config:
-        gadget_name = os.path.splitext(
-            os.path.basename(gadget_yaml_path))[0]
-        config.update({"name": gadget_name})
+
     # assert gadget_cls is not None, f"Gadget type {config['type']} does not exist"
     return gadget_cls(config)

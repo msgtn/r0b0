@@ -59,9 +59,8 @@ class Mouse(Gadget):
     @decode_msg
     def mouse_button_event(self, data):
         # logging.debug(data)
-        msg = data['msg']
+        msg = data["msg"]
         # logging.debug(msg.kwargs)
-        mouse_func = getattr(
-            mouse, msg.mouse_func)
+        mouse_func = getattr(mouse, msg.mouse_func)
         mouse_func(**msg.kwargs)
         pass

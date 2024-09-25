@@ -13,39 +13,37 @@ from pydub.playback import play
 import numpy as np
 from scipy.signal import savgol_filter
 
-DEFAULT_CONFIG = {
-    "type": "LanguageModel", 
-    "model": "llama3"
-}
+DEFAULT_CONFIG = {"type": "LanguageModel", "model": "llama3"}
 EVENTS = ["prompt"]
-SYSPROMPT = '. '.join([
-    "You are a robot named Blossom",
-    "You are not designed for anything in particular",
-    "You are a social companion robot, just existing",
-    "You are a floating head with no limbs or actuators",
-    "You can't hear very well so if something sounds confusing, reiterate it",
-    "You have bad eyesight and need glasses to see",
-    "You were created by someone named Michael for their PhD project",
-    "Michael is right next to you",
-    "You are not a language model",
-    "Answer as concisely as possible, in one sentence",
-    # "Be brusque if necessary; sardonic, optionally.",
-])
+SYSPROMPT = ". ".join(
+    [
+        "You are a robot named Blossom",
+        "You are not designed for anything in particular",
+        "You are a social companion robot, just existing",
+        "You are a floating head with no limbs or actuators",
+        "You can't hear very well so if something sounds confusing, reiterate it",
+        "You have bad eyesight and need glasses to see",
+        "You were created by someone named Michael for their PhD project",
+        "Michael is right next to you",
+        "You are not a language model",
+        "Answer as concisely as possible, in one sentence",
+        # "Be brusque if necessary; sardonic, optionally.",
+    ]
+)
 
 SOUNDS_DIR = os.path.join(os.path.dirname(__file__), "sounds")
 
+
 class LanguageModel(Gadget):
     def __init__(self, config=DEFAULT_CONFIG, **kwargs):
-        Gadget.__init__(self , config, **kwargs)
+        Gadget.__init__(self, config, **kwargs)
         self.model = llm.get_model(config["model"])
         self.model = self.model.conversation()
         self.handle_events(EVENTS)
 
     def prompt(self, prompt_string):
-        return self.model.prompt(
-            prompt_string,
-            system=SYSPROMPT).text()
-    
+        return self.model.prompt(prompt_string, system=SYSPROMPT).text()
+
     @decode_msg
     def prompt_event(self, data, vocalize=True):
         msg = data["msg"]
@@ -53,9 +51,7 @@ class LanguageModel(Gadget):
         if vocalize:
             self.vocalize(res)
         self.emit(
-            event="response",
-            data={"event":"response"},
-            namespace=self.namespace
+            event="response", data={"event": "response"}, namespace=self.namespace
         )
 
     def vocalize(self, text):
@@ -76,16 +72,16 @@ class LanguageModel(Gadget):
             target=partial(self.stream_wav_values, audio_array, frame_rate)
         )
         playback_thread = threading.Thread(
-            target=partial(pydub.playback.play, wav),
+            # target=partial(pydub.playback.play, wav),
+            target=partial(pydub.playback._play_with_simpleaudio, wav),
         )
         # breakpoint()
-        # playback_thread.start()
+        playback_thread.start()
         stream_thread.start()
         self.print_typewriter(input_string=text)
 
         # playback_thread.join()
         # stream_thread.join()
-        
 
     def convert_audiosegment2array(self, audio_segment):
         audio_data = np.frombuffer(audio_segment.raw_data, dtype=np.uint8)
@@ -93,13 +89,15 @@ class LanguageModel(Gadget):
         window_length = 2000
         polyorder = 3
         for _ in range(2):
-            audio_data = savgol_filter(audio_data, window_length=window_length, polyorder=polyorder)
+            audio_data = savgol_filter(
+                audio_data, window_length=window_length, polyorder=polyorder
+            )
         return audio_data
 
     def stream_wav_values(self, wav_array, frame_rate):
         downsample = 4000
         wav_array = wav_array[::downsample]
-        for i,frame in enumerate(wav_array):
+        for i, frame in enumerate(wav_array):
             # logging.info(frame)
             # logging.debug(frame)
             # logging.debug(f"{i:08d}/{len(wav_array)}, {frame:.2f}")
@@ -112,80 +110,125 @@ class LanguageModel(Gadget):
             # time.sleep(1/frame_rate*downsample)
             # NOTE - maybe there's a minimum sleep length?
             # i.e. can't sleep shorter than a few milliseconds
-            time.sleep(1/frame_rate)
-    
+            time.sleep(1 / frame_rate)
+
     def process_text(self, text):
-        TO_REPLACE = ["\"", "?"]
+        TO_REPLACE = ['"', "?"]
         for c in TO_REPLACE:
             text = text.replace(c, "")
         return text
-    
+
     def print_typewriter(self, input_string, delay=0.025):
         for c in input_string:
-            print(c,end='')
+            print(c, end="")
             sys.stdout.flush()
             sleep(delay)
-    
-    def create_wav(self, stringy, pitch,
+
+    def create_wav(
+        self,
+        stringy,
+        pitch,
         # out_file
-        ):
+    ):
 
         stringy = stringy.lower()
         sounds = {}
 
-        keys = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','th','sh',' ','.']
-        for index,ltr in enumerate(keys):
-            num = index+1
+        keys = [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "th",
+            "sh",
+            " ",
+            ".",
+        ]
+        for index, ltr in enumerate(keys):
+            num = index + 1
             if num < 10:
-                num = '0'+str(num)
+                num = "0" + str(num)
             # sounds[ltr] = './sounds/'+pitch+'/sound'+str(num)+'.wav'
             sounds[ltr] = os.path.join(SOUNDS_DIR, pitch, f"sound{num}.wav")
 
-        if pitch == 'med':
-            rnd_factor = .35
+        if pitch == "med":
+            rnd_factor = 0.35
         else:
-            rnd_factor = .25
+            rnd_factor = 0.25
 
         infiles = []
 
         for i, char in enumerate(stringy):
             try:
-                if char == 's' and stringy[i+1] == 'h': #test for 'sh' sound
-                    infiles.append(sounds['sh'])
+                if char == "s" and stringy[i + 1] == "h":  # test for 'sh' sound
+                    infiles.append(sounds["sh"])
                     continue
-                elif char == 't' and stringy[i+1] == 'h': #test for 'th' sound
-                    infiles.append(sounds['th'])
+                elif char == "t" and stringy[i + 1] == "h":  # test for 'th' sound
+                    infiles.append(sounds["th"])
                     continue
-                elif char == 'h' and (stringy[i-1] == 's' or stringy[i-1] == 't'): #test if previous letter was 's' or 's' and current letter is 'h'
+                elif char == "h" and (
+                    stringy[i - 1] == "s" or stringy[i - 1] == "t"
+                ):  # test if previous letter was 's' or 's' and current letter is 'h'
                     continue
-                elif char == ',' or char == '?':
-                    infiles.append(sounds['.'])
+                elif char == "," or char == "?":
+                    infiles.append(sounds["."])
                     continue
-                elif char == stringy[i-1]: #skip repeat letters
+                elif char == stringy[i - 1]:  # skip repeat letters
                     continue
             except:
                 pass
-            if not char.isalpha() and char != '.': # skip characters that are not letters or periods. 
+            if (
+                not char.isalpha() and char != "."
+            ):  # skip characters that are not letters or periods.
                 continue
             infiles.append(sounds[char])
 
         combined_sounds = None
 
         print(len(infiles))
-        for index,sound in enumerate(infiles):
+        for index, sound in enumerate(infiles):
             tempsound = AudioSegment.from_wav(sound)
-            if stringy[len(stringy)-1] == '?':
-                if index >= len(infiles)*.8:
-                    octaves = random.random() * rnd_factor + (index-index*.8) * .1 + 2.1 # shift the pitch up by half an octave (speed will increase proportionally)
+            if stringy[len(stringy) - 1] == "?":
+                if index >= len(infiles) * 0.8:
+                    octaves = (
+                        random.random() * rnd_factor + (index - index * 0.8) * 0.1 + 2.1
+                    )  # shift the pitch up by half an octave (speed will increase proportionally)
                 else:
                     octaves = random.random() * rnd_factor + 2.0
             else:
-                octaves = random.random() * rnd_factor + 2.3 # shift the pitch up by half an octave (speed will increase proportionally)
-            new_sample_rate = int(tempsound.frame_rate * (2.0 ** octaves))
-            new_sound = tempsound._spawn(tempsound.raw_data, overrides={'frame_rate': new_sample_rate})
-            new_sound = new_sound.set_frame_rate(44100) # set uniform sample rate
-            combined_sounds = new_sound if combined_sounds is None else combined_sounds + new_sound
-
+                octaves = (
+                    random.random() * rnd_factor + 2.3
+                )  # shift the pitch up by half an octave (speed will increase proportionally)
+            new_sample_rate = int(tempsound.frame_rate * (2.0**octaves))
+            new_sound = tempsound._spawn(
+                tempsound.raw_data, overrides={"frame_rate": new_sample_rate}
+            )
+            new_sound = new_sound.set_frame_rate(44100)  # set uniform sample rate
+            combined_sounds = (
+                new_sound if combined_sounds is None else combined_sounds + new_sound
+            )
 
         return combined_sounds
-        # combined_sounds.export(out_file, format="wav") 
+        # combined_sounds.export(out_file, format="wav")

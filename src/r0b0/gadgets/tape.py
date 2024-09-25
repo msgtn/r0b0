@@ -40,7 +40,9 @@ class Tape(Gadget):
 
     @classmethod
     def load(self, name):
-        filename = str(TAPES_DIR / f"{name}.json")
+        filename = str(TAPES_DIR / f"{name}")
+        if not filename[-5:] == ".json":
+            filename = f"{filename}.json"
         # assert os.path.exists(filename), "No"
         if os.path.exists(filename):
             tape = Tape(name)

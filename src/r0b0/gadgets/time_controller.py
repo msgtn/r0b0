@@ -1,8 +1,10 @@
 from enum import Enum
 import time
+
 # from .gadget import Gadget, Message, logging
 from .gadget import Gadget, Message
 import logging
+
 # logger = logging.getLogger(__name__)
 logger = logging.getLogger()
 from r0b0.utils.loaders import decode_msg
@@ -10,6 +12,7 @@ from timeit import default_timer
 from threading import Thread
 import multiprocessing
 from functools import partial
+
 
 # MODES = ['idle','stopwatch','timer']
 class TimeMode(Enum):
@@ -31,7 +34,7 @@ class TimeController(Gadget):
             config,
             # request_timeout=0.1,
             # *args,
-            **kwargs
+            **kwargs,
         )
         self.handle_events(EVENTS)
         self.mode = TimeMode.IDLE
@@ -52,16 +55,15 @@ class TimeController(Gadget):
         # return (4096-position)
         ret = position
         if ccw_positive:
-            ret = 4096-position
-        ret *= 60/4096
-        ret += rotations*60
+            ret = 4096 - position
+        ret *= 60 / 4096
+        ret += rotations * 60
         return ret
 
     @staticmethod
     def _timer2position(timer):
         position = 0
-        return int(4096 - (timer%60)*4096/60)
-    
+        return int(4096 - (timer % 60) * 4096 / 60)
 
     @decode_msg
     def set_mode_event(self, data):
@@ -75,10 +77,9 @@ class TimeController(Gadget):
         # if len(self.position_buffer):
         #     if self.position_buffer[-1] < self.position:
         #         self.rotations  += 1
-                
-                
+
         self.position_buffer.append(self.position)
-        
+
         # logging.debug(f"POSITION, {self.rotations}, {self.position_buffer}")
         # "debounce"
         if self.ticking:
@@ -91,16 +92,16 @@ class TimeController(Gadget):
                 # self.tick_thread.terminate()
                 self.tick_thread = None
             logging.debug("Resetting to IDLE")
-        elif last_mode!=self.mode:
+        elif last_mode != self.mode:
             if self.tick_thread is not None:
                 if self.tick_thread.is_alive():
                     return
             logging.debug(self.mode)
-            if self.mode==TimeMode.STOPWATCH:
+            if self.mode == TimeMode.STOPWATCH:
                 self.direction = -1
-            elif self.mode==TimeMode.TIMER:
+            elif self.mode == TimeMode.TIMER:
                 self.direction = 1
-            elif self.mode==TimeMode.IDLE:
+            elif self.mode == TimeMode.IDLE:
                 self.direction = 0
                 self.position_buffer = []
                 self.rotations = 0
@@ -118,7 +119,6 @@ class TimeController(Gadget):
                 )
                 self.tick_thread.start()
 
-
     # What else does this have to do
     # Timeout after mode is changed, after the last read velocity or mode change event
     # Send an enable event
@@ -126,7 +126,7 @@ class TimeController(Gadget):
     # Send a tick event
     # either up or down
     # This should be a thread that is remade after every setting of the mode
-    # Not here, but a cable will translate the tick to position events 
+    # Not here, but a cable will translate the tick to position events
 
     def _tick_thread(self, direction=1, tick_period=1, *args, **kwargs):
         # "Debounce" / timeout, only start thread after 2 seconds of no motion
@@ -135,13 +135,11 @@ class TimeController(Gadget):
         self.ticking = True
 
         logging.debug(f"Starting tick thread with {direction:}")
-        self.timer = TimeController._position2timer(
-            self.position, self.rotations
-        )
+        self.timer = TimeController._position2timer(self.position, self.rotations)
         logging.debug(f"TIMER, {self.timer}, {self.position}")
         last_time = self.start_time = default_timer()
         while self.timer > 0 and self.ticking:
-            if default_timer()-last_time >= tick_period:
+            if default_timer() - last_time >= tick_period:
                 self._tick(direction, *args, **kwargs)
                 last_time = default_timer()
         self.mode = TimeMode.IDLE
@@ -149,7 +147,7 @@ class TimeController(Gadget):
         self.emit(
             event="idle",
             data={
-                "event":"idle",
+                "event": "idle",
             },
             namespace=self.namespace,
         )
@@ -161,8 +159,8 @@ class TimeController(Gadget):
         # self.position += direction*(4096//60)
         # self.position %= 2**12
         # if direction == 1:
-        self.timer -= direction*(default_timer() - self.last_moved_time)
-        if self.timer <= 0 :
+        self.timer -= direction * (default_timer() - self.last_moved_time)
+        if self.timer <= 0:
             return
         self.last_moved_time = default_timer()
         self.position = TimeController._timer2position(self.timer)
@@ -170,12 +168,12 @@ class TimeController(Gadget):
         self.emit(
             event="tick",
             data={
-                "event":"tick",
+                "event": "tick",
                 "direction": direction,
-                "position":self.position,
-                "msg": Message(event="tick", direction=direction)
+                "position": self.position,
+                "msg": Message(event="tick", direction=direction),
             },
-            namespace=self.namespace
+            namespace=self.namespace,
         )
 
     # @encode_msg

@@ -21,13 +21,14 @@ SENSOR_MODE = 3
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
 
+
 class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
         Picamera2.create_still_configuration(self)
-        #self.still_configuration.size = (4056,3040)
+        # self.still_configuration.size = (4056,3040)
         self.still_configuration.size = (2028, 1520)
         Picamera2.start(self, "still")
 
@@ -43,7 +44,6 @@ class PiCamera(Gadget, Picamera2):
         except:
             pass
 
-        
         self.on("d_down", handler=self.shutter15, namespace=self.namespace)
         self.on("d_right", handler=self.shutter60, namespace=self.namespace)
         self.on("d_up", handler=self.shutter250, namespace=self.namespace)
@@ -59,7 +59,7 @@ class PiCamera(Gadget, Picamera2):
 
     @decode_msg
     def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
-        subprocess.call(['raspi-gpio', 'set', '47', 'dh'])
+        subprocess.call(["raspi-gpio", "set", "47", "dh"])
         logging.debug(f"Shutter released")
         # TODO - split off into separate subfolders
         # instead of one large folder
@@ -73,9 +73,7 @@ class PiCamera(Gadget, Picamera2):
         :param shutter_speed: Shutter speed in milliseconds, i.e. 1e6 / {15, 60, 250}.
         """
         logging.debug(f"Shutter speed: 1/{int(1e6 / shutter_speed)}")
-        self.set_controls({
-            "ExposureTime": shutter_speed
-        })
+        self.set_controls({"ExposureTime": shutter_speed})
 
     @decode_msg
     def shutter15(

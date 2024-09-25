@@ -283,9 +283,9 @@ function compassHeading(alpha, beta, gamma) {
 }
 
 const handleOrientation = (e) => {
-  if (!controlSwitch.checked && !appendageSwitch.checked) {
-    return;
-  }
+  // if (!controlSwitch.checked && !appendageSwitch.checked) {
+  //   return;
+  // }
 
   beta = (e.beta * Math.PI) / 180;
   gamma = (e.gamma * Math.PI) / 180;
@@ -391,7 +391,8 @@ function calibrateYaw() {
 
 function onControl() {
   controlConsent = true;
-  if (controlSwitch.checked || appendageSwitch.checked) {
+  // if (controlSwitch.checked || appendageSwitch.checked) {
+  if (controlSwitch.checked ) {
     if (controlSwitch.checked && calibrateEveryControl) {
       calibrateYaw();
     }
@@ -418,6 +419,8 @@ function onRecord() {
   console.log("record");
   // socket.emit("record",{record:true,event:'device_motion'});
   recording = !recording;
+  controlSwitch.checked = recording;
+  onControl();
   recordButton.classList.remove(recording ? "notRec" : "Rec");
   recordButton.classList.add(recording ? "Rec" : "notRec");
   socket.emit("record", {
