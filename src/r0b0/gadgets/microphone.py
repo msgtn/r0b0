@@ -62,7 +62,7 @@ class Microphone(
                 res = self.rec.recognize_vosk(
                     self.rec.listen(
                         source,
-                        # timeout=self.timeout
+                        timeout=self.timeout
                         ))
                 return res
             res = get_res()

@@ -44,15 +44,15 @@ def main():
         socket_addr=socket_addr,
     )
 
-    microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "microphone.yaml"))
-    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
+    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "microphone.yaml"))
+    microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
     # microphone = r0b0.gadgets.from_dict({"type":"Microphone", "microphone_name":"OP-Z"})
 
     ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
     # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "xreal_mic.yaml"))
     lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
     pygame_keys = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "pygame_keys.yaml"))
-    # motor = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "dxl_motor.yaml"))
+    motor = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "dxl_motor.yaml"))
     key2mic_cable = Key2MicCable()
     mic2prompt_cable = Microphone2PromptCable()
     wav2motor_cable = Wav2MotorCable()

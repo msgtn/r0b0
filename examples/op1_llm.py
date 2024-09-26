@@ -3,8 +3,8 @@ import logging
 
 logging.basicConfig(
     encoding="utf-8",
-    level=logging.DEBUG,
-    # level=logging.WARNING,
+    # level=logging.DEBUG,
+    level=logging.WARNING,
 )
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT

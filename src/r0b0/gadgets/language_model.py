@@ -17,16 +17,18 @@ DEFAULT_CONFIG = {"type": "LanguageModel", "model": "llama3"}
 EVENTS = ["prompt"]
 SYSPROMPT = ". ".join(
     [
-        "You are a robot named Blossom",
-        "You are not designed for anything in particular",
-        "You are a social companion robot, just existing",
-        "You are a floating head with no limbs or actuators",
-        "You can't hear very well so if something sounds confusing, reiterate it",
-        "You have bad eyesight and need glasses to see",
-        "You were created by someone named Michael for their PhD project",
-        "Michael is right next to you",
-        "You are not a language model",
-        "Answer as concisely as possible, in one sentence",
+        # "You are a robot named Blossom",
+        # "You are not designed for anything in particular",
+        # "You are a social companion robot, just existing",
+        # "You are a floating head with no limbs or actuators",
+        # "You can't hear very well so if something sounds confusing, reiterate it",
+        # "You have bad eyesight and need glasses to see",
+        # "You were created by someone named Michael for their PhD project",
+        # "Michael is right next to you",
+        # "You are not a language model",
+        "You are a Teenage Engineering OP-Z",
+        "Answer as concisely as possible, in one clause",
+
         # "Be brusque if necessary; sardonic, optionally.",
     ]
 )
@@ -61,6 +63,7 @@ class LanguageModel(Gadget):
             # pitch="med",
             pitch="low",
         )
+        # wav = wav.strip_silence()
         """Converting to a numpy array
         raw_data = np.frombuffer(wav.raw_data, dtype=np.uint8)
         Should make a thread to stream the values, timed with the typewriter printer
@@ -95,8 +98,10 @@ class LanguageModel(Gadget):
         return audio_data
 
     def stream_wav_values(self, wav_array, frame_rate):
-        downsample = 4000
+        downsample = int(1e3)
+        new_freq = frame_rate / downsample * 2
         wav_array = wav_array[::downsample]
+        t_start = time.time()
         for i, frame in enumerate(wav_array):
             # logging.info(frame)
             # logging.debug(frame)
@@ -110,7 +115,13 @@ class LanguageModel(Gadget):
             # time.sleep(1/frame_rate*downsample)
             # NOTE - maybe there's a minimum sleep length?
             # i.e. can't sleep shorter than a few milliseconds
-            time.sleep(1 / frame_rate)
+            # time.sleep(1 / frame_rate)
+            sleep_time = (i)*1/new_freq
+            t = time.time() - t_start
+            # print(sleep_time, t, sleep_time-t)
+            del_t = max(sleep_time-t,0)
+            if del_t > 0.05:
+                time.sleep(del_t)
 
     def process_text(self, text):
         TO_REPLACE = ['"', "?"]
@@ -207,7 +218,7 @@ class LanguageModel(Gadget):
 
         combined_sounds = None
 
-        print(len(infiles))
+        # print(len(infiles))
         for index, sound in enumerate(infiles):
             tempsound = AudioSegment.from_wav(sound)
             if stringy[len(stringy) - 1] == "?":
