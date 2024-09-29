@@ -45,6 +45,20 @@ class Cable(object):
     def inner_call(self, *args, **kwargs):
         return {}
 
+# class TapeCable(Cable):
+#     """
+#     Helper class for "echoing" 
+#     """
+#     def __init__(self):
+#         self.input_event = "tape"
+
+#     def __call__(self, data):
+#         super().__call__(data)
+#         event = data["event"]
+#         return {
+#             "event":event,
+#             "data":
+#         }
 
 class Key2MouseCable(Cable):
     """
@@ -148,7 +162,7 @@ class Wav2MotorCable(Cable):
     def __call__(self, data):
         # Will be float normalized between 0.-1.
         wav_value = data["value"]
-        motor_value = int(wav_value**3 * 4096)
+        motor_value = int(wav_value * 1000 + 200)
         # logging.info(motor_value)
         return {
             "event": "position",

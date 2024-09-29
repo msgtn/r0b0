@@ -3,13 +3,21 @@ import logging
 
 logging.basicConfig(
     encoding="utf-8",
-    # level=logging.DEBUG,
-    level=logging.WARNING,
+    level=logging.DEBUG,
+    # level=logging.WARNING,
 )
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.blsm import Motion2MotorCable
+from r0b0.cables.blsm import (
+    Motion2MotorCable,
+    Microphone2PromptCable,
+    Key2MicCable,
+    Serial2PoseCable,
+    Response2PoseCable,
+)
+from r0b0.cables.cable import Wav2MotorCable, Ser2MicCable, Response2ListenCable
+
 
 
 CONFIG_DIR = os.path.abspath(
@@ -46,13 +54,52 @@ def main():
     # Create the gadgets
     blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_phone.yaml"))
+    microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
+    lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
+    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+
     motion2motor_cable = Motion2MotorCable()
+    mic2prompt_cable = Microphone2PromptCable()
+    wav2motor_cable = Wav2MotorCable()
+    ser2mic_cable = Ser2MicCable()
+    res2listen_cable = Response2ListenCable()
 
     rig.add_cable(
         cable=motion2motor_cable,
         rx_gadget=blsm_dxl,
         tx_gadget=blsm_phone,
     )
+    rig.add_cable(
+        cable=ser2mic_cable,
+        rx_gadget=microphone,
+        tx_gadget=ser)
+    rig.add_cable(
+        cable=mic2prompt_cable,
+        rx_gadget=lm,
+        tx_gadget=microphone,
+    )
+
+    rig.add_cable(
+        cable=res2listen_cable,
+        rx_gadget=ser,
+        tx_gadget=lm,
+    )
+    rig.add_cable(
+        cable=wav2motor_cable,
+        rx_gadget=blsm_dxl,
+        tx_gadget=lm,
+    )
+    rig.add_cable(
+        cable=Serial2PoseCable(),
+        rx_gadget=blsm_dxl,
+        tx_gadget=ser,
+    )
+    rig.add_cable(
+        cable=Response2PoseCable(),
+        rx_gadget=blsm_dxl,
+        tx_gadget=lm,
+    )
+
 
     test_emit_dict = {
         "event": "position",

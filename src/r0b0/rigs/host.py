@@ -1,8 +1,8 @@
 import glob, inspect
 
-import logging
+# import logging
 
-logging = logging.getLogger(__name__)
+# logging = logging.getLogger(__name__)
 import datetime
 
 from r0b0.config import (
@@ -58,7 +58,9 @@ import json
 PLAYER_EVENTS = [
     "load",
     "play",
+    "stop",
     "record",
+    "echo"
 ]
 
 
@@ -229,6 +231,9 @@ class Host(Thread, SocketIO):
         if event in PLAYER_EVENTS:
             getattr(self, f"on_{event}")(*args, **kwargs)
         else:
+            if kwargs.get("namespace", None)=="/tape":
+                kwargs.update({"namespace":kwargs["rx_namespace"]})
+            logging.debug(f"{args}, {kwargs}")
             SocketIO.emit(self, event, *args, **kwargs)
 
     @decode_msg
@@ -346,22 +351,25 @@ class Host(Thread, SocketIO):
 
     @decode_msg
     def on_play(self, data, **kwargs):
-        logging.debug(data)
         if "msg" in data:
             data.update(data["msg"].__dict__)
         tape = self.tapes.get(data["tape_name"], None)
+        loop = self.tapes.get(data["loop"], False)
+        loop = data.get('loop', False)
+        # breakpoint()
         if tape is None and "msg" in data:
             # tape = self.tapes.getattr(data['msg'],'tape_name',None)
             tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
-        logging.debug(f"tape {tape}")
+            loop = getattr(data["msg"], "loop", False)
+        logging.debug(f"tape {tape}, loop: {loop}")
 
         if tape is not None:
-            tape.play()
+            tape.play(loop=loop)
         else:
             # try to load tape
             tape = self.on_load(data)
             if tape is not None:
-                tape.play()
+                tape.play(loop=loop)
             # could not load tape
             else:
                 logging.warning(f"No tape {data['tape_name']}, cannot play")
@@ -374,6 +382,32 @@ class Host(Thread, SocketIO):
         """
         self.on_load({"tape_name": tape_name})
         self.on_play({"tape_name": tape_name})
+
+    def stop(self, tape_name):
+        self.on_stop({"tape_name": tape_name})
+
+    @decode_msg
+    def on_stop(self, data, **kwargs):
+        if "msg" in data:
+            data.update(data["msg"].__dict__)
+        tape = self.tapes.get(data["tape_name"], None)
+        if tape is None and "msg" in data:
+            # tape = self.tapes.getattr(data['msg'],'tape_name',None)
+            tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
+        logging.debug(f"tape {tape}")
+
+        if tape is not None:
+            tape.stop()
+
+    @decode_msg
+    def on_echo(self, data, **kwargs):
+        logging.debug("echoing")
+        kwargs.update({
+            "namespace":data["rx_namespace"],
+            # "event":data["event"]
+        })
+        # breakpoint()
+        self.emit(event=data["event"], data=data, **kwargs)
 
     # no metaphor for this one
     def _webrtc_setup(self):

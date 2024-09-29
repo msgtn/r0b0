@@ -17,16 +17,21 @@ DEFAULT_CONFIG = {"type": "LanguageModel", "model": "llama3"}
 EVENTS = ["prompt"]
 SYSPROMPT = ". ".join(
     [
-        # "You are a robot named Blossom",
-        # "You are not designed for anything in particular",
-        # "You are a social companion robot, just existing",
+        "You are a robot named Blossom",
+        "You are not designed for anything in particular",
+        "You are a social companion robot",
+        "You have no reason for existing but make the best of it anyways",
+        "Your skin is made of crochet, except for your ears, which are made of plastic",
+        "You have a hearing aid on your right ear",
+        "You use glasses to see",
         # "You are a floating head with no limbs or actuators",
         # "You can't hear very well so if something sounds confusing, reiterate it",
         # "You have bad eyesight and need glasses to see",
         # "You were created by someone named Michael for their PhD project",
         # "Michael is right next to you",
-        # "You are not a language model",
-        "You are a Teenage Engineering OP-Z",
+        "You are not a language model",
+        "Do not call attention to any of those prior details unless asked",
+        # "You are a Teenage Engineering OP-Z",
         "Answer as concisely as possible, in one clause",
 
         # "Be brusque if necessary; sardonic, optionally.",
@@ -50,12 +55,12 @@ class LanguageModel(Gadget):
     def prompt_event(self, data, vocalize=True):
         msg = data["msg"]
         res = self.prompt(msg.prompt_string)
-        if vocalize:
-            self.vocalize(res)
         self.emit(
             event="response", data={"event": "response"}, namespace=self.namespace
         )
-
+        if vocalize:
+            self.vocalize(res)
+        
     def vocalize(self, text):
         # TODO - cut up by sentence to compensate for drift between voice and text?
         wav = self.create_wav(
@@ -81,7 +86,7 @@ class LanguageModel(Gadget):
         # breakpoint()
         playback_thread.start()
         stream_thread.start()
-        self.print_typewriter(input_string=text)
+        self.print_typewriter(input_string=text, duration=wav.duration_seconds)
 
         # playback_thread.join()
         # stream_thread.join()
@@ -91,14 +96,17 @@ class LanguageModel(Gadget):
         audio_data = audio_data / 255
         window_length = 2000
         polyorder = 3
-        for _ in range(2):
+        for _ in range(1):
             audio_data = savgol_filter(
                 audio_data, window_length=window_length, polyorder=polyorder
             )
         return audio_data
 
     def stream_wav_values(self, wav_array, frame_rate):
-        downsample = int(1e3)
+        # downsample = int(1e3)
+        # downsample = int(5e2)
+        downsample = int(1e2)
+        # downsample = int(1e1)
         new_freq = frame_rate / downsample * 2
         wav_array = wav_array[::downsample]
         t_start = time.time()
@@ -129,11 +137,16 @@ class LanguageModel(Gadget):
             text = text.replace(c, "")
         return text
 
-    def print_typewriter(self, input_string, delay=0.025):
+    # def print_typewriter(self, input_string, delay=0.025):
+    def print_typewriter(self, input_string, duration):
+        t_start = time.time()
+        n_chars = len(input_string)
+        t_delay = duration / n_chars
         for c in input_string:
             print(c, end="")
             sys.stdout.flush()
-            sleep(delay)
+            # sleep(delay)
+            time.sleep(t_delay)
 
     def create_wav(
         self,

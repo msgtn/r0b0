@@ -8,6 +8,8 @@ from r0b0.kinematics.blsm import (
 )
 
 
+
+
 class Motion2MotorCable(Cable):
     """
     Converts phone's device motion into motor positions for Blossom
@@ -161,3 +163,29 @@ def response2blsm(data=None):
 
     # logging.warning(tape)
     return {"event": "play", "tape_name": f"blsm_{res.split('.')[0].lower()}"}
+
+class Serial2PoseCable(Cable):
+    def __init__(self):
+        self.input_event = "serial"
+
+    def __call__(self, data):
+        super().__call__(data)
+        return {
+            "event": "position",
+            "value": [0,2000,0,1000],
+            "motor_id": [1, 2, 3, 4],
+            "absolute": True,
+        } 
+
+class Response2PoseCable(Cable):
+    def __init__(self):
+        self.input_event = "response"
+
+    def __call__(self, data):
+        super().__call__(data)
+        return {
+            "event": "position",
+            "value": [500,500,500,2000],
+            "motor_id": [1, 2, 3, 4],
+            "absolute": True,
+        } 

@@ -36,6 +36,7 @@ class Tape(Gadget):
         self.playing_thread = Thread(
             target=self._play,
         )
+        self.playing = False
         self.started = False
 
     @classmethod
@@ -70,23 +71,40 @@ class Tape(Gadget):
         logging.debug(self.namespaces)
         self.started = True
 
-    def play(self):
+    def play(self, **kwargs):
         if not self.started:
             self.start()
-        self.playing_thread.start()
+        self.playing = True
+        logging.debug(kwargs)
         self.playing_thread = Thread(
             target=self._play,
+            kwargs=kwargs
         )
+        self.playing_thread.start()
 
-    def _play(self):
-        t_last = 0
-        for f, frame in enumerate(self.get_frame()):
-            logging.debug(frame)
-            self.emit(**frame)
-            # print(frame)
-            time.sleep(frame["data"]["time"] - t_last)
-            t_last = frame["data"]["time"]
+    def _play(self, loop=False):
+        while True:
+            t_last = 0
+            for f, frame in enumerate(self.get_frame()):
+                if not self.playing:
+                    break
+                # logging.debug(frame)
+                self.emit(**frame)
+                # print(frame)
+                time_sleep = frame["data"]["time"] - t_last
+                time.sleep(time_sleep)
+                t_last = frame["data"]["time"]
+            if not loop or not self.playing:
+                break
+            else:
+                time.sleep(time_sleep)
+                logging.debug("looping")
+
+        self.playing = False
         logging.debug("Done playing tape")
+
+    def stop(self,):
+        self.playing = False
 
     def _normalize_time(self):
         t_0 = self.tape[0]["data"]["time"]

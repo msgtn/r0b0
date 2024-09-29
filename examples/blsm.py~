@@ -9,8 +9,15 @@ logging.basicConfig(
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.blsm import Motion2MotorCable, Microphone2PromptCable, Key2MicCable
+from r0b0.cables.blsm import (
+    Motion2MotorCable,
+    Microphone2PromptCable,
+    Key2MicCable,
+    Serial2PoseCable,
+    Response2PoseCable,
+)
 from r0b0.cables.cable import Wav2MotorCable, Ser2MicCable, Response2ListenCable
+
 
 
 CONFIG_DIR = os.path.abspath(
@@ -44,26 +51,24 @@ def main():
         socket_addr=socket_addr,
     )
 
-    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "microphone.yaml"))
+    # Create the gadgets
+    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
+    blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_phone.yaml"))
     microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
-    # microphone = r0b0.gadgets.from_dict({"type":"Microphone", "microphone_name":"OP-Z"})
-
-    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
-    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "xreal_mic.yaml"))
     lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
-    pygame_keys = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "pygame_keys.yaml"))
-    motor = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "dxl_motor.yaml"))
-    key2mic_cable = Key2MicCable()
+    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+
+    motion2motor_cable = Motion2MotorCable()
     mic2prompt_cable = Microphone2PromptCable()
     wav2motor_cable = Wav2MotorCable()
     ser2mic_cable = Ser2MicCable()
     res2listen_cable = Response2ListenCable()
 
-    # rig.add_cable(
-    #     cable=key2mic_cable,
-    #     rx_gadget=microphone,
-    #     tx_gadget=pygame_keys,
-    # )
+    rig.add_cable(
+        cable=motion2motor_cable,
+        rx_gadget=blsm_dxl,
+        tx_gadget=blsm_phone,
+    )
     rig.add_cable(
         cable=ser2mic_cable,
         rx_gadget=microphone,
@@ -81,9 +86,20 @@ def main():
     )
     rig.add_cable(
         cable=wav2motor_cable,
-        rx_gadget=motor,
+        rx_gadget=blsm_dxl,
         tx_gadget=lm,
     )
+    rig.add_cable(
+        cable=Serial2PoseCable(),
+        rx_gadget=blsm_dxl,
+        tx_gadget=ser,
+    )
+    rig.add_cable(
+        cable=Response2PoseCable(),
+        rx_gadget=blsm_dxl,
+        tx_gadget=lm,
+    )
+
 
     test_emit_dict = {
         "event": "position",

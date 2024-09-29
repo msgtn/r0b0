@@ -101,6 +101,7 @@ function getDevices() {
 
 function gotDevices(deviceInfos) {
   window.deviceInfos = deviceInfos;
+  console.log(deviceInfos);
   for (const deviceInfo of deviceInfos.reverse()) {
     const option = document.createElement("option");
     option.value = deviceInfo.deviceId;
@@ -128,7 +129,7 @@ function getStream() {
   const constraints = {
      audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
     video: { deviceId: videoSource ? { exact: videoSource } : undefined , 
-      frameRate: {min:30}
+      // frameRate: {min:30}
     }
   };
   return navigator.mediaDevices

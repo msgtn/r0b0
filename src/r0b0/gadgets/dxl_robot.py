@@ -232,7 +232,12 @@ class DynamixelRobot(Gadget, DynamixelManager):
     @decode_msg
     def position_event(self, data):
         # msg is a data object
-        msg = data["msg"]
+        # msg = data["msg"]
+        # msg = data.get("msg", data)
+        if "msg" in data:
+            msg = data["msg"]
+        else:
+            msg = Message(**data)
         logging.debug(msg.value)
         logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
