@@ -8,8 +8,6 @@ from r0b0.kinematics.blsm import (
 )
 
 
-
-
 class Motion2MotorCable(Cable):
     """
     Converts phone's device motion into motor positions for Blossom
@@ -40,6 +38,18 @@ class Microphone2PromptCable(Cable):
         # print("mic2prompt")
         logging.info(f"Prompt: {data['text']}")
         return {"event": "prompt", "prompt_string": data["text"]}
+
+class Text2PromptCable(Cable):
+    def __init__(self):
+        self.input_event = "text"
+
+    def __call__(self, data):
+        super().__call__(data)
+        # print("mic2prompt")
+        logging.info(f"Prompt: {data['text']}")
+        logging.debug(f"Prompt: {data['text']}")
+        return {"event": "prompt", "prompt_string": data["text"]}
+
 
 
 def key2mic(data=None):
@@ -164,18 +174,40 @@ def response2blsm(data=None):
     # logging.warning(tape)
     return {"event": "play", "tape_name": f"blsm_{res.split('.')[0].lower()}"}
 
+
 class Serial2PoseCable(Cable):
     def __init__(self):
         self.input_event = "serial"
 
     def __call__(self, data):
         super().__call__(data)
-        return {
-            "event": "position",
-            "value": [0,2000,0,1000],
-            "motor_id": [1, 2, 3, 4],
-            "absolute": True,
-        } 
+        return [
+            {"event": "stop", "namespace": "/"},
+            {
+                "event": "position",
+                "value": [0, 2000, 0, 1000],
+                "motor_id": [1, 2, 3, 4],
+                "absolute": True,
+            },
+        ]
+
+class Text2PoseCable(Cable):
+    def __init__(self):
+        self.input_event = "text"
+    
+    def __call__(self, data):
+        # TODO - could make this a staticmethod decorator?
+        super().__call__(data)
+        return [
+            {"event": "stop", "namespace": "/"},
+            {
+                "event": "position",
+                "value": [0, 800, 800, 2000],
+                "motor_id": [1, 2, 3, 4],
+                "absolute": True,
+            },
+        ]
+
 
 class Response2PoseCable(Cable):
     def __init__(self):
@@ -185,7 +217,7 @@ class Response2PoseCable(Cable):
         super().__call__(data)
         return {
             "event": "position",
-            "value": [500,500,500,2000],
+            "value": [500, 500, 500, 2000],
             "motor_id": [1, 2, 3, 4],
             "absolute": True,
-        } 
+        }

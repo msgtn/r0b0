@@ -45,6 +45,7 @@ var socket = null;
 var backupSocket = null;
 
 var controlBar = document.getElementById("controlBar");
+// controlBar.opacity = 0.5;
 var calibrateButton = document.getElementById("calibrate");
 var heightControl = document.getElementById("heightControl");
 var gestureBar = document.getElementById("gestureBar");
@@ -53,7 +54,8 @@ var videoContainer = document.getElementById("videoContainer");
 var videoInput = document.getElementById("videoInput");
 var streamConstraints = {
   video: true,
-  audio: true,
+  // audio: true,
+  audio: false,
 };
 
 var controlSwitch = document
@@ -67,7 +69,11 @@ var audioSelect = document.getElementById("audioSource");
 var videoSelect = document.getElementById("videoSource");
 var recordingIndicator = document.getElementById("recordingIndicator");
 var recordButton = document.getElementById("record");
+var touchPad = document.getElementById("touchpad");
+var tapeRow = document.getElementById("tapeRow");
+var sourceRow = document.getElementById("sourceRow");
 var tapeName = document.getElementById("tapeName");
+var controlStuff = document.getElementById("controlStuff");
 recordButton.classList.add("notRec");
 recording = false;
 
@@ -86,12 +92,24 @@ if (mobileDevice) {
       : "deviceorientationabsolute";
     // alibrateButton.style.display = "none";
     // videoInput.style.display = "none";
+    // appendageSwitch.style.display = "none";
+    document.getElementById("appendageSwitch").style.display = "none";
+
   }
 } else {
   controlBar.style.display = "none";
   // calibrateButton.style.display = "none";
   // touchPad.style.display = "none";
 }
+touchPad.style.display = "none";
+tapeRow.style.display = "none";
+sourceRow.style.display = "none";
+controlStuff.style.position = "absolute";
+controlStuff.style.bottom = 0;
+controlStuff.style.display = "flex";
+// controlStuff.style.display = "flex";
+
+
 
 let tailHeight = 0.2;
 
@@ -306,7 +324,7 @@ const handleOrientation = (e) => {
   // beta<2 because sometimes indicates when just looking up
   // doesnt catch high beta in the endpoints anyways
   // only catches if pitch is not much higher than the horizon
-  if (!inEndpoint && distToEndpoint<endpointThreshold && beta<2) {
+  if (!inEndpoint && distToEndpoint < endpointThreshold && beta < 2) {
     inEndpoint = true;
     if (Math.PI > alpha) {
       endpointIndicator.style.textAlign = "left";
@@ -322,7 +340,7 @@ const handleOrientation = (e) => {
     }
     // increase endpoint to make it harder to get out of it
     // this should reduce the frequency of alerts
-  } else if (inEndpoint && distToEndpoint>2*endpointThreshold) {
+  } else if (inEndpoint && distToEndpoint > 2 * endpointThreshold) {
     inEndpoint = false;
     endpointIndicator.innerHTML = " ";
   }
@@ -332,7 +350,7 @@ const handleOrientation = (e) => {
     lastEvent = e.timeStamp;
     let _time = Date.now();
     let datetime = new Date();
-    let _datetime =  datetime.toISOString();
+    let _datetime = datetime.toISOString();
     var body = {
       event: "device_motion",
       x: parseFloat(beta.toFixed(2)),
@@ -392,7 +410,7 @@ function calibrateYaw() {
 function onControl() {
   controlConsent = true;
   // if (controlSwitch.checked || appendageSwitch.checked) {
-  if (controlSwitch.checked ) {
+  if (controlSwitch.checked) {
     if (controlSwitch.checked && calibrateEveryControl) {
       calibrateYaw();
     }
@@ -507,5 +525,19 @@ videoSelect.onchange = getStream;
 
 getStream(audioSelect).then(getDevices).then(gotDevices);
 getStream(videoSelect).then(getDevices).then(gotDevices);
+
+function onText() {
+  let res = window.prompt("Type a message to Blossom");
+  if (res == null || res == "") {
+
+  } else {
+    socket.emit("text", {
+      event: "text",
+      text: res,
+      id: socket.id,
+    });
+    console.log("emitted onText");
+  }
+}
 
 startup();

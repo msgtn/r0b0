@@ -111,6 +111,9 @@ class Rig(Host):
                 logging.debug(msg_kwargs)
                 if msg_kwargs is None:
                     return
+                # if "namespace" in msg_kwargs:
+                #     _namespace = msg
+                # _namespace
                 # wrap the data into the gadget's expected message object
                 if rx_gadget is None or rx_gadget == tx_gadget:
                     emit_data = Message(**msg_kwargs)
@@ -125,8 +128,10 @@ class Rig(Host):
                     data={"event": output_event, "msg": pickle.dumps(emit_data)},
                     to=None,
                     include_self=include_self,
-                    namespace=rx_namespace,
+                    # namespace=rx_namespace,
+                    namespace=msg_kwargs.get("namespace", rx_namespace),
                 )
+                # breakpoint()
                 # logging.debug(f"func_emit {emit_kwargs}")
                 # print('func_emit', emit_kwargs)
                 self.emit(**emit_kwargs)

@@ -3,9 +3,9 @@ import logging
 
 logging.basicConfig(
     encoding="utf-8",
-    # level=logging.DEBUG,
+    level=logging.DEBUG,
     # level=logging.WARNING,
-    level=logging.INFO,
+    # level=logging.INFO,
 )
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
@@ -13,6 +13,7 @@ from r0b0.rigs import Rig
 from r0b0.cables.blsm import (
     Motion2MotorCable,
     Microphone2PromptCable,
+    Text2PromptCable,
     Key2MicCable,
     Serial2PoseCable,
     Text2PoseCable,
@@ -54,11 +55,11 @@ def main():
     )
 
     # Create the gadgets
-    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
+    # blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_phone.yaml"))
     microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
     lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
-    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+    # ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
 
     motion2motor_cable = Motion2MotorCable()
     mic2prompt_cable = Microphone2PromptCable()
@@ -66,47 +67,54 @@ def main():
     ser2mic_cable = Ser2MicCable()
     res2listen_cable = Response2ListenCable()
 
-    rig.add_cable(
-        cable=motion2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=blsm_phone,
-    )
-    rig.add_cable(
-        cable=ser2mic_cable,
-        rx_gadget=microphone,
-        tx_gadget=ser)
+    if "blsm_dxl" in locals():
+        rig.add_cable(
+            cable=motion2motor_cable,
+            rx_gadget=blsm_dxl,
+            tx_gadget=blsm_phone,
+        )
+        rig.add_cable(
+            cable=wav2motor_cable,
+            rx_gadget=blsm_dxl,
+            tx_gadget=lm,
+        )
+        rig.add_cable(
+            cable=Response2PoseCable(),
+            rx_gadget=blsm_dxl,
+            tx_gadget=lm,
+        )
+        rig.add_cable(
+            cable=Text2PoseCable(),
+            rx_gadget=blsm_dxl,
+            tx_gadget=microphone,
+        )
+
+
     rig.add_cable(
         cable=mic2prompt_cable,
         rx_gadget=lm,
         tx_gadget=microphone,
     )
     rig.add_cable(
-        cable=res2listen_cable,
-        rx_gadget=ser,
-        tx_gadget=lm,
+        cable=Text2PromptCable(),
+        tx_gadget=blsm_phone,
+        rx_gadget=lm,
     )
-    rig.add_cable(
-        cable=wav2motor_cable,
-        rx_gadget=blsm_dxl,
-        tx_gadget=lm,
-    )
-    rig.add_cable(
-        cable=Serial2PoseCable(),
-        rx_gadget=blsm_dxl,
-        tx_gadget=ser,
-    )
-    rig.add_cable(
-        cable=Text2PoseCable(),
-        rx_gadget=blsm_dxl,
-        tx_gadget=microphone,
-    )
-
-    rig.add_cable(
-        cable=Response2PoseCable(),
-        rx_gadget=blsm_dxl,
-        tx_gadget=lm,
-    )
-
+    if "ser" in locals():
+        rig.add_cable(
+            cable=res2listen_cable,
+            rx_gadget=ser,
+            tx_gadget=lm,
+        )
+        rig.add_cable(
+            cable=ser2mic_cable,
+            rx_gadget=microphone,
+            tx_gadget=ser)
+        rig.add_cable(
+            cable=Serial2PoseCable(),
+            rx_gadget=blsm_dxl,
+            tx_gadget=ser,
+        )
 
     test_emit_dict = {
         "event": "position",

@@ -37,6 +37,12 @@ SYSPROMPT = ". ".join(
         # "Be brusque if necessary; sardonic, optionally.",
     ]
 )
+HEARD_MSGS = [
+    "I heard",
+    "I think I heard",
+    "You said",
+    "I think you said",
+]
 
 SOUNDS_DIR = os.path.join(os.path.dirname(__file__), "sounds")
 
@@ -55,6 +61,8 @@ class LanguageModel(Gadget):
     def prompt_event(self, data, vocalize=True):
         msg = data["msg"]
         res = self.prompt(msg.prompt_string)
+        # Prepend the prompt
+        res = f"{random.choice(HEARD_MSGS)}: '{msg.prompt_string}.' {res}"
         self.emit(
             event="response", data={"event": "response"}, namespace=self.namespace
         )

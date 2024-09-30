@@ -1,5 +1,5 @@
-// const broadcastAudio = false;
-const broadcastAudio = true;
+const broadcastAudio = false;
+// const broadcastAudio = true;
 const peerConnections = {};
 const config = {
   iceServers: [
@@ -38,8 +38,8 @@ socket.on("connect", () => {
 
 function sendWatcher() {
   // socket.emit("watcher",socket.id);
-  setTimeout(function() {
-    socket.emit("broadcaster",socket.id);
+  setTimeout(function () {
+    socket.emit("broadcaster", socket.id);
   }, 1000);
 };
 
@@ -49,7 +49,7 @@ socket.on("watcher", async (id) => {
   peerConnections[id] = peerConnection;
   peerConnection = peerConnections[id];
   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: broadcastAudio });
-  stream.getTracks().forEach((track) => {peerConnection.addTrack(track, stream)});
+  stream.getTracks().forEach((track) => { peerConnection.addTrack(track, stream) });
   peerConnection.onicecandidate = event => {
     if (event.candidate) {
       socket.emit("candidate", id, event.candidate);
@@ -72,7 +72,7 @@ socket.on("watcher", async (id) => {
 });
 
 socket.on("candidate", (id, candidate) => {
-  console.log(id,candidate);
+  console.log(id, candidate);
   peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
 });
 
@@ -127,8 +127,9 @@ function getStream() {
   const audioSource = audioSelect.value;
   const videoSource = videoSelect.value;
   const constraints = {
-     audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
-    video: { deviceId: videoSource ? { exact: videoSource } : undefined , 
+    audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+    video: {
+      deviceId: videoSource ? { exact: videoSource } : undefined,
       // frameRate: {min:30}
     }
   };
@@ -148,8 +149,8 @@ function gotStream(stream) {
     option => option.text === stream.getVideoTracks()[0].label
   );
   broadcasterVideo.srcObject = stream;
-  socket.emit("broadcaster",socket.id);
-  
+  socket.emit("broadcaster", socket.id);
+
   console.log("Got stream");
 }
 

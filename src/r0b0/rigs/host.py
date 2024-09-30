@@ -390,14 +390,22 @@ class Host(Thread, SocketIO):
     def on_stop(self, data, **kwargs):
         if "msg" in data:
             data.update(data["msg"].__dict__)
-        tape = self.tapes.get(data["tape_name"], None)
-        if tape is None and "msg" in data:
-            # tape = self.tapes.getattr(data['msg'],'tape_name',None)
-            tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
-        logging.debug(f"tape {tape}")
+        tape_name = data.get("tape_name", None)
+        if tape_name is None:
+            logging.debug("Trying to stop all tapes")
+            for tape in self.tapes.values():
+                if tape.playing:
+                    logging.debug(f"Stopping {tape}")
+                    tape.stop()
+        else:
+            tape = self.tapes.get(data["tape_name"], None)
+            if tape is None and "msg" in data:
+                # tape = self.tapes.getattr(data['msg'],'tape_name',None)
+                tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
+            logging.debug(f"tape {tape}")
 
-        if tape is not None:
-            tape.stop()
+            if tape is not None:
+                tape.stop()
 
     @decode_msg
     def on_echo(self, data, **kwargs):
