@@ -3,8 +3,6 @@ from r0b0.utils.loaders import decode_msg
 import logging
 
 
-import picamera
-import picamera.array
 import numpy as np
 from time import sleep
 from gpiozero import Button, LED

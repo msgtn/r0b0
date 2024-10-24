@@ -1,21 +1,10 @@
 from .gadget import Gadget, Message
 from r0b0.config import TAPES_DIR
 from r0b0.utils.loaders import decode_msg
-from r0b0 import get_timestamp
-import logging
-# logging = logging.getLogger(__name__)
-logging.basicConfig(
-    encoding='utf-8',
-    level=logging.DEBUG,
-    # level=getattr(logging,args.logging.upper())
-)
-import time
+from r0b0 import logging, get_timestamp
 import os
-import threading
-from gpiozero import LED
 
 from picamera2 import Picamera2
-from libcamera import controls as libcamera_controls
 import numpy as np
 from time import sleep
 from functools import partial
@@ -23,20 +12,14 @@ import glob
 import subprocess
 import libcamera
 
-# Picamera2.set_logging(Picamera2.CRITICAL)
 shutter_speeds = [1 / 30, 1 / 250, 1 / 1000]
 shutter_speed_idx = 0
-# RESOLUTION = (1920, 1080)
-RESOLUTION = (2028, 1520)
-STILL_CONFIG_DICT = {
-    "size": RESOLUTION,
-}
+RESOLUTION = (4056, 3040)
 FRAMERATE = 15
 ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE = 3
 ROTATE = libcamera.Transform(hflip=1, vflip=1)
-FLASH = LED(24)
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
 
@@ -45,31 +28,12 @@ class PiCamera(Gadget, Picamera2):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
-        still_config = Picamera2.create_still_configuration(
-                self, 
-                *[STILL_CONFIG_DICT]*3,
-                transform=ROTATE, 
-                # buffer_count=4,
-                queue=False
-                )
-        self.still_configuration.size = RESOLUTION
+        Picamera2.create_still_configuration(self, transform=ROTATE)
         #self.still_configuration.size = (4056,3040)
-        # self.still_configuration.size = (2028, 1520)
-        # self.still_configuration.transform = ROTATE
-        Picamera2.configure(self, still_config)
-        # breakpoint()
-        Picamera2.start(self, "still", show_preview=False)
-        self.set_controls({
-            "AfMode": libcamera_controls.AfModeEnum.Manual,
-            "AeEnable": False,
-            "AeFlickerMode": libcamera_controls.AeFlickerModeEnum.Off,
-            "ExposureTime":int(1e6/250),
-            # "AnalogueGain":1.0,
-            "AnalogueGain":4.0,
-            })
-        # self.set_logging(self.CRITICAL)
+        self.still_configuration.size = (2028, 1520)
+        self.still_configuration.transform = ROTATE
+        Picamera2.start(self, "still")
 
-        # breakpoint()  
         try:
             os.remove(str(TAPES_DIR / "testshot.jpg"))
         except:
@@ -95,50 +59,14 @@ class PiCamera(Gadget, Picamera2):
         )
         self.set_param = self.__dict__.update
         self.start = lambda: Gadget.start(self)
-        self.t_last = time.time()
-        self.exposing = False
 
     @decode_msg
     def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
-        if time.time()-self.t_last < 0.5:
-            return
         subprocess.call(['raspi-gpio', 'set', '47', 'dh'])
         logging.debug(f"Shutter released")
         # TODO - split off into separate subfolders
         # instead of one large folder
-        capture_thread = threading.Thread(
-                target=self._capture_file,)
-        flash_thread = threading.Thread(target=self.trigger_flash)
-        # capture_thread.start()
-        flash_thread.start()
-        self._capture_file(save_dir, **kwargs)
-
-    def trigger_flash(self):
-        num_files_0 = get_file_number(TAPES_DIR)
-        while not self.exposing:
-            time.sleep(0.1)
-        # while self.exposing:
-        while get_file_number(TAPES_DIR)==num_files_0:
-            logging.info("Triggering flash")
-            FLASH.on()
-            FLASH.off()
-            time.sleep(1/3)
-
-
-    def _capture_file(self, save_dir=TAPES_DIR, **kwargs):
-        logging.info("Taking picture")
-        filename = str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
-        t_start = time.time()
-        # image = self.capture_image("main")
-        # image.save(filename)
-        self.exposing = True
-        self.capture_file(filename)
-        self.exposing = False
-        t_end = time.time()
-        del_t = t_end - t_start
-        logging.debug(f"Time to capture: {del_t:0.2f}")
-        self.t_last = time.time()
-        # self.capture_file(filename)
+        self.capture_file(str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg"))
 
     @decode_msg
     def set_shutter(self, shutter_speed):
@@ -157,9 +85,8 @@ class PiCamera(Gadget, Picamera2):
         self,
         msg,
     ):
-        logging.info("Shutter: 1/2")
-        # self.set_controls({"ExposureTime": int(1e6 / 1)})
-        self.set_controls({"ExposureTime": int(1e6 / 2)})
+        logging.debug("Shutter: 1/15")
+        self.set_controls({"ExposureTime": int(10e5 / 15)})
         return
 
     @decode_msg
@@ -168,7 +95,7 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.debug("Shutter: 1/60")
-        self.set_controls({"ExposureTime": int(1e6 / 60)})
+        self.set_controls({"ExposureTime": int(10e5 / 60)})
         return
 
     @decode_msg

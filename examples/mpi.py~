@@ -27,7 +27,7 @@ def main():
     mpi_camera = r0b0.gadgets.from_config(
         os.path.join(CONFIG_DIR, 'mpi_camera.yaml'))
     mpi_buttons = r0b0.gadgets.from_config(
-        os.path.join(CONFIG_DIR, 'mpi_button.yaml'))
+        os.path.join(CONFIG_DIR, 'mpi_buttons.yaml'))
     mpi_cable = MPiCable()
     rig.add_cable(
         cable=mpi_cable,
