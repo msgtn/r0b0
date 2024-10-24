@@ -110,3 +110,12 @@ class MobilePage(Page):
             data=data,
             namespace=self.namespace,
         )
+
+    @decode_msg
+    def on_text(self, data):
+        # print('device_motion', data, self.namespace)
+        self.emit(
+            event="text",
+            data=data,
+            namespace=self.namespace,
+        )

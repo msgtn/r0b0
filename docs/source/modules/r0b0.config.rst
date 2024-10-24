@@ -1,0 +1,7 @@
+r0b0.config module
+==================
+
+.. automodule:: r0b0.config
+   :members:
+   :undoc-members:
+   :show-inheritance:

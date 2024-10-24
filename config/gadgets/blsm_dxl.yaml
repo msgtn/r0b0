@@ -28,11 +28,4 @@ motors: # use these same names as kwargs to constructors
   operating_mode: 3
   profile_velocity: 200
   profile_acceleration: 100
-- name: left_wheel
-  model: xl330-m077
-  id: 7
-  operating_mode: 1
-- name: right_wheel
-  model: xl330-m077
-  id: 8
-  operating_mode: 1
+  

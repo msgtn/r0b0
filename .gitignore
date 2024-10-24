@@ -12,6 +12,7 @@ tapes/*
 
 # speech recognition models
 vosk*
+model
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,7 @@
+r0b0.gadgets.test\_gadget module
+================================
+
+.. automodule:: r0b0.gadgets.test_gadget
+   :members:
+   :undoc-members:
+   :show-inheritance:

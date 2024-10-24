@@ -1,0 +1,7 @@
+r0b0.gadgets.pygame\_gadget module
+==================================
+
+.. automodule:: r0b0.gadgets.pygame_gadget
+   :members:
+   :undoc-members:
+   :show-inheritance:

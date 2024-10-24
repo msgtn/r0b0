@@ -1,0 +1,7 @@
+r0b0.cables.msg\_funcs module
+=============================
+
+.. automodule:: r0b0.cables.msg_funcs
+   :members:
+   :undoc-members:
+   :show-inheritance:

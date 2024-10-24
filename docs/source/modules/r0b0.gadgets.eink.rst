@@ -1,0 +1,7 @@
+r0b0.gadgets.eink module
+========================
+
+.. automodule:: r0b0.gadgets.eink
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,6 +1,7 @@
 import logging
 from r0b0.cables import cable
 
+
 class MPiCable(Cable):
     def __init__(self):
         # Maps buttons to functions to call
@@ -18,9 +19,6 @@ class MPiCable(Cable):
 
         if data.button not in self.button_funcs:
             logging.warning(f"Button {data.button} not assigned to a method")
-        return {
-            'event':'call_method',
-            'method':self.button_funcs[data.button]
-        }
+        return {"event": "call_method", "method": self.button_funcs[data.button]}
 
         pass

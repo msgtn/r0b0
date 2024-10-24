@@ -1,4 +1,5 @@
 const broadcastAudio = false;
+// const broadcastAudio = true;
 const peerConnections = {};
 const config = {
   iceServers: [
@@ -37,18 +38,18 @@ socket.on("connect", () => {
 
 function sendWatcher() {
   // socket.emit("watcher",socket.id);
-  setTimeout(function() {
-    socket.emit("broadcaster",socket.id);
+  setTimeout(function () {
+    socket.emit("broadcaster", socket.id);
   }, 1000);
 };
 
 socket.on("watcher", async (id) => {
   console.log(`watcher from ${id}`)
-  const peerConnection = new RTCPeerConnection(config);
+  var peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
-  // peerConnection = peerConnections[id];
+  peerConnection = peerConnections[id];
   const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: broadcastAudio });
-  stream.getTracks().forEach((track) => {peerConnection.addTrack(track, stream)});
+  stream.getTracks().forEach((track) => { peerConnection.addTrack(track, stream) });
   peerConnection.onicecandidate = event => {
     if (event.candidate) {
       socket.emit("candidate", id, event.candidate);
@@ -71,7 +72,7 @@ socket.on("watcher", async (id) => {
 });
 
 socket.on("candidate", (id, candidate) => {
-  console.log(id,candidate);
+  console.log(id, candidate);
   peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
 });
 
@@ -100,6 +101,7 @@ function getDevices() {
 
 function gotDevices(deviceInfos) {
   window.deviceInfos = deviceInfos;
+  console.log(deviceInfos);
   for (const deviceInfo of deviceInfos.reverse()) {
     const option = document.createElement("option");
     option.value = deviceInfo.deviceId;
@@ -125,9 +127,10 @@ function getStream() {
   const audioSource = audioSelect.value;
   const videoSource = videoSelect.value;
   const constraints = {
-    // audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
-    video: { deviceId: videoSource ? { exact: videoSource } : undefined , 
-      frameRate: {min:30}
+    audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+    video: {
+      deviceId: videoSource ? { exact: videoSource } : undefined,
+      // frameRate: {min:30}
     }
   };
   return navigator.mediaDevices
@@ -146,8 +149,8 @@ function gotStream(stream) {
     option => option.text === stream.getVideoTracks()[0].label
   );
   broadcasterVideo.srcObject = stream;
-  socket.emit("broadcaster",socket.id);
-  
+  socket.emit("broadcaster", socket.id);
+
   console.log("Got stream");
 }
 

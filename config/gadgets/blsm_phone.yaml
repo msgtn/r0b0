@@ -10,4 +10,5 @@ event_kwargs:
   device_motion:
     # namespace: /
     # namespace: /blsm_phone
+  text:
   

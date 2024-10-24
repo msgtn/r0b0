@@ -1,6 +1,7 @@
 from .gadget import Gadget, Message
 from r0b0.utils.loaders import decode_msg
 import logging
+logging = logging.getLogger(__name__)
 
 import mido
 from mido.sockets import PortServer, connect
@@ -55,7 +56,7 @@ class MIDIController(Gadget):
         # logging.debug(midi_msg.__dict__)
         # print('midi_msg',midi_msg)
         # print(midi_msg,self.connected,self.echo,midi_msg.event)
-        print(midi_msg.event, self.connected, self.echo)
+        logging.debug(f"{midi_msg.event}, Connected: {self.connected}, Connected: {self.echo}")
         if self.connected:
             if self.echo:
                 # print(midi_msg,midi_msg.event, )

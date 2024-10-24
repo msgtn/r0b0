@@ -40,6 +40,7 @@ FLASH = LED(24)
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
 
+
 class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
@@ -82,7 +83,6 @@ class PiCamera(Gadget, Picamera2):
         except:
             pass
 
-        
         self.on("d_down", handler=self.shutter15, namespace=self.namespace)
         self.on("d_right", handler=self.shutter60, namespace=self.namespace)
         self.on("d_up", handler=self.shutter250, namespace=self.namespace)
@@ -148,9 +148,7 @@ class PiCamera(Gadget, Picamera2):
         :param shutter_speed: Shutter speed in milliseconds, i.e. 1e6 / {15, 60, 250}.
         """
         logging.debug(f"Shutter speed: 1/{int(1e6 / shutter_speed)}")
-        self.set_controls({
-            "ExposureTime": shutter_speed
-        })
+        self.set_controls({"ExposureTime": shutter_speed})
 
     @decode_msg
     def shutter15(

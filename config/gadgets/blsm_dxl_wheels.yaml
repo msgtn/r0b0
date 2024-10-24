@@ -1,0 +1,38 @@
+name: blsm_dxl
+type: DynamixelRobot
+# usb_port: /dev/ttyUSB0
+usb_port: /dev/tty.usbserial-FT1SF1UM
+baud_rate: 57600
+motors: # use these same names as kwargs to constructors
+- name: tower_1
+  model: xl330-m288
+  id: 1
+  operating_mode: 3
+  profile_velocity: 200
+  profile_acceleration: 100
+- name: tower_2
+  model: xl330-m288
+  id: 2
+  operating_mode: 3
+  profile_velocity: 200
+  profile_acceleration: 100
+- name: tower_3
+  model: xl330-m288
+  id: 3
+  operating_mode: 3
+  profile_velocity: 200
+  profile_acceleration: 100
+- name: base
+  model: xl330-m288
+  id: 4
+  operating_mode: 3
+  profile_velocity: 200
+  profile_acceleration: 100
+- name: left_wheel
+  model: xl330-m077
+  id: 7
+  operating_mode: 1
+- name: right_wheel
+  model: xl330-m077
+  id: 8
+  operating_mode: 1

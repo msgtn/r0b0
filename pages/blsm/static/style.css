@@ -5,6 +5,7 @@
   width: 60px;
   height: 34px;
   top: 0px;
+  vertical-align: middle;
 }
 
 /* Hide default HTML checkbox */
@@ -12,19 +13,24 @@
   opacity: 0;
   width: 0;
   height: 0;
+  vertical-align: middle;
 }
 
 /* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
+  /* top: 0; */
   left: 0;
   right: 0;
-  bottom: 0;
+  /* bottom: 0; */
+  bottom: -25%;
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
+  /* vertical-align: middle; */
+  margin: 0;
+  top: 25%;
 }
 
 .slider:before {
@@ -55,10 +61,14 @@ input:checked + .slider:before {
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+  /* border-radius: 34px; */
+  border-radius: 14px;
+  /* height:10px; */
+  vertical-align: middle;
 }
 
 .slider.round:before {
+  vertical-align: middle;
   border-radius: 50%;
 }
 
@@ -314,8 +324,52 @@ div {
     z-index:0;
 }
 
+.controlBar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 150%;
+  margin: auto;
+  background-color: black;
+  opacity: 0.8;
+  padding-top:5%;
+  padding-bottom:5%;
+}
+
+.element {
+  /* height: 100px; You can adjust this as per your requirement */
+  /* background-color: lightblue; */
+  border-radius: 10px;
+  /* padding: 1em; */
+  font-size: smaller;
+  color: white;
+  min-width: 30%;
+  /* max-height: 80%; */
+  vertical-align: middle;
+  /* margin-right: 5px; */
+  box-sizing: border-box;
+  display: flex; 
+  justify-content: center;
+  /* position:absolute; */
+  top: 50%;
+}
+
+
+
+.rowContainer {
+  /* width: 100%; */
+  position: absolute;
+  bottom: 0;
+}
+
+.row {
+  width: 100%;
+  position: relative
+}
+
 body {
   margin: 0; /* Because annoying default browser margins */
+  height:50%;
 }
 video {
     position: absolute;
@@ -329,6 +383,7 @@ video {
     margin-top: -100vw;
     object-fit: cover;
     z-index: -4;
+    /* z-index: 4; */
     visibility: visible;
 }
 

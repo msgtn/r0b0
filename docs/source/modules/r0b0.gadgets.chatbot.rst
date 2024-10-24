@@ -1,0 +1,7 @@
+r0b0.gadgets.chatbot module
+===========================
+
+.. automodule:: r0b0.gadgets.chatbot
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -4,7 +4,10 @@ import numpy as np
 from functools import partial
 from r0b0.utils.loaders import decode_msg, encode_msg
 
-from .gadget import Gadget, Message, logging
+from .gadget import Gadget, Message
+import logging
+
+logging = logging.getLogger(__name__)
 from dynamixel_python import DynamixelManager, DynamixelMotor, ReadError
 
 BAUD_DICT = {57600: 1, 115200: 2, 1000000: 3, 9600: 0}
@@ -25,6 +28,10 @@ class DynamixelRobot(Gadget, DynamixelManager):
     A Gadget representing a Dynamixel-based robot.
     """
 
+    @staticmethod
+    def Message(*args, **kwargs):
+        return Message(*args, **kwargs)
+
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, request_timeout=0.1, **kwargs)
         DynamixelManager.__init__(
@@ -44,13 +51,14 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # initialize
         self.power_up = self.init
         # NOTE - enabling and disabling is slow, use sparingly
-        self.enable, self.disable = self.enable_all, self.disable_all
+        # self.enable, self.disable = self.enable_all, self.disable_all
         self.power_up()
         self.disable()
         # for motor_name,motor in self..items():
         for motor_name in self.motor_configs.keys():
             self.dxl_dict[motor_name].set_motor_config(self.motor_configs[motor_name])
 
+        # breakpoint()
         self.enable()
 
         # set motor operating modes
@@ -66,6 +74,8 @@ class DynamixelRobot(Gadget, DynamixelManager):
                 handler=getattr(self, f"{_event}_event"),
                 namespace=self.namespace,
             )
+        self.on("enable", handler=self.enable, namespace=self.namespace)
+        self.on("disable", handler=self.disable, namespace=self.namespace)
 
         self.moving_thread = Thread(
             target=self._moving_thread,
@@ -77,6 +87,17 @@ class DynamixelRobot(Gadget, DynamixelManager):
 
         self.set_param = partial(self.access_param, rw_mode="set")
         self.get_param = partial(self.access_param, rw_mode="get")
+
+    def enable(self, *args, **kwargs):
+        # if not self.enabled:
+        logging.debug("Enabling")
+        self.POLL_MOVEMENT = False
+        self.enabled = self.enable_all()
+
+    def disable(self, *args, **kwargs):
+        logging.debug("Disabling")
+        self.POLL_MOVEMENT = True
+        self.enabled = not self.disable_all()
 
     def add_motors_from_config(self, motor_config: list):
         """
@@ -130,31 +151,50 @@ class DynamixelRobot(Gadget, DynamixelManager):
         # continuously check the
         # "is moving" flag and emit events
         while True:
-            if self.POLL_MOVEMENT:
-                moving_dict = {}
-                position_dict = {}
-                velocity_dict = {}
-                for motor_name, motor in self.dxl_dict.items():
-                    moving_dict.update({motor_name: motor.get_moving() * True})
-                    position_dict.update({motor_name: motor.get_present_position()})
+            try:
+                if self.POLL_MOVEMENT:
+                    moving_dict = {}
+                    position_dict = {}
+                    velocity_dict = {}
+                    for motor_name, motor in self.dxl_dict.items():
+                        # If the torque is on, the motor is probably moving somewhere, so skip
+                        if motor.get_torque_enable():
+                            continue
+                        # moving_dict.update({motor_name: motor.get_moving() * True})
+                        # position_dict.update({motor_name: motor.get_present_position()})
 
-                    # Calculate the velocity, which is reported on the range [0, 2**32]
-                    present_velocity = motor.get_present_velocity()
-                    velocity_direction = np.exp2(
-                        np.round(np.log2(present_velocity + 1e-6) / 32.0) * 32
-                    )
-                    present_velocity -= velocity_direction
-                    velocity_dict.update({motor_name: present_velocity})
-
-                if any(moving_dict.values()):
-                    # else:
-                    # break
-                    self.emit(
-                        event="motor_velocity",
-                        data=velocity_dict,
-                        namespace=self.namespace,
-                    )
-        pass
+                        # Calculate the velocity, which is reported on the range [0, 2**32]
+                        present_velocity = motor.get_present_velocity()
+                        velocity_direction = np.exp2(
+                            np.round(np.log2(present_velocity + 1e-6) / 32.0) * 32
+                        )
+                        present_velocity -= velocity_direction
+                        # velocity_dict.update({motor_name: present_velocity})
+                        moving_dict.update(
+                            {
+                                motor_name: {
+                                    "moving": motor.get_moving() * True,
+                                    "position": motor.get_present_position() % 2**12,
+                                    "velocity": present_velocity,
+                                }
+                            }
+                        )
+                    # logging.debug(moving_dict)
+                    if any([v["moving"] for v in moving_dict.values()]):
+                        # logging.debug("Moving")
+                        # logging.debug(velocity_dict)
+                        logging.debug("Moving")
+                        # else:
+                        # break
+                        self.emit(
+                            event="motor_motion",
+                            # data=velocity_dict,
+                            data=moving_dict,
+                            namespace=self.namespace,
+                        )
+                    time.sleep(50e-3)
+            except:
+                pass
 
     def access_param(self, param, motor_id_kwargs, rw_mode="set"):
         return_dict = {m_id: {} for m_id in motor_id_kwargs.keys()}
@@ -192,10 +232,17 @@ class DynamixelRobot(Gadget, DynamixelManager):
     @decode_msg
     def position_event(self, data):
         # msg is a data object
-        msg = data["msg"]
+        # msg = data["msg"]
+        # msg = data.get("msg", data)
+        if "msg" in data:
+            msg = data["msg"]
+        else:
+            msg = Message(**data)
         logging.debug(msg.value)
         logging.debug(f"MSG2KWARGS {datetime.datetime.now()}")
         motor_id_kwargs = self._msg2kwargs(msg)
+        # logging.debug("motorkwargs")
+        # logging.debug(motor_id_kwargs)
 
         # TODO - maybe calcualte this before packing with self._msg2kwargs
         # that might be cleaner
@@ -206,10 +253,15 @@ class DynamixelRobot(Gadget, DynamixelManager):
             present_positions = self.get_param(
                 "present_position", {m_id: {} for m_id, _ in motor_id_kwargs.items()}
             )
+            # Sometimes results in very large number,
+            # That just needs to be modulo'd by 2**12
+            for pos in present_positions.keys():
+                present_positions[pos] %= 2**12
             logging.debug(present_positions)
             relative_positions = [m_v["data"] for m_v in motor_id_kwargs.values()]
             motor_ids = list(motor_id_kwargs.keys())
             # motor_id_kwargs.update({m_id:})
+            # logging.debug(present_positions)
             motor_id_kwargs.update(
                 {
                     m_id: {"data": rel_pos + pres_pos}
@@ -229,6 +281,7 @@ class DynamixelRobot(Gadget, DynamixelManager):
             "goal_position",
             motor_id_kwargs,
         )
+        self.emit(event="position", data=motor_id_kwargs, namespace=self.namespace)
 
     @decode_msg
     def velocity_event(self, data):
@@ -326,7 +379,7 @@ class Motor(DynamixelMotor):
 
     def calibrate_homing_offset(self):
         self.disable()
-        self.set_param("homing_offset", -self.get_present_position())
+        self.set_param("homing_offset", -(self.get_present_position() % 2**12))
 
     def set_motor_config(self, config: dict):
         # pass

@@ -84,7 +84,12 @@ class Rig(Host):
         return self.gadgets.get(gadget).namespace
 
     def add_cable(self, cable, tx_gadget=None, rx_gadget=None):
-        print(f"Adding {cable} from {tx_gadget} to {rx_gadget}")
+        logging.info(f"Adding {cable} from {tx_gadget} to {rx_gadget}")
+        assert not (
+            tx_gadget is None and rx_gadget is None
+        ), "Either or both tx_gadget and rx_gadget must be defined when calling add_cable()"
+        if tx_gadget is None:
+            tx_gadget = rx_gadget
         if tx_gadget.name not in self.gadgets:
             self.add_gadget(tx_gadget)
         if rx_gadget is not None:
@@ -98,28 +103,39 @@ class Rig(Host):
         def func_emit(data):
             # if not isinstance(data,dict): data = pickle.loads(data)
             # msg_kwargs = msg_func(data)
-            msg_kwargs = cable(data)
-            if msg_kwargs is None:
-                return
-            # wrap the data into the gadget's expected message object
-            if rx_gadget is None:
-                emit_data = Message(**msg_kwargs)
-                include_self = True
-            else:
-                emit_data = self.gadgets[rx_gadget.name].message(**msg_kwargs)
-                include_self = False
-            output_event = emit_data.event
-            # assemble the output to emit
-            emit_kwargs = dict(
-                event=output_event,
-                data={"event": output_event, "msg": pickle.dumps(emit_data)},
-                to=None,
-                include_self=include_self,
-                namespace=rx_namespace,
-            )
-            logging.debug(f"func_emit {emit_kwargs}")
-            # print('func_emit', emit_kwargs)
-            self.emit(**emit_kwargs)
+            # Handle SEQUENTIAL single-input multiple-output
+            msg_kwargs_list = cable(data)
+            if not isinstance(msg_kwargs_list, list):
+                msg_kwargs_list = [msg_kwargs_list]
+            for msg_kwargs in msg_kwargs_list:
+                logging.debug(msg_kwargs)
+                if msg_kwargs is None:
+                    return
+                # if "namespace" in msg_kwargs:
+                #     _namespace = msg
+                # _namespace
+                # wrap the data into the gadget's expected message object
+                if rx_gadget is None or rx_gadget == tx_gadget:
+                    emit_data = Message(**msg_kwargs)
+                    include_self = True
+                else:
+                    emit_data = self.gadgets[rx_gadget.name].message(**msg_kwargs)
+                    include_self = False
+                output_event = emit_data.event
+                # assemble the output to emit
+                emit_kwargs = dict(
+                    event=output_event,
+                    data={"event": output_event, "msg": pickle.dumps(emit_data)},
+                    to=None,
+                    include_self=include_self,
+                    # namespace=rx_namespace,
+                    namespace=msg_kwargs.get("namespace", rx_namespace),
+                )
+                # breakpoint()
+                # logging.debug(f"func_emit {emit_kwargs}")
+                # print('func_emit', emit_kwargs)
+                self.emit(**emit_kwargs)
+                # time.sleep(2)
 
         input_handlers = self.event_handlers.get(input_event, [])
         input_handlers.append(func_emit)
@@ -221,7 +237,7 @@ class Rig(Host):
                 if event_gadget is not None:
                     # logging.debug(event_gadget.namespace)
                     emit_dict.update(dict(namespace=event_gadget.namespace))
-                    logging.debug(emit_dict)
+                    # logging.debug(emit_dict)
                     # logging.debug(emit_dict)
                     event_gadget.emit(**emit_dict)
                 break
@@ -229,7 +245,7 @@ class Rig(Host):
     def power_on(
         self,
     ):
-        print("POWER ON")
+        logging.info("POWER ON")
 
         self.start()
         logging.debug(self.gadgets.values())

@@ -1,0 +1,29 @@
+r0b0 package
+============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   r0b0.cables
+   r0b0.gadgets
+   r0b0.rigs
+   r0b0.utils
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   r0b0.config
+
+Module contents
+---------------
+
+.. automodule:: r0b0
+   :members:
+   :undoc-members:
+   :show-inheritance:

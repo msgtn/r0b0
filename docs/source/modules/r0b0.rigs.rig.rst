@@ -1,0 +1,7 @@
+r0b0.rigs.rig module
+====================
+
+.. automodule:: r0b0.rigs.rig
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,6 +1,7 @@
 import os
 import yaml
 import logging
+logging = logging.getLogger(__name__)
 from r0b0.config import CONFIG_DIR, LOCALHOST, SERVER_PORT
 
 from functools import partial
@@ -82,9 +83,11 @@ def decode_msg(func):
     :param func: The handler function (usually a Gadget function)
     """
 
+    logging.debug(f"Decoding message for {func}")
     def _inner_func(s, data, **kwargs):
         logging.debug(data)
-        if isinstance(data, dict) and data.get("msg", None) is not None:
+        if isinstance(data, dict) and "msg" in data:
+
             # Load from a hex-encoded string
             # TODO - messages *should* be hex encoded if it is sent
             # from a function decorated with encode_msg

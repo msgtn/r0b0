@@ -1,6 +1,8 @@
 import glob, inspect
 
-import logging
+# import logging
+
+# logging = logging.getLogger(__name__)
 import datetime
 
 from r0b0.config import (
@@ -56,7 +58,9 @@ import json
 PLAYER_EVENTS = [
     "load",
     "play",
+    "stop",
     "record",
+    "echo"
 ]
 
 
@@ -218,15 +222,18 @@ class Host(Thread, SocketIO):
 
         :param event: The event
         """
-        logging.debug(f"HOST EMIT {datetime.datetime.now()}")
-        logging.debug(args)
-        logging.debug(kwargs)
+        logging.debug(f"HOST EMIT {event} {datetime.datetime.now()}")
+        # logging.debug(args)
+        # logging.debug(kwargs)
 
         # if the event is a player-related event,
         # handle it internally
         if event in PLAYER_EVENTS:
             getattr(self, f"on_{event}")(*args, **kwargs)
         else:
+            if kwargs.get("namespace", None)=="/tape":
+                kwargs.update({"namespace":kwargs["rx_namespace"]})
+            logging.debug(f"{args}, {kwargs}")
             SocketIO.emit(self, event, *args, **kwargs)
 
     @decode_msg
@@ -265,20 +272,24 @@ class Host(Thread, SocketIO):
                 data=d,
                 **data["kwargs"],  # namespace arg from the .yaml that defined it
             )
-            if d.get('id',None) is not None:
+            if d.get("id", None) is not None:
                 id_event = f"{d['id']}_{d['event']}"
-                tape = self.tapes.get(id_event,None)
+                tape = self.tapes.get(id_event, None)
                 if tape is not None:
-                # if id_event in self.tapes.keys():
+                    # if id_event in self.tapes.keys():
                     # record time in millis
-                    d.update({
-                        'time':int(time.time()*10e3),
-                        })
-                    tape.write({**{
-                        'event':data['event'],
-                        'data':d},
-                        **data['kwargs'],
-                    })
+                    d.update(
+                        {
+                            "time": int(time.time() * 10e3),
+                        }
+                    )
+                    tape.write(
+                        {
+                            **{"event": data["event"], "data": d},
+                            **data["kwargs"],
+                        }
+                    )
+
         self.server.on(
             data["event"],
             _emit_record,
@@ -340,22 +351,25 @@ class Host(Thread, SocketIO):
 
     @decode_msg
     def on_play(self, data, **kwargs):
-        logging.debug(data)
         if "msg" in data:
             data.update(data["msg"].__dict__)
         tape = self.tapes.get(data["tape_name"], None)
+        loop = self.tapes.get(data["loop"], False)
+        loop = data.get('loop', False)
+        # breakpoint()
         if tape is None and "msg" in data:
             # tape = self.tapes.getattr(data['msg'],'tape_name',None)
             tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
-        logging.debug(f"tape {tape}")
+            loop = getattr(data["msg"], "loop", False)
+        logging.debug(f"tape {tape}, loop: {loop}")
 
         if tape is not None:
-            tape.play()
+            tape.play(loop=loop)
         else:
             # try to load tape
             tape = self.on_load(data)
             if tape is not None:
-                tape.play()
+                tape.play(loop=loop)
             # could not load tape
             else:
                 logging.warning(f"No tape {data['tape_name']}, cannot play")
@@ -368,6 +382,40 @@ class Host(Thread, SocketIO):
         """
         self.on_load({"tape_name": tape_name})
         self.on_play({"tape_name": tape_name})
+
+    def stop(self, tape_name):
+        self.on_stop({"tape_name": tape_name})
+
+    @decode_msg
+    def on_stop(self, data, **kwargs):
+        if "msg" in data:
+            data.update(data["msg"].__dict__)
+        tape_name = data.get("tape_name", None)
+        if tape_name is None:
+            logging.debug("Trying to stop all tapes")
+            for tape in self.tapes.values():
+                if tape.playing:
+                    logging.debug(f"Stopping {tape}")
+                    tape.stop()
+        else:
+            tape = self.tapes.get(data["tape_name"], None)
+            if tape is None and "msg" in data:
+                # tape = self.tapes.getattr(data['msg'],'tape_name',None)
+                tape = self.tapes.get(getattr(data["msg"], "tape_name", None), None)
+            logging.debug(f"tape {tape}")
+
+            if tape is not None:
+                tape.stop()
+
+    @decode_msg
+    def on_echo(self, data, **kwargs):
+        logging.debug("echoing")
+        kwargs.update({
+            "namespace":data["rx_namespace"],
+            # "event":data["event"]
+        })
+        # breakpoint()
+        self.emit(event=data["event"], data=data, **kwargs)
 
     # no metaphor for this one
     def _webrtc_setup(self):

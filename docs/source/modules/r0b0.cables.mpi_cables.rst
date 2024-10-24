@@ -1,0 +1,7 @@
+r0b0.cables.mpi\_cables module
+==============================
+
+.. automodule:: r0b0.cables.mpi_cables
+   :members:
+   :undoc-members:
+   :show-inheritance:
