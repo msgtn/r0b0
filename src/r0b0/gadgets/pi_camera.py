@@ -66,7 +66,7 @@ class PiCamera(Gadget, Picamera2):
             "AeFlickerMode": libcamera_controls.AeFlickerModeEnum.Off,
             "ExposureTime":int(1e6/250),
             # "AnalogueGain":1.0,
-            "AnalogueGain":8.0,
+            "AnalogueGain":4.0,
             })
         # self.set_logging(self.CRITICAL)
 
@@ -113,19 +113,23 @@ class PiCamera(Gadget, Picamera2):
         flash_thread.start()
         self._capture_file(save_dir, **kwargs)
 
-    def trigger_flash(self):
+    def trigger_flash(self, period=1/3):
         num_files_0 = get_file_number(TAPES_DIR)
         while not self.exposing:
-            time.sleep(0.1)
+            continue
         # while self.exposing:
-        while get_file_number(TAPES_DIR)==num_files_0:
-            logging.info("Triggering flash")
-            FLASH.on()
-            FLASH.off()
-            time.sleep(1/3)
+        t_start = time.time()
+        while get_file_number(TAPES_DIR)==num_files_0 or len(self._requests)==0 or self.exposing:
+            t = time.time()
+            if t-t_start > period:
+                logging.info("Triggering flash")
+                FLASH.on()
+                FLASH.off()
+                t_start = t
 
 
     def _capture_file(self, save_dir=TAPES_DIR, **kwargs):
+        self.t_last = time.time()
         logging.info("Taking picture")
         filename = str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
         t_start = time.time()
@@ -137,7 +141,6 @@ class PiCamera(Gadget, Picamera2):
         t_end = time.time()
         del_t = t_end - t_start
         logging.debug(f"Time to capture: {del_t:0.2f}")
-        self.t_last = time.time()
         # self.capture_file(filename)
 
     @decode_msg
@@ -156,8 +159,8 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.info("Shutter: 1/2")
-        # self.set_controls({"ExposureTime": int(1e6 / 1)})
-        self.set_controls({"ExposureTime": int(1e6 / 2)})
+        self.set_controls({"ExposureTime": int(1e6 / 1)})
+        # self.set_controls({"ExposureTime": int(1e6 / 2)})
         return
 
     @decode_msg
