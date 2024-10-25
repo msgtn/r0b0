@@ -113,13 +113,15 @@ class PiCamera(Gadget, Picamera2):
         flash_thread.start()
         self._capture_file(save_dir, **kwargs)
 
-    def trigger_flash(self, period=1/3):
+    def trigger_flash(self, period=1/4):
         num_files_0 = get_file_number(TAPES_DIR)
         while not self.exposing:
             continue
         # while self.exposing:
         t_start = time.time()
-        while get_file_number(TAPES_DIR)==num_files_0 or len(self._requests)==0 or self.exposing:
+        # while get_file_number(TAPES_DIR)==num_files_0 or len(self._requests)==0 or self.exposing:
+        while self.exposing:
+        # while not self.lock.locked():
             t = time.time()
             if t-t_start > period:
                 logging.info("Triggering flash")
@@ -133,10 +135,10 @@ class PiCamera(Gadget, Picamera2):
         logging.info("Taking picture")
         filename = str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
         t_start = time.time()
+        self.exposing = True
+        self.capture_file(filename, wait=True)
         # image = self.capture_image("main")
         # image.save(filename)
-        self.exposing = True
-        self.capture_file(filename)
         self.exposing = False
         t_end = time.time()
         del_t = t_end - t_start
@@ -159,8 +161,8 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.info("Shutter: 1/2")
-        self.set_controls({"ExposureTime": int(1e6 / 1)})
-        # self.set_controls({"ExposureTime": int(1e6 / 2)})
+        # self.set_controls({"ExposureTime": int(1e6 / 1)})
+        self.set_controls({"ExposureTime": int(1e6 / 2)})
         return
 
     @decode_msg
