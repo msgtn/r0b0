@@ -1,9 +1,10 @@
 import logging
-from r0b0.cables import cable
+from r0b0.cables import Cable
 
 
 class MPiCable(Cable):
     def __init__(self):
+        self.input_event = "pi_button"
         # Maps buttons to functions to call
         self.button_funcs = {
             "d_down": "shutter15",
@@ -16,9 +17,11 @@ class MPiCable(Cable):
 
     def __call__(self, data):
         super().__call__(data)
+        button = data['button']
 
-        if data.button not in self.button_funcs:
-            logging.warning(f"Button {data.button} not assigned to a method")
-        return {"event": "call_method", "method": self.button_funcs[data.button]}
+        if button not in self.button_funcs:
+            logging.warning(f"Button {button} not assigned to a method")
+        return {"event": data["button"]}
+        # return {"event": "call_method", "method": self.button_funcs[button]}
 
         pass

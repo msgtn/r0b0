@@ -9,6 +9,7 @@ logging.basicConfig(
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
+from r0b0.cables.mpi_cables import MPiCable
 
 
 CONFIG_DIR = os.path.abspath(
@@ -18,11 +19,16 @@ CONFIG_DIR = os.path.abspath(
 
 def main():
     # Start the server
-
     rig = Rig(
+        # Default: https://localhost:8080
+        # hostname='0.0.0.0',
         hostname=LOCALHOST,
         port=SERVER_PORT,
+        # Point to wherever you created the OpenSSL keys
+        certfile=os.path.join(os.path.dirname(__file__), "csr.pem"),
+        keyfile=os.path.join(os.path.dirname(__file__), "key.pem"),
     )
+
 
     # Create the gadgets
     mpi_camera = r0b0.gadgets.from_config(
