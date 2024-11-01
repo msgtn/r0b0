@@ -36,20 +36,25 @@ class Microphone2PromptCable(Cable):
     def __call__(self, data):
         super().__call__(data)
         # print("mic2prompt")
-        logging.info(f"Prompt: {data['text']}")
+        logging.debug(f"Prompt: {data['text']}")
         return {"event": "prompt", "prompt_string": data["text"]}
+
 
 class Text2PromptCable(Cable):
     def __init__(self):
-        self.input_event = "text"
+        self.input_event = "phone_text"
 
     def __call__(self, data):
         super().__call__(data)
         # print("mic2prompt")
-        logging.info(f"Prompt: {data['text']}")
+        # logging.info(f"Prompt: {data['text']}")
         logging.debug(f"Prompt: {data['text']}")
         return {"event": "prompt", "prompt_string": data["text"]}
 
+
+class Microphone2StopctrlCable(Cable):
+    def __init__(self):
+        self.input_event = ""
 
 
 def key2mic(data=None):
@@ -181,20 +186,24 @@ class Serial2PoseCable(Cable):
 
     def __call__(self, data):
         super().__call__(data)
-        return [
-            {"event": "stop", "namespace": "/"},
-            {
+        if data["detected"]:
+            pose_event = {
                 "event": "position",
                 "value": [0, 2000, 0, 1000],
                 "motor_id": [1, 2, 3, 4],
                 "absolute": True,
-            },
-        ]
+            }
+            return [
+                {"event": "stopControl", "namespace": "/"},
+                {"event": "stop", "namespace": "/"},
+                # {"event": "stopControl", "namespace": "/blsm_phone"},
+            ] + [pose_event]*3
+
 
 class Text2PoseCable(Cable):
     def __init__(self):
         self.input_event = "text"
-    
+
     def __call__(self, data):
         # TODO - could make this a staticmethod decorator?
         super().__call__(data)
@@ -220,4 +229,15 @@ class Response2PoseCable(Cable):
             "value": [500, 500, 500, 2000],
             "motor_id": [1, 2, 3, 4],
             "absolute": True,
+        }
+
+class Response2TypeCable(Cable):
+    def __init__(self):
+        self.input_event = "response"
+
+    def __call__(self, data):
+        super().__call__(data)
+        return {
+            "event": "write",
+            "text": data["text"]
         }
