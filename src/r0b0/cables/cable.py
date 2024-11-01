@@ -45,9 +45,10 @@ class Cable(object):
     def inner_call(self, *args, **kwargs):
         return {}
 
+
 # class TapeCable(Cable):
 #     """
-#     Helper class for "echoing" 
+#     Helper class for "echoing"
 #     """
 #     def __init__(self):
 #         self.input_event = "tape"
@@ -59,6 +60,7 @@ class Cable(object):
 #             "event":event,
 #             "data":
 #         }
+
 
 class Key2MouseCable(Cable):
     """
@@ -178,9 +180,10 @@ class Ser2MicCable(Cable):
 
     def __call__(self, data):
         super().__call__(data)
-        return {
-            "event": "listen",
-        }
+        if data["detected"]:
+            return {
+                "event": "listen",
+            }
 
 
 class Response2ListenCable(Cable):
@@ -189,6 +192,10 @@ class Response2ListenCable(Cable):
 
     def __call__(self, data):
         super().__call__(data)
-        return {
-            "event": "listen",
-        }
+        return [
+            {"event": "write", "text": data["text"]},
+
+            # {
+            #     "event": "listen",
+            # },
+        ]

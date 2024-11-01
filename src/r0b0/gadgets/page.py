@@ -30,7 +30,11 @@ class Page(Gadget):
 
         :param data: The data packet
         """
-        event = data.get("event", "unknown_event")
+        if isinstance(data, str):
+            event = data
+            data = {"event": event}
+        else:
+            event = data.get("event", "unknown_event")
         logging.debug(f"Page {self.name} received {event}")
         print(f"Page {self.name} received {event}")
 
@@ -118,4 +122,18 @@ class MobilePage(Page):
             event="text",
             data=data,
             namespace=self.namespace,
+        )
+
+    @decode_msg
+    def on_stopControl(self, data):
+        logging.debug(f"Stop Control {data}")
+
+        self.emit(
+            event="stopControl",
+            data={"event":"stopControl"},
+            # include_self=True,
+            # broadcast=True,
+            # include_self=False,
+            # namespace=self.namespace,
+            # namespace="/"
         )

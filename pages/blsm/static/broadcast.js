@@ -47,8 +47,12 @@ socket.on("watcher", async (id) => {
   console.log(`watcher from ${id}`)
   var peerConnection = new RTCPeerConnection(config);
   peerConnections[id] = peerConnection;
-  peerConnection = peerConnections[id];
-  const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: broadcastAudio });
+  // peerConnection = peerConnections[id];
+  const stream = await navigator.mediaDevices.getUserMedia(
+    { video: true, audio: broadcastAudio },
+    // { video: true,  },
+  );
+  console.log(stream);
   stream.getTracks().forEach((track) => { peerConnection.addTrack(track, stream) });
   peerConnection.onicecandidate = event => {
     if (event.candidate) {
@@ -102,7 +106,8 @@ function getDevices() {
 function gotDevices(deviceInfos) {
   window.deviceInfos = deviceInfos;
   console.log(deviceInfos);
-  for (const deviceInfo of deviceInfos.reverse()) {
+  // for (const deviceInfo of deviceInfos.reverse()) {
+  for (const deviceInfo of deviceInfos) {
     const option = document.createElement("option");
     option.value = deviceInfo.deviceId;
     if (deviceInfo.kind === "audioinput") {
@@ -133,6 +138,7 @@ function getStream() {
       // frameRate: {min:30}
     }
   };
+  console.log(constraints);
   return navigator.mediaDevices
     .getUserMedia(constraints)
     .then(gotStream)
@@ -142,6 +148,8 @@ function getStream() {
 function gotStream(stream) {
   window.stream = stream;
   // window.stream.applyConstraints({ frameRate: { min: 30 } });
+  console.log(stream);
+
   audioSelect.selectedIndex = [...audioSelect.options].findIndex(
     option => option.text === stream.getAudioTracks()[0].label
   );

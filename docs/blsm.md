@@ -1,6 +1,9 @@
 # Blossom
 
-*2023-07-14 This page is a work-in-progress.*
+![A layout of the robot's parts and the completed model with cover](https://github.com/msgtn/r0b0/blob/main/docs/assets/maker-faire.jpg)
+![View of the robot's inner skeleton and a layout of its constituent components](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm-teaser.jpg)
+
+*~~2023-07-14~~2024-11-01 This page is *still* a work-in-progress.*
 This page covers the build and use of a Blossom robot, specifically:
 - Building the robot hardware
 - Setting up the software

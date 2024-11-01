@@ -1,8 +1,9 @@
 import os
 import yaml
-import logging
-logging = logging.getLogger(__name__)
+# import logging
+# logging = logging.getLogger(__name__)
 from r0b0.config import CONFIG_DIR, LOCALHOST, SERVER_PORT
+from r0b0 import logging
 
 from functools import partial
 import pickle
@@ -84,8 +85,11 @@ def decode_msg(func):
     """
 
     logging.debug(f"Decoding message for {func}")
-    def _inner_func(s, data, **kwargs):
-        logging.debug(data)
+    def _inner_func(s, data, *args, **kwargs):
+
+        logging.debug(f"inner_func data {data}")
+        logging.debug(f"inner_func args {args}")
+        logging.debug(f"inner_func kwargs {kwargs}")
         if isinstance(data, dict) and "msg" in data:
 
             # Load from a hex-encoded string

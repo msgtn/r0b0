@@ -58,9 +58,9 @@ def main():
     # Create the gadgets
     blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_phone.yaml"))
-    microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
-    lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
-    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+    # microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
+    # lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
+    # ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
     # ser.listen()
 
     motion2motor_cable = Motion2MotorCable()
@@ -69,27 +69,27 @@ def main():
     ser2mic_cable = Ser2MicCable()
     res2listen_cable = Response2ListenCable()
 
-    listen = lambda: ser.listen()
-    lis = listen
-    blsm_txts = [
-        "blsm",
-        "BLSM",
-        "blossom",
-        "Blossom",
-        "b l o s s o m",
-        "B l o s s o m",
-        "B L O S S O M"
-    ]
-    # write_blsm = lambda: ser.write(random.choice(blsm_txts))
-    def write_blsm():
-        txt = random.choice(blsm_txts)
-        padding = (15-len(txt))//2
+    # listen = lambda: ser.listen()
+    # lis = listen
+    # blsm_txts = [
+    #     "blsm",
+    #     "BLSM",
+    #     "blossom",
+    #     "Blossom",
+    #     "b l o s s o m",
+    #     "B l o s s o m",
+    #     "B L O S S O M"
+    # ]
+    # # write_blsm = lambda: ser.write(random.choice(blsm_txts))
+    # def write_blsm():
+    #     txt = random.choice(blsm_txts)
+    #     padding = (15-len(txt))//2
 
-        empty_line = " "*15
-        txt = empty_line*3 + " "*padding + txt
+    #     empty_line = " "*15
+    #     txt = empty_line*3 + " "*padding + txt
 
-        ser.write(txt)
-    wb = write_blsm
+    #     ser.write(txt)
+    # wb = write_blsm
     def all_stop():
         [rig.stop(x) for x in list(rig.tapes.keys())]
     stop = all_stop
@@ -100,48 +100,48 @@ def main():
             rx_gadget=blsm_dxl,
             tx_gadget=blsm_phone,
         )
-        rig.add_cable(
-            cable=wav2motor_cable,
-            rx_gadget=blsm_dxl,
-            tx_gadget=lm,
-        )
-        rig.add_cable(
-            cable=Response2PoseCable(),
-            rx_gadget=blsm_dxl,
-            tx_gadget=lm,
-        )
-        rig.add_cable(
-            cable=Text2PoseCable(),
-            rx_gadget=blsm_dxl,
-            tx_gadget=microphone,
-        )
+        # rig.add_cable(
+        #     cable=wav2motor_cable,
+        #     rx_gadget=blsm_dxl,
+        #     tx_gadget=lm,
+        # )
+        # rig.add_cable(
+        #     cable=Response2PoseCable(),
+        #     rx_gadget=blsm_dxl,
+        #     tx_gadget=lm,
+        # )
+        # rig.add_cable(
+        #     cable=Text2PoseCable(),
+        #     rx_gadget=blsm_dxl,
+        #     tx_gadget=microphone,
+        # )
 
 
-    rig.add_cable(
-        cable=mic2prompt_cable,
-        rx_gadget=lm,
-        tx_gadget=microphone,
-    )
-    rig.add_cable(
-        cable=Text2PromptCable(),
-        tx_gadget=blsm_phone,
-        rx_gadget=lm,
-    )
-    if "ser" in locals():
-        rig.add_cable(
-            cable=res2listen_cable,
-            rx_gadget=ser,
-            tx_gadget=lm,
-        )
-        rig.add_cable(
-            cable=ser2mic_cable,
-            rx_gadget=microphone,
-            tx_gadget=ser)
-        rig.add_cable(
-            cable=Serial2PoseCable(),
-            rx_gadget=blsm_dxl,
-            tx_gadget=ser,
-        )
+    # rig.add_cable(
+    #     cable=mic2prompt_cable,
+    #     rx_gadget=lm,
+    #     tx_gadget=microphone,
+    # )
+    # rig.add_cable(
+    #     cable=Text2PromptCable(),
+    #     tx_gadget=blsm_phone,
+    #     rx_gadget=lm,
+    # )
+    # if "ser" in locals():
+    #     rig.add_cable(
+    #         cable=res2listen_cable,
+    #         rx_gadget=ser,
+    #         tx_gadget=lm,
+    #     )
+    #     rig.add_cable(
+    #         cable=ser2mic_cable,
+    #         rx_gadget=microphone,
+    #         tx_gadget=ser)
+    #     rig.add_cable(
+    #         cable=Serial2PoseCable(),
+    #         rx_gadget=blsm_dxl,
+    #         tx_gadget=ser,
+    #     )
 
     test_emit_dict = {
         "event": "position",
