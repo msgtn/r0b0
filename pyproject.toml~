@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blsm"
+description = "Library for connecting hardware and software, like aconnect for anything."
+authors = [
+    {name = "Michael Suguitan", email = "m.jp.sgtn@icloud.com"}
+]
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Repository = "https://github.com/msgtn/r0b0.git"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements/requirements.txt"] }
+optional-dependencies.robot = {file = ["requirements/robot.txt"] }
+optional-dependencies.chatbot = {file = ["requirements/chatbot.txt"]}
+

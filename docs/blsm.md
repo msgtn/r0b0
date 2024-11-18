@@ -1,7 +1,6 @@
 # Blossom
 
 ![A layout of the robot's parts and the completed model with cover](https://github.com/msgtn/r0b0/blob/main/docs/assets/maker-faire.jpg)
-![View of the robot's inner skeleton and a layout of its constituent components](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm-teaser.jpg)
 
 *~~2023-07-14~~2024-11-01 This page is *still* a work-in-progress.*
 This page covers the build and use of a Blossom robot, specifically:
@@ -11,11 +10,15 @@ This page covers the build and use of a Blossom robot, specifically:
 
 ## Build
 
+![View of the robot's inner skeleton and a layout of its constituent components](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm-teaser.jpg)
+
 The total component cost for the base Dynamixel-powered configuration is less than $200.
 The platform also supports a cheaper configuration using micro servos and an Arduino for approximately $50.
 
 
 ### Parts
+
+![](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm-instructions.png)
 The parts to print in `*.stl` format are [available here](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/).
 Each directory contains the whole runner (e.g. [blsm_A](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/blsm_A.stl) ) or individual parts (e.g. [A1](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_A/A1.stl)).
 I printed the parts on an entry-level [Creality Ender 3](https://www.creality.com/products/ender-3-3d-printer) and sliced the files in Cura using [this profile](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm-020.curaprofile).
