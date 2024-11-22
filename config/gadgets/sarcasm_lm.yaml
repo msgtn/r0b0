@@ -1,0 +1,7 @@
+type: ControlVectorLanguageModel
+model: llama3
+model_path: /Users/ms/Developer/work/repeng/notebooks/sarcasm_pt
+tokenizer_path: /Users/ms/Developer/work/repeng/notebooks/sarcasm_tokenizer
+vector_path: /Users/ms/Developer/work/repeng/notebooks/sarcasm_vector.gguf
+statedict_path: /Users/ms/Developer/work/repeng/notebooks/sarcasm_state_dict
+config_path: /Users/ms/Developer/work/repeng/notebooks/sarcasm_config

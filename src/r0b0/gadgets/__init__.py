@@ -32,6 +32,7 @@ GADGETS = {
     #    "eink": ["EInk"],
     #    "time_controller": ["TimeController"],
     "language_model": ["LanguageModel"],
+    "controlveclm": ["ControlVectorLanguageModel"],
     #    "time_controller": ["TimeController"],
     "pi_camera": ["PiCamera"],
     "pi_button": ["PiButton"],

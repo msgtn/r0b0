@@ -156,6 +156,65 @@ class MIDI2MicCable(Cable):
     def __call__(self, data):
         return {"event": "listen"}
 
+class MIDI2ControlVecCable(Cable):
+    def __init__(self):
+        self.input_event = "midi_cc"
+        self.min_len = 10
+        self.max_len = 60
+        self.min_temp = 0.5
+        self.max_temp = 1.5
+        self.vector_range = [-2, 2]
+        self.len_range = [10, 60]
+        self.temp_range = [0.5, 1.5]
+        self.rep_range = [0.8, 1.3]
+        self.cc_range = [0,127]
+    
+    def _map_range(self, input_range, output_range, value):
+        return (value / (input_range[1] - input_range[0])) \
+            * (output_range[1] - output_range[0]) \
+                + output_range[0]
+
+
+    def __call__(self, data):
+        # msg = pickle.loads(data["msg"])
+        # print(data)
+        # breakpoint()
+        # msg = data['msg']
+
+        # cc = msg.control
+        # logging.warning(data)
+        # TODO -
+        # 
+        # Ignore if not on first channel (0)
+        # if data["channel"] != 0:
+            # return
+
+        cc = data['value']
+        
+        event = None
+        match data['control']:
+            case 1:
+                event = "vector"
+                output_range = self.vector_range
+            case 2:
+                event = "max_len"
+                output_range = self.len_range
+            case 3:
+                event = "temperature"
+                output_range = self.temp_range
+            case 4:
+                event = "repetition_penalty"
+                output_range = self.rep_range
+            case _:
+                return 
+        value = self._map_range(self.cc_range, output_range, cc)
+
+        # if data['channel'] == 0 and data['control']==1:
+            # logging.warning(f"MIDI_CC: {cc}")
+        return {
+            "event": event,
+            "value": value,
+        }
 
 class Wav2MotorCable(Cable):
     def __init__(self):
