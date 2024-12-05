@@ -29,34 +29,34 @@ For detailed / business inquiries or direct commissions, please [contact me dire
 
 | Item                          | Description                                        | Quantity | Approx. cost | Link | Notes                                                                |
 | ----------------------------- | -------------------------------------------------- | -------- | ------------ | ---- | -------------------------------------------------------------------- |
-| Raspberry Pi Zero 2           | Main computer                                      | 1        | $15          |      |                                                                      |
-| Waveshare LCD module w/ D-Pad | Interface                                          | 1        | $15          |      |                                                                      |
-| PiSugar                       | Internal power supply                              | 1        | $40          |      | Any Pi Zero-mountable model; recommended is the 3 for USB-C charging |
+| Raspberry Pi Zero 2           | Main computer                                      | 1        | $15          | [Purchase](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/)     |                                                                      |
+| Waveshare LCD module w/ D-Pad | Interface                                          | 1        | $15          | [Purchase](https://www.waveshare.com/1.3inch-lcd-hat.htm)     |                                                                      |
+| PiSugar                       | Internal power supply                              | 1        | $40          | [Purchase](https://www.tindie.com/products/pisugar/pisugar-3-battery-for-raspberry-pi-zero/)     | Any Pi Zero-mountable model; recommended is the 3 for USB-C charging |
 | M2x8 bolts                    | For assembling the housing                         | 5        | <$1          |      |                                                                      |
 | M2 nuts                       | For assembling the housing and sync cable adapter  | 3        | <$1          |      |                                                                      |
 | M2x4(?) bolts                 | For mounting the sensor                            | 2        | <$1          |      |                                                                      |
 | Anti-static foam              | Spring for mounting sensor                         | 1        | <$1          |      | Commonly found on components with legs e.g. ICs, microcontrollers    |
 | Wires                         | For wiring the sync cable                          | 2        | <$1          |      |                                                                      |
-| 20x male header pins          | For stacking the LCD hat                           | 1        | <$1          |      |                                                                      |
-| 20x right-angle female header | For stacking the LCD while exposing the Pi's GPIOs | 1        | <$1          |      |                                                                      |
+| 1x20 male header pins          | For stacking the LCD hat                           | 1        | <$1          |      |                                                                      |
+| 1x20 right-angle female header | For stacking the LCD while exposing the Pi's GPIOs | 1        | <$1          | [Purchase](https://www.digikey.com/en/products/detail/sullins-connector-solutions/PPPC201LGBN-RC/775953)     |                                                                      |
 
 
 Choose one of the following sensors:
 
 | Item                          | Resolution | Crop factor | Approx. cost | Link | Notes                        |
 | ----------------------------- | ---------- | ----------- | ------------ | ---- | ---------------------------- |
-| Raspberry Pi HQ Camera Module | 12MP       | 5.5x        | $50          |      | Official first-party product | 
-| Arducam OwlSight              | 64MP       | 3.7x        | $50          |      | Requires disassembly         |
+| Raspberry Pi HQ Camera Module | 12MP       | 5.5x        | $50          | [Purchase](https://www.raspberrypi.com/products/raspberry-pi-high-quality-camera/)     | Official first-party product | 
+| Arducam OwlSight              | 64MP       | 3.7x        | $50          | [Purchase](https://www.arducam.com/product/arducam-1-1-32-64mp-autofocus-camera-module-for-raspebrry-pi/)     | Requires disassembly         |
 
 ### Print
 
 | Item               | Description                                                        | Link | Notes    |
 | ------------------ | ------------------------------------------------------------------ | ---- | -------- |
-| Housing            | Main housing                                                       |      |          |
-| Back plate         | Mounts to the back of the camera                                   |      |          |
-| Top cover          | Protects top of module, slides next to GPIO header                 |      | Optional |
-| Side cover         | Protects SD card                                                   |      | Optional |
-| Sync cable adapter | Syncs mechanical and electronic shutters through flash sync socket |      |          |
+| Housing            | Main housing                                                       | [Print](https://github.com/msgtn/r0b0/blob/mpi/docs/assets/mpi/mpi-housing.stl)     |          |
+| Back plate         | Mounts to the back of the camera                                   | [Print](https://github.com/msgtn/r0b0/blob/mpi/docs/assets/mpi/mpi-back-plate-arducam.stl)     |          |
+| Top cover          | Protects top of module, slides next to GPIO header                 | [Print](https://github.com/msgtn/r0b0/blob/mpi/docs/assets/mpi/mpi-top-cover.stl)     | Optional |
+| Side cover         | Protects SD card                                                   | [Print](https://github.com/msgtn/r0b0/blob/mpi/docs/assets/mpi/mpi-side-cover.stl)     | Optional |
+| Sync cable adapter | Syncs mechanical and electronic shutters through flash sync socket | [Print](https://github.com/msgtn/r0b0/blob/mpi/docs/assets/mpi/mpi-plug.stl)     |          |
 
 
 

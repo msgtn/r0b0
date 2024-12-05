@@ -1,6 +1,7 @@
 # `r0b0`
 
 ![](docs/assets/r0b0-new.png)
+
 *Example of `r0b0` network of gadgets.*
 
 r0b0 is a communication library for connecting hardware and software — an [`aconnect`](https://man.archlinux.org/man/aconnect.1.en) for anything.
