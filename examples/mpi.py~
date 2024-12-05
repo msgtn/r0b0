@@ -9,7 +9,6 @@ logging.basicConfig(
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
 from r0b0.rigs import Rig
-from r0b0.cables.mpi_cables import MPiCable
 
 
 CONFIG_DIR = os.path.abspath(

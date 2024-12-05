@@ -2,9 +2,11 @@ from r0b0.rigs.rig import Rig
 from r0b0.utils import loaders
 from r0b0.cables import msg_funcs
 from r0b0.config import LOCALHOST, SERVER_PORT
-from r0b0 import logging, \
+from r0b0 import \
     gadgets as gadget_shelf
 from functools import partial
+import logging
+
 
 import os, sys
 import argparse

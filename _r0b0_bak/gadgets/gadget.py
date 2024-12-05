@@ -109,7 +109,7 @@ class Gadget(Client, Thread):
             self,
             url=url,
             namespaces=[self.namespace, "/"],
-            wait_timeout=2,
+            wait_timeout=20,
         )
         Client.wait(self)
 
