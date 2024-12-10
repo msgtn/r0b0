@@ -11,15 +11,15 @@ completed: null
 
 # Instructions
 
-*Last modified: 241205*
+*Last modified: 241209*
 
-These instructions are for replicating the [Leica MPi](https://msgtn.xyz/mpi).
+These instructions are for replicating the [Leica MPi](https://msgtn.xyz/mpi) in its [current 2nd major revision](https://msgtn.xyz/m2pi).
 This is an intermediate-level project and requires familiarity with:
 - Physical fabrication: 3D printing, soldering
 - Microcomputers: Raspberry Pi, Linux, Python
 - Photography: basic concepts of exposure and focusing
 
-These instructions are very much a living document.
+These instructions are very much an in-progress living document.
 Please post general questions as [issues in this repository](https://github.com/msgtn/r0b0/issues).
 For detailed / business inquiries or direct commissions, please [contact me directly](mailto:m.jp.sgtn@icloud.com).
 
