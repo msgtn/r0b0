@@ -68,7 +68,7 @@ var mirrorSwitch = document
   .getElementById("mirrorSwitch")
   .querySelector("#mirror");
 mirrorSwitch.checked = true;
-mirrorSwitch.checked = false;
+// mirrorSwitch.checked = false;
 var watcherVideo = document.getElementById("watcherVideo");
 var audioSelect = document.getElementById("audioSource");
 var videoSelect = document.getElementById("videoSource");
