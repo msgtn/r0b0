@@ -13,12 +13,13 @@ from pygame import (
 )
 
 pygame.init()
+pgDisplay.init()
 pgJoystick.init()
 pgTime.Clock().tick(1)
-try:
-    pgDisplay.init()
-except pygame.error:
-    pass
+# try:
+#     pgDisplay.init()
+# except pygame.error:
+#     pass
 
 
 from r0b0 import gadgets as gadget_shelf, cables as r0b0_msgs, logging
@@ -207,8 +208,9 @@ class Rig(Host):
         Loop to handle a rig with PyGame objects
         Infinite loop to catch PyGame events
         """
-        T_LAST_EVENT = 0
+        T_LAST_EVENT = time.time()
         T_COOLDOWN = 300 / (10e3)
+        logging.debug("GOING INTO PYGAME EVENT HANDLER")
         while True:
             if (time.time() - T_LAST_EVENT) < T_COOLDOWN:
                 continue
@@ -231,7 +233,7 @@ class Rig(Host):
                     event=_event_name,
                     data=_event_dict,
                 )
-                # logging.debug(event_gadget)
+                logging.debug(event_gadget)
                 # logging.debug(_event_name)
                 # logging.debug(pygame_name)
                 if event_gadget is not None:

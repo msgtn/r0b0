@@ -153,6 +153,13 @@ class Host(Thread, SocketIO):
             self.add_emit,
         )
 
+        SocketIO.on_event(
+        # self.server.on(
+            self,
+            "stopControl",
+            lambda : partial(self.manual_emit, event="stopControl", data={"event":"stopControl"})
+        )
+
         self._webrtc_setup()
         self._player_setup()
 

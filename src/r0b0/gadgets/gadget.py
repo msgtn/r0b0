@@ -2,7 +2,9 @@
 The base Gadget class
 """
 
-import logging
+# import logging
+from r0b0 import logging
+# logging = logging.getLogger(__name__)
 from r0b0.config import LOCALHOST, SERVER_PORT, HEADER
 from r0b0.utils.loaders import decode_msg, encode_msg
 
@@ -56,7 +58,8 @@ class Gadget(Client, Thread):
         Client.__init__(
             self,
             ssl_verify=False,
-            logger=True,
+            # logger=True,
+            logger=False,
         )
         Thread.__init__(
             self,

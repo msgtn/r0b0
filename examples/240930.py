@@ -1,11 +1,12 @@
 import os
+import random
 import logging
 
 logging.basicConfig(
     encoding="utf-8",
-    level=logging.DEBUG,
+    # level=logging.DEBUG,
     # level=logging.WARNING,
-    # level=logging.INFO,
+    level=logging.INFO,
 )
 import r0b0
 from r0b0.config import LOCALHOST, SERVER_PORT
@@ -55,17 +56,43 @@ def main():
     )
 
     # Create the gadgets
-    # blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
+    blsm_dxl = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_dxl.yaml"))
     blsm_phone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "blsm_phone.yaml"))
     microphone = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "usb_audio.yaml"))
     lm = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "lm.yaml"))
-    # ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+    ser = r0b0.gadgets.from_config(os.path.join(CONFIG_DIR, "serial.yaml"))
+    # ser.listen()
 
     motion2motor_cable = Motion2MotorCable()
     mic2prompt_cable = Microphone2PromptCable()
     wav2motor_cable = Wav2MotorCable()
     ser2mic_cable = Ser2MicCable()
     res2listen_cable = Response2ListenCable()
+
+    listen = lambda: ser.listen()
+    lis = listen
+    blsm_txts = [
+        "blsm",
+        "BLSM",
+        "blossom",
+        "Blossom",
+        "b l o s s o m",
+        "B l o s s o m",
+        "B L O S S O M"
+    ]
+    # write_blsm = lambda: ser.write(random.choice(blsm_txts))
+    def write_blsm():
+        txt = random.choice(blsm_txts)
+        padding = (15-len(txt))//2
+
+        empty_line = " "*15
+        txt = empty_line*3 + " "*padding + txt
+
+        ser.write(txt)
+    wb = write_blsm
+    def all_stop():
+        [rig.stop(x) for x in list(rig.tapes.keys())]
+    stop = all_stop
 
     if "blsm_dxl" in locals():
         rig.add_cable(

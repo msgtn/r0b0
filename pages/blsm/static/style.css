@@ -6,6 +6,7 @@
   height: 34px;
   top: 0px;
   vertical-align: middle;
+  text-align: center;
 }
 
 /* Hide default HTML checkbox */
@@ -328,22 +329,52 @@ div {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 150%;
+  height: 100%;
   margin: auto;
+  /* margin: 10px; */
   background-color: black;
-  opacity: 0.8;
-  padding-top:5%;
-  padding-bottom:5%;
+  opacity: 0.6;
+  /* padding-top:10px; */
+  padding-top:20px;
+  padding-bottom:10px;
 }
 
 .element {
   /* height: 100px; You can adjust this as per your requirement */
   /* background-color: lightblue; */
-  border-radius: 10px;
+  border-radius: 0px;
   /* padding: 1em; */
   font-size: smaller;
   color: white;
-  min-width: 30%;
+  /* min-width: 30%; */
+  width: 100%;
+  /* max-height: 80%; */
+  vertical-align: middle;
+  /* margin-right: 5px; */
+  box-sizing: border-box;
+  /* display: flex;  */
+  justify-content: center;
+  /* position:absolute; */
+  top: 50%;
+  text-align: center;
+  display:inline-block;
+  /* line-height:1%; */
+  line-height:1px;
+  /* margin: 10px; */
+}
+
+.textButton {
+  /* height: 100px; You can adjust this as per your requirement */
+  /* background-color: lightblue; */
+  /* border-radius: 10px; */
+  border-radius: 0px;
+  /* padding: 1em; */
+  font-size: smaller;
+  color: white;
+  /* min-width: 30%; */
+  /* min-width: 25%; */
+  width: 100%;
+  min-height:100%;
   /* max-height: 80%; */
   vertical-align: middle;
   /* margin-right: 5px; */
@@ -353,6 +384,48 @@ div {
   /* position:absolute; */
   top: 50%;
 }
+.textButton button {
+  min-width: 80%;
+}
+.textButton i {
+  font-size: x-large;
+  /* min-height:800%; */
+  /* min-width: 80%; */
+}
+
+
+.playerButton {
+  /* height: 100px; You can adjust this as per your requirement */
+  /* background-color: lightblue; */
+  border-radius: 10px;
+  /* padding: 1em; */
+  font-size: smaller;
+  color: white;
+  /* min-width: 30%; */
+  /* min-width: 25%; */
+  min-height:100%;
+  width: 20%;
+  /* max-height: 80%; */
+  vertical-align: middle;
+  /* margin-right: 5px; */
+  box-sizing: border-box;
+  display: flex; 
+  justify-content: center;
+  /* position:absolute; */
+  top: 50%;
+  /* aspect-ratio: 1; */
+}
+.playerButton button {
+  min-width: 80%;
+}
+.playerButton i {
+  font-size: x-large;
+  /* min-height:800%; */
+  /* min-width: 80%; */
+}
+
+
+
 
 
 
@@ -395,4 +468,21 @@ video {
     display: inline-block;
     width: 100%;
     text-align: justify;
+}
+
+p {
+  margin: 0;
+  padding:0;
+}
+
+#loopSwitch {
+  /* font-size:1px; */
+  /* margin-top:-10px; */
+  /* line-height: 0%; */
+  /* content: "test"; */
+  position: relative;
+  top: 10px;
+}
+#loop {
+  width: 20%;
 }

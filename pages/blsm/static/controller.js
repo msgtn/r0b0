@@ -64,6 +64,11 @@ var controlSwitch = document
 var appendageSwitch = document
   .getElementById("appendageSwitch")
   .querySelector("#control");
+var mirrorSwitch = document
+  .getElementById("mirrorSwitch")
+  .querySelector("#mirror");
+mirrorSwitch.checked = true;
+mirrorSwitch.checked = false;
 var watcherVideo = document.getElementById("watcherVideo");
 var audioSelect = document.getElementById("audioSource");
 var videoSelect = document.getElementById("videoSource");
@@ -72,8 +77,11 @@ var recordButton = document.getElementById("record");
 var touchPad = document.getElementById("touchpad");
 var tapeRow = document.getElementById("tapeRow");
 var sourceRow = document.getElementById("sourceRow");
-var tapeName = document.getElementById("tapeName");
+var wholeCover = document.getElementById("wholeCover");
+// var tapeName = document.getElementById("tapeName");
 var controlStuff = document.getElementById("controlStuff");
+var loop = document.getElementById("loopSwitch"
+).querySelector("#loop")
 recordButton.classList.add("notRec");
 recording = false;
 
@@ -102,13 +110,15 @@ if (mobileDevice) {
   // touchPad.style.display = "none";
 }
 touchPad.style.display = "none";
-tapeRow.style.display = "none";
+// tapeRow.style.display = "none";
 sourceRow.style.display = "none";
 controlStuff.style.position = "absolute";
 controlStuff.style.bottom = 0;
 controlStuff.style.display = "flex";
 // controlStuff.style.display = "flex";
-
+indicatorContainer = document.getElementById("indicatorContainer")
+indicatorContainer.style.display = "none";
+endpointIndicator.style.display = "none";
 
 
 let tailHeight = 0.2;
@@ -204,6 +214,16 @@ function startup() {
 
   let peerConnection;
 
+  socket.on("test", () => {
+    console.log("received test");
+  });
+
+  socket.on("stopControl", () => {
+    controlSwitch.checked = false;
+    onControl();
+  });
+
+
   socket.on("connect", () => {
     socket.emit("watcher", socket.id);
   });
@@ -226,11 +246,11 @@ function startup() {
     peerConnection = new RTCPeerConnection(config);
     peerConnections[id] = peerConnection;
 
-    const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
+    // const stream = await navigator.mediaDevices.getUserMedia(streamConstraints);
 
-    stream.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, stream);
-    });
+    // stream.getTracks().forEach((track) => {
+    //   peerConnection.addTrack(track, stream);
+    // });
 
     peerConnection
       .setRemoteDescription(description)
@@ -241,6 +261,7 @@ function startup() {
       });
     peerConnection.ontrack = (event) => {
       broadcasterVideo.srcObject = event.streams[0];
+      // broadcasterVideo.srcObject = event.streams[];
       console.log(event.streams);
       console.log(event.streams[0]);
     };
@@ -372,7 +393,9 @@ const handleOrientation = (e) => {
       // tail: tailPos,
       landscape: false,
       // mirror: !externalCam,
-      mirror: true,
+      // mirror: true, # this is actually unmirrored (fpv)
+      // mirror: false,  // this is actually mirrored (3pv)
+      mirror: !mirrorSwitch.checked,
       // mirror: false,
       heightCtrl: false,
       // armsCtrl: appendageSwitch.checked,
@@ -414,6 +437,7 @@ function onControl() {
     if (controlSwitch.checked && calibrateEveryControl) {
       calibrateYaw();
     }
+    stopTape();
     // feature detect
     if (iosDevice) {
       DeviceMotionEvent.requestPermission()
@@ -446,6 +470,7 @@ function onRecord() {
     event: "device_motion",
     id: socket.id,
   });
+  setTimeout(updateTapes(), 2000);
 }
 
 function onLoad() {
@@ -527,12 +552,14 @@ getStream(audioSelect).then(getDevices).then(gotDevices);
 getStream(videoSelect).then(getDevices).then(gotDevices);
 
 function onText() {
+  controlSwitch.checked = false;
+  onControl();
   let res = window.prompt("Type a message to Blossom");
   if (res == null || res == "") {
 
   } else {
-    socket.emit("text", {
-      event: "text",
+    socket.emit("phone_text", {
+      event: "phone_text",
       text: res,
       id: socket.id,
     });
@@ -540,4 +567,74 @@ function onText() {
   }
 }
 
+// const socket = io.connect(socketAddr)
+const tapesSelect = document.getElementById("tapes");
+// const loop = document.getElementById("loop");
+
+
+function updateTapes() {
+  fetch(`${socketAddr}/tapes`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(tapesSelect);
+      console.log(data);
+      data = data.reverse();
+      data.map((lang, i) => {
+        let opt = document.createElement("option");
+        opt.value = i; // the index
+        opt.innerHTML = lang.replace(".json", "");
+        console.log(opt);
+        // tapesSelect.append(opt);
+        tapesSelect[i] = opt;
+      })
+    })
+    ;
+}
+
+function playTape() {
+  controlSwitch.checked = false; onControl();
+  socket.emit("play",
+    {
+      'tape_name': selectedTape(),
+      'loop': loop.checked,
+    }
+  )
+}
+
+function selectedTape() {
+  let tapesSelect = document.getElementById("tapes");
+  return tapesSelect.options[tapesSelect.selectedIndex].text;
+}
+
+function stopTape() {
+  // controlSwitch.checked = false; onControl();
+  socket.emit("stop",
+    {
+      "tape_name": selectedTape(),
+    }
+  )
+}
+
+if (false) {
+  wholeCover.style.display = "none";
+  // tapeRow.style.display = "none";
+  // controlStuff.style.display = "none";
+  let res = window.prompt("Please type the 4-digit code:");
+  if (res == null || res == "") {
+
+  } else {
+    if (res == "1234") {
+      wholeCover.style.display = "inline";
+      // tapeRow.style.display = "inline";
+      // controlStuff.style.display = "inline";
+
+      startup();
+
+      updateTapes();
+    }
+  }
+}
+
+// wholeCover.style.display = "inline";
 startup();
+updateTapes();

@@ -10,6 +10,11 @@ tapes/*
 *notes.md
 *DS_Store*
 
+# vim
+*~
+*.swp
+*.swo
+
 # speech recognition models
 vosk*
 model

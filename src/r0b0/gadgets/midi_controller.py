@@ -62,9 +62,21 @@ class MIDIController(Gadget):
                 # print(midi_msg,midi_msg.event, )
                 # Gadget.emit(
                 #     self,
+                emit_dict = {"event": midi_msg.event, "msg": midi_msg}
+                for attr in midi_msg.__dict__:
+                    if attr[0] != '_':
+                        emit_dict.update({
+                            attr: getattr(midi_msg, attr)
+                        })
+                event = midi_msg.event
+
+                # if hasattr(midi_msg, "value"):
+                #     emit_dict.update({
+                #         "value":midi_msg.value
+                #     })
                 self.emit(
-                    event=midi_msg.event,
-                    data={"event": midi_msg.event, "msg": midi_msg},
+                    event=event,
+                    data=emit_dict,
                     namespace=self.namespace,
                 )
 

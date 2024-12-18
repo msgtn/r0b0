@@ -3,7 +3,7 @@ requires = ["setuptools >= 61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "r0b0-io"
+name = "blsm-io"
 description = "Library for connecting hardware and software, like aconnect for anything."
 authors = [
     {name = "Michael Suguitan", email = "m.jp.sgtn@icloud.com"}

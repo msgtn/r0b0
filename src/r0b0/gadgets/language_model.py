@@ -64,15 +64,24 @@ class LanguageModel(Gadget):
         # Prepend the prompt
         res = f"{random.choice(HEARD_MSGS)}: '{msg.prompt_string}.' {res}"
         self.emit(
-            event="response", data={"event": "response"}, namespace=self.namespace
+            event="response", data={"event": "response", "text":res}, namespace=self.namespace
         )
+        logging.debug(f"{self}: {res}")
+        # breakpoint()
         if vocalize:
             self.vocalize(res)
         
+    def strip_text(self, text):
+        empty_chars = [":", ";", "/", "'", "\""]
+        for c in empty_chars:
+            text = text.replace(c," ")
+        return text
+
     def vocalize(self, text):
+        stripped_text = self.strip_text(text)
         # TODO - cut up by sentence to compensate for drift between voice and text?
         wav = self.create_wav(
-            stringy=self.process_text(text),
+            stringy=self.process_text(stripped_text),
             # pitch="med",
             pitch="low",
         )
@@ -150,6 +159,7 @@ class LanguageModel(Gadget):
         t_start = time.time()
         n_chars = len(input_string)
         t_delay = duration / n_chars
+        logging.warning(f"{t_delay:0.5f}")
         for c in input_string:
             print(c, end="")
             sys.stdout.flush()
@@ -235,7 +245,8 @@ class LanguageModel(Gadget):
                 not char.isalpha() and char != "."
             ):  # skip characters that are not letters or periods.
                 continue
-            infiles.append(sounds[char])
+            if char in sounds:
+                infiles.append(sounds[char])
 
         combined_sounds = None
 
@@ -264,3 +275,5 @@ class LanguageModel(Gadget):
 
         return combined_sounds
         # combined_sounds.export(out_file, format="wav")
+
+
