@@ -1,4 +1,5 @@
 from .gadget import Gadget, Message
+from .ST7789 import ST7789
 from r0b0.config import TAPES_DIR
 from r0b0.utils.loaders import decode_msg
 from r0b0 import get_timestamp
@@ -22,12 +23,18 @@ from functools import partial
 import glob
 import subprocess
 import libcamera
+from libcamera import Transform
+from PIL import Image
 
 # Picamera2.set_logging(Picamera2.CRITICAL)
 shutter_speeds = [1 / 30, 1 / 250, 1 / 1000]
 shutter_speed_idx = 0
 # RESOLUTION = (1920, 1080)
 RESOLUTION = (2028, 1520)
+RESOLUTION = (2400, 1800)
+# RESOLUTION = (4624, 3472)
+# RESOLUTION = (2828, 2120)
+ROTATE = libcamera.Transform(hflip=1, vflip=1)
 STILL_CONFIG_DICT = {
     "size": RESOLUTION,
 }
@@ -35,21 +42,31 @@ FRAMERATE = 15
 ISO = 800
 SHUTTER_BLINK_SLEEP = 0.5
 SENSOR_MODE = 3
-ROTATE = libcamera.Transform(hflip=1, vflip=1)
-FLASH = LED(24)
+FLASH = LED(12)
 
 get_file_number = lambda save_dir: len(glob.glob(str(save_dir / "*")))
 
+get_strftime = lambda : time.strftime('%y%m%d_%H%M%S')
+
+subprocess.call(['raspi-gpio', 'set', '24', 'op'])
+subprocess.call(['raspi-gpio', 'set', '24', 'dl'])
 
 class PiCamera(Gadget, Picamera2):
     def __init__(self, config, **kwargs):
         Gadget.__init__(self, config, **kwargs)
         # _PiCamera.__init__(self, sensor_mode=SENSOR_MODE)
         Picamera2.__init__(self)
+        self.lcd_display = ST7789()
+        self.lcd_display.Init()
+        self.lcd_display.clear()
+        self.lcd_display.bl_DutyCycle(0)
+
+        ROTATE = libcamera.Transform(hflip=1, vflip=1)
         still_config = Picamera2.create_still_configuration(
                 self, 
                 *[STILL_CONFIG_DICT]*3,
-                transform=ROTATE, 
+                # transform=ROTATE, 
+                transform=Transform(hflip=1, vflip=1), 
                 # buffer_count=4,
                 queue=False
                 )
@@ -68,6 +85,7 @@ class PiCamera(Gadget, Picamera2):
             # "AnalogueGain":1.0,
             "AnalogueGain":4.0,
             })
+        ROTATE = libcamera.Transform(hflip=1, vflip=1)
         # self.set_logging(self.CRITICAL)
 
         # breakpoint()  
@@ -87,6 +105,9 @@ class PiCamera(Gadget, Picamera2):
         self.on("d_right", handler=self.shutter60, namespace=self.namespace)
         self.on("d_up", handler=self.shutter250, namespace=self.namespace)
         self.on("d_left", handler=self.shutter1000, namespace=self.namespace)
+        self.on("k1", handler=self.on_show_image, namespace=self.namespace)
+        self.on("k2", handler=self.on_show_image, namespace=self.namespace)
+        self.on("k3", handler=self.on_show_image, namespace=self.namespace)
 
         self.on(
             "set_shutter_speed",
@@ -100,7 +121,7 @@ class PiCamera(Gadget, Picamera2):
 
     @decode_msg
     def release_shutter(self, msg, save_dir=TAPES_DIR, **kwargs):
-        if time.time()-self.t_last < 0.5:
+        if self.exposing or time.time()-self.t_last < 0.5:
             return
         subprocess.call(['raspi-gpio', 'set', '47', 'dh'])
         logging.debug(f"Shutter released")
@@ -113,7 +134,7 @@ class PiCamera(Gadget, Picamera2):
         flash_thread.start()
         self._capture_file(save_dir, **kwargs)
 
-    def trigger_flash(self, period=1/4):
+    def trigger_flash(self, period=1/6):
         num_files_0 = get_file_number(TAPES_DIR)
         while not self.exposing:
             continue
@@ -133,12 +154,16 @@ class PiCamera(Gadget, Picamera2):
     def _capture_file(self, save_dir=TAPES_DIR, **kwargs):
         self.t_last = time.time()
         logging.info("Taking picture")
-        filename = str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
+        # filename = str(TAPES_DIR / f"picam_{get_file_number(TAPES_DIR)}.jpg")
+        filename = str(TAPES_DIR / f"picam_{get_strftime()}.jpg")
         t_start = time.time()
         self.exposing = True
         self.capture_file(filename, wait=True)
-        # image = self.capture_image("main")
-        # image.save(filename)
+        # image = self.capture_image("main", wait=True)
+
+        # image = Image.open(filename)
+        # image = image.transpose(Image.ROTATE_180)
+        # image.save(filename, exif=image.info["exif"])
         self.exposing = False
         t_end = time.time()
         del_t = t_end - t_start
@@ -171,7 +196,7 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.debug("Shutter: 1/60")
-        self.set_controls({"ExposureTime": int(1e6 / 60)})
+        self.set_controls({"ExposureTime": int(1e6 / 15)})
         return
 
     @decode_msg
@@ -180,7 +205,7 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.debug("Shutter: 1/250")
-        self.set_controls({"ExposureTime": int(10e5 / 250)})
+        self.set_controls({"ExposureTime": int(1e6 / 60)})
         return
 
     @decode_msg
@@ -189,7 +214,7 @@ class PiCamera(Gadget, Picamera2):
         msg,
     ):
         logging.debug("Shutter: 1/1000")
-        self.set_controls({"ExposureTime": int(10e5 / 1000)})
+        self.set_controls({"ExposureTime": int(1e6 / 250)})
         return
 
     @decode_msg
@@ -199,3 +224,26 @@ class PiCamera(Gadget, Picamera2):
         ss = int(msg.shutter_speed)
         logging.debug(f"Shutter: {ss}")
         self.set_controls({"ExposureTime": ss})
+
+    @decode_msg
+    def on_show_image(self, data):
+        filename = str(TAPES_DIR / "picam_2412*")
+        filename = sorted(glob.glob(filename))[-1]
+        # filename = str(TAPES_DIR / "picam_9999.jpg")
+        filename = os.path.abspath(filename)
+
+        
+        subprocess.call(['raspi-gpio', 'set', '24', 'dh'])
+        logging.warning(filename)
+        print(filename)
+        image = Image.open(filename)
+        image = image.resize((240,240))
+        self.lcd_display.clear()
+        self.lcd_display.bl_DutyCycle(50)
+
+        self.lcd_display.ShowImage(image)
+        time.sleep(2)
+        self.lcd_display.clear()
+        self.lcd_display.bl_DutyCycle(0)
+
+        subprocess.call(['raspi-gpio', 'set', '24', 'dl'])
