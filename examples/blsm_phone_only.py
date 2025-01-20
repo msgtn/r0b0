@@ -16,7 +16,8 @@ def main():
 
     with open(
         os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "../ngrok_public_url.txt")
+            # os.path.join(os.path.dirname(__file__), "../ngrok_public_url.txt"),
+            os.path.join(os.path.dirname(__file__), "../ngrok_free_url.txt"),
         ),
         "r",
     ) as _file:

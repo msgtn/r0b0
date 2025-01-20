@@ -32,4 +32,5 @@ ROBOT_PORT = 9090
 HEADER = "https"
 
 SOCKET_ADDR = "https://r0b0.ngrok.io"
+# SOCKET_ADDR = "https://together-still-ferret.ngrok-free.app"
 # SOCKET_ADDR = "https://{LOCALHOST}:{SERVER_PORT}"
