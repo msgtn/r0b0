@@ -1,7 +1,0 @@
-name: mpk37
-type: MIDIController
-hostname: localhost
-port: 9000
-port_name: MPK mini Plus
-# port_name: OP-Z
-channel: 1

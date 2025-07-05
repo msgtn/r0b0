@@ -1,8 +1,0 @@
-name: joyblossom
-gadgets:
-- x3d
-- blossomsingle
-cables:
-- cable: joy2motor
-  tx_gadget: x3d
-  rx_gadget: blossomsingle

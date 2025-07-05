@@ -1,7 +1,0 @@
-gadgets:
-- blsm_ard
-- blsm_phone
-cables:
-- cable: motion2arduino_motor
-  tx_gadget: blsm_phone
-  rx_gadget: blsm_ard

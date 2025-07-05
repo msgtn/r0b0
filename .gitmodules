@@ -1,3 +1,0 @@
-[submodule "deps/dynamixel_python"]
-	path = deps/dynamixel_python
-	url = https://github.com/psychomugs/dynamixel_python

@@ -1,8 +1,0 @@
-gadgets:
-- opz
-- open_arm
-cables:
-- cable: midi_rel2position
-  tx_gadget: opz
-  rx_gadget: open_arm
-  

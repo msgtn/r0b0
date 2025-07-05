@@ -1,7 +1,0 @@
-gadgets:
-- blsm_dxl
-- blsm_phone
-cables:
-- cable: motion2motor
-  tx_gadget: blsm_phone
-  rx_gadget: blsm_dxl

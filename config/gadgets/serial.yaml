@@ -1,9 +1,0 @@
-type: SerialGadget
-# Need to us cu, not tty, when monitoring
-# I guess the Pico extension is on tty, 
-# and need to use another port
-# serial_port: /dev/cu.usbmodem1101
-serial_port: /dev/cu.usbmodem11201
-# serial_port: /dev/tty.usbmodem1101
-# timeout: null
-timeout: 2

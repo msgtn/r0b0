@@ -1,9 +1,0 @@
-name: up
-gadgets:
-- opz
-- upbot
-cables:
-- cable: cc2motor
-  tx_gadget: opz
-  rx_gadget: upbot
-  

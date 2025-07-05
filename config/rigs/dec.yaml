@@ -1,9 +1,0 @@
-name: dec
-gadgets:
-- opz
-- blossom
-cables:
-- cable: note2motor
-  tx_gadget: opz
-  rx_gadget: blossom
-  

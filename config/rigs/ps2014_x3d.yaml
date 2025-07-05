@@ -1,7 +1,0 @@
-gadgets:
-- ps2014
-- x3d
-cables:
-- cable: joy2vel
-  tx_gadget: x3d
-  rx_gadget: ps2014

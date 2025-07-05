@@ -1,6 +1,0 @@
-name: eink_page
-type: Page
-route_urls:
-  /: index.html
-event_kwargs: 
-  file_upload:
