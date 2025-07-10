@@ -15,9 +15,10 @@ UTILS_DIR = SRC_DIR / "utils"
 MESSAGES_DIR = SRC_DIR / "messages"
 CABLES_DIR = SRC_DIR / "cables"
 BROWSER_DIR = SRC_DIR / "browser"
+KEYS_DIR = ROOT_DIR / ".keys"
 
-CSR_PEM = SRC_DIR / "csr.pem"
-KEY_PEM = SRC_DIR / "key.pem"
+CSR_PEM = KEYS_DIR / "csr.pem"
+KEY_PEM = KEYS_DIR / "key.pem"
 
 STATIC_DIR = GADGETS_DIR / "static"
 PUBLIC_DIR = GADGETS_DIR / "public"
