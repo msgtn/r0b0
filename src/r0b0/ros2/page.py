@@ -13,6 +13,8 @@ import rclpy
 from flask import Flask, render_template, request
 from rclpy.node import Node
 from std_msgs.msg import String
+from geometry_msgs.msg import Vector3
+from r0b0_interfaces.msg import DeviceMotion
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 
@@ -83,6 +85,8 @@ class BlsmPageNode(WebPageNode):
                 _event, getattr(self, _event), namespace="/")
         self.broadcaster_id = None
         self.pub = self.create_publisher(String, "/blsm", 10)
+        self.device_motion_pub = self.create_publisher(
+            DeviceMotion, "/blsm/device_motion", 10)
         self.server_thread = Thread(target=self.start_web_server)
 
     def broadcaster(self, sid):
@@ -134,8 +138,14 @@ class BlsmPageNode(WebPageNode):
         ...
         # breakpoint()
 
-    def device_motion(self, *args, **kwargs):
-        print(args, kwargs)
+    def device_motion(self, msg):
+
+        self.device_motion_pub.publish(DeviceMotion(
+            xyz=Vector3(**{k: float(msg[k]) for k in ["x", "y", "z"]}),
+            ears=msg["ears"],
+            portrait=msg["portrait"],
+            mirror=msg["mirror"]
+        ))
 
     def setup_routes(self):
         """Define routes for the Flask app."""
