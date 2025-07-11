@@ -433,6 +433,7 @@ function onControl() {
     if (controlSwitch.checked && calibrateEveryControl) {
       calibrateYaw();
     }
+    // need to comment this out or else will not send
     // stopTape();
     // feature detect
     if (iosDevice) {
