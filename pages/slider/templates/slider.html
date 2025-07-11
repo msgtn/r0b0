@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Slider</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .slider-container {
+            margin: 20px auto;
+            width: 50%;
+        }
+        .slider-value {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Slider Example</h1>
+    <div class="slider-container">
+        <input type="range" id="slider" min="0" max="100" value="50">
+        <div class="slider-value">Value: <span id="sliderValue">50</span></div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        // Add an event listener for the slider input
+        slider.addEventListener('input', () => {
+            // Update the displayed value
+            sliderValue.textContent = slider.value;
+
+            // Emit a custom event named "slider" with the slider value
+            const sliderEvent = new CustomEvent('slider', {
+                detail: { value: slider.value }
+            });
+            slider.dispatchEvent(sliderEvent);
+        });
+
+        // Example: Listen for the "slider" event
+        slider.addEventListener('slider', (event) => {
+            console.log(`Slider value changed to: ${event.detail.value}`);
+        });
+    </script>
+</body>
+</html>

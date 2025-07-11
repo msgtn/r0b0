@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>r0b0 controller</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+
+  <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js" type="text/javascript"></script>
+  <script src="{{ url_for('static',filename='socket_addr.js') }}"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+</head>
+
+<body style="margin:0; height: 50%">
+  <!-- test  -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+
+  <div id="wholeCover">
+    <!-- </div> -->
+    <!-- <div id="tapeStuff" style="position: absolute; bottom:-1"> -->
+    <!-- <div id="tapeRow" class="row"> -->
+    <div id="tapeRow" class="controlBar" style="padding-bottom:15px">
+      <!-- <div id="tapeRow" class="controlBar" > -->
+      <!-- <label for="tape" style="font-family:sans-serif;">Playback:</label> -->
+      <!-- <input type="text" id="tapeName" name="tapeName"></input> -->
+
+      <div class="playerButton">
+        <button class="button" id="textButton" onClick="onText();">
+          <i class="fa fa-comment"></i>
+
+        </button>
+      </div>
+      <select name="tapes" id="tapes" style="max-width: 20%""></select>
+    <!-- <button class=" button" id="loadTape" value="Load" onclick="onLoad();"></button> -->
+        <!-- <button class="button" id="update" value="Update" onclick="updateTapes();">Update</button> -->
+        <!-- <input type="checkbox" id="loop" value="Loop">Loop</input> -->
+        <div class="element" id="loopSwitch" justify-content="center" style="width:20%; top:-10px">
+          <p style="font-family:sans-serif;">LOOP</p>
+          <!-- <br> -->
+          <!-- <i class="fa fa-repeat"></i> -->
+          <label class="switch">
+            <input id="loop" type="checkbox">
+            <span class="slider round" style="font-family:sans-serif;">
+              <!-- <i class="fa fa-repeat"></i> -->
+            </span>
+          </label>
+        </div>
+        <!-- <label class="switch"> -->
+        <!-- <input id="loop" type="checkbox"> -->
+        <!-- <span class="slider round" style="font-family:sans-serif;"></span> -->
+        <!-- </label> -->
+        <div class="playerButton">
+          <button class="button" id="play" value="Play" onclick="playTape();">
+            <i class="fa fa-play-circle"></i>
+          </button>
+        </div>
+        <div class="playerButton">
+          <button class="button" id="stop" value="STOP" onclick="stopTape();">
+            <i class="fa fa-stop-circle"></i>
+          </button>
+        </div>
+
+    </div>
+
+
+
+    <div id="videoContainer" align="right" z-index="-10">
+
+      <div id="watcherVideoContainer" align="left" position="relative" display="flex">
+        <video playsinline autoplay id="watcherVideo" align="left" position="absolute" z-index="-15"></video>
+      </div>
+      <div id="indicatorContainer" class="overlay">
+        <p id="recordingIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+      </div>
+    </div>
+
+    <video playsinline autoplay id="broadcasterVideo"></video>
+
+    <div class="overlay">
+      <p id="endpointIndicator" style="font-family:sans-serif;font-size:100px;color:white"></p>
+    </div>
+
+    <canvas id="touchpad" style="height:10%; width:100%; border:1px solid #000000;">
+      <span class="right">RIGHT ARM</span>
+      <span class="left">LEFT ARM</span>
+    </canvas>
+  <!-- </div> -->
+  <div id="appendageSwitch" align="left" align-items="center" justify-content="center" style="width: 0">
+    <p style="font-family:sans-serif;">ARMS</p>
+    <label class="switch">
+      <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+      <span class="slider round" style="font-family:sans-serif;"></span>
+    </label>
+  </div>
+
+
+
+  <!-- <div id="controlStuff" style="position: absolute; bottom:0; max-width: 100%"> -->
+  <!-- <div id="controlStuff" style="position: absolute; bottom:0; width:100%"> -->
+  <!-- <div id="controlStuff" style="position: absolute; bottom:0; width:inherit"> -->
+  <!-- <div id="controlStuff" class="rowContainer"> -->
+  <!-- <div id="controlStuff" style="position: absolute; bottom:0"> -->
+  <!-- <div id="controlStuff" style="display: flex"> -->
+  <div id="controlStuff" style="width: 100%; justify-content: space-between; margin: auto">
+    <!-- <div id="controlBar" style="display: flex"> -->
+    <div class="controlBar" id="controlBar">
+
+      <div class="element" id="mirrorSwitch" justify-content="center">
+        <p style="font-family:sans-serif;">MIRROR</p>
+        <!-- <br> -->
+        <!-- MIRROR -->
+        <label class="switch">
+          <input id="mirror" type="checkbox">
+          <span class="slider round" style="font-family:sans-serif;"></span>
+        </label>
+      </div>
+      <div class="element">
+        <button class="button recButton" id="record" value="Record" onclick="onRecord();"></button>
+      </div>
+      <div class="element" id="controlSwitch" align="right" align-items="center" justify-content="center">
+        <p style="font-family:sans-serif;">CONTROL</p>
+        <!-- <br> -->
+        <label class="switch">
+          <input id="control" type="checkbox" onclick="onControl()" disabled=true>
+          <span class="slider round" style="font-family:sans-serif;"></span>
+        </label>
+      </div>
+    </div>
+    <div id="sourceRow" class="row">
+      <section class="select">
+        <label for="videoSource">Video source: </label>
+        <select id="videoSource"></select>
+      </section>
+      <section class="select">
+        <label for="audioSource">Audio source: </label>
+        <select id="audioSource"></select>
+      </section>
+    </div>
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.1/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  <script src="{{ url_for('static',filename='controller.js') }}"></script>
+
+</body>
+
+</html>

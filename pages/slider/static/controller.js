@@ -1,5 +1,5 @@
 /**
- * socketAddr and io (for sockets) are imported in the
+ * socketAddr and io (for sockets) are imported in the 
  * <script> tags in blsm_controller.html
  */
 
@@ -21,6 +21,7 @@ const config = {
     },
   ],
 };
+
 
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
@@ -79,7 +80,8 @@ var sourceRow = document.getElementById("sourceRow");
 var wholeCover = document.getElementById("wholeCover");
 // var tapeName = document.getElementById("tapeName");
 var controlStuff = document.getElementById("controlStuff");
-var loop = document.getElementById("loopSwitch").querySelector("#loop");
+var loop = document.getElementById("loopSwitch"
+).querySelector("#loop")
 recordButton.classList.add("notRec");
 recording = false;
 
@@ -100,6 +102,7 @@ if (mobileDevice) {
     // videoInput.style.display = "none";
     // appendageSwitch.style.display = "none";
     document.getElementById("appendageSwitch").style.display = "none";
+
   }
 } else {
   controlBar.style.display = "none";
@@ -113,9 +116,10 @@ controlStuff.style.position = "absolute";
 controlStuff.style.bottom = 0;
 controlStuff.style.display = "flex";
 // controlStuff.style.display = "flex";
-indicatorContainer = document.getElementById("indicatorContainer");
+indicatorContainer = document.getElementById("indicatorContainer")
 indicatorContainer.style.display = "none";
 endpointIndicator.style.display = "none";
+
 
 let tailHeight = 0.2;
 
@@ -218,6 +222,7 @@ function startup() {
     controlSwitch.checked = false;
     onControl();
   });
+
 
   socket.on("connect", () => {
     socket.emit("watcher", socket.id);
@@ -427,13 +432,12 @@ function calibrateYaw() {
 
 function onControl() {
   controlConsent = true;
-  window.prompt();
   // if (controlSwitch.checked || appendageSwitch.checked) {
   if (controlSwitch.checked) {
     if (controlSwitch.checked && calibrateEveryControl) {
       calibrateYaw();
     }
-    // stopTape();
+    stopTape();
     // feature detect
     if (iosDevice) {
       DeviceMotionEvent.requestPermission()
@@ -444,7 +448,6 @@ function onControl() {
         })
         .catch(console.error);
     } else {
-      // window.addEventListener(orientationEvent, handleOrientation, false);
       if (window.DeviceMotionEvent) {
         window.addEventListener(orientationEvent, handleOrientation, false);
       }
@@ -553,6 +556,7 @@ function onText() {
   onControl();
   let res = window.prompt("Type a message to Blossom");
   if (res == null || res == "") {
+
   } else {
     socket.emit("phone_text", {
       event: "phone_text",
@@ -567,10 +571,11 @@ function onText() {
 const tapesSelect = document.getElementById("tapes");
 // const loop = document.getElementById("loop");
 
+
 function updateTapes() {
   fetch(`${socketAddr}/tapes`)
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       console.log(tapesSelect);
       console.log(data);
       data = data.reverse();
@@ -581,17 +586,19 @@ function updateTapes() {
         console.log(opt);
         // tapesSelect.append(opt);
         tapesSelect[i] = opt;
-      });
-    });
+      })
+    })
+    ;
 }
 
 function playTape() {
-  controlSwitch.checked = false;
-  onControl();
-  socket.emit("play", {
-    tape_name: selectedTape(),
-    loop: loop.checked,
-  });
+  controlSwitch.checked = false; onControl();
+  socket.emit("play",
+    {
+      'tape_name': selectedTape(),
+      'loop': loop.checked,
+    }
+  )
 }
 
 function selectedTape() {
@@ -601,9 +608,11 @@ function selectedTape() {
 
 function stopTape() {
   // controlSwitch.checked = false; onControl();
-  socket.emit("stop", {
-    tape_name: selectedTape(),
-  });
+  socket.emit("stop",
+    {
+      "tape_name": selectedTape(),
+    }
+  )
 }
 
 if (false) {
@@ -612,6 +621,7 @@ if (false) {
   // controlStuff.style.display = "none";
   let res = window.prompt("Please type the 4-digit code:");
   if (res == null || res == "") {
+
   } else {
     if (res == "1234") {
       wholeCover.style.display = "inline";

@@ -1,3 +1,7 @@
+""" 
+On computer, go to https://localhost:8080/blsm_broadcast
+On mobile, go to https://r0b0.ngrok.io/blsm_controller
+"""
 import time
 from rclpy.executors import MultiThreadedExecutor
 import copy
@@ -13,19 +17,19 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 
 
-PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
+BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
 
 class WebPageNode(Node):
-    def __init__(self, name, certfile: str, keyfile: str):
+    def __init__(self, name, template_folder: str, static_folder: str, certfile: str, keyfile: str):
         super().__init__(name)
         self.get_logger().info("Initializing WebPageNode...")
 
         # Initialize Flask app
         self.app = Flask(
             __name__,
-            template_folder=os.path.join(PAGES_FOLDER, "templates"),
-            static_folder=os.path.join(PAGES_FOLDER, "static"),
+            template_folder=template_folder,
+            static_folder=static_folder
         )
         CORS(self.app)
         self.setup_routes()
@@ -60,13 +64,20 @@ class WebPageNode(Node):
         self.socketio.run(self.app, host="0.0.0.0", port=SERVER_PORT,
                           certfile=self.certfile, keyfile=self.keyfile)
 
+    def _setup_route(self, _route):
+        # NOTE: did the same thing back with r0b0.rigs.host
+        def route_func(): return render_template(f"{_route}.html")
+        route_func.__name__ = _route
+        self.app.add_url_rule(
+            f"/{_route}", view_func=route_func)
+
 
 class BlsmPageNode(WebPageNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         webrtc_events = ["broadcaster", "watcher",
                          "offer", "answer", "candidate"]
-        interface_events = ["phone_text"]
+        interface_events = ["phone_text", "device_motion"]
         for _event in webrtc_events+interface_events:
             self.socketio.on_event(
                 _event, getattr(self, _event), namespace="/")
@@ -75,25 +86,28 @@ class BlsmPageNode(WebPageNode):
         self.server_thread = Thread(target=self.start_web_server)
 
     def broadcaster(self, sid):
+        self.get_logger().info(f"{sid=}")
         self.broadcaster_id = sid
-        self.socketio.emit(self, "broadcaster")
-        self.get_logger().info("broadcaster")
+        self.socketio.emit("broadcaster")
 
     def watcher(self, sid):
-        if not self.broadcaster_id:
-            return
-        self.socketio.emit(
-            self,
-            "watcher",
-            request.sid,
-            to=self.broadcaster_id,
-        )
-        self.get_logger().info("watcher")
-        self.pub.publish(String(data="watcher"))
+        for i in range(5):
+            self.get_logger().info(f"Watcher attempt {i}")
+            try:
+                self.socketio.emit(
+                    "watcher",
+                    request.sid,
+                    to=self.broadcaster_id,
+                )
+                self.get_logger().info(f"{self.broadcaster_id=}")
+                self.get_logger().info("watcher")
+                self.pub.publish(String(data="watcher"))
+                return
+            except:
+                pass
 
     def offer(self, sid, msg, *args, **kwargs):
         self.socketio.emit(
-            self,
             "offer",
             (request.sid, msg),
             to=sid,
@@ -103,7 +117,6 @@ class BlsmPageNode(WebPageNode):
     def answer(self, sid, msg):
         # TODO: handle max connections
         self.socketio.emit(
-            self,
             "answer",
             (request.sid, msg),
             to=sid,
@@ -111,14 +124,18 @@ class BlsmPageNode(WebPageNode):
 
     def candidate(self, sid, msg):
         self.socketio.emit(
-            self,
             "candidate",
             (request.sid, msg),
             to=sid,
         )
 
     def phone_text(self, *args, **kwargs):
-        breakpoint()
+        print(args, kwargs)
+        ...
+        # breakpoint()
+
+    def device_motion(self, *args, **kwargs):
+        print(args, kwargs)
 
     def setup_routes(self):
         """Define routes for the Flask app."""
@@ -128,19 +145,45 @@ class BlsmPageNode(WebPageNode):
             # the for-loop does not recreate new method instances
             self._setup_route(_route)
 
-    def _setup_route(self, _route):
-        # NOTE: did the same thing back with r0b0.rigs.host
-        def route_func(): return render_template(f"{_route}.html")
-        route_func.__name__ = _route
-        self.app.add_url_rule(
-            f"/{_route}", view_func=route_func)
+
+class SliderPageNode(WebPageNode):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        events = ["slider"]
+        for _event in events:
+            self.socketio.on_event(
+                _event, getattr(self, _event), namespace="/")
+        self.pub = self.create_publisher(String, "/blsm", 10)
+        self.server_thread = Thread(target=self.start_web_server)
+
+    def slider(self, *args, **kwargs):
+        breakpoint()
+
+    def setup_routes(self):
+        """Define routes for the Flask app."""
+
+        for _route in ["slider"]:
+            # NOTE: must call in separate function or else
+            # the for-loop does not recreate new method instances
+            self._setup_route(_route)
 
 
 def main(args=None):
     rclpy.init(args=args)
-    # node = WebPageNode("web_page_node")
-    node = BlsmPageNode("web_page_node", certfile=CSR_PEM, keyfile=KEY_PEM)
-    # Use a MultiThreadedExecutor for non-blocking spinning
+    node = BlsmPageNode("web_page_node",
+                        template_folder=os.path.join(
+                            BLSM_PAGES_FOLDER, "templates"),
+                        static_folder=os.path.join(
+                            BLSM_PAGES_FOLDER, "static"),
+                        certfile=CSR_PEM, keyfile=KEY_PEM)
+
+    # node = SliderPageNode("slider_page_node",
+    #                       template_folder=os.path.abspath(
+    #                           ROOT_DIR / "pages" / "slider" / "templates"),
+    #                       static_folder=os.path.abspath(
+    #                           ROOT_DIR / "pages" / "slider" / "static"),
+    #                       certfile=CSR_PEM, keyfile=KEY_PEM)
+
     executor = MultiThreadedExecutor()
     executor.add_node(node)
     node.start()
@@ -152,7 +195,6 @@ def main(args=None):
 
             # Perform other tasks here if needed
             time.sleep(0.1)
-            # node.pub.publish(String(data="blsm"))
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:

@@ -1,0 +1,228 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Device Motion and Orientation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+
+    <style>
+      * {
+        text-align: center;
+      }
+
+      p {
+        font-size: 12.5pt;
+      }
+    </style>
+  </head>
+
+  <body style="padding-top: 2vh">
+    <div id="supported-check-panel" class="container">
+      <h2>Unsupported Device</h2>
+      <p style="margin-bottom: 1rem">Hmm, we're not seeing any movement or orientation coming from your device...</p>
+      <p>Try visiting on a phone, tablet, or device that supports <a href="https://developer.mozilla.org/en-US/docs/Web/API/DeviceMotionEvent">DeviceMotionEvent</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent">DeviceOrientationEvent</a>.</p>
+      <br>
+      <img src="https://imgs.xkcd.com/comics/xkcd_phone.png" alt="XKCD #1363 - The XKCD Phone"/>
+      <br>
+      <small> <a href="https://xkcd.com/1363/">XKCD #1363</a> </small>
+    </div>
+
+    <div style="display: none;" id="capture-panel">
+      <h2>Motion</h2>
+      <div class="row">
+        <div class="one-half column">
+          <h5>Acceleration: <span id="maccel">?</span></h5>
+        </div>
+        <div class="one-half column">
+          <h5>Acceleration w/ Gravity: <span id="maccelg">?</span></h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="one-half column">
+          <h5>Rotation Rate: <span id="mrr">?</span></h5>
+        </div>
+        <div class="one-half column">
+          <h5>Interval: <span id="mint">?</span></h5>
+        </div>
+      </div>
+
+      <div>
+        <a disabled="true" id="download-motion" class="button">Capturing Motion JSON...</a>
+      </div>
+
+      <hr>
+
+      <h2>Orientation</h2>
+      <div class="row">
+        <div class="one-half column">
+          <h5>Absolute: <span id="oabsolute">?</span></h5>
+        </div>
+        <div class="one-half column">
+          <h5>Alpha (z): <span id="oalpha">?</span></h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="one-half column">
+          <h5>Beta (x): <span id="obeta">?</span></h5>
+        </div>
+        <div class="one-half column">
+          <h5>Gamma (y): <span id="ogamma">?</span></h5>
+        </div>
+      </div>
+
+      <div>
+        <a disabled="true" id="download-orientation" class="button">Capturing Orientation JSON...</a>
+      </div>
+    </div>
+  </body>
+
+  <script>
+
+    // Request permission for iOS 13+ devices
+    if (
+      DeviceMotionEvent &&
+      typeof DeviceMotionEvent.requestPermission === "function"
+    ) {
+      DeviceMotionEvent.requestPermission();
+    }
+    
+    // Run all captures for 10 seconds
+    const captureSeconds = 10
+
+    // Need to use this to determine if we've initialised the application since
+    // the initial listener can somehow fire multiple times before removal
+    let appInitialised = false
+
+    window.addEventListener('deviceorientation', applicationInitialisationEvent, true)
+
+    function applicationInitialisationEvent () {
+      if (appInitialised) {
+        return
+      }
+
+      appInitialised = true
+
+      console.log('intialising the application')
+
+      document.getElementById('supported-check-panel').style = 'display: none;'
+      document.getElementById('capture-panel').style = ''
+
+      startMotionCapture()
+      startOrientationCapture()
+
+      window.removeEventListener('deviceorientation', applicationInitialisationEvent)
+    }
+
+    function startOrientationCapture () {
+      const capturedEvents = []
+      const startTs = new Date().getTime()
+      const endTs = startTs + captureSeconds * 1000
+      const downloadOrientationDataBtn = document.getElementById('download-orientation')
+
+      const oabsolute = document.getElementById('oabsolute')
+      const oalpha = document.getElementById('oalpha')
+      const obeta = document.getElementById('obeta')
+      const ogamma = document.getElementById('ogamma')
+
+      const onOrientationEvent = (e) => {
+        oabsolute.textContent = e.absolute
+        oalpha.textContent = e.alpha.toFixed(4)
+        obeta.textContent = e.beta.toFixed(4)
+        ogamma.textContent = e.gamma.toFixed(4)
+
+        if (new Date().getTime() < endTs) {
+          capturedEvents.push({
+            absolute: e.absolute,
+            alpha: e.alpha,
+            beta: e.beta,
+            gamma: e.gamma,
+            ts: Date.now()
+          })
+        }
+      }
+
+      setTimeout(() => {
+        const filename = 'orientation-events.json'
+        const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(capturedEvents))
+
+        downloadOrientationDataBtn.className = 'button button-primary'
+        downloadOrientationDataBtn.setAttribute('href', data)
+        downloadOrientationDataBtn.setAttribute('download', filename)
+        downloadOrientationDataBtn.setAttribute('disabled', 'false')
+        downloadOrientationDataBtn.textContent = 'Download Orientation JSON'
+
+        alert(`Captured ${capturedEvents.length} orientation events. JSON size is ${Math.round(JSON.stringify(capturedEvents).length / 1024)}kb. Use the button to download it.`)
+      }, endTs - startTs)
+
+
+      window.addEventListener('deviceorientation', onOrientationEvent, true)
+    }
+
+    function startMotionCapture () {
+      const capturedEvents = []
+      const startTs = new Date().getTime()
+      const endTs = startTs + captureSeconds * 1000
+      const downloadMotionDataBtn = document.getElementById('download-motion')
+
+      const maccel = document.getElementById('maccel')
+      const maccelg = document.getElementById('maccelg')
+      const mrr = document.getElementById('mrr')
+      const mint = document.getElementById('mint')
+
+      let latestEvent = null
+
+      // Throttle UI update to once per second (otherwise...aaaagh my eyes!)
+      let updateInterval = setInterval(() => {
+        if (latestEvent) {
+          maccel.textContent = `${latestEvent.acceleration.x.toFixed(2)}x, ${latestEvent.acceleration.y.toFixed(2)}y, ${latestEvent.acceleration.z.toFixed(2)}z`
+          maccelg.textContent = `${latestEvent.accelerationIncludingGravity.x.toFixed(2)}x, ${latestEvent.accelerationIncludingGravity.y.toFixed(2)}y, ${latestEvent.accelerationIncludingGravity.z.toFixed(2)}z`
+          mrr.textContent = `${latestEvent.rotationRate.alpha.toFixed(2)}α, ${latestEvent.rotationRate.beta.toFixed(2)}β, ${latestEvent.rotationRate.gamma.toFixed(2)}γ`
+          mint.textContent = `${latestEvent.interval}ms`
+        }
+      }, 100)
+
+      const onMotionEvent = (e) => {
+        latestEvent = e
+
+        if (new Date().getTime() < endTs) {
+          capturedEvents.push({
+            acceleration: {
+              x: latestEvent.acceleration.x,
+              y: latestEvent.acceleration.y,
+              z: latestEvent.acceleration.z
+            },
+            accelerationIncludingGravity: {
+              x: latestEvent.accelerationIncludingGravity.x,
+              y: latestEvent.accelerationIncludingGravity.y,
+              z: latestEvent.accelerationIncludingGravity.z
+            },
+            rotationRate: {
+              alpha: latestEvent.rotationRate.alpha,
+              beta: latestEvent.rotationRate.beta,
+              gamma: latestEvent.rotationRate.gamma
+            },
+            interval: latestEvent.interval,
+            ts: Date.now()
+          })
+        }
+      }
+
+      setTimeout(() => {
+        const filename = 'motion-events.json'
+        const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(capturedEvents))
+
+        downloadMotionDataBtn.className = 'button button-primary'
+        downloadMotionDataBtn.setAttribute('href', data)
+        downloadMotionDataBtn.setAttribute('download', filename)
+        downloadMotionDataBtn.setAttribute('disabled', 'false')
+        downloadMotionDataBtn.textContent = 'Download Motion JSON'
+
+        alert(`Captured ${capturedEvents.length} motion events. JSON size is ${Math.round(JSON.stringify(capturedEvents).length / 1024)}kb. Use the button to download it.`)
+      }, endTs - startTs)
+
+      window.addEventListener('devicemotion', onMotionEvent, true)
+    }
+  </script>
+</html>

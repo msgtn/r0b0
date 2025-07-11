@@ -1,0 +1,1 @@
+JavaScript files that are actually used are in `static`
