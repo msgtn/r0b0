@@ -2,22 +2,29 @@
 On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
-import time
-from rclpy.executors import MultiThreadedExecutor
 import copy
 import os
+import time
 from threading import Thread
-from r0b0.config import SOCKET_ADDR, LOCALHOST, SERVER_PORT, ROOT_DIR, CSR_PEM, KEY_PEM
 
 import rclpy
 from flask import Flask, render_template, request
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
+from geometry_msgs.msg import Vector3
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from std_msgs.msg import String
-from geometry_msgs.msg import Vector3
-from r0b0_interfaces.msg import DeviceMotion
-from flask_socketio import SocketIO, emit
-from flask_cors import CORS
 
+from r0b0.config import (
+    CSR_PEM,
+    KEY_PEM,
+    LOCALHOST,
+    ROOT_DIR,
+    SERVER_PORT,
+    SOCKET_ADDR,
+)
+from r0b0_interfaces.msg import DeviceMotion
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 

@@ -21,3 +21,4 @@ dependencies = { file = ["requirements/requirements.txt"] }
 
 [tool.ruff]
 line-length = 80
+select = ['F401']
