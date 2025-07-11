@@ -206,12 +206,13 @@ def main(args=None):
     node.start()
 
     try:
+        # rclpy.spin(node)
         while rclpy.ok():
-            # Spin once to process callbacks
-            executor.spin_once(timeout_sec=0.1)
+        #     # Spin once to process callbacks
+            executor.spin_once(timeout_sec=0.01)
 
-            # Perform other tasks here if needed
-            time.sleep(0.1)
+        #     # Perform other tasks here if needed
+        #     time.sleep(0.1)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:
