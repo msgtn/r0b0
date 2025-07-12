@@ -8,8 +8,11 @@ description = "Library for connecting hardware and software, like aconnect for a
 authors = [{ name = "Michael Suguitan", email = "m.jp.sgtn@icloud.com" }]
 readme = "README.md"
 license = { file = "LICENSE.txt" }
-dynamic = ["version", "dependencies", "optional-dependencies"]
+dynamic = ["version"]
 requires-python = "==3.12.*"
+dependencies = [
+    "scipy>=1.16.0",
+]
 
 # [project.urls]
 # Repository = "https://github.com/msgtn/r0b0.git"

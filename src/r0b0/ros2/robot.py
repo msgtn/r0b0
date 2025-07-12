@@ -10,6 +10,8 @@ from abc import abstractmethod
 from threading import Thread
 import numpy as np
 from typing_extensions import override
+from r0b0 import blsm_config
+from scipy.spatial.transform import Rotation
 
 import rclpy
 import serial
@@ -34,7 +36,7 @@ class RobotNode(Node):
         name,
     ):
         super().__init__(name)
-        self.motors: dict[str, float] = {}
+        self.motor_id_pos: dict[str, float] = {}
 
         self.create_timer(
             0.01,
@@ -53,22 +55,120 @@ class SerialRobotNode(RobotNode):
     @override
     def write_motors(self):
         """Send the motor values as a string"""
-        params: str = "&".join(["=".join([str(k), str(v)])
-                               for k, v in self.motors.items()])
+        # params: str = "&".join(["=".join([str(k), str(v)])
+        params: str = "&".join([f"{k}={v:0.2f}"
+                               for k, v in self.motor_id_pos.items()])
         params += "\n"
         self.serial.write(bytes(params, encoding="utf-8"))
 
 
 class BlsmRobotNode(SerialRobotNode):
+    # class BlsmRobotNode(RobotNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.device_motion_sub = self.create_subscription(
             DeviceMotion, "/blsm/device_motion", callback=self.ik, qos_profile=10)
 
-    def ik(self, msg):
+    def ik(self, msg: DeviceMotion, sensitivity: float = 1.0):
+        """
+        Get position of the motors given orientation using inverse kinematics
+        args:
+            ori     orientation from sensors (Euler angles)
+            accel   accelerometer readings
+        returns:
+            motor positions
+        """
         self.get_logger().info(f"{msg=}")
-        self.motors.update({1: int(np.interp(msg.xyz.x, [0, 6], [10, 170]))})
-        self.get_logger().info(f"{self.motors=}")
+        # self.motor_id_pos.update(
+        #     {1: int(np.interp(msg.xyz.x, [0, 6], [10, 170]))})
+        self.get_logger().info(f"{self.motor_id_pos=}")
+
+        # yaw, pitch, roll
+        # zyx / alpha,gamma,beta
+        # print(ori)
+        # [e_1, e_2, e_3, e_4, yaw_offset] = ori
+        # [beta, gamma, alpha,_, yaw_offset] = ori
+        # breakpoint()
+        beta = msg.xyz.x
+        gamma = msg.xyz.y
+        alpha = msg.xyz.z
+        portrait = msg.portrait
+
+        yaw_offset = msg.yaw_offset
+
+        angle_order = "ZXY"
+        angles = [alpha, beta, gamma]
+
+        r = Rotation.from_euler(angle_order, angles=angles)
+        r = r * Rotation.from_euler("Z", np.pi / 2)
+        if portrait:
+            r = r * Rotation.from_euler("Y", np.pi / 2)
+
+        # NOTE: could rewrite as matrix multiplication
+        p_0 = [r.apply(_p) for _p in [blsm_config.p1_0,
+                                      blsm_config.p2_0, blsm_config.p3_0]]
+
+        # calculate height
+        # h = ((e_4 - 50) / 100.0) * h_range * h_fac + h_mid
+        h = 0
+
+        # init array for motor positions (tower_1-4)
+        motor_pos = np.array([])
+        # calculate distance motor must rotate
+        for i, p_i in enumerate(p_0):
+            # get just x,z components
+            p_i_xz = p_i[[0, 2]]
+            # p_i_xz = p_i
+            # get displacement and its magnitude
+            # del_h = p_i_xz-yaw.apply(p_list[i])
+            del_h = p_i_xz - blsm_config.p_xz[i]
+            # del_h = del_h[[0,2]]
+            mag_del_h = np.linalg.norm(del_h)
+
+            # calculate motor angle
+            theta = np.rad2deg(
+                mag_del_h / (blsm_config.r_w / sensitivity)) * np.sign(del_h[1])
+
+            # EXPERIMENTAL - only take the z-difference
+            mag_del_h = del_h[1]
+            theta = np.rad2deg(mag_del_h / (blsm_config.r_w / sensitivity))
+
+            # print(theta)
+            motor_pos = np.append(motor_pos, theta)
+
+        # constrain tower motor range (50-130)
+        motor_pos = np.maximum(np.minimum(
+            motor_pos + h, blsm_config.h_max), blsm_config.h_min)
+
+        # NOTE: not sure why this is here?
+        # try:
+        #     alpha -= yaw_offset
+        # except:
+        #     pass
+        alpha -= yaw_offset
+
+        # angle wrapping
+        if alpha < -np.pi:
+            alpha += 2 * np.pi
+        elif alpha > np.pi:
+            alpha -= 2 * np.pi
+
+        # add the base motor for yaw (-140,140)
+        motor_pos = np.append(
+            motor_pos, np.maximum(np.minimum(
+                np.rad2deg(blsm_config.base_mult * alpha), 150), -150)
+        )
+
+        # 230620 - inverted since motors 2 and 3 swapped
+        # in the refactor to r0b0
+        motor_pos[3] *= -1
+
+        if msg.mirror:
+            motor_pos[1], motor_pos[2] = motor_pos[2], motor_pos[1]
+            motor_pos[3] *= -1
+
+        self.motor_id_pos = {str(i+1): value for i,
+                             value in enumerate(motor_pos)}
 
 
 def main(args=None):
@@ -81,11 +181,11 @@ def main(args=None):
     try:
         rclpy.spin(node)
         # while rclpy.ok():
-            # Spin once to process callbacks
-            # executor.spin_once(timeout_sec=0.01)
+        # Spin once to process callbacks
+        # executor.spin_once(timeout_sec=0.01)
 
-            # Perform other tasks here if needed
-            # time.sleep(0.1)
+        # Perform other tasks here if needed
+        # time.sleep(0.1)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:
