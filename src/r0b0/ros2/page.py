@@ -1,4 +1,4 @@
-""" 
+"""
 On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
@@ -149,6 +149,7 @@ class BlsmPageNode(WebPageNode):
 
         self.device_motion_pub.publish(DeviceMotion(
             xyz=Vector3(**{k: float(msg[k]) for k in ["x", "y", "z"]}),
+            yaw_offset=float(msg["yaw"]),
             ears=msg["ears"],
             portrait=msg["portrait"],
             mirror=msg["mirror"]
@@ -164,14 +165,15 @@ class BlsmPageNode(WebPageNode):
 
 
 class SliderPageNode(WebPageNode):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         events = ["slider"]
         for _event in events:
             self.socketio.on_event(
                 _event, getattr(self, _event), namespace="/")
-        self.pub = self.create_publisher(String, "/blsm", 10)
-        self.server_thread = Thread(target=self.start_web_server)
+            self.pub = self.create_publisher(String, "/blsm", 10)
+            self.server_thread = Thread(target=self.start_web_server)
 
     def slider(self, *args, **kwargs):
         breakpoint()
@@ -206,13 +208,12 @@ def main(args=None):
     node.start()
 
     try:
-        # rclpy.spin(node)
-        while rclpy.ok():
-        #     # Spin once to process callbacks
-            executor.spin_once(timeout_sec=0.01)
+        rclpy.spin(node)
+        # while rclpy.ok():
+        #     #     # Spin once to process callbacks
+        #     executor.spin_once(timeout_sec=0)
 
         #     # Perform other tasks here if needed
-        #     time.sleep(0.1)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:
