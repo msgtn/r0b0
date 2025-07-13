@@ -2,6 +2,7 @@
 On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
+
 import copy
 import os
 import time
@@ -30,7 +31,14 @@ BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
 
 class WebPageNode(Node):
-    def __init__(self, name, template_folder: str, static_folder: str, certfile: str, keyfile: str):
+    def __init__(
+        self,
+        name,
+        template_folder: str,
+        static_folder: str,
+        certfile: str,
+        keyfile: str,
+    ):
         super().__init__(name)
         self.get_logger().info("Initializing WebPageNode...")
 
@@ -38,7 +46,7 @@ class WebPageNode(Node):
         self.app = Flask(
             __name__,
             template_folder=template_folder,
-            static_folder=static_folder
+            static_folder=static_folder,
         )
         CORS(self.app)
         self.setup_routes()
@@ -49,7 +57,7 @@ class WebPageNode(Node):
                 "*",
                 SOCKET_ADDR,
                 f"https://{LOCALHOST}:{SERVER_PORT}",
-                f"https://{LOCALHOST}"
+                f"https://{LOCALHOST}",
             ],
             max_http_buffer_size=1e8,
         )
@@ -70,30 +78,44 @@ class WebPageNode(Node):
     def start_web_server(self):
         """Start the Flask web server."""
         self.get_logger().info("Starting Flask web server...")
-        self.socketio.run(self.app, host="0.0.0.0", port=SERVER_PORT,
-                          certfile=self.certfile, keyfile=self.keyfile)
+        self.socketio.run(
+            self.app,
+            host="0.0.0.0",
+            port=SERVER_PORT,
+            certfile=self.certfile,
+            keyfile=self.keyfile,
+        )
 
     def _setup_route(self, _route):
         # NOTE: did the same thing back with r0b0.rigs.host
-        def route_func(): return render_template(f"{_route}.html")
+        def route_func():
+            return render_template(f"{_route}.html")
+
         route_func.__name__ = _route
-        self.app.add_url_rule(
-            f"/{_route}", view_func=route_func)
+        self.app.add_url_rule(f"/{_route}", view_func=route_func)
 
 
 class BlsmPageNode(WebPageNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        webrtc_events = ["broadcaster", "watcher",
-                         "offer", "answer", "candidate"]
-        interface_events = ["phone_text", "device_motion"]
-        for _event in webrtc_events+interface_events:
-            self.socketio.on_event(
-                _event, getattr(self, _event), namespace="/")
+        webrtc_events = [
+            "broadcaster",
+            "watcher",
+            "offer",
+            "answer",
+            "candidate",
+        ]
+        interface_events = ["phone_text", "device_motion", "key_event"]
+        for _event in webrtc_events + interface_events:
+            self.socketio.on_event(_event, getattr(self, _event), namespace="/")
         self.broadcaster_id = None
         self.pub = self.create_publisher(String, "/blsm", 10)
         self.device_motion_pub = self.create_publisher(
-            DeviceMotion, "/blsm/device_motion", 10)
+            DeviceMotion, "/blsm/device_motion", 10
+        )
+        self.key_event_pub = self.create_publisher(
+            String, "/blsm/key_event", 10
+        )
         self.server_thread = Thread(target=self.start_web_server)
 
     def broadcaster(self, sid):
@@ -145,33 +167,40 @@ class BlsmPageNode(WebPageNode):
         ...
         # breakpoint()
 
-    def device_motion(self, msg):
+    def key_event(self, msg, **kwargs):
+        self.key_event_pub.publish(String(data=msg["code"]))
 
-        self.device_motion_pub.publish(DeviceMotion(
-            xyz=Vector3(**{k: float(msg[k]) for k in ["x", "y", "z"]}),
-            yaw_offset=float(msg["yaw"]),
-            ears=msg["ears"],
-            portrait=msg["portrait"],
-            mirror=msg["mirror"]
-        ))
+    def device_motion(self, msg):
+        self.device_motion_pub.publish(
+            DeviceMotion(
+                xyz=Vector3(**{k: float(msg[k]) for k in ["x", "y", "z"]}),
+                yaw_offset=float(msg["yaw"]),
+                ears=msg["ears"],
+                portrait=msg["portrait"],
+                mirror=msg["mirror"],
+            )
+        )
 
     def setup_routes(self):
         """Define routes for the Flask app."""
 
-        for _route in ["blsm_controller", "blsm_player", "blsm_broadcast"]:
+        for _route in [
+            "blsm_controller",
+            "blsm_player",
+            "blsm_broadcast",
+            "blsm_web",
+        ]:
             # NOTE: must call in separate function or else
             # the for-loop does not recreate new method instances
             self._setup_route(_route)
 
 
 class SliderPageNode(WebPageNode):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         events = ["slider"]
         for _event in events:
-            self.socketio.on_event(
-                _event, getattr(self, _event), namespace="/")
+            self.socketio.on_event(_event, getattr(self, _event), namespace="/")
             self.pub = self.create_publisher(String, "/blsm", 10)
             self.server_thread = Thread(target=self.start_web_server)
 
@@ -189,12 +218,13 @@ class SliderPageNode(WebPageNode):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = BlsmPageNode("web_page_node",
-                        template_folder=os.path.join(
-                            BLSM_PAGES_FOLDER, "templates"),
-                        static_folder=os.path.join(
-                            BLSM_PAGES_FOLDER, "static"),
-                        certfile=CSR_PEM, keyfile=KEY_PEM)
+    node = BlsmPageNode(
+        "web_page_node",
+        template_folder=os.path.join(BLSM_PAGES_FOLDER, "templates"),
+        static_folder=os.path.join(BLSM_PAGES_FOLDER, "static"),
+        certfile=CSR_PEM,
+        keyfile=KEY_PEM,
+    )
 
     # node = SliderPageNode("slider_page_node",
     #                       template_folder=os.path.abspath(

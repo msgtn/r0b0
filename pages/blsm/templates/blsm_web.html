@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Event Listener</title>
+
+  <!-- Include Socket.IO -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+    }
+  </style>
+  <script src="{{ url_for('static',filename='socket_addr.js') }}"></script>
+</head>
+
+<body>
+  <h1>Key Event Listener</h1>
+  <p>Press any key to send a socket event.</p>
+  <div id="status">Waiting for key events...</div>
+
+  <script>
+    // Connect to the Socket.IO server
+    const socket = io.connect(socketAddr); // Replace with your server address
+
+    // Listen for keydown events
+    document.addEventListener('keydown', (event) => {
+      const key = event.key; // Get the key that was pressed
+      const code = event.code; // Get the key code
+
+      // Send the key event as a socket event
+      socket.emit('key_event', { key, code });
+
+      // Update the status on the page
+      const statusDiv = document.getElementById('status');
+      statusDiv.textContent = `Key pressed: ${key} (Code: ${code})`;
+    });
+
+    // Handle connection status
+    socket.on('connect', () => {
+      console.log('Connected to the server');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+  </script>
+</body>
+
+</html>
