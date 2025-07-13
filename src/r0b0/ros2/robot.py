@@ -37,6 +37,7 @@ class RobotNode(Node):
     ):
         super().__init__(name)
         self.motor_id_pos: dict[str, float] = {}
+        self.rotation = Rotation.from_euler("ZXY", angles=[0, 0, 0])
 
         # self.create_timer(
         #     0.01,
@@ -56,8 +57,9 @@ class SerialRobotNode(RobotNode):
     def write_motors(self):
         """Send the motor values as a string"""
         # params: str = "&".join(["=".join([str(k), str(v)])
-        params: str = "&".join([f"{k}={v:0.2f}"
-                               for k, v in self.motor_id_pos.items()])
+        params: str = "&".join(
+            [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
+        )
         params += "\n"
         self.serial.write(bytes(params, encoding="utf-8"))
 
@@ -75,7 +77,38 @@ class BlsmRobotNode(SerialRobotNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.device_motion_sub = self.create_subscription(
-            DeviceMotion, "/blsm/device_motion", callback=self.ik, qos_profile=10)
+            DeviceMotion,
+            "/blsm/device_motion",
+            callback=self.ik,
+            qos_profile=10,
+        )
+        self.device_motion_sub = self.create_subscription(
+            String,
+            "/blsm/key_event",
+            callback=self.update_rotation_from_keys,
+            qos_profile=10,
+        )
+
+    def update_rotation_from_keys(self, msg: String, delta_deg=10):
+        delta_rad = delta_deg / 180 * np.pi
+        self.get_logger().info(f"{msg=}")
+        match msg.data:
+            case "KeyW":
+                rotvec = [0, -1, 0]
+            case "KeyS":
+                rotvec = [0, 1, 0]
+            case "KeyA":
+                rotvec = [0, 0, -1]
+            case "KeyD":
+                rotvec = [0, 0, 1]
+            case "KeyQ":
+                rotvec = [-1, 0, 0]
+            case "KeyE":
+                rotvec = [1, 0, 0]
+            case _:
+                rotvec = [0,0,0]
+        self.rotation *= Rotation.from_rotvec(delta_rad*np.array(rotvec))
+        self._ik(self.rotation, yaw_offset=0, mirror=False)
 
     def ik(self, msg: DeviceMotion, sensitivity: float = 1.0):
         """
@@ -111,10 +144,16 @@ class BlsmRobotNode(SerialRobotNode):
         r = r * Rotation.from_euler("Z", np.pi / 2)
         if portrait:
             r = r * Rotation.from_euler("Y", np.pi / 2)
+        self.rotation = r
+        return self._ik(r, yaw_offset=yaw_offset, mirror=msg.mirror, sensitivity=sensitivity)
+
+    def _ik(self, r, yaw_offset, mirror: bool, sensitivity:float=1.0):
 
         # NOTE: could rewrite as matrix multiplication
-        p_0 = [r.apply(_p) for _p in [blsm_config.p1_0,
-                                      blsm_config.p2_0, blsm_config.p3_0]]
+        p_0 = [
+            r.apply(_p)
+            for _p in [blsm_config.p1_0, blsm_config.p2_0, blsm_config.p3_0]
+        ]
 
         # calculate height
         # h = ((e_4 - 50) / 100.0) * h_range * h_fac + h_mid
@@ -135,7 +174,8 @@ class BlsmRobotNode(SerialRobotNode):
 
             # calculate motor angle
             theta = np.rad2deg(
-                mag_del_h / (blsm_config.r_w / sensitivity)) * np.sign(del_h[1])
+                mag_del_h / (blsm_config.r_w / sensitivity)
+            ) * np.sign(del_h[1])
 
             # EXPERIMENTAL - only take the z-difference
             mag_del_h = del_h[1]
@@ -145,14 +185,16 @@ class BlsmRobotNode(SerialRobotNode):
             motor_pos = np.append(motor_pos, theta)
 
         # constrain tower motor range (50-130)
-        motor_pos = np.maximum(np.minimum(
-            motor_pos + h, blsm_config.h_max), blsm_config.h_min)
+        motor_pos = np.maximum(
+            np.minimum(motor_pos + h, blsm_config.h_max), blsm_config.h_min
+        )
 
         # NOTE: not sure why this is here?
         # try:
         #     alpha -= yaw_offset
         # except:
         #     pass
+        alpha = r.as_euler("ZXY")[0]
         alpha -= yaw_offset
 
         # angle wrapping
@@ -163,20 +205,24 @@ class BlsmRobotNode(SerialRobotNode):
 
         # add the base motor for yaw (-140,140)
         motor_pos = np.append(
-            motor_pos, np.maximum(np.minimum(
-                np.rad2deg(blsm_config.base_mult * alpha), 150), -150)
+            motor_pos,
+            np.maximum(
+                np.minimum(np.rad2deg(blsm_config.base_mult * alpha), 150), -150
+            ),
         )
 
         # 230620 - inverted since motors 2 and 3 swapped
         # in the refactor to r0b0
         motor_pos[3] *= -1
 
-        if msg.mirror:
+        if mirror:
             motor_pos[1], motor_pos[2] = motor_pos[2], motor_pos[1]
             motor_pos[3] *= -1
 
-        self.motor_id_pos = {str(i+1): int(np.interp(value, *RAD2DXL[i])) for i,
-                             value in enumerate(motor_pos)}
+        self.motor_id_pos = {
+            str(i + 1): int(np.interp(value, *RAD2DXL[i]))
+            for i, value in enumerate(motor_pos)
+        }
         self.write_motors()
 
 
