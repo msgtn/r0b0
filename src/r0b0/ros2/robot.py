@@ -38,10 +38,10 @@ class RobotNode(Node):
         super().__init__(name)
         self.motor_id_pos: dict[str, float] = {}
 
-        self.create_timer(
-            0.01,
-            callback=self.write_motors,
-        )
+        # self.create_timer(
+        #     0.01,
+        #     callback=self.write_motors,
+        # )
 
     @abstractmethod
     def write_motors(self): ...
@@ -60,6 +60,14 @@ class SerialRobotNode(RobotNode):
                                for k, v in self.motor_id_pos.items()])
         params += "\n"
         self.serial.write(bytes(params, encoding="utf-8"))
+
+
+RAD2DXL = [
+    [[-10, 140], [0, 2048]],
+    [[-10, 140], [0, 2048]],
+    [[-10, 140], [0, 2048]],
+    [[-140, 140], [0, 4096]],
+]
 
 
 class BlsmRobotNode(SerialRobotNode):
@@ -167,8 +175,9 @@ class BlsmRobotNode(SerialRobotNode):
             motor_pos[1], motor_pos[2] = motor_pos[2], motor_pos[1]
             motor_pos[3] *= -1
 
-        self.motor_id_pos = {str(i+1): value for i,
+        self.motor_id_pos = {str(i+1): int(np.interp(value, *RAD2DXL[i])) for i,
                              value in enumerate(motor_pos)}
+        self.write_motors()
 
 
 def main(args=None):
@@ -180,12 +189,6 @@ def main(args=None):
 
     try:
         rclpy.spin(node)
-        # while rclpy.ok():
-        # Spin once to process callbacks
-        # executor.spin_once(timeout_sec=0.01)
-
-        # Perform other tasks here if needed
-        # time.sleep(0.1)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:
