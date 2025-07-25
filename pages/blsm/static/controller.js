@@ -427,7 +427,6 @@ function calibrateYaw() {
 
 function onControl() {
   controlConsent = true;
-  window.prompt();
   // if (controlSwitch.checked || appendageSwitch.checked) {
   if (controlSwitch.checked) {
     if (controlSwitch.checked && calibrateEveryControl) {

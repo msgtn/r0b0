@@ -91,62 +91,23 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 ### Wiring
 Follow the [wiring instructions](https://github.com/msgtn/r0b0/blob/main/docs/wiring.md).
 
+- [ ] TODO wiring diagram for Pico, for both dxl and simple configs
+
 ## Software
 
 ### Environment setup
-Set up [conda](https://conda.io), then set up a conda environment and install some other dependencies with `pip` (because of issues with [mouse](https://github.com/boppreh/mouse/issues/75)). Docker maybe coming soon (maybe).
+The project environment is managed by `uv`.
+Install `uv`, [instructions here](https://docs.astral.sh/uv/getting-started/installation/).
+Then from the top level of the repository, let `uv` download the dependencies:
 ```
-conda env create -f env.yaml
-conda activate r0b0
-pip3 install -r req.txt 
-```
-
-To enable `https` for the control page, generate some keys with `openssl`.
-Since this is self-signing(*?*), you can safely hit 'Enter' to accept the defaults for all fields.
-```
-mdkir -p .keys
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout .keys/key.pem -out .keys/csr.pem
+uv sync
 ```
 
-### ngrok setup
-*This has only been tested on iOS.*
-Phone-based motion control is enabled through `ngrok`.
-`ngrok` opens a tunnel to a local port (e.g. `localhost:8080`) through a URL.
-Tunneling enables sending data transmission even from non-local networks — this enables telepresence by sending phone orientation data and WebRTC handshaking through the tunnel.
-If you're not interested in motion control, you can skip this section.
 
-Sign up for [ngrok](https://ngrok.com).
-Continue on with the guides until you can run `ngrok` as a terminal command - this will probably require some `sudo apt`ing (Linux) or `brew`ing (macOS) and some `authtoken`ing.
-Start a tunnel to `https://{hostname}:{port}` that the `blsm` rig is running on, e.g. with the defaults of `hostname=localhost` and `port=8080`:
+## Starting Blossom
+This command will start the two nodes comprising Blossom: one node controls the motors by sending serial commands to the Pi Pico; the other node serves webpages for interfaces, such as the motion-based phone controller or the keyboard controller.
 ```
-ngrok http https://localhost:8080
-```
-
-The terminal will show you the forwarding URL, e.g.:
-```
-...
-Forwarding http://someRandomLettersAndNumbers.ngrok.app -> https://localhost:8080
-Forwarding https://someRandomLettersAndNumbers.ngrok.app -> https://localhost:8080
-...
-```
-
-*This next part is a kludge.* We need to update this address in three files: `r0b0/rigs/static/controller.js`, `r0b0/rigs/static/player.js`, and `r0b0/rigs/host.py`.
-This address is stored as `socketAddr` and `SOCKET_ADDR` towards the top of each file — modify these to `https://someRandomLettersAndNumbers.ngrok.app`:
-In `controller.js` and `player.js`:
-```
-const socketAddr = "https://someRandomLettersAndNumbers.ngrok.app"
-```
-In `host.py`:
-```
-SOCKET_ADDR = "https://someRandomLettersAndNumbers.ngrok.app"
-```
-
-Note that `ngrok` must be running in a separate terminal — start it, then open another terminal to continue the instructions.
-
-If you have a paid `ngrok` subscription, you can add a `--subdomain` argument to the tunnel command to maintain a consistent forwarding URL.
-For example, to set the forwarding URL to `https://mysubdomain.ngrok.io`:
-```
-ngrok http https://localhost:8080 --subdomain=mysubdomain
+uv run blsm
 ```
 
 ### Motor calibration (Dynamixel models only)
@@ -190,49 +151,7 @@ m2.set_goal_position(700) # for the towers:700 ; for the base: 500
 To stop the script, type `Ctrl+D`.
 Repeat this for motor IDs 3 and 4.
 
-## Starting the `blsm` rig
 
-### Dynamixel
-Start the `blsm` rig configuration, which contains the `blsm_dxl` robot as a `DynamixelRobot` and the `bslm_phone` browser-based interface as a `Page`.
-The rig uses the `motion2motor` cable to translate `device_motion` events from the page (when accessed from a mobile browser) into `position` events for the motor.
-<!-- *Note: if using the older Blossom -->
-
-In `/config/gadgets/blsm_dxl.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml)), modify `usb_port` with the port we found during the motor calibration step:
-```
-type: DynamixelRobot
-usb_port: /dev/tty.usbserial-FT1SF1UM   # modify this
-```
-
-In a separate terminal window from the `ngrok` tunnel script, 
-```
-python3 start.py --config blsm
-```
-
-### Arduino
-
-We must first flash the Arduino with the pyFirmata firmware, which enables the Arduino to be controlled from Python through the [Arduino gadget class](../r0b0/gadgets/arduino.py).
-Connect the Arduino to the computer.
-Open [r0b0/gadgets/Standardfirmata.ino](../r0b0/gadgets/StandardFirmata/StandardFirmata.ino) in the [Arduino IDE](https://www.arduino.cc/en/software).
-To find the port that the Arduino is connected to, use the Arduino IDE (`Tools` > `Port`).
-Upload the firmware to the board (`Sketch` > `Upload`).
-
-Next, we need to modify the configuration at `/config/gadgets/blsm_ard.yaml` ([here](https://github.com/msgtn/r0b0/blob/main/config/gadgets/blsm_ard.yaml)) with the `usb_port` and motor `id`s.
-For the motor IDs, refer to the [Fritzing diagram](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm_ard.png) and modify according to your specific build:
-```
-type: ArduinoRobot
-usb_port: /dev/cu.usbserial-ADAQDbKpQ # modify this to the port that the Arduino is connected to
-baud_rate: 57600
-timeout: 2
-motors:
-- name: base
-  id: 9         # modify this to the pin that the BASE motor is connected to
-- name: tower_1
-  id: 10        # modify this to the pin that the FRONT head motor is connected to
-- name: tower_2
-  id: 6         # modify this to the pin that the LEFT head motor is connected to
-- name: tower_3
-  id: 5         # modify this to the pin that the RIGHT head motor is connected to
-```
 
 ## Telepresence
 
@@ -312,3 +231,44 @@ For example, in `/config/gadgets/blsm_dxl.yaml` ([here](https://github.com/msgtn
 ```
 Setting `operating_mode: 3` sets the motors to position control mode, per the [documentation](https://emanual.robotis.com/docs/en/dxl/x/xl330-m288/#operating-mode).
 Faster velocity and acceleration will yield snappier movements at the risk of jerkiness.
+
+### ngrok setup
+*This has only been tested on iOS.*
+Phone-based motion control is enabled through `ngrok`.
+`ngrok` opens a tunnel to a local port (e.g. `localhost:8080`) through a URL.
+Tunneling enables sending data transmission even from non-local networks — this enables telepresence by sending phone orientation data and WebRTC handshaking through the tunnel.
+If you're not interested in motion control, you can skip this section.
+
+Sign up for [ngrok](https://ngrok.com).
+Continue on with the guides until you can run `ngrok` as a terminal command - this will probably require some `sudo apt`ing (Linux) or `brew`ing (macOS) and some `authtoken`ing.
+Start a tunnel to `https://{hostname}:{port}` that the `blsm` rig is running on, e.g. with the defaults of `hostname=localhost` and `port=8080`:
+```
+ngrok http https://localhost:8080
+```
+
+The terminal will show you the forwarding URL, e.g.:
+```
+...
+Forwarding http://someRandomLettersAndNumbers.ngrok.app -> https://localhost:8080
+Forwarding https://someRandomLettersAndNumbers.ngrok.app -> https://localhost:8080
+...
+```
+
+*This next part is a kludge.* We need to update this address in three files: `r0b0/rigs/static/controller.js`, `r0b0/rigs/static/player.js`, and `r0b0/rigs/host.py`.
+This address is stored as `socketAddr` and `SOCKET_ADDR` towards the top of each file — modify these to `https://someRandomLettersAndNumbers.ngrok.app`:
+In `controller.js` and `player.js`:
+```
+const socketAddr = "https://someRandomLettersAndNumbers.ngrok.app"
+```
+In `host.py`:
+```
+SOCKET_ADDR = "https://someRandomLettersAndNumbers.ngrok.app"
+```
+
+Note that `ngrok` must be running in a separate terminal — start it, then open another terminal to continue the instructions.
+
+If you have a paid `ngrok` subscription, you can add a `--subdomain` argument to the tunnel command to maintain a consistent forwarding URL.
+For example, to set the forwarding URL to `https://mysubdomain.ngrok.io`:
+```
+ngrok http https://localhost:8080 --subdomain=mysubdomain
+```
