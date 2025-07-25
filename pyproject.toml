@@ -11,16 +11,23 @@ license = { file = "LICENSE.txt" }
 dynamic = ["version"]
 requires-python = "==3.12.*"
 dependencies = [
+    "aiortc>=1.13.0",
+    "mediapipe>=0.10.14",
+    "opencv-python>=4.12.0.88",
+    "pyvirtualcam>=0.13.0",
     "scipy>=1.16.0",
 ]
 
-# [project.urls]
-# Repository = "https://github.com/msgtn/r0b0.git"
+[project.urls]
+Repository = "https://github.com/msgtn/r0b0.git"
+
+[project.scripts]
+blsm = "r0b0.ros2.blsm:main"
+page = "r0b0.ros2.page:main"
+robot = "r0b0.ros2.robot:main"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements/requirements.txt"] }
-# optional-dependencies.robot = { file = ["requirements/robot.txt"] }
-# optional-dependencies.chatbot = { file = ["requirements/chatbot.txt"] }
 
 [tool.ruff]
 line-length = 80

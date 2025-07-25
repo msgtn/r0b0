@@ -5,12 +5,13 @@ from rclpy.executors import MultiThreadedExecutor
 
 
 from r0b0.ros2.page import BlsmPageNode
-from r0b0.ros2.robot import BLSM_PAGES_FOLDER, BlsmRobotNode
+from r0b0.ros2.robot import BLSM_PAGES_FOLDER, BlsmRobotNode, HeadRobotNode
 
 def main():
 
     rclpy.init()
-    robot_node = BlsmRobotNode("robot_node")
+    # robot_node = BlsmRobotNode("robot_node")
+    robot_node = HeadRobotNode("robot_node")
 
     page_node = BlsmPageNode("web_page_node",
         template_folder=os.path.join(
