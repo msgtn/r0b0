@@ -48,21 +48,17 @@ class WebPageNode(Node):
             template_folder=template_folder,
             static_folder=static_folder,
         )
-        CORS(self.app)
+
+        # Allow all origins
+        CORS(self.app, resources={r"/*": {"origins": "*"}})
+
         self.setup_routes()
 
         self.socketio = SocketIO(
             self.app,
-            cors_allowed_origins=[
-                "*",
-                SOCKET_ADDR,
-                f"https://{LOCALHOST}:{SERVER_PORT}",
-                f"https://{LOCALHOST}",
-            ],
+            cors_allowed_origins="*",
             max_http_buffer_size=1e8,
         )
-        self.socketio.on_event("test", print, namespace="/")
-
         self.certfile = certfile
         self.keyfile = keyfile
         # Start Flask server in a separate thread
