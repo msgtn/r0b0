@@ -5,20 +5,26 @@ from rclpy.executors import MultiThreadedExecutor
 
 
 from r0b0.ros2.page import BlsmPageNode
-from r0b0.ros2.robot import BLSM_PAGES_FOLDER, BlsmRobotNode, HeadRobotNode
+from r0b0.ros2.robot import (
+    BLSM_PAGES_FOLDER,
+    BlsmRobotNode,
+    DEG2DXL,
+    DEG2SERVO,
+)
+
 
 def main():
-
     rclpy.init()
-    # robot_node = BlsmRobotNode("robot_node")
-    robot_node = HeadRobotNode("robot_node")
+    robot_node = BlsmRobotNode(name="robot_node", motor_map=DEG2SERVO)
+    # robot_node = HeadRobotNode("robot_node")
 
-    page_node = BlsmPageNode("web_page_node",
-        template_folder=os.path.join(
-            BLSM_PAGES_FOLDER, "templates"),
-        static_folder=os.path.join(
-            BLSM_PAGES_FOLDER, "static"),
-        certfile=CSR_PEM, keyfile=KEY_PEM)
+    page_node = BlsmPageNode(
+        "web_page_node",
+        template_folder=os.path.join(BLSM_PAGES_FOLDER, "templates"),
+        static_folder=os.path.join(BLSM_PAGES_FOLDER, "static"),
+        certfile=CSR_PEM,
+        keyfile=KEY_PEM,
+    )
 
     executor = MultiThreadedExecutor()
     executor.add_node(robot_node)
@@ -36,5 +42,6 @@ def main():
         page_node.destroy_node()
         rclpy.shutdown()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
