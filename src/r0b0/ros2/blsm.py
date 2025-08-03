@@ -17,15 +17,18 @@ def main():
     rclpy.init()
     robot_node = BlsmRobotNode(name="robot_node", motor_map=DEG2SERVO)
     # robot_node = HeadRobotNode("robot_node")
+    page_kwargs = {
+        "name": "web_page_node",
+        "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
+        "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
+    }
+    if os.path.exists(CSR_PEM) and os.path.exists(KEY_PEM):
+        page_kwargs.update({"certfile": CSR_PEM, "keyfile": KEY_PEM})
 
     page_node = BlsmPageNode(
-        "web_page_node",
-        template_folder=os.path.join(BLSM_PAGES_FOLDER, "templates"),
-        static_folder=os.path.join(BLSM_PAGES_FOLDER, "static"),
-        certfile=CSR_PEM,
-        keyfile=KEY_PEM,
-    )
+        **page_kwargs)
 
+    
     executor = MultiThreadedExecutor()
     executor.add_node(robot_node)
     executor.add_node(page_node)

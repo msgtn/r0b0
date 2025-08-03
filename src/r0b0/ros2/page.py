@@ -36,8 +36,8 @@ class WebPageNode(Node):
         name,
         template_folder: str,
         static_folder: str,
-        certfile: str,
-        keyfile: str,
+        certfile: str | None = None,
+        keyfile: str | None = None,
     ):
         super().__init__(name)
         self.get_logger().info("Initializing WebPageNode...")
@@ -216,13 +216,15 @@ class SliderPageNode(WebPageNode):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = BlsmPageNode(
-        "web_page_node",
-        template_folder=os.path.join(BLSM_PAGES_FOLDER, "templates"),
-        static_folder=os.path.join(BLSM_PAGES_FOLDER, "static"),
-        certfile=CSR_PEM,
-        keyfile=KEY_PEM,
-    )
+    page_kwargs = {
+        "name": "web_page_node",
+        "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
+        "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
+    }
+    if os.path.exists(CSR_PEM) and os.path.exists(KEY_PEM):
+        page_kwargs.update({"certfile": CSR_PEM, "keyfile": KEY_PEM})
+
+    node = BlsmPageNode(**page_kwargs)
 
     # node = SliderPageNode("slider_page_node",
     #                       template_folder=os.path.abspath(
