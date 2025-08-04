@@ -81,8 +81,8 @@ DEG2SERVO = [
 
 class BlsmRobotNode(SerialRobotNode):
     # class BlsmRobotNode(RobotNode):
-    def __init__(self, motor_map=DEG2DXL, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, motor_map=DEG2DXL, **kwargs):
+        super().__init__(**kwargs)
         self._motor_map = motor_map
         self.device_motion_sub = self.create_subscription(
             DeviceMotion,
@@ -104,42 +104,56 @@ class BlsmRobotNode(SerialRobotNode):
         # self.get_logger().info(f"{msg=}")
         match msg.data:
             case "KeyW":
-                rotmat = [[np.cos(-delta_rad), 0, -np.sin(-delta_rad)],
-                          [0, 1, 0],
-                          [np.sin(-delta_rad), 0, np.cos(-delta_rad)]]
+                rotmat = [
+                    [np.cos(-delta_rad), 0, -np.sin(-delta_rad)],
+                    [0, 1, 0],
+                    [np.sin(-delta_rad), 0, np.cos(-delta_rad)],
+                ]
             #     rotvec = [0, -1, 0]
             case "KeyS":
-                rotmat = [[np.cos(delta_rad), 0, -np.sin(delta_rad)],
-                          [0, 1, 0],
-                          [np.sin(delta_rad), 0, np.cos(delta_rad)]]
+                rotmat = [
+                    [np.cos(delta_rad), 0, -np.sin(delta_rad)],
+                    [0, 1, 0],
+                    [np.sin(delta_rad), 0, np.cos(delta_rad)],
+                ]
 
             #     rotvec = [0, 1, 0]
             case "KeyD":
-                rotmat = [[np.cos(-delta_rad), np.sin(-delta_rad), 0],
-                          [-np.sin(-delta_rad), np.cos(-delta_rad), 0],
-                          [0, 0, 1]]
+                rotmat = [
+                    [np.cos(-delta_rad), np.sin(-delta_rad), 0],
+                    [-np.sin(-delta_rad), np.cos(-delta_rad), 0],
+                    [0, 0, 1],
+                ]
             #     rotvec = [0, 0, -1]
             case "KeyA":
-                rotmat = [[np.cos(delta_rad), np.sin(delta_rad), 0],
-                          [-np.sin(delta_rad), np.cos(delta_rad), 0],
-                          [0, 0, 1]]
+                rotmat = [
+                    [np.cos(delta_rad), np.sin(delta_rad), 0],
+                    [-np.sin(delta_rad), np.cos(delta_rad), 0],
+                    [0, 0, 1],
+                ]
             #     rotvec = [0, 0, 1]
             case "KeyE":
-                rotmat = [[1, 0, 0],
-                          [0, np.cos(-delta_rad), np.sin(-delta_rad)],
-                          [0, -np.sin(-delta_rad), np.cos(-delta_rad)]]
+                rotmat = [
+                    [1, 0, 0],
+                    [0, np.cos(-delta_rad), np.sin(-delta_rad)],
+                    [0, -np.sin(-delta_rad), np.cos(-delta_rad)],
+                ]
             #     rotvec = [-1, 0, 0]
             case "KeyQ":
-                rotmat = [[1, 0, 0],
-                          [0, np.cos(delta_rad), np.sin(delta_rad)],
-                          [0, -np.sin(delta_rad), np.cos(delta_rad)]]
+                rotmat = [
+                    [1, 0, 0],
+                    [0, np.cos(delta_rad), np.sin(delta_rad)],
+                    [0, -np.sin(delta_rad), np.cos(delta_rad)],
+                ]
             #     rotvec = [1, 0, 0]
             case _:
                 rotmat = np.eye(3)
             #     rotvec = [0,0,0]
         # self.rotation *= Rotation.from_rotvec(delta_rad*np.array(rotvec))
         self.rotation *= Rotation.from_matrix(rotmat)
-        self._ik(self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False)
+        self._ik(
+            self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False
+        )
 
     def ik(self, msg: DeviceMotion, sensitivity: float = 1.0):
         """
@@ -176,10 +190,14 @@ class BlsmRobotNode(SerialRobotNode):
         if portrait:
             r = r * Rotation.from_euler("Y", np.pi / 2)
         self.rotation = r
-        return self._ik(r, alpha=alpha-yaw_offset, mirror=msg.mirror, sensitivity=sensitivity)
+        return self._ik(
+            r,
+            alpha=alpha - yaw_offset,
+            mirror=msg.mirror,
+            sensitivity=sensitivity,
+        )
 
-    def _ik(self, r, alpha, mirror: bool, sensitivity:float=1.0):
-
+    def _ik(self, r, alpha, mirror: bool, sensitivity: float = 1.0):
         # NOTE: could rewrite as matrix multiplication
         p_0 = [
             r.apply(_p)
