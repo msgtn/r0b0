@@ -2,7 +2,7 @@
 set -e
 
 # Source the ROS 2 environment
-source /opt/ros/humble/setup.bash
+source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 uv run blsm
 

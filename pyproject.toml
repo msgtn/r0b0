@@ -9,7 +9,7 @@ authors = [{ name = "Michael Suguitan", email = "m.jp.sgtn@icloud.com" }]
 readme = "README.md"
 license = { file = "LICENSE.txt" }
 dynamic = ["version"]
-requires-python = "==3.10.*"
+requires-python = "==3.12.*"
 dependencies = [
     "aiohttp>=3.12.14",
     "eventlet>=0.40.2",
