@@ -164,7 +164,6 @@ class BlsmPageNode(WebPageNode):
         # breakpoint()
 
     def key_event(self, msg, **kwargs):
-        
         print(msg)
         self.key_event_pub.publish(String(data=msg["code"]))
 
