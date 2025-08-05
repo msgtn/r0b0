@@ -21,6 +21,7 @@ const config = {
     },
   ],
 };
+let socketAddr = window.location.origin;
 
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
