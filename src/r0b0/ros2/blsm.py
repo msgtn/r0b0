@@ -15,7 +15,7 @@ from r0b0.ros2.robot import (
 
 def main():
     rclpy.init()
-    robot_node = BlsmRobotNode(name="robot_node", motor_map=DEG2SERVO)
+    robot_node = BlsmRobotNode(name="robot_node", motor_map=DEG2SERVO, port="/dev/serial0")
     # robot_node = HeadRobotNode("robot_node")
     page_kwargs = {
         "name": "web_page_node",

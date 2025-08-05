@@ -14,7 +14,7 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run-pi:
-	docker run --privileged -v /dev/serial0:/dev/serial0 -p 8080:8080 -it r0b0:latest
+	docker run --name r0b0-blsm --privileged -v /dev/serial0:/dev/serial0 -p 8080:8080 -it r0b0:latest
 
 docker-run-desktop:
 	docker run --privileged -v /dev/ttyACM0:/dev/ttyACM0 -p 8080:8080 -it r0b0:latest
