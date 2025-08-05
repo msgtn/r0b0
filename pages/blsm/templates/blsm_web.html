@@ -24,7 +24,6 @@
       color: green;
     }
   </style>
-  <script src="{{ url_for('static',filename='socket_addr.js') }}"></script>
 </head>
 
 <body>
@@ -33,6 +32,7 @@
   <div id="status">Waiting for key events...</div>
 
   <script>
+    let socketAddr = window.location.origin;
     // Connect to the Socket.IO server
     const socket = io.connect(socketAddr); // Replace with your server address
 

@@ -95,6 +95,35 @@ Follow the [wiring instructions](https://github.com/msgtn/r0b0/blob/main/docs/wi
 
 ## Software
 
+```mermaid
+sequenceDiagram
+	participant comp as Computer
+	participant zero as Pi Zero
+	participant pico as Pi Pico
+	participant motors as Motors
+
+	pico ->> comp: Plug USB
+	note over pico: Load MicroPython onto board
+	note over comp: Clone `micropython-servo` repo
+	note over comp: Download `uv`
+	note over comp: Start `sudo uvx rshell`
+	comp ->> pico: Copy files (`make copy`)
+	pico ->> comp: Unplug USB
+	pico ->> zero: Connect UART pins<br>(TODO: link to diagram)
+	motors ->> pico: Connect motors<br>(TODO: link to diagram)
+	note over motors: Connect to 5V power
+
+	note over comp: Download Raspbery Pi Imager,<br>backup image of project
+	note over comp: Burn image onto microSD card
+	comp ->> zero: Insert microSD card
+	zero ->> comp: Plug USB<br>(NOTE: ensure using Zero's USB, not PWR)
+
+	note over comp: Access interface<br>10.55.0.2:8080/blsm_web
+	comp ->> motors: Command motors to calibration positon
+	note over motors: Attach servos in configuration orientation<br>(TODO: link to instructions)
+	
+```
+
 ### Environment setup
 The project environment is managed by `uv`.
 Install `uv`, [instructions here](https://docs.astral.sh/uv/getting-started/installation/).
