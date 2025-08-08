@@ -15,7 +15,13 @@ from r0b0.ros2.robot import (
 
 def main():
     rclpy.init()
-    robot_node = BlsmRobotNode(name="robot_node", motor_map=DEG2SERVO, port="/dev/serial0")
+    robot_node = BlsmRobotNode(
+        name="robot_node",
+        # motor_map=DEG2SERVO,
+        motor_map=DEG2DXL,
+        # port="/dev/serial0"
+        port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
+    )
     # robot_node = HeadRobotNode("robot_node")
     page_kwargs = {
         "name": "web_page_node",
@@ -25,10 +31,8 @@ def main():
     if os.path.exists(CSR_PEM) and os.path.exists(KEY_PEM):
         page_kwargs.update({"certfile": CSR_PEM, "keyfile": KEY_PEM})
 
-    page_node = BlsmPageNode(
-        **page_kwargs)
+    page_node = BlsmPageNode(**page_kwargs)
 
-    
     executor = MultiThreadedExecutor()
     executor.add_node(robot_node)
     executor.add_node(page_node)

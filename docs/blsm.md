@@ -301,3 +301,6 @@ For example, to set the forwarding URL to `https://mysubdomain.ngrok.io`:
 ```
 ngrok http https://localhost:8080 --subdomain=mysubdomain
 ```
+
+# Notes
+- recommended method for installing ROS2 on Pi is through a docker container [in these instructions](https://docs.ros.org/en/humble/How-To-Guides/Installing-on-Raspberry-Pi.html). also had to follow [these post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/).
