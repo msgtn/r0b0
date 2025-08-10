@@ -6,6 +6,7 @@ After=network.target
 [Service]
 WorkingDirectory=/home/dummy/r0b0
 ExecStart=/usr/bin/make docker-run
+Environment=DOCKER_FLAGS=
 StandardOutput=inherit
 StandardError=inherit
 User=dummy
