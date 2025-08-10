@@ -14,6 +14,15 @@ keys:
 	mkdir -p .keys
 	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout .keys/key.pem -out .keys/csr.pem
 
+.PHONY: service
+service:
+	sudo cp ./service/blsm.service /etc/systemd/system/blsm.service
+	sudo systemctl daemon-reload
+	sudo systemctl kill blsm
+	-docker ps | grep r0b0 | awk '{print $$NF}' | xargs -n1 docker rm -f
+	sudo systemctl enable blsm
+	sudo systemctl start blsm
+
 docker-build:
 	docker build -t r0b0:latest .
 
