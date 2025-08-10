@@ -1,5 +1,6 @@
 PORT ?= 8080
-DEVICE ?= /dev/serial0
+DEVICE ?= /dev/ttyACM0
+DOCKER_FLAGS ?= -it
 
 blsm:
 	-. scripts/ngrok.sh &
@@ -17,4 +18,4 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run:
-	docker run --privileged -v $(DEVICE):$(DEVICE) -p 8080:8080 -e BLSM_PORT=$(DEVICE) -it r0b0:latest
+	docker run --privileged -v $(DEVICE):$(DEVICE) -p 8080:8080 -e BLSM_PORT=$(DEVICE) $(DOCKER_FLAGS) r0b0:latest
