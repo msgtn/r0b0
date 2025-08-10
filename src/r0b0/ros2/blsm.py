@@ -19,7 +19,6 @@ def main():
         name="robot_node",
         # motor_map=DEG2SERVO,
         motor_map=DEG2DXL,
-        # port="/dev/serial0"
         port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
     )
     # robot_node = HeadRobotNode("robot_node")
