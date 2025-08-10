@@ -1,3 +1,6 @@
+PORT ?= 8080
+DEVICE ?= /dev/serial0
+
 blsm:
 	-. scripts/ngrok.sh &
 	uv run python3 src/r0b0/ros2/blsm.py
@@ -14,7 +17,7 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run-pi:
-	docker run --name r0b0-blsm --privileged -v /dev/serial0:/dev/serial0 -p 8080:8080 -it r0b0:latest
+	docker run --name r0b0-blsm --privileged -v $(DEVICE):/dev/serial0 -p $(PORT):8080 -it r0b0:latest
 
 docker-run-desktop:
-	docker run --privileged -v /dev/ttyACM0:/dev/ttyACM0 -p 8080:8080 -it r0b0:latest
+	docker run --privileged -v $(DEVICE):$(DEVICE) -p 8080:8080 -e BLSM_PORT=$(DEVICE) -it r0b0:latest

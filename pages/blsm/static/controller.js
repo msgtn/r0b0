@@ -418,6 +418,10 @@ function calibrateYaw() {
       "Content-Type": "application/json",
     },
   })
+    .then(() =>{
+        alert("Current yawOffset: " + yawOffset);
+
+    })
     .then(() => {
       yawOffset = alphaTrue;
     })
