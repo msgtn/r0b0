@@ -330,7 +330,7 @@ const handleOrientation = (e) => {
  // Set yawOffset to alphaTrue if it is null
   if (yawOffset === null) {
     yawOffset = alphaTrue;
-    alert("Current yawOffset: " + yawOffset);
+    // alert("Current yawOffset: " + yawOffset);
   }
   alpha = ((alphaTrue - yawOffset) * Math.PI) / 180;
 
