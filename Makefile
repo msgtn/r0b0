@@ -16,8 +16,5 @@ keys:
 docker-build:
 	docker build -t r0b0:latest .
 
-docker-run-pi:
-	docker run --name r0b0-blsm --privileged -v $(DEVICE):/dev/serial0 -p $(PORT):8080 -it r0b0:latest
-
-docker-run-desktop:
+docker-run:
 	docker run --privileged -v $(DEVICE):$(DEVICE) -p 8080:8080 -e BLSM_PORT=$(DEVICE) -it r0b0:latest
