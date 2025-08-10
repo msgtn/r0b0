@@ -187,6 +187,7 @@ class BlsmPageNode(WebPageNode):
             "blsm_broadcast",
             "blsm_web",
             "reset",
+            "tapes",
         ]:
             # NOTE: must call in separate function or else
             # the for-loop does not recreate new method instances
