@@ -104,7 +104,7 @@ sequenceDiagram
 
 	pico ->> comp: Plug USB
 	note over pico: Load MicroPython onto board
-	note over comp: Clone `micropython-servo` repo
+	note over comp: Submodule update `micropython-servo` repo
 	note over comp: Download `uv`
 	note over comp: Start `sudo uvx rshell`
 	comp ->> pico: Copy files (`make copy`)
