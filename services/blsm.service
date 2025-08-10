@@ -1,0 +1,15 @@
+# /etc/systemd/system/r0b0-docker.service
+[Unit]
+Description=Start r0b0 Docker container at boot
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/r0b0
+ExecStart=/usr/bin/make docker-run
+Restart=always
+User=dummy
+
+[Install]
+WantedBy=multi-user.target
