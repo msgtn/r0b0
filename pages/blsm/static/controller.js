@@ -32,8 +32,9 @@ var initYaw = 0;
 var ctrlAddr = "";
 var headCtrl = true;
 var armsCtrl = true;
+var alphaTrue = 0;
 
-var yawOffset = 0;
+var yawOffset = null;
 var defaultHeight = 70;
 var inEndpoint = false;
 var showEndpointAlerts = true;
@@ -305,16 +306,16 @@ function compassHeading(alpha, beta, gamma) {
   var Vy = -sZ * sY + cZ * sX * cY;
 
   // Calculate compass heading
-  var compassHeading = Math.atan(Vx / Vy);
+  var heading = Math.atan(Vx / Vy);
 
   // Convert compass heading to use whole unit circle
   if (Vy < 0) {
-    compassHeading += Math.PI;
+    heading += Math.PI;
   } else if (Vx < 0) {
-    compassHeading += 2 * Math.PI;
+    heading += 2 * Math.PI;
   }
   // return compassHeading;
-  return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
+  return heading * (180 / Math.PI); // Compass Heading (in degrees)
 }
 
 const handleOrientation = (e) => {
@@ -326,6 +327,11 @@ const handleOrientation = (e) => {
   gamma = (e.gamma * Math.PI) / 180;
 
   alphaTrue = compassHeading(e.alpha, e.beta, e.gamma);
+ // Set yawOffset to alphaTrue if it is null
+  if (yawOffset === null) {
+    yawOffset = alphaTrue;
+    alert("Current yawOffset: " + yawOffset);
+  }
   alpha = ((alphaTrue - yawOffset) * Math.PI) / 180;
 
   // constraint 0 < alpha < 2pi
@@ -418,14 +424,16 @@ function calibrateYaw() {
       "Content-Type": "application/json",
     },
   })
+    .then(() => {
+      yawOffset = alphaTrue;
+      // yawOffset = compassHeading(e.alpha, e.beta, e.gamma);
+    })
     .then(() =>{
         alert("Current yawOffset: " + yawOffset);
 
     })
-    .then(() => {
-      yawOffset = alphaTrue;
-    })
     .catch(() => {
+      alert("Couldn't calibrate yaw");
       console.log("Couldnt calibrate yaw");
     });
 }
@@ -434,9 +442,9 @@ function onControl() {
   controlConsent = true;
   // if (controlSwitch.checked || appendageSwitch.checked) {
   if (controlSwitch.checked) {
-    if (controlSwitch.checked && calibrateEveryControl) {
-      calibrateYaw();
-    }
+    // if (controlSwitch.checked && calibrateEveryControl) {
+    //   // calibrateYaw();
+    // }
     // need to comment this out or else will not send
     // stopTape();
     // feature detect
@@ -456,6 +464,7 @@ function onControl() {
     }
   } else {
     window.removeEventListener(orientationEvent, handleOrientation);
+    yawOffset = null;
   }
 }
 
