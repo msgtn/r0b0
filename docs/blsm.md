@@ -89,9 +89,8 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 
 
 ### Wiring
-Follow the [wiring instructions](https://github.com/msgtn/r0b0/blob/main/docs/wiring.md).
 
-- [ ] TODO wiring diagram for Pico, for both dxl and simple configs
+![Wiring diagram for the Pi Zero, Pi Pico, and servo motors](assets/blsm/blsm-pico_bb.png)
 
 ## Software
 
@@ -102,12 +101,13 @@ sequenceDiagram
 	participant pico as Pi Pico
 	participant motors as Motors
 
-	pico ->> comp: Plug USB
-	note over pico: Load MicroPython onto board
-	note over comp: Submodule update `micropython-servo` repo
+	note over comp: Clone `r0b0` repository, including submodules
+
+	pico ->> comp: Plug USB 
+	note over pico: Load MicroPython onto board 
 	note over comp: Download `uv`
 	note over comp: Start `sudo uvx rshell`
-	comp ->> pico: Copy files (`make copy`)
+	comp ->> pico: Copy files
 	pico ->> comp: Unplug USB
 	pico ->> zero: Connect UART pins<br>(TODO: link to diagram)
 	motors ->> pico: Connect motors<br>(TODO: link to diagram)
@@ -118,26 +118,82 @@ sequenceDiagram
 	comp ->> zero: Insert microSD card
 	zero ->> comp: Plug USB<br>(NOTE: ensure using Zero's USB, not PWR)
 
+	note over zero: Download docker
+	note over zero: Clone repository
+	note over zero: Build image
+	note over zero: Run `make service` to set up `systemd` service to run on boot
+
 	note over comp: Access interface<br>10.55.0.2:8080/blsm_web
 	comp ->> motors: Command motors to calibration positon
 	note over motors: Attach servos in configuration orientation<br>(TODO: link to instructions)
-	
 ```
 
-### Environment setup
-The project environment is managed by `uv`.
-Install `uv`, [instructions here](https://docs.astral.sh/uv/getting-started/installation/).
-Then from the top level of the repository, let `uv` download the dependencies:
-```
-uv sync
+There are helper scripts runnable through `r0b0/Makefile`, though some may need modification depending on your host machine.
+
+### Clone `r0b0` repository
+First, we clone the base `rr0b0` repository, as well as the `micropython-servo` submodule repository for loading the firmware onto hte Pico.
+```bash
+# Clone the main repository
+git clone https://github.com/msgtn/r0b0
+cd r0b0
+
+# clone the micropython-servo repository to /deps/micropython-servo
+git submoule update --init --recursive 
 ```
 
+### Pico
+#### Micropython
+Now, weload the MicroPython firmware on the Pico.
+The full instructions, paragraphsed from the Raspberry Pi website
+- [ ] Link to raspebrry pi page
+- While holding down the `BOOTSEL` button, connect the Pico to the computer through USB.
+- The Pico should appear as a mounted volume. 
+	- Download the appropriate file from the Raspberry Pi website, and copy onto the board. The board should momentarily disconnect.
+	- Alternatively, from `/r0b0/deps/micropython-servo`, try running `make micropython-dl` which `wget`s the firmware onto the board, assuming the board is the Pico W.
 
-## Starting Blossom
-This command will start the two nodes comprising Blossom: one node controls the motors by sending serial commands to the Pi Pico; the other node serves webpages for interfaces, such as the motion-based phone controller or the keyboard controller.
-```
-uv run blsm
-```
+#### `rshell`
+Next, we connect to the Pico through the terminal using `rshell`, a command-line utility.
+We'll use `uv` to manaage `rshell` and its dependencies.
+- Install `uv`, [instructions here](https://docs.astral.sh/uv/getting-started/installation/).
+- From within `/r0b0/deps/micropython-servo`, start `rshell` with `uvx rshell`. `rshell` should detect the Pico on a given port.
+- The commands to copy the files are in `/micropython-servo/copy-files.sh`, but this file is not executable from within `rshell`, so copy and execute each command line by line. After executing the commands, the directory structure at `/pyboard` should be identical to `/micropython-servo/src`.
+
+#### Wire Pico to Zero
+- Disconnect the Pico from the computer.
+- Following the wiring diagram, connect the Pico's power and UART pins to the Zero.
+- Following the wiring diagram, connect the servos to the Pico's GPIO pins and separate power supply.
+
+### Zero
+#### Imaging
+Next, we set up the Zero.
+- Download the Raspberry Pi Imager
+	-  [ ] Add link
+- Connect a microSD card to the computer.
+- Open the imager, and burn the latest `bookworm` image onto the SD card.
+	- Apply any settings for connecting to wifi.
+
+
+#### Set up USB gadget mode
+- [ ] Link to repository
+- Edit files
+	- [ ] Can the files be edited before booting the Zero?
+- Shutdown the Zero and reonnect to the computer through the `USB` input, **not** `PWR IN`
+- On the host machine, apply the OS-specific configuration settings for connecting to the Zero.
+	- [ ] Add link to these instructions
+
+#### Docker
+Next, we build the project image and configure startup service to run on boot
+- Install docker
+- Clone the repository (pulling the `micropython-servo` submodule is not necessary)
+- In `/r0b0`, build the image with `make docker-build`
+- Configure the image as a startup service with `make service`
+	- Check the status of the Docker image with `docker ps`. There should be a running container tagged `r0b0:latest`.
+	- Check the status of the service with `journalctl --follow -u blsm`. Any errors will be indicated here.
+
+# TODO
+- [ ] Motor calibration instructions and interface
+
+# BELOW IS OLD
 
 ### Motor calibration (Dynamixel models only)
 Next, we will calibrate the motors.
