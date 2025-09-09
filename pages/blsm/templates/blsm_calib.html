@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Slider</title>
+    <style>
+        .slider {
+            width: 60%;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .slider img {
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+<p id="slider-value">test</p>
+
+<script>
+  // Function to update the display text based on slider position
+  function updateSliderDisplay() {
+    let currentValue = this.value;
+    let max = this.max;
+
+    document.getElementById('slider-value').innerText = `${currentValue} / ${max}`;
+  }
+  let sliderName = ''
+  let slider = undefined;
+  let sliders = [];
+
+  // Create the slider element
+  for (let i=1; i<5; i++) {
+
+    // sliderName = `input${i}`;
+    let sliderName = 'input';
+    // let sliderName = ;
+    let slider = document.createElement(sliderName);
+    slider.id = `slider${i}`;
+    slider.type = 'range';
+    slider.min = 10; // Minimum value
+    slider.max = 170; // Maximum value
+    slider.value = 90; // Initial value
+
+    // Attach event listener to update display on slider change
+    slider.addEventListener(sliderName, updateSliderDisplay);
+
+    // Append the slider to the document body
+    sliders.push(slider);
+    document.body.appendChild(slider);
+
+    // Display initial value
+    updateSliderDisplay();
+  };
+
+</script>
+
+</body>
+</html>

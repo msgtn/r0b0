@@ -186,6 +186,7 @@ class BlsmPageNode(WebPageNode):
             "blsm_player",
             "blsm_broadcast",
             "blsm_web",
+            "blsm_calib",
             "reset",
             "tapes",
         ]:
