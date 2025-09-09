@@ -25,7 +25,7 @@ from r0b0.config import (
     SERVER_PORT,
     SOCKET_ADDR,
 )
-from r0b0_interfaces.msg import DeviceMotion
+from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
@@ -101,7 +101,12 @@ class BlsmPageNode(WebPageNode):
             "answer",
             "candidate",
         ]
-        interface_events = ["phone_text", "device_motion", "key_event"]
+        interface_events = [
+            "phone_text",
+            "device_motion",
+            "key_event",
+            "slider_event",
+        ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
         self.broadcaster_id = None
@@ -111,6 +116,9 @@ class BlsmPageNode(WebPageNode):
         )
         self.key_event_pub = self.create_publisher(
             String, "/blsm/key_event", 10
+        )
+        self.motor_command_pub = self.create_publisher(
+            MotorCommands, "/blsm/motor_cmd", 10
         )
         self.server_thread = Thread(target=self.start_web_server)
 
@@ -177,6 +185,19 @@ class BlsmPageNode(WebPageNode):
                 mirror=msg["mirror"],
             )
         )
+
+    def slider_event(self, msg):
+        if "id" in msg and "value" in msg:
+            print(msg)
+            self.motor_command_pub.publish(
+                MotorCommands(
+                    data=[
+                        MotorCommand(
+                            name=msg["id"], position_rad=float(msg["value"])
+                        )
+                    ]
+                )
+            )
 
     def setup_routes(self):
         """Define routes for the Flask app."""
