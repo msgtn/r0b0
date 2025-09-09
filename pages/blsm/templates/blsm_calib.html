@@ -1,61 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Slider</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+
     <style>
-        .slider {
-            width: 60%;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-        .slider img {
-            transition: transform 0.5s ease;
-        }
+      .slider {
+        width: 60%;
+        margin: 20px auto;
+        overflow: hidden;
+      }
+      .slider img {
+        transition: transform 0.5s ease;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <p id="slider-value">test</p>
+    <button id="reset-sliders">Reset to calibration position</button>
+    <script>
+      let socketAddr = window.location.origin;
+      // Connect to the Socket.IO server
+      const socket = io.connect(socketAddr); // Replace with your server address
+      // Function to update the display text based on slider position
+      function updateSliderDisplay(idx) {
+        let currentValue = this.value;
+        let max = this.max;
 
-<p id="slider-value">test</p>
+        document.getElementById(
+          "slider-value"
+        ).innerText = `${currentValue} / ${max}`;
+        socket.emit("slider_event", { id: this.id, value: this.value });
+        console.log(this.id, currentValue);
+      }
+      let sliderName = "";
+      let slider = undefined;
+      let sliders = [];
 
-<script>
-  // Function to update the display text based on slider position
-  function updateSliderDisplay() {
-    let currentValue = this.value;
-    let max = this.max;
+      // Create the slider element
+      for (let i = 1; i < 5; i++) {
+        // sliderName = `input${i}`;
+        let sliderName = "input";
+        // let sliderName = ;
+        let slider = document.createElement(sliderName);
+        slider.id = `slider${i}`;
+        slider.type = "range";
+        slider.min = 10; // Minimum value
+        slider.max = 170; // Maximum value
+        slider.value = 90; // Initial value
 
-    document.getElementById('slider-value').innerText = `${currentValue} / ${max}`;
-  }
-  let sliderName = ''
-  let slider = undefined;
-  let sliders = [];
+        // Attach event listener to update display on slider change
+        slider.addEventListener(sliderName, updateSliderDisplay);
 
-  // Create the slider element
-  for (let i=1; i<5; i++) {
+        // Append the slider to the document body
+        sliders.push(slider);
+        document.body.appendChild(slider);
 
-    // sliderName = `input${i}`;
-    let sliderName = 'input';
-    // let sliderName = ;
-    let slider = document.createElement(sliderName);
-    slider.id = `slider${i}`;
-    slider.type = 'range';
-    slider.min = 10; // Minimum value
-    slider.max = 170; // Maximum value
-    slider.value = 90; // Initial value
+        // Display initial value
+        updateSliderDisplay();
+      }
 
-    // Attach event listener to update display on slider change
-    slider.addEventListener(sliderName, updateSliderDisplay);
-
-    // Append the slider to the document body
-    sliders.push(slider);
-    document.body.appendChild(slider);
-
-    // Display initial value
-    updateSliderDisplay();
-  };
-
-</script>
-
-</body>
+      document.getElementById("reset-sliders").onclick = function () {
+        sliders.forEach((slider) => {
+          slider.value = 90;
+          slider.dispatchEvent(new Event("input"));
+        });
+      };
+    </script>
+  </body>
 </html>
