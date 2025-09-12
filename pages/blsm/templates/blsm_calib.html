@@ -22,8 +22,6 @@
     </style>
   </head>
   <body>
-    <p id="slider-value">test</p>
-    <button id="reset-sliders">Reset to calibration position</button>
     <script>
       let socketAddr = window.location.origin;
       // Connect to the Socket.IO server
@@ -33,11 +31,12 @@
         let currentValue = this.value;
         let max = this.max;
 
+        let id = this.id.replace("slider", "");
         document.getElementById(
-          "slider-value"
-        ).innerText = `${currentValue} / ${max}`;
-        socket.emit("slider_event", { id: this.id, value: this.value });
-        console.log(this.id, currentValue);
+          `slider-value${id}`
+        ).innerText = `Motor ${id}: ${currentValue} / ${max}`;
+        socket.emit("slider_event", { id: id, value: this.value });
+        console.log(id, currentValue);
       }
       let sliderName = "";
       let slider = undefined;
@@ -54,6 +53,9 @@
         slider.min = 10; // Minimum value
         slider.max = 170; // Maximum value
         slider.value = 90; // Initial value
+        let sliderValue = document.createElement("p");
+        sliderValue.id = `slider-value${i}`;
+        sliderValue.innerText = `Motor ${i}: 90/170`;
 
         // Attach event listener to update display on slider change
         slider.addEventListener(sliderName, updateSliderDisplay);
@@ -61,11 +63,12 @@
         // Append the slider to the document body
         sliders.push(slider);
         document.body.appendChild(slider);
-
-        // Display initial value
-        updateSliderDisplay();
+        document.body.appendChild(sliderValue);
       }
-
+    </script>
+    <br />
+    <button id="reset-sliders">Reset to calibration position</button>
+    <script>
       document.getElementById("reset-sliders").onclick = function () {
         sliders.forEach((slider) => {
           slider.value = 90;

@@ -17,8 +17,8 @@ def main():
     rclpy.init()
     robot_node = BlsmRobotNode(
         name="robot_node",
-        # motor_map=DEG2SERVO,
-        motor_map=DEG2DXL,
+        motor_map=DEG2SERVO,
+        # motor_map=DEG2DXL,
         port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
     )
     # robot_node = HeadRobotNode("robot_node")

@@ -26,16 +26,13 @@ from r0b0.config import (
     SERVER_PORT,
     SOCKET_ADDR,
 )
-from r0b0_interfaces.msg import DeviceMotion
+from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
 
 class RobotNode(Node):
-    def __init__(
-        self,
-        name,
-    ):
+    def __init__(self, name, **kwargs):
         super().__init__(name)
         self.motor_id_pos: dict[str, float] = {}
         self.rotation = Rotation.from_euler("ZXY", angles=[0, 0, 0])
@@ -80,7 +77,7 @@ DEG2SERVO = [
 
 
 class BlsmRobotNode(SerialRobotNode):
-    # class BlsmRobotNode(RobotNode):
+# class BlsmRobotNode(RobotNode):
     def __init__(self, motor_map=DEG2DXL, **kwargs):
         super().__init__(**kwargs)
         self._motor_map = motor_map
@@ -96,6 +93,19 @@ class BlsmRobotNode(SerialRobotNode):
             callback=self.update_rotation_from_keys,
             qos_profile=10,
         )
+        self.slider_event_sub = self.create_subscription(
+            MotorCommands,
+            "/blsm/motor_cmd",
+            callback=self.update_motors_from_sliders,
+            qos_profile=10,
+        )
+
+    def update_motors_from_sliders(self, msg: MotorCommands):
+        for motor_cmd in msg.data:
+            self.motor_id_pos.update({motor_cmd.name: motor_cmd.position_rad})
+        # NOTE 250909: this is not dissimilar from rendering functions in e.g. neopixels
+        print(self.motor_id_pos)
+        self.write_motors()
 
     def update_rotation_from_keys(self, msg: String, delta_deg=10):
         # NOTE: these controls apply to the egocentric perspective,
@@ -104,42 +114,56 @@ class BlsmRobotNode(SerialRobotNode):
         # self.get_logger().info(f"{msg=}")
         match msg.data:
             case "KeyW":
-                rotmat = [[np.cos(-delta_rad), 0, -np.sin(-delta_rad)],
-                          [0, 1, 0],
-                          [np.sin(-delta_rad), 0, np.cos(-delta_rad)]]
+                rotmat = [
+                    [np.cos(-delta_rad), 0, -np.sin(-delta_rad)],
+                    [0, 1, 0],
+                    [np.sin(-delta_rad), 0, np.cos(-delta_rad)],
+                ]
             #     rotvec = [0, -1, 0]
             case "KeyS":
-                rotmat = [[np.cos(delta_rad), 0, -np.sin(delta_rad)],
-                          [0, 1, 0],
-                          [np.sin(delta_rad), 0, np.cos(delta_rad)]]
+                rotmat = [
+                    [np.cos(delta_rad), 0, -np.sin(delta_rad)],
+                    [0, 1, 0],
+                    [np.sin(delta_rad), 0, np.cos(delta_rad)],
+                ]
 
             #     rotvec = [0, 1, 0]
             case "KeyD":
-                rotmat = [[np.cos(-delta_rad), np.sin(-delta_rad), 0],
-                          [-np.sin(-delta_rad), np.cos(-delta_rad), 0],
-                          [0, 0, 1]]
+                rotmat = [
+                    [np.cos(-delta_rad), np.sin(-delta_rad), 0],
+                    [-np.sin(-delta_rad), np.cos(-delta_rad), 0],
+                    [0, 0, 1],
+                ]
             #     rotvec = [0, 0, -1]
             case "KeyA":
-                rotmat = [[np.cos(delta_rad), np.sin(delta_rad), 0],
-                          [-np.sin(delta_rad), np.cos(delta_rad), 0],
-                          [0, 0, 1]]
+                rotmat = [
+                    [np.cos(delta_rad), np.sin(delta_rad), 0],
+                    [-np.sin(delta_rad), np.cos(delta_rad), 0],
+                    [0, 0, 1],
+                ]
             #     rotvec = [0, 0, 1]
             case "KeyE":
-                rotmat = [[1, 0, 0],
-                          [0, np.cos(-delta_rad), np.sin(-delta_rad)],
-                          [0, -np.sin(-delta_rad), np.cos(-delta_rad)]]
+                rotmat = [
+                    [1, 0, 0],
+                    [0, np.cos(-delta_rad), np.sin(-delta_rad)],
+                    [0, -np.sin(-delta_rad), np.cos(-delta_rad)],
+                ]
             #     rotvec = [-1, 0, 0]
             case "KeyQ":
-                rotmat = [[1, 0, 0],
-                          [0, np.cos(delta_rad), np.sin(delta_rad)],
-                          [0, -np.sin(delta_rad), np.cos(delta_rad)]]
+                rotmat = [
+                    [1, 0, 0],
+                    [0, np.cos(delta_rad), np.sin(delta_rad)],
+                    [0, -np.sin(delta_rad), np.cos(delta_rad)],
+                ]
             #     rotvec = [1, 0, 0]
             case _:
                 rotmat = np.eye(3)
             #     rotvec = [0,0,0]
         # self.rotation *= Rotation.from_rotvec(delta_rad*np.array(rotvec))
         self.rotation *= Rotation.from_matrix(rotmat)
-        self._ik(self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False)
+        self._ik(
+            self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False
+        )
 
     def ik(self, msg: DeviceMotion, sensitivity: float = 1.0):
         """
@@ -176,10 +200,14 @@ class BlsmRobotNode(SerialRobotNode):
         if portrait:
             r = r * Rotation.from_euler("Y", np.pi / 2)
         self.rotation = r
-        return self._ik(r, alpha=alpha-yaw_offset, mirror=msg.mirror, sensitivity=sensitivity)
+        return self._ik(
+            r,
+            alpha=alpha - yaw_offset,
+            mirror=msg.mirror,
+            sensitivity=sensitivity,
+        )
 
-    def _ik(self, r, alpha, mirror: bool, sensitivity:float=1.0):
-
+    def _ik(self, r, alpha, mirror: bool, sensitivity: float = 1.0):
         # NOTE: could rewrite as matrix multiplication
         p_0 = [
             r.apply(_p)
