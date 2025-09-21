@@ -1,80 +1,295 @@
-<!DOCTYPE html>
+<!DOC    <meta name="description" content="Motor Calibration for r0b0 robot" />
+    <meta name="author" content="" />
+    <title>Calibration - r0b0 Framework</title>E html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Slider</title>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-      crossorigin="anonymous"
-    ></script>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Motor Control and Calibration for r0b0 robot" />
+    <meta name="author" content="" />
+    <title>Motor Control - r0b0 Framework</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/main/assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/main/css/styles.css" rel="stylesheet" />
+    <!-- Include Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+        crossorigin="anonymous"></script>
+</head>
+<body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="/">r0b0</a>
+            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <!-- Masthead Heading-->
+            <h1 class="masthead-heading text-uppercase mb-0">Calibration</h1>
+            <!-- Icon Divider-->
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-sliders-h"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Masthead Subheading-->
+            <p class="masthead-subheading font-weight-light mb-0">Robot Motor Calibration and Control</p>
+        </div>
+    </header>
+    <!-- Motor Control Section-->
+    <section class="page-section bg-white" id="motorcontrol">
+        <div class="container">
+            <!-- Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Motor Calibration</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Instructions and Controls-->
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <p class="lead mb-4">Use the sliders below to control and calibrate robot motors. </p>
+                    
+                    <!-- Connection Status -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">
+                                <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+                                Connection Status
+                            </h5>
+                            <p class="card-text" id="connectionStatus">Connecting to server...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Motor Controls -->
+                    <div class="row" id="motorControls">
+                        <!-- Motor sliders will be dynamically generated here -->
+                    </div>
+                    
+                    <!-- Reset Button -->
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-lg" id="reset-sliders">
+                            <i class="fas fa-undo me-2"></i>
+                            Reset to Calibration Position
+                        </button>
+                    </div>
+                    
+                    <!-- Instructions -->
+                    <div class="mt-4">
+                        <h6 class="text-uppercase mb-3">Instructions</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="small">• Drag sliders to adjust motor positions</p>
+                                <p class="small">• Changes are sent immediately via WebSocket</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="small">• Use reset button to return to calibration position (90°)</p>
+                                <p class="small">• Monitor connection status above</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer-->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <!-- Footer Project Info-->
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
+                    <p class="lead mb-0">
+                        Communication library for<br />
+                        hardware and software
+                    </p>
+                </div>
+                <!-- Footer Social Icons-->
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Links</h4>
+                    <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-fw fa-github"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"><i class="fas fa-fw fa-keyboard"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"><i class="fas fa-fw fa-sliders-h"></i></a>
+                </div>
+                <!-- Footer About Text-->
+                <div class="col-lg-4">
+                    <h4 class="text-uppercase mb-4">Open Source</h4>
+                    <p class="lead mb-0">
+                        Licensed under AGPL-3.0<br />
+                        <a href="https://github.com/msgtn/r0b0">View Source Code</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Copyright Section-->
+    <div class="copyright py-4 text-center text-white">
+        <div class="container"><small>Copyright &copy; r0b0 Framework 2023</small></div>
+    </div>
 
-    <style>
-      .slider {
-        width: 60%;
-        margin: 20px auto;
-        overflow: hidden;
-      }
-      .slider img {
-        transition: transform 0.5s ease;
-      }
-    </style>
-  </head>
-  <body>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="/main/js/scripts.js"></script>
+    
+    <!-- Motor Control Script -->
     <script>
-      let socketAddr = window.location.origin;
-      // Connect to the Socket.IO server
-      const socket = io.connect(socketAddr); // Replace with your server address
-      // Function to update the display text based on slider position
-      function updateSliderDisplay(idx) {
-        let currentValue = this.value;
-        let max = this.max;
+        let socketAddr = window.location.origin;
+        
+        // DOM elements
+        const connectionStatusElement = document.getElementById('connectionStatus');
+        const connectionIconElement = document.getElementById('connectionIcon');
+        const motorControlsContainer = document.getElementById('motorControls');
+        
+        let sliders = [];
 
-        let id = this.id.replace("slider", "");
-        document.getElementById(
-          `slider-value${id}`
-        ).innerText = `Motor ${id}: ${currentValue} / ${max}`;
-        socket.emit("slider_event", { id: id, value: this.value });
-        console.log(id, currentValue);
-      }
-      let sliderName = "";
-      let slider = undefined;
-      let sliders = [];
+        // Initialize connection status
+        function setConnectionStatus(status, message, iconClass) {
+            connectionStatusElement.textContent = message;
+            connectionIconElement.className = iconClass;
+        }
 
-      // Create the slider element
-      for (let i = 1; i < 5; i++) {
-        // sliderName = `input${i}`;
-        let sliderName = "input";
-        // let sliderName = ;
-        let slider = document.createElement(sliderName);
-        slider.id = `slider${i}`;
-        slider.type = "range";
-        slider.min = 10; // Minimum value
-        slider.max = 170; // Maximum value
-        slider.value = 90; // Initial value
-        let sliderValue = document.createElement("p");
-        sliderValue.id = `slider-value${i}`;
-        sliderValue.innerText = `Motor ${i}: 90/170`;
+        // Set initial status
+        setConnectionStatus('connecting', 'Connecting to server...', 'fas fa-circle text-warning me-2');
 
-        // Attach event listener to update display on slider change
-        slider.addEventListener(sliderName, updateSliderDisplay);
-
-        // Append the slider to the document body
-        sliders.push(slider);
-        document.body.appendChild(slider);
-        document.body.appendChild(sliderValue);
-      }
-    </script>
-    <br />
-    <button id="reset-sliders">Reset to calibration position</button>
-    <script>
-      document.getElementById("reset-sliders").onclick = function () {
-        sliders.forEach((slider) => {
-          slider.value = 90;
-          slider.dispatchEvent(new Event("input"));
+        // Connect to the Socket.IO server
+        const socket = io.connect(socketAddr, {
+            timeout: 5000,
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionAttempts: 5
         });
-      };
+
+        // Function to update the display text based on slider position
+        function updateSliderDisplay(event) {
+            // Only process if connected
+            if (!socket.connected) {
+                return;
+            }
+
+            let currentValue = event.target.value;
+            let max = event.target.max;
+            let id = event.target.id.replace("slider", "");
+            
+            document.getElementById(`slider-value${id}`).innerText = `Motor ${id}: ${currentValue}° / ${max}°`;
+            socket.emit("slider_event", { id: id, value: currentValue });
+            console.log(`Motor ${id}: ${currentValue}`);
+        }
+
+        // Create motor sliders
+        function createMotorSliders() {
+            for (let i = 1; i < 5; i++) {
+                // Create column div
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-6 col-lg-3 mb-4';
+                
+                // Create card
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card h-100';
+                
+                // Create card body
+                const cardBodyDiv = document.createElement('div');
+                cardBodyDiv.className = 'card-body text-center';
+                
+                // Create title
+                const title = document.createElement('h5');
+                title.className = 'card-title';
+                title.innerHTML = `<i class="fas fa-cog me-2"></i>Motor ${i}`;
+                
+                // Create slider
+                const slider = document.createElement('input');
+                slider.id = `slider${i}`;
+                slider.type = 'range';
+                slider.className = 'form-range mb-3';
+                slider.min = 10;
+                slider.max = 170;
+                slider.value = 90;
+                
+                // Create value display
+                const sliderValue = document.createElement('p');
+                sliderValue.id = `slider-value${i}`;
+                sliderValue.className = 'card-text';
+                sliderValue.innerText = `Motor ${i}: 90° / 170°`;
+                
+                // Attach event listener
+                slider.addEventListener('input', updateSliderDisplay);
+                
+                // Assemble the card
+                cardBodyDiv.appendChild(title);
+                cardBodyDiv.appendChild(slider);
+                cardBodyDiv.appendChild(sliderValue);
+                cardDiv.appendChild(cardBodyDiv);
+                colDiv.appendChild(cardDiv);
+                
+                // Add to container
+                motorControlsContainer.appendChild(colDiv);
+                sliders.push(slider);
+            }
+        }
+
+        // Reset sliders function
+        document.getElementById("reset-sliders").onclick = function () {
+            sliders.forEach((slider) => {
+                slider.value = 90;
+                slider.dispatchEvent(new Event("input"));
+            });
+        };
+
+        // Handle connection events
+        socket.on('connect', () => {
+            console.log('Connected to the server');
+            setConnectionStatus('connected', 'Connected to server - Motor controls active', 'fas fa-circle text-success me-2');
+        });
+
+        socket.on('disconnect', (reason) => {
+            console.log('Disconnected from the server:', reason);
+            setConnectionStatus('disconnected', `Disconnected from server (${reason}) - Motor controls inactive`, 'fas fa-circle text-danger me-2');
+        });
+
+        socket.on('connect_error', (error) => {
+            console.log('Connection error:', error);
+            setConnectionStatus('error', 'Connection error - Unable to reach server', 'fas fa-circle text-danger me-2');
+        });
+
+        socket.on('reconnect', (attemptNumber) => {
+            console.log('Reconnected to server after', attemptNumber, 'attempts');
+            setConnectionStatus('connected', 'Reconnected to server - Motor controls active', 'fas fa-circle text-success me-2');
+        });
+
+        socket.on('reconnect_attempt', (attemptNumber) => {
+            console.log('Attempting to reconnect... attempt', attemptNumber);
+            setConnectionStatus('reconnecting', `Reconnecting... (attempt ${attemptNumber})`, 'fas fa-circle text-warning me-2');
+        });
+
+        socket.on('reconnect_failed', () => {
+            console.log('Failed to reconnect');
+            setConnectionStatus('failed', 'Failed to reconnect - Please refresh the page', 'fas fa-circle text-danger me-2');
+        });
+
+        // Initialize sliders when page loads
+        document.addEventListener('DOMContentLoaded', createMotorSliders);
     </script>
-  </body>
+</body>
 </html>

@@ -3,19 +3,65 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
-import copy
 import os
 import time
 from threading import Thread
 
-import rclpy
+# Set to True to disable ROS2 imports for testing without ROS2
+NO_ROS = True
+
+if not NO_ROS:
+    import rclpy
+    from geometry_msgs.msg import Vector3
+    from rclpy.executors import MultiThreadedExecutor
+    from rclpy.node import Node
+    from std_msgs.msg import String
+    from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
+else:
+    class Node:
+        def __init__(self, name):
+            self._name = name
+        def get_logger(self):
+            import logging
+            logging.basicConfig(level=logging.INFO)
+            return logging.getLogger(self._name)
+        def create_publisher(self, *args, **kwargs):
+            return self
+        def publish(self, *args, **kwargs):
+            pass
+        def destroy_node(self):
+            pass
+
+    class MultiThreadedExecutor:
+        def add_node(self, node):
+            pass
+        def spin_once(self, *args, **kwargs):
+            pass
+    
+    class _rclpy:
+        def init(self, *args, **kwargs):
+            pass
+        def spin(self, node, *args, **kwargs):
+            # keep main thread alive
+            node.get_logger().info('Spinning')
+            while True:
+                time.sleep(1)
+        def shutdown(self):
+            pass
+        def ok(self):
+            return True
+
+    rclpy = _rclpy()
+    Vector3 = dict
+    String = dict
+    DeviceMotion = dict
+    MotorCommands = dict
+    MotorCommand = dict
+
+
 from flask import Flask, render_template, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
-from geometry_msgs.msg import Vector3
-from rclpy.executors import MultiThreadedExecutor
-from rclpy.node import Node
-from std_msgs.msg import String
 
 from r0b0.config import (
     CSR_PEM,
@@ -25,9 +71,11 @@ from r0b0.config import (
     SERVER_PORT,
     SOCKET_ADDR,
 )
-from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
+if not NO_ROS:
+    from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
+MAIN_PAGES_FOLDER = str(ROOT_DIR / "pages" / "main")
 
 
 class WebPageNode(Node):
@@ -57,7 +105,7 @@ class WebPageNode(Node):
         self.socketio = SocketIO(
             self.app,
             cors_allowed_origins="*",
-            max_http_buffer_size=1e8,
+            max_http_buffer_size=int(1e8),
         )
         self.certfile = certfile
         self.keyfile = keyfile
@@ -121,6 +169,20 @@ class BlsmPageNode(WebPageNode):
             MotorCommands, "/blsm/motor_cmd", 10
         )
         self.server_thread = Thread(target=self.start_web_server)
+        
+        # Add support for serving main static files
+        self.setup_main_static_route()
+
+    def setup_main_static_route(self):
+        """Set up route to serve static files from main pages folder."""
+        from flask import send_from_directory
+        
+        @self.app.route('/main/<path:filename>')
+        def main_static(filename):
+            return send_from_directory(
+                os.path.join(MAIN_PAGES_FOLDER, 'static'), 
+                filename
+            )
 
     def broadcaster(self, sid):
         self.get_logger().info(f"{sid=}")
@@ -201,6 +263,21 @@ class BlsmPageNode(WebPageNode):
 
     def setup_routes(self):
         """Define routes for the Flask app."""
+        
+        # Add home page route to serve main template
+        @self.app.route('/')
+        def home():
+            from flask import render_template_string
+            # Read the main template file directly
+            main_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'index.html')
+            with open(main_template_path, 'r') as f:
+                template_content = f.read()
+            # Replace asset paths to use the /main/ prefix
+            template_content = template_content.replace('href="css/', 'href="/main/css/')
+            template_content = template_content.replace('src="js/', 'src="/main/js/')
+            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
+            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            return render_template_string(template_content)
 
         for _route in [
             "blsm_controller",
