@@ -8,7 +8,7 @@ import time
 from threading import Thread
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = True
+NO_ROS = False
 
 if not NO_ROS:
     import rclpy
