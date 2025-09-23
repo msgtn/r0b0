@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Speech Recognition for r0b0 robot control" />
+        <meta name="author" content="" />
+        <title>Speech Recognition - r0b0 Framework</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <!-- Include Socket.IO -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+            integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+            crossorigin="anonymous"></script>
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="#page-top">r0b0</a>
+                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/speech_recognition">Speech</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/speech_history" target="_blank">History</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">Speech Recognition</h1>
+                <!-- Icon Divider-->
+                <div class="divider-custom divider-light">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-microphone"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Masthead Subheading-->
+                <p class="masthead-subheading font-weight-light mb-0">Voice Commands for Robot Control</p>
+            </div>
+        </header>
+        <!-- Speech Recognition Section-->
+        <section class="page-section bg-white" id="speechrecognition">
+            <div class="container">
+                <!-- Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Voice Command Center</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <!-- Browser Compatibility Check-->
+                        <div class="mb-4">
+                            <div class="card" id="compatibilityCard">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">
+                                        <i id="compatibilityIcon" class="fas fa-info-circle me-2"></i>
+                                        Browser Compatibility
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p id="compatibilityMessage">Checking browser compatibility...</p>
+                                    <div id="compatibilityDetails" class="mt-3" style="display: none;">
+                                        <small class="text-muted">
+                                            <strong>Browser:</strong> <span id="browserInfo"></span><br>
+                                            <strong>Speech Recognition:</strong> <span id="speechRecognitionSupport"></span><br>
+                                            <strong>Speech Synthesis:</strong> <span id="speechSynthesisSupport"></span><br>
+                                            <strong>Processing Location:</strong> <span id="processingLocation"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Connection Status-->
+                        <div class="mb-4">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">
+                                        <i id="connectionIcon" class="fas fa-circle text-warning me-2"></i>
+                                        Server Connection
+                                    </h6>
+                                    <p id="connectionStatus" class="card-text mb-0">Connecting to server...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Speech Controls-->
+                        <div class="mb-4" id="speechControls" style="display: none;">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row d-flex">
+                                        <div class="col-md-6 mb-3 text-center d-flex flex-column">
+                                            <h5><i class="fas fa-microphone me-2"></i>Speech Recognition</h5>
+                                            <div>
+                                                <button id="startRecognition" class="btn btn-success btn-lg me-2">
+                                                    <i class="fas fa-play me-2"></i>Start Listening
+                                                </button>
+                                                <button id="stopRecognition" class="btn btn-danger btn-lg" disabled>
+                                                    <i class="fas fa-stop me-2"></i>Stop Listening
+                                                </button>
+                                            </div>
+                                            <div class="mt-auto">
+                                                <label class="form-label">Language:</label>
+                                                <select id="languageSelect" class="form-select" style="max-width: 200px; margin: 0 auto;">
+                                                    <option value="en-US">English (US)</option>
+                                                    <option value="en-GB">English (UK)</option>
+                                                    <option value="es-ES">Spanish</option>
+                                                    <option value="fr-FR">French</option>
+                                                    <option value="de-DE">German</option>
+                                                    <option value="ja-JP">Japanese</option>
+                                                    <option value="zh-CN">Chinese (Mandarin)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3 text-center d-flex flex-column">
+                                            <h5><i class="fas fa-volume-up me-2"></i>Speech Synthesis</h5>
+                                            <div class="input-group mb-3">
+                                                <input type="text" id="textToSpeak" class="form-control" placeholder="Enter text to speak" value="Hello, robot commands received!">
+                                                <button id="speakButton" class="btn btn-primary">
+                                                    <i class="fas fa-volume-up me-2"></i>Speak
+                                                </button>
+                                            </div>
+                                            <div class="mt-auto">
+                                                <label class="form-label">Voice:</label>
+                                                <select id="voiceSelect" class="form-select" style="max-width: 200px; margin: 0 auto;">
+                                                    <!-- Voices will be populated by JavaScript -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Speech Recognition Results-->
+                        <div>
+                            <div class="card bg-primary text-white">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-comments me-2"></i>
+                                    Voice Commands
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Status:</strong> <span id="recognitionStatus">Ready to listen</span>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Last Command:</strong>
+                                    <div id="finalTranscript" class="p-3 bg-light text-dark rounded mt-2">
+                                        No commands spoken yet
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Listening (Live):</strong>
+                                    <div id="interimTranscript" class="p-3 bg-secondary text-white rounded mt-2">
+                                        ...
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Command History:</strong>
+                                    <div id="commandHistory" class="p-3 bg-light text-dark rounded mt-2" style="max-height: 200px; overflow-y: auto;">
+                                        <small class="text-muted">Command history will appear here...</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Usage Instructions-->
+                <div class="row justify-content-center mt-4">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    How to Use
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>Click "Start Listening" to begin voice recognition</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Speak clearly into your microphone</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Commands are sent to the robot in real-time</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Use the text-to-speech feature for audio feedback</li>
+                                    <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Requires HTTPS in production environments</li>
+                                    <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>Allow microphone access when prompted</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <!-- Footer Project Info-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
+                        <p class="lead mb-0">
+                            Communication library for<br />
+                            hardware and software
+                        </p>
+                    </div>
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Links</h4>
+                        <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-fw fa-github"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"><i class="fas fa-fw fa-keyboard"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"><i class="fas fa-fw fa-sliders-h"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="/speech_recognition"><i class="fas fa-fw fa-microphone"></i></a>
+                    </div>
+                    <!-- Footer About Text-->
+                    <div class="col-lg-4">
+                        <h4 class="text-uppercase mb-4">Open Source</h4>
+                        <p class="lead mb-0">
+                            Licensed under AGPL-3.0<br />
+                            <a href="https://github.com/msgtn/r0b0">View Source Code</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Copyright &copy; r0b0 Framework 2023</small></div>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        
+        <!-- Speech Recognition Script -->
+        <script>
+            let socketAddr = window.location.origin;
+            
+            // DOM elements
+            const compatibilityCard = document.getElementById('compatibilityCard');
+            const compatibilityMessage = document.getElementById('compatibilityMessage');
+            const compatibilityDetails = document.getElementById('compatibilityDetails');
+            const compatibilityIcon = document.getElementById('compatibilityIcon');
+            const browserInfo = document.getElementById('browserInfo');
+            const speechRecognitionSupport = document.getElementById('speechRecognitionSupport');
+            const speechSynthesisSupport = document.getElementById('speechSynthesisSupport');
+            const processingLocation = document.getElementById('processingLocation');
+            
+            const connectionStatusElement = document.getElementById('connectionStatus');
+            const connectionIconElement = document.getElementById('connectionIcon');
+            const speechControls = document.getElementById('speechControls');
+            
+            const startRecognitionBtn = document.getElementById('startRecognition');
+            const stopRecognitionBtn = document.getElementById('stopRecognition');
+            const languageSelect = document.getElementById('languageSelect');
+            const textToSpeak = document.getElementById('textToSpeak');
+            const speakButton = document.getElementById('speakButton');
+            const voiceSelect = document.getElementById('voiceSelect');
+            
+            const recognitionStatus = document.getElementById('recognitionStatus');
+            const finalTranscript = document.getElementById('finalTranscript');
+            const interimTranscript = document.getElementById('interimTranscript');
+            const commandHistory = document.getElementById('commandHistory');
+
+            let recognition = null;
+            let isRecognitionActive = false;
+            let commandCount = 0;
+
+            // Browser detection
+            function getBrowserInfo() {
+                const userAgent = navigator.userAgent;
+                if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) return 'Chrome';
+                if (userAgent.includes('Firefox')) return 'Firefox';
+                if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
+                if (userAgent.includes('Edg')) return 'Edge';
+                return 'Unknown';
+            }
+
+            // Check browser compatibility
+            function checkCompatibility() {
+                const browser = getBrowserInfo();
+                browserInfo.textContent = browser;
+
+                // Check Speech Recognition support
+                const hasSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+                speechRecognitionSupport.textContent = hasSpeechRecognition ? 'Supported' : 'Not Supported';
+                speechRecognitionSupport.className = hasSpeechRecognition ? 'text-success' : 'text-danger';
+
+                // Check Speech Synthesis support
+                const hasSpeechSynthesis = 'speechSynthesis' in window;
+                speechSynthesisSupport.textContent = hasSpeechSynthesis ? 'Supported' : 'Not Supported';
+                speechSynthesisSupport.className = hasSpeechSynthesis ? 'text-success' : 'text-danger';
+
+                // Determine processing location (educated guess based on browser)
+                let location = 'Unknown';
+                if (browser === 'Chrome' || browser === 'Edge') {
+                    location = 'Cloud-based (Google/Microsoft)';
+                } else if (browser === 'Safari') {
+                    location = 'Hybrid (Local + Cloud)';
+                } else if (browser === 'Firefox') {
+                    location = 'Limited Support';
+                }
+                processingLocation.textContent = location;
+
+                compatibilityDetails.style.display = 'block';
+
+                if (hasSpeechRecognition && hasSpeechSynthesis) {
+                    compatibilityCard.className = 'card border-success';
+                    compatibilityCard.querySelector('.card-header').className = 'card-header bg-success text-white';
+                    compatibilityIcon.className = 'fas fa-check-circle me-2';
+                    compatibilityMessage.textContent = 'Your browser fully supports Speech Web API!';
+                    speechControls.style.display = 'block';
+                    initializeSpeechRecognition();
+                } else if (hasSpeechRecognition || hasSpeechSynthesis) {
+                    compatibilityCard.className = 'card border-warning';
+                    compatibilityCard.querySelector('.card-header').className = 'card-header bg-warning text-dark';
+                    compatibilityIcon.className = 'fas fa-exclamation-triangle me-2';
+                    compatibilityMessage.textContent = 'Partial support detected. Some features may not work.';
+                    speechControls.style.display = 'block';
+                    if (hasSpeechRecognition) initializeSpeechRecognition();
+                } else {
+                    compatibilityCard.className = 'card border-danger';
+                    compatibilityCard.querySelector('.card-header').className = 'card-header bg-danger text-white';
+                    compatibilityIcon.className = 'fas fa-times-circle me-2';
+                    compatibilityMessage.textContent = 'Your browser does not support Speech Web API. Please try Chrome, Edge, or Safari.';
+                }
+            }
+
+            // Initialize Speech Recognition
+            function initializeSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    recognition = new SpeechRecognition();
+                    
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = languageSelect.value;
+                    
+                    recognition.onstart = () => {
+                        isRecognitionActive = true;
+                        recognitionStatus.textContent = 'Listening...';
+                        startRecognitionBtn.disabled = true;
+                        stopRecognitionBtn.disabled = false;
+                        interimTranscript.textContent = 'Listening for commands...';
+                    };
+                    
+                    recognition.onresult = (event) => {
+                        let finalText = '';
+                        let interimText = '';
+                        
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            const transcript = event.results[i][0].transcript;
+                            if (event.results[i].isFinal) {
+                                finalText += transcript;
+                            } else {
+                                interimText += transcript;
+                            }
+                        }
+                        
+                        if (interimText) {
+                            interimTranscript.textContent = interimText;
+                        }
+                        
+                        if (finalText) {
+                            finalTranscript.textContent = finalText;
+                            addToCommandHistory(finalText);
+                            
+                            // Send command to server via socket
+                            if (socket && socket.connected) {
+                                socket.emit('speech_command', {
+                                    command: finalText,
+                                    language: languageSelect.value,
+                                    timestamp: new Date().toISOString()
+                                });
+                                console.log('Speech command sent:', finalText);
+                            }
+                        }
+                    };
+                    
+                    recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        recognitionStatus.textContent = `Error: ${event.error}`;
+                        if (event.error === 'not-allowed') {
+                            recognitionStatus.textContent = 'Microphone access denied. Please allow microphone access and try again.';
+                        } else if (event.error === 'network') {
+                            recognitionStatus.textContent = 'Network error. Check your internet connection.';
+                        }
+                        stopSpeechRecognition();
+                    };
+                    
+                    recognition.onend = () => {
+                        isRecognitionActive = false;
+                        recognitionStatus.textContent = 'Stopped listening';
+                        startRecognitionBtn.disabled = false;
+                        stopRecognitionBtn.disabled = true;
+                        interimTranscript.textContent = '...';
+                    };
+                }
+            }
+
+            // Initialize Speech Synthesis
+            function initializeSpeechSynthesis() {
+                if ('speechSynthesis' in window) {
+                    // Populate voice options
+                    function populateVoices() {
+                        const voices = speechSynthesis.getVoices();
+                        voiceSelect.innerHTML = '';
+                        
+                        voices.forEach((voice, index) => {
+                            const option = document.createElement('option');
+                            option.value = index;
+                            option.textContent = `${voice.name} (${voice.lang})`;
+                            voiceSelect.appendChild(option);
+                        });
+                    }
+                    
+                    // Load voices when available
+                    if (speechSynthesis.getVoices().length > 0) {
+                        populateVoices();
+                    } else {
+                        speechSynthesis.addEventListener('voiceschanged', populateVoices);
+                    }
+                }
+            }
+
+            // Speech Recognition controls
+            function startSpeechRecognition() {
+                if (recognition && !isRecognitionActive) {
+                    recognition.lang = languageSelect.value;
+                    recognition.start();
+                }
+            }
+
+            function stopSpeechRecognition() {
+                if (recognition && isRecognitionActive) {
+                    recognition.stop();
+                }
+            }
+
+            // Text-to-Speech
+            function speakText(text) {
+                if ('speechSynthesis' in window && text.trim()) {
+                    // Stop any ongoing speech
+                    speechSynthesis.cancel();
+                    
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    const voices = speechSynthesis.getVoices();
+                    
+                    if (voices.length > 0 && voiceSelect.value) {
+                        utterance.voice = voices[voiceSelect.value];
+                    }
+                    
+                    utterance.volume = 1;
+                    utterance.rate = 1;
+                    utterance.pitch = 1;
+                    
+                    utterance.onstart = () => console.log('Speech synthesis started');
+                    utterance.onend = () => console.log('Speech synthesis ended');
+                    utterance.onerror = (event) => console.error('Speech synthesis error:', event);
+                    
+                    speechSynthesis.speak(utterance);
+                }
+            }
+
+            // Add command to history
+            function addToCommandHistory(command) {
+                commandCount++;
+                const timestamp = new Date().toLocaleTimeString();
+                const historyItem = document.createElement('div');
+                historyItem.className = 'mb-2 p-2 border-bottom';
+                historyItem.innerHTML = `
+                    <strong>#${commandCount}</strong> 
+                    <span class="text-muted">[${timestamp}]</span><br>
+                    ${command}
+                `;
+                
+                if (commandHistory.querySelector('.text-muted')) {
+                    commandHistory.innerHTML = '';
+                }
+                
+                commandHistory.insertBefore(historyItem, commandHistory.firstChild);
+                
+                // Limit history to 10 items
+                while (commandHistory.children.length > 10) {
+                    commandHistory.removeChild(commandHistory.lastChild);
+                }
+            }
+
+            // Socket.IO connection
+            function setConnectionStatus(status, message, iconClass) {
+                connectionStatusElement.textContent = message;
+                connectionIconElement.className = iconClass;
+            }
+
+            setConnectionStatus('connecting', 'Connecting to server...', 'fas fa-circle text-warning me-2');
+
+            const socket = io.connect(socketAddr, {
+                timeout: 5000,
+                reconnection: true,
+                reconnectionDelay: 1000,
+                reconnectionAttempts: 5
+            });
+
+            // Socket event handlers
+            socket.on('connect', () => {
+                console.log('Connected to the server');
+                setConnectionStatus('connected', 'Connected to server - Speech commands active', 'fas fa-circle text-success me-2');
+            });
+
+            socket.on('disconnect', (reason) => {
+                console.log('Disconnected from the server:', reason);
+                setConnectionStatus('disconnected', `Disconnected from server (${reason})`, 'fas fa-circle text-danger me-2');
+            });
+
+            socket.on('connect_error', (error) => {
+                console.log('Connection error:', error);
+                setConnectionStatus('error', 'Connection error - Unable to reach server', 'fas fa-circle text-danger me-2');
+            });
+
+            socket.on('reconnect', (attemptNumber) => {
+                console.log('Reconnected to server after', attemptNumber, 'attempts');
+                setConnectionStatus('connected', 'Reconnected to server - Speech commands active', 'fas fa-circle text-success me-2');
+            });
+
+            socket.on('reconnect_attempt', (attemptNumber) => {
+                console.log('Attempting to reconnect... attempt', attemptNumber);
+                setConnectionStatus('reconnecting', `Reconnecting... (attempt ${attemptNumber})`, 'fas fa-circle text-warning me-2');
+            });
+
+            socket.on('reconnect_failed', () => {
+                console.log('Failed to reconnect');
+                setConnectionStatus('failed', 'Failed to reconnect - Please refresh the page', 'fas fa-circle text-danger me-2');
+            });
+
+            // Event listeners
+            startRecognitionBtn.addEventListener('click', startSpeechRecognition);
+            stopRecognitionBtn.addEventListener('click', stopSpeechRecognition);
+            speakButton.addEventListener('click', () => speakText(textToSpeak.value));
+            
+            languageSelect.addEventListener('change', () => {
+                if (recognition) {
+                    recognition.lang = languageSelect.value;
+                }
+            });
+
+            // Initialize everything when page loads
+            document.addEventListener('DOMContentLoaded', () => {
+                checkCompatibility();
+                initializeSpeechSynthesis();
+            });
+        </script>
+    </body>
+</html>
