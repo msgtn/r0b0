@@ -8,7 +8,7 @@ import time
 from threading import Thread
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = False
+NO_ROS = True
 
 if not NO_ROS:
     import rclpy
@@ -154,10 +154,12 @@ class BlsmPageNode(WebPageNode):
             "device_motion",
             "key_event",
             "slider_event",
+            "speech_command",
         ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
         self.broadcaster_id = None
+        self.speech_commands = []
         self.pub = self.create_publisher(String, "/blsm", 10)
         self.device_motion_pub = self.create_publisher(
             DeviceMotion, "/blsm/device_motion", 10
@@ -167,6 +169,9 @@ class BlsmPageNode(WebPageNode):
         )
         self.motor_command_pub = self.create_publisher(
             MotorCommands, "/blsm/motor_cmd", 10
+        )
+        self.speech_command_pub = self.create_publisher(
+            String, "/blsm/speech_command", 10
         )
         self.server_thread = Thread(target=self.start_web_server)
         
@@ -261,6 +266,42 @@ class BlsmPageNode(WebPageNode):
                 )
             )
 
+    def speech_command(self, data):
+        """Handle speech command from client."""
+        try:
+            command = data.get('command', '')
+            language = data.get('language', 'en-US')
+            confidence = data.get('confidence', 0.0)
+            
+            if not command:
+                emit('speech_response', {'status': 'error', 'message': 'No command provided'})
+                return
+            
+            # Store the command
+            self.speech_commands.append(data)
+
+            # Publish to ROS2 topic
+            ros_msg = String(data=command)
+            self.speech_command_pub.publish(ros_msg)
+            
+            self.get_logger().info(f"Speech command published: {command} (lang: {language}, conf: {confidence:.2f})")
+            
+            # Send success response
+            emit('speech_response', {
+                'status': 'success',
+                'message': f'Command processed: {command}',
+                'command': command,
+                'language': language,
+                'confidence': confidence
+            })
+            
+        except Exception as e:
+            self.get_logger().error(f"Error processing speech command: {e}")
+            emit('speech_response', {
+                'status': 'error',
+                'message': f'Error processing command: {str(e)}'
+            })
+
     def setup_routes(self):
         """Define routes for the Flask app."""
         
@@ -278,6 +319,26 @@ class BlsmPageNode(WebPageNode):
             template_content = template_content.replace('src="assets/', 'src="/main/assets/')
             template_content = template_content.replace('href="assets/', 'href="/main/assets/')
             return render_template_string(template_content)
+
+        # Add speech recognition route from main templates
+        @self.app.route('/speech_recognition')
+        def speech_recognition():
+            from flask import render_template_string
+            # Read the speech recognition template file directly
+            speech_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'speech_recognition.html')
+            with open(speech_template_path, 'r') as f:
+                template_content = f.read()
+            # Replace asset paths to use the /main/ prefix
+            template_content = template_content.replace('href="css/', 'href="/main/css/')
+            template_content = template_content.replace('src="js/', 'src="/main/js/')
+            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
+            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            return render_template_string(template_content)
+
+        @self.app.route('/speech_history')
+        def speech_history():
+            from flask import jsonify
+            return jsonify(self.speech_commands)
 
         for _route in [
             "blsm_controller",
