@@ -31,6 +31,8 @@
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/speech_recognition">Speech</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/speech_history" target="_blank">History</a></li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a></li>
                     </ul>
                 </div>
@@ -51,7 +53,7 @@
                 <p class="masthead-subheading font-weight-light mb-0">Communication Framework - Hardware Interface - Robot Control</p>
                 <!-- Quick Links Section-->
                 <div class="row mt-5">
-                    <div class="col-lg-6 mb-4 mb-lg-0 d-flex flex-column">
+                    <div class="col-lg-4 mb-4 mb-lg-0 d-flex flex-column">
                         <h4 class="text-uppercase mb-3">Key Events</h4>
                         <p class="lead font-weight-light mb-3">Capture keyboard inputs to control robot actions in real-time.</p>
                         <a class="btn btn-outline-light mt-auto align-self-center" href="/blsm_web">
@@ -59,12 +61,20 @@
                             Go to Key Events
                         </a>
                     </div>
-                    <div class="col-lg-6 d-flex flex-column">
+                    <div class="col-lg-4 mb-4 mb-lg-0 d-flex flex-column">
                         <h4 class="text-uppercase mb-3">Motor Calibration</h4>
                         <p class="lead font-weight-light mb-3">Fine-tune motor positions with interactive sliders for precise calibration.</p>
                         <a class="btn btn-outline-light mt-auto align-self-center" href="/blsm_calib">
                             <i class="fas fa-sliders-h me-2"></i>
                             Go to Calibration
+                        </a>
+                    </div>
+                    <div class="col-lg-4 d-flex flex-column">
+                        <h4 class="text-uppercase mb-3">Speech Recognition</h4>
+                        <p class="lead font-weight-light mb-3">Control your robot using voice commands with advanced speech recognition.</p>
+                        <a class="btn btn-outline-light mt-auto align-self-center" href="/speech_recognition">
+                            <i class="fas fa-microphone me-2"></i>
+                            Go to Speech Control
                         </a>
                     </div>
                 </div>
@@ -88,8 +98,8 @@
                         <p class="lead">The system is built around three main components: <strong>Gadgets</strong> (individual hardware devices or software services), <strong>Cables</strong> (connections that translate between Gadgets), and <strong>Rigs</strong> (networks of connected Gadgets).</p>
                     </div>
                     <div class="col-lg-6 me-auto">
-                        <p class="lead">This web interface provides control panels for robot interaction, including keyboard input capture and motor calibration tools. It was originally developed for Blossom, an open-source robot platform for human-robot interaction research.</p>
-                        <p class="lead">Use the navigation menu to access the Key Events listener for keyboard control, or the Calibration panel for calibrating robot movements.</p>
+                        <p class="lead">This web interface provides control panels for robot interaction, including keyboard input capture, motor calibration tools, and voice command recognition. It was originally developed for Blossom, an open-source robot platform for human-robot interaction research.</p>
+                        <p class="lead">Use the navigation menu to access the Key Events listener for keyboard control, the Calibration panel for calibrating robot movements, or the Speech Recognition system for voice commands.</p>
                     </div>
                 </div>
                 <!-- About Section Button-->
@@ -119,6 +129,7 @@
                         <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-fw fa-github"></i></a>
                         <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"><i class="fas fa-fw fa-keyboard"></i></a>
                         <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"><i class="fas fa-fw fa-sliders-h"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="/speech_recognition"><i class="fas fa-fw fa-microphone"></i></a>
                     </div>
                     <!-- Footer About Text-->
                     <div class="col-lg-4">
