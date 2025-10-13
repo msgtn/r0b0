@@ -6,9 +6,10 @@ On mobile, go to https://r0b0.ngrok.io/blsm_controller
 import os
 import time
 from threading import Thread
+from typing import Optional
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = True
+NO_ROS = False
 
 if not NO_ROS:
     import rclpy
@@ -71,6 +72,8 @@ from r0b0.config import (
     SERVER_PORT,
     SOCKET_ADDR,
 )
+from r0b0.utils.cert_manager import ensure_https_certificates
+
 if not NO_ROS:
     from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
@@ -377,13 +380,23 @@ class SliderPageNode(WebPageNode):
 
 def main(args=None):
     rclpy.init(args=args)
+    
+    # Ensure HTTPS certificates exist (auto-generate if needed)
+    try:
+        cert_path, key_path = ensure_https_certificates(CSR_PEM, KEY_PEM)
+        print(f"✓ HTTPS enabled with certificates: {cert_path}")
+    except Exception as e:
+        print(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
+        print("  Continuing without HTTPS...")
+        cert_path, key_path = None, None
+    
     page_kwargs = {
         "name": "web_page_node",
         "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
         "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
     }
-    if os.path.exists(CSR_PEM) and os.path.exists(KEY_PEM):
-        page_kwargs.update({"certfile": CSR_PEM, "keyfile": KEY_PEM})
+    if cert_path and key_path:
+        page_kwargs.update({"certfile": str(cert_path), "keyfile": str(key_path)})
 
     node = BlsmPageNode(**page_kwargs)
 
