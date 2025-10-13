@@ -7,5 +7,7 @@ WORKDIR /r0b0
 RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build"
 RUN uv sync
 RUN uv pip install setuptools
+# generate self-signed certs
+RUN make keys
 RUN chmod +x /r0b0/scripts/entrypoint.sh
 ENTRYPOINT ["/r0b0/scripts/entrypoint.sh"]
