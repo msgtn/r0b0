@@ -20,6 +20,7 @@ from r0b0.config import (
     HEADER,
 )
 from r0b0.utils.loaders import decode_msg, encode_msg
+from r0b0.utils.cert_manager import ensure_https_certificates
 from r0b0.gadgets import Tape
 from r0b0 import logging, get_timestamp
 
@@ -81,6 +82,20 @@ class Host(Thread, SocketIO):
         socket_addr=SOCKET_ADDR,
         **kwargs,
     ):
+        # Ensure HTTPS certificates exist (auto-generate if needed)
+        # Only if certfile/keyfile not explicitly provided
+        if certfile is None or keyfile is None:
+            try:
+                cert_path, key_path = ensure_https_certificates(CSR_PEM, KEY_PEM)
+                certfile = str(cert_path)
+                keyfile = str(key_path)
+                logging.info(f"✓ HTTPS enabled with certificates: {cert_path}")
+            except Exception as e:
+                logging.warning(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
+                logging.warning("  Continuing without HTTPS...")
+                certfile = None
+                keyfile = None
+        
         flask_kwargs = {}
         if pages_folder:
             flask_kwargs.update(
