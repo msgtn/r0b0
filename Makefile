@@ -12,7 +12,7 @@ blsm-stop:
 
 keys:
 	mkdir -p .keys
-	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout .keys/key.pem -out .keys/csr.pem
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout .keys/key.pem -out .keys/csr.pem -subj "/C=US/O=r0b0/CN=localhost"
 
 .PHONY: service
 service:

@@ -11,6 +11,7 @@ from r0b0.ros2.robot import (
     DEG2DXL,
     DEG2SERVO,
 )
+from r0b0.utils.cert_manager import ensure_https_certificates
 
 
 def main():
@@ -27,8 +28,18 @@ def main():
         "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
         "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
     }
-    if os.path.exists(CSR_PEM) and os.path.exists(KEY_PEM):
-        page_kwargs.update({"certfile": CSR_PEM, "keyfile": KEY_PEM})
+
+    # Ensure HTTPS certificates exist (auto-generate if needed)
+    try:
+        cert_path, key_path = ensure_https_certificates(CSR_PEM, KEY_PEM)
+        print(f"✓ HTTPS enabled with certificates: {cert_path}")
+    except Exception as e:
+        print(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
+        print("  Continuing without HTTPS...")
+        cert_path, key_path = None, None
+    
+    if cert_path and key_path:
+        page_kwargs.update({"certfile": str(cert_path), "keyfile": str(key_path)})
 
     page_node = BlsmPageNode(**page_kwargs)
 
