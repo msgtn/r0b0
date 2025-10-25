@@ -50,12 +50,12 @@
         let slider = document.createElement(sliderName);
         slider.id = `slider${i}`;
         slider.type = "range";
-        slider.min = 10; // Minimum value
+        slider.min = 90; // Minimum value
         slider.max = 170; // Maximum value
-        slider.value = 90; // Initial value
+        slider.value = 130; // Initial value
         let sliderValue = document.createElement("p");
         sliderValue.id = `slider-value${i}`;
-        sliderValue.innerText = `Motor ${i}: 90/170`;
+        sliderValue.innerText = `Motor ${i}: 130/170`;
 
         // Attach event listener to update display on slider change
         slider.addEventListener(sliderName, updateSliderDisplay);
@@ -71,7 +71,7 @@
     <script>
       document.getElementById("reset-sliders").onclick = function () {
         sliders.forEach((slider) => {
-          slider.value = 90;
+          slider.value = 130;
           slider.dispatchEvent(new Event("input"));
         });
       };

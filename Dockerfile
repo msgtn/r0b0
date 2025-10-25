@@ -6,6 +6,6 @@ COPY . /r0b0
 WORKDIR /r0b0
 RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build"
 RUN uv sync
-RUN uv install setuptools
+RUN uv pip install setuptools
 RUN chmod +x /r0b0/scripts/entrypoint.sh
 ENTRYPOINT ["/r0b0/scripts/entrypoint.sh"]

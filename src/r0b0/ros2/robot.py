@@ -3,6 +3,7 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
+import asyncio
 import copy
 import os
 import time
@@ -55,11 +56,22 @@ class SerialRobotNode(RobotNode):
     def write_motors(self):
         """Send the motor values as a string"""
         # params: str = "&".join(["=".join([str(k), str(v)])
-        params: str = "&".join(
-            [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
-        )
+        params: str = "&".join([f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()])
         params += "\n"
         self.serial.write(bytes(params, encoding="utf-8"))
+        # self.serial.flush()
+
+    async def read_sensor(self):
+        while True:
+            try:
+                if self.serial.in_waiting > 0:
+                    line = self.serial.readline()
+                    if line:
+                        data = line.decode("utf-8").strip()
+                        print(data)
+                await asyncio.sleep(0.01)
+            except Exception as e:
+                print(f"Serial read error: {e}")
 
 
 DEG2DXL = [
@@ -77,7 +89,7 @@ DEG2SERVO = [
 
 
 class BlsmRobotNode(SerialRobotNode):
-# class BlsmRobotNode(RobotNode):
+    # class BlsmRobotNode(RobotNode):
     def __init__(self, motor_map=DEG2DXL, **kwargs):
         super().__init__(**kwargs)
         self._motor_map = motor_map
@@ -161,9 +173,7 @@ class BlsmRobotNode(SerialRobotNode):
             #     rotvec = [0,0,0]
         # self.rotation *= Rotation.from_rotvec(delta_rad*np.array(rotvec))
         self.rotation *= Rotation.from_matrix(rotmat)
-        self._ik(
-            self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False
-        )
+        self._ik(self.rotation, alpha=self.rotation.as_euler("ZXY")[0], mirror=False)
 
     def ik(self, msg: DeviceMotion, sensitivity: float = 1.0):
         """
@@ -210,8 +220,7 @@ class BlsmRobotNode(SerialRobotNode):
     def _ik(self, r, alpha, mirror: bool, sensitivity: float = 1.0):
         # NOTE: could rewrite as matrix multiplication
         p_0 = [
-            r.apply(_p)
-            for _p in [blsm_config.p1_0, blsm_config.p2_0, blsm_config.p3_0]
+            r.apply(_p) for _p in [blsm_config.p1_0, blsm_config.p2_0, blsm_config.p3_0]
         ]
 
         # calculate height
@@ -232,9 +241,9 @@ class BlsmRobotNode(SerialRobotNode):
             mag_del_h = np.linalg.norm(del_h)
 
             # calculate motor angle
-            theta = np.rad2deg(
-                mag_del_h / (blsm_config.r_w / sensitivity)
-            ) * np.sign(del_h[1])
+            theta = np.rad2deg(mag_del_h / (blsm_config.r_w / sensitivity)) * np.sign(
+                del_h[1]
+            )
 
             # EXPERIMENTAL - only take the z-difference
             mag_del_h = del_h[1]

@@ -1,3 +1,4 @@
+import asyncio
 import os
 from r0b0.config import CSR_PEM, KEY_PEM
 import rclpy
@@ -21,6 +22,7 @@ def main():
         # motor_map=DEG2DXL,
         port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
     )
+    asyncio.run(robot_node.read_sensor())
     # robot_node = HeadRobotNode("robot_node")
     page_kwargs = {
         "name": "web_page_node",
