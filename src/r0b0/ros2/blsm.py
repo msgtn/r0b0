@@ -18,8 +18,8 @@ def main():
     rclpy.init()
     robot_node = BlsmRobotNode(
         name="robot_node",
-        motor_map=DEG2SERVO,
-        # motor_map=DEG2DXL,
+        # motor_map=DEG2SERVO,
+        motor_map=DEG2DXL,
         port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
     )
     # robot_node = HeadRobotNode("robot_node")
@@ -37,9 +37,11 @@ def main():
         print(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
         print("  Continuing without HTTPS...")
         cert_path, key_path = None, None
-    
+
     if cert_path and key_path:
-        page_kwargs.update({"certfile": str(cert_path), "keyfile": str(key_path)})
+        page_kwargs.update(
+            {"certfile": str(cert_path), "keyfile": str(key_path)}
+        )
 
     page_node = BlsmPageNode(**page_kwargs)
 

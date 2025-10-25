@@ -77,7 +77,7 @@ DEG2SERVO = [
 
 
 class BlsmRobotNode(SerialRobotNode):
-# class BlsmRobotNode(RobotNode):
+    # class BlsmRobotNode(RobotNode):
     def __init__(self, motor_map=DEG2DXL, **kwargs):
         super().__init__(**kwargs)
         self._motor_map = motor_map
@@ -99,6 +99,26 @@ class BlsmRobotNode(SerialRobotNode):
             callback=self.update_motors_from_sliders,
             qos_profile=10,
         )
+        self.h: float = 0
+        self.alpha: float = 0
+        self.yaw_offset = 0
+        self.mirror: bool = True
+        self.sensitivity: float = 1
+        # self.ts = time.time()
+        self.breathing_thread = Thread(target=self.breathe, daemon=True)
+        self.breathing_thread.start()
+
+    def breathe(self):
+        while True:
+            self.h = 50 * np.sin(time.time()) + 50
+
+            self._ik(
+                self.rotation,
+                alpha=self.alpha - self.yaw_offset,
+                mirror=self.mirror,
+                sensitivity=self.sensitivity,
+            )
+            time.sleep(0.05)
 
     def update_motors_from_sliders(self, msg: MotorCommands):
         for motor_cmd in msg.data:
@@ -187,25 +207,27 @@ class BlsmRobotNode(SerialRobotNode):
         # breakpoint()
         beta = msg.xyz.x
         gamma = msg.xyz.y
-        alpha = msg.xyz.z
+        self.alpha = msg.xyz.z
         portrait = msg.portrait
 
-        yaw_offset = msg.yaw_offset
+        self.yaw_offset = msg.yaw_offset
 
         angle_order = "ZXY"
-        angles = [alpha, beta, gamma]
+        angles = [self.alpha, beta, gamma]
 
         r = Rotation.from_euler(angle_order, angles=angles)
         r = r * Rotation.from_euler("Z", np.pi / 2)
         if portrait:
             r = r * Rotation.from_euler("Y", np.pi / 2)
         self.rotation = r
-        return self._ik(
-            r,
-            alpha=alpha - yaw_offset,
-            mirror=msg.mirror,
-            sensitivity=sensitivity,
-        )
+        self.mirror = msg.mirror
+        self.sensitivity = sensitivity
+        # return self._ik(
+        #     r,
+        #     alpha=alpha - yaw_offset,
+        #     mirror=msg.mirror,
+        #     sensitivity=sensitivity,
+        # )
 
     def _ik(self, r, alpha, mirror: bool, sensitivity: float = 1.0):
         # NOTE: could rewrite as matrix multiplication
@@ -216,7 +238,6 @@ class BlsmRobotNode(SerialRobotNode):
 
         # calculate height
         # h = ((e_4 - 50) / 100.0) * h_range * h_fac + h_mid
-        h = 0
 
         # init array for motor positions (tower_1-4)
         motor_pos = np.array([])
@@ -245,8 +266,9 @@ class BlsmRobotNode(SerialRobotNode):
 
         # constrain tower motor range (50-130)
         motor_pos = np.maximum(
-            np.minimum(motor_pos + h, blsm_config.h_max), blsm_config.h_min
+            np.minimum(motor_pos + self.h, blsm_config.h_max), blsm_config.h_min
         )
+        print(self.h)
 
         # NOTE: not sure why this is here?
         # try:

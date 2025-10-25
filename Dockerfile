@@ -2,11 +2,16 @@ FROM ros:jazzy-ros-base
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 
-COPY . /r0b0
+COPY ./r0b0_interfaces /r0b0/r0b0_interfaces
 WORKDIR /r0b0
 RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build"
+
+COPY ./pyproject.toml /r0b0
 RUN uv sync
 RUN uv pip install setuptools
+
+
+COPY . /r0b0
 # generate self-signed certs
 RUN make keys
 RUN chmod +x /r0b0/scripts/entrypoint.sh
