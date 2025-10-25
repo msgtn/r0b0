@@ -104,13 +104,32 @@ class BlsmRobotNode(SerialRobotNode):
         self.yaw_offset = 0
         self.mirror: bool = True
         self.sensitivity: float = 1
+        self.breathe_rise_s: float = 4
+        self.breathe_fall_s: float = 6
+        self.breathe_amp_rad: float = 50
         # self.ts = time.time()
         self.breathing_thread = Thread(target=self.breathe, daemon=True)
         self.breathing_thread.start()
 
     def breathe(self):
         while True:
-            self.h = 50 * np.sin(time.time()) + 50
+            t = time.time() % (self.breathe_rise_s + self.breathe_fall_s)
+
+            if t < self.breathe_rise_s:
+                mult = np.sin(2 * np.pi / (self.breathe_rise_s * 4) * t)
+            else:
+                mult = (
+                    -np.sin(
+                        2
+                        * np.pi
+                        / (self.breathe_fall_s * 4)
+                        * (t - self.breathe_rise_s)
+                    )
+                    + 1
+                )
+
+            # self.h = 50 * np.sin(time.time()) + 50
+            self.h = self.breathe_amp_rad * mult
 
             self._ik(
                 self.rotation,
@@ -268,7 +287,6 @@ class BlsmRobotNode(SerialRobotNode):
         motor_pos = np.maximum(
             np.minimum(motor_pos + self.h, blsm_config.h_max), blsm_config.h_min
         )
-        print(self.h)
 
         # NOTE: not sure why this is here?
         # try:
