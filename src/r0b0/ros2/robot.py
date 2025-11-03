@@ -45,6 +45,9 @@ class RobotNode(Node):
     @abstractmethod
     def write_motors(self): ...
 
+    @abstractmethod
+    def read_serial(self): ...
+
 
 class SerialRobotNode(RobotNode):
     def __init__(self, name, port="/dev/ttyACM0", baudrate=115200):
@@ -110,6 +113,25 @@ class BlsmRobotNode(SerialRobotNode):
         # self.ts = time.time()
         self.breathing_thread = Thread(target=self.breathe, daemon=True)
         self.breathing_thread.start()
+        self.serialin_thread = Thread(target=self.read_serial, daemon=True)
+        self.serialin_thread.start()
+
+    @override
+    def read_serial(self):
+        """Read any available content from the serial input and print it."""
+        while True:
+            # if line:
+            #     print(line.decode("utf-8").strip())
+            # while self.serial.in_waiting > 0:
+            try:
+                data = self.serial.readline()
+                if data:
+                    print(data.decode(errors="ignore").strip())
+            except serial.SerialException:
+                ...
+            # else:
+            #     print("no data")
+            time.sleep(0.05)
 
     def breathe(self):
         while True:
@@ -128,7 +150,6 @@ class BlsmRobotNode(SerialRobotNode):
                     + 1
                 )
 
-            # self.h = 50 * np.sin(time.time()) + 50
             self.h = self.breathe_amp_rad * mult
 
             self._ik(
@@ -137,6 +158,7 @@ class BlsmRobotNode(SerialRobotNode):
                 mirror=self.mirror,
                 sensitivity=self.sensitivity,
             )
+            # print(self.h)
             time.sleep(0.05)
 
     def update_motors_from_sliders(self, msg: MotorCommands):
