@@ -1,0 +1,21 @@
+# .dockerignore
+__pycache__/
+*.pyc
+.git
+.gitignore
+.vscode
+venv*
+*.DS_Store
+tapes/*
+!tapes/blsm_*
+*notes.md
+*.egg-info/
+build/
+dist/
+.env
+.venv
+env/
+ENV/
+env.bak/
+# ...add any other files/folders you want to ignore
+CMakeCache.txt
