@@ -16,45 +16,59 @@ if not NO_ROS:
     from geometry_msgs.msg import Vector3
     from rclpy.executors import MultiThreadedExecutor
     from rclpy.node import Node
-    from std_msgs.msg import String
+    from std_msgs.msg import String, Int64
     from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 else:
+
     class Node:
         def __init__(self, name):
             self._name = name
+
         def get_logger(self):
             import logging
+
             logging.basicConfig(level=logging.INFO)
             return logging.getLogger(self._name)
+
         def create_publisher(self, *args, **kwargs):
             return self
+
+        def create_subscription(self, *args, **kwargs):
+            return self
+
         def publish(self, *args, **kwargs):
             pass
+
         def destroy_node(self):
             pass
 
     class MultiThreadedExecutor:
         def add_node(self, node):
             pass
+
         def spin_once(self, *args, **kwargs):
             pass
-    
+
     class _rclpy:
         def init(self, *args, **kwargs):
             pass
+
         def spin(self, node, *args, **kwargs):
             # keep main thread alive
-            node.get_logger().info('Spinning')
+            node.get_logger().info("Spinning")
             while True:
                 time.sleep(1)
+
         def shutdown(self):
             pass
+
         def ok(self):
             return True
 
     rclpy = _rclpy()
     Vector3 = dict
     String = dict
+    Int64 = dict
     DeviceMotion = dict
     MotorCommands = dict
     MotorCommand = dict
@@ -192,8 +206,14 @@ class BlsmPageNode(WebPageNode):
         self.speech_command_pub = self.create_publisher(
             String, "/blsm/speech_command", 10
         )
+        self.distance_sub = self.create_subscription(
+            Int64,
+            "/blsm/distance_sensor",
+            callback=self.handle_distance,
+            qos_profile=10,
+        )
         self.server_thread = Thread(target=self.start_web_server)
-        
+
         # Add support for serving main static files
         self.setup_main_static_route()
         # Setup REST API routes for state management
@@ -202,12 +222,11 @@ class BlsmPageNode(WebPageNode):
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
         from flask import send_from_directory
-        
-        @self.app.route('/main/<path:filename>')
+
+        @self.app.route("/main/<path:filename>")
         def main_static(filename):
             return send_from_directory(
-                os.path.join(MAIN_PAGES_FOLDER, 'static'), 
-                filename
+                os.path.join(MAIN_PAGES_FOLDER, "static"), filename
             )
 
     # -------------------- State REST API --------------------
@@ -348,75 +367,113 @@ class BlsmPageNode(WebPageNode):
     def speech_command(self, data):
         """Handle speech command from client."""
         try:
-            command = data.get('command', '')
-            language = data.get('language', 'en-US')
-            confidence = data.get('confidence', 0.0)
-            
+            command = data.get("command", "")
+            language = data.get("language", "en-US")
+            confidence = data.get("confidence", 0.0)
+
             if not command:
-                emit('speech_response', {'status': 'error', 'message': 'No command provided'})
+                emit(
+                    "speech_response",
+                    {"status": "error", "message": "No command provided"},
+                )
                 return
-            
+
             # Store the command
             self.speech_commands.append(data)
 
             # Publish to ROS2 topic
             ros_msg = String(data=command)
             self.speech_command_pub.publish(ros_msg)
-            
-            self.get_logger().info(f"Speech command published: {command} (lang: {language}, conf: {confidence:.2f})")
-            
+
+            self.get_logger().info(
+                f"Speech command published: {command} (lang: {language}, conf: {confidence:.2f})"
+            )
+
             # Send success response
-            emit('speech_response', {
-                'status': 'success',
-                'message': f'Command processed: {command}',
-                'command': command,
-                'language': language,
-                'confidence': confidence
-            })
-            
+            emit(
+                "speech_response",
+                {
+                    "status": "success",
+                    "message": f"Command processed: {command}",
+                    "command": command,
+                    "language": language,
+                    "confidence": confidence,
+                },
+            )
+
         except Exception as e:
             self.get_logger().error(f"Error processing speech command: {e}")
-            emit('speech_response', {
-                'status': 'error',
-                'message': f'Error processing command: {str(e)}'
-            })
+            emit(
+                "speech_response",
+                {
+                    "status": "error",
+                    "message": f"Error processing command: {str(e)}",
+                },
+            )
+
+    def handle_distance(self, msg: Int64):
+        # TODO: implement
+        ...
 
     def setup_routes(self):
         """Define routes for the Flask app."""
-        
+
         # Add home page route to serve main template
-        @self.app.route('/')
+        @self.app.route("/")
         def home():
             from flask import render_template_string
+
             # Read the main template file directly
-            main_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'index.html')
-            with open(main_template_path, 'r') as f:
+            main_template_path = os.path.join(
+                MAIN_PAGES_FOLDER, "templates", "index.html"
+            )
+            with open(main_template_path, "r") as f:
                 template_content = f.read()
             # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace('href="css/', 'href="/main/css/')
-            template_content = template_content.replace('src="js/', 'src="/main/js/')
-            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
-            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            template_content = template_content.replace(
+                'href="css/', 'href="/main/css/'
+            )
+            template_content = template_content.replace(
+                'src="js/', 'src="/main/js/'
+            )
+            template_content = template_content.replace(
+                'src="assets/', 'src="/main/assets/'
+            )
+            template_content = template_content.replace(
+                'href="assets/', 'href="/main/assets/'
+            )
             return render_template_string(template_content)
 
         # Add speech recognition route from main templates
-        @self.app.route('/speech_recognition')
+        @self.app.route("/speech_recognition")
         def speech_recognition():
             from flask import render_template_string
+
             # Read the speech recognition template file directly
-            speech_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'speech_recognition.html')
-            with open(speech_template_path, 'r') as f:
+            speech_template_path = os.path.join(
+                MAIN_PAGES_FOLDER, "templates", "speech_recognition.html"
+            )
+            with open(speech_template_path, "r") as f:
                 template_content = f.read()
             # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace('href="css/', 'href="/main/css/')
-            template_content = template_content.replace('src="js/', 'src="/main/js/')
-            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
-            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            template_content = template_content.replace(
+                'href="css/', 'href="/main/css/'
+            )
+            template_content = template_content.replace(
+                'src="js/', 'src="/main/js/'
+            )
+            template_content = template_content.replace(
+                'src="assets/', 'src="/main/assets/'
+            )
+            template_content = template_content.replace(
+                'href="assets/', 'href="/main/assets/'
+            )
             return render_template_string(template_content)
 
-        @self.app.route('/speech_history')
+        @self.app.route("/speech_history")
         def speech_history():
             from flask import jsonify
+
             return jsonify(self.speech_commands)
 
         for _route in [
@@ -456,7 +513,7 @@ class SliderPageNode(WebPageNode):
 
 def main(args=None):
     rclpy.init(args=args)
-    
+
     # Ensure HTTPS certificates exist (auto-generate if needed)
     try:
         cert_path, key_path = ensure_https_certificates(CSR_PEM, KEY_PEM)
@@ -465,14 +522,16 @@ def main(args=None):
         print(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
         print("  Continuing without HTTPS...")
         cert_path, key_path = None, None
-    
+
     page_kwargs = {
         "name": "web_page_node",
         "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
         "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
     }
     if cert_path and key_path:
-        page_kwargs.update({"certfile": str(cert_path), "keyfile": str(key_path)})
+        page_kwargs.update(
+            {"certfile": str(cert_path), "keyfile": str(key_path)}
+        )
 
     node = BlsmPageNode(**page_kwargs)
 

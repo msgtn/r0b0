@@ -13,11 +13,12 @@ from typing_extensions import override
 from r0b0 import blsm_config
 from scipy.spatial.transform import Rotation
 
+from r0b0.ros2.filters import ExponentialFilter
 import rclpy
 import serial
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import String, Int64
 from geometry_msgs.msg import Vector3
 
 from r0b0.config import (
@@ -77,6 +78,7 @@ DEG2SERVO = [
     [[-10, 140], [90, 170]],
     [[-140, 140], [10, 170]],
 ]
+DIST2HEIGHT = [[0, 500], [0, 50]]
 
 
 class BlsmRobotNode(SerialRobotNode):
@@ -102,6 +104,9 @@ class BlsmRobotNode(SerialRobotNode):
             callback=self.update_motors_from_sliders,
             qos_profile=10,
         )
+        self.distance_pub = self.create_publisher(
+            Int64, "/blsm/distance_sensor", qos_profile=10
+        )
         self.h: float = 0
         self.alpha: float = 0
         self.yaw_offset = 0
@@ -110,31 +115,58 @@ class BlsmRobotNode(SerialRobotNode):
         self.breathe_rise_s: float = 4
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
-        # self.ts = time.time()
+        self.breathing: bool = True
         self.breathing_thread = Thread(target=self.breathe, daemon=True)
         self.breathing_thread.start()
         self.serialin_thread = Thread(target=self.read_serial, daemon=True)
         self.serialin_thread.start()
+        self.distance_mm: int | None = None
+        self.distance_filter = ExponentialFilter(alpha=0.5)
 
     @override
     def read_serial(self):
-        """Read any available content from the serial input and print it."""
         while True:
-            # if line:
-            #     print(line.decode("utf-8").strip())
-            # while self.serial.in_waiting > 0:
             try:
+                # TODO: handle jumps when sensor is covered,
+                # from low values (~50) to max (~2500)
+                # but to the sensors this looks the same
+                # as quickly removing your hand from above the sensor
+                # maybe expose the alpha parameter of the ExponentialFilter?
+                # not sure if that's relevant to the curriculum
                 data = self.serial.readline()
                 if data:
-                    print(data.decode(errors="ignore").strip())
+                    data = data.decode(errors="ignore").strip()
+                    data = int(data)
+                    self.distance_mm = self.distance_filter(data)
+                    self.distance_pub.publish(Int64(data=self.distance_mm))
+                    # TODO map this to some behavior,
+                    # i.e. map distance to the height,
+                    # and turn off the height adjustment in the breathing thread
+                    self.map_distance_height(distance_mm=self.distance_mm)
+
             except serial.SerialException:
                 ...
-            # else:
-            #     print("no data")
             time.sleep(0.05)
+
+    def map_distance_height(self, distance_mm: int):
+        dist_within_range = DIST2HEIGHT[0][0] < distance_mm < DIST2HEIGHT[0][1]
+        if dist_within_range:
+            self.breathing = True
+            self.h = np.interp(distance_mm, DIST2HEIGHT[0], DIST2HEIGHT[1])
+            self._ik(
+                self.rotation,
+                alpha=self.alpha - self.yaw_offset,
+                mirror=self.mirror,
+                sensitivity=self.sensitivity,
+            )
+        else:
+            self.breathing = False
 
     def breathe(self):
         while True:
+            if not self.breathing:
+                time.sleep(0.05)
+                continue
             t = time.time() % (self.breathe_rise_s + self.breathe_fall_s)
 
             if t < self.breathe_rise_s:
@@ -158,7 +190,6 @@ class BlsmRobotNode(SerialRobotNode):
                 mirror=self.mirror,
                 sensitivity=self.sensitivity,
             )
-            # print(self.h)
             time.sleep(0.05)
 
     def update_motors_from_sliders(self, msg: MotorCommands):
@@ -172,7 +203,6 @@ class BlsmRobotNode(SerialRobotNode):
         # NOTE: these controls apply to the egocentric perspective,
         # i.e. from the robot's perspective
         delta_rad = delta_deg / 180 * np.pi
-        # self.get_logger().info(f"{msg=}")
         match msg.data:
             case "KeyW":
                 rotmat = [
