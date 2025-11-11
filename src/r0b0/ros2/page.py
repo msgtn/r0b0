@@ -9,7 +9,7 @@ from threading import Thread
 from typing import Optional
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = False
+NO_ROS = True
 
 if not NO_ROS:
     import rclpy
@@ -60,7 +60,8 @@ else:
     MotorCommand = dict
 
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+from enum import Enum
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
@@ -79,6 +80,16 @@ if not NO_ROS:
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 MAIN_PAGES_FOLDER = str(ROOT_DIR / "pages" / "main")
+
+
+class PageState(str, Enum):
+    key_control = "key_control"
+    calibration = "calibration"
+    speech = "speech"
+    idle = "idle"  # default/non-configured state
+
+
+_ALLOWED_STATES = {s.value for s in PageState}
 
 
 class WebPageNode(Node):
@@ -145,6 +156,10 @@ class WebPageNode(Node):
 class BlsmPageNode(WebPageNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # --- State management ---
+        self.current_state = PageState.idle
+        # Cache allowed state strings for O(1) membership checks
+        self._allowed_states = set(_ALLOWED_STATES)
         webrtc_events = [
             "broadcaster",
             "watcher",
@@ -158,6 +173,7 @@ class BlsmPageNode(WebPageNode):
             "key_event",
             "slider_event",
             "speech_command",
+            "set_state",
         ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
@@ -180,6 +196,8 @@ class BlsmPageNode(WebPageNode):
         
         # Add support for serving main static files
         self.setup_main_static_route()
+        # Setup REST API routes for state management
+        self.setup_state_routes()
 
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
@@ -192,6 +210,64 @@ class BlsmPageNode(WebPageNode):
                 filename
             )
 
+    # -------------------- State REST API --------------------
+    def setup_state_routes(self):
+        @self.app.get('/api/state')
+        def get_state():
+            # Canonical format: { state: <string> }
+            return jsonify({'state': self.current_state.value})
+
+        @self.app.post('/api/state')
+        def set_state():
+            try:
+                data = request.get_json(silent=True) or {}
+                new_state = data.get('state')
+                if not new_state:
+                    return jsonify({'error': 'missing state'}), 400
+                # normalize
+                new_state = str(new_state).strip().lower()
+                # validate against enum
+                if new_state not in self._allowed_states:
+                    return jsonify({'error': 'invalid state', 'allowed': sorted(self._allowed_states)}), 400
+
+                # update only if changed
+                if self.current_state.value != new_state:
+                    self.current_state = PageState(new_state)
+                    # Emit over sockets for immediate client updates
+                    try:
+                        self.socketio.emit('state_update', {
+                            'state': self.current_state.value,
+                        })
+                    except Exception:
+                        pass
+
+                return jsonify({'state': self.current_state.value})
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
+
+    # -------------------- State Socket.IO API --------------------
+    def set_state(self, data):
+        try:
+            data = data or {}
+            new_state = data.get('state')
+            if not new_state:
+                return {'error': 'missing state'}
+            new_state = str(new_state).strip().lower()
+            if new_state not in self._allowed_states:
+                return {'error': 'invalid state', 'allowed': sorted(self._allowed_states)}
+
+            if self.current_state.value != new_state:
+                self.current_state = PageState(new_state)
+                try:
+                    self.socketio.emit('state_update', {
+                        'state': self.current_state.value,
+                    })
+                except Exception:
+                    pass
+            return {'state': self.current_state.value}
+        except Exception as e:
+            return {'error': str(e)}
+
     def broadcaster(self, sid):
         self.get_logger().info(f"{sid=}")
         self.broadcaster_id = sid
@@ -203,7 +279,7 @@ class BlsmPageNode(WebPageNode):
             try:
                 self.socketio.emit(
                     "watcher",
-                    request.sid,
+                    sid,
                     to=self.broadcaster_id,
                 )
                 self.get_logger().info(f"{self.broadcaster_id=}")
@@ -216,7 +292,7 @@ class BlsmPageNode(WebPageNode):
     def offer(self, sid, msg, *args, **kwargs):
         self.socketio.emit(
             "offer",
-            (request.sid, msg),
+            (sid, msg),
             to=sid,
         )
         self.get_logger().info("offer")
@@ -225,14 +301,14 @@ class BlsmPageNode(WebPageNode):
         # TODO: handle max connections
         self.socketio.emit(
             "answer",
-            (request.sid, msg),
+            (sid, msg),
             to=sid,
         )
 
     def candidate(self, sid, msg):
         self.socketio.emit(
             "candidate",
-            (request.sid, msg),
+            (sid, msg),
             to=sid,
         )
 
@@ -356,7 +432,7 @@ class BlsmPageNode(WebPageNode):
             # the for-loop does not recreate new method instances
             self._setup_route(_route)
 
-
+# not used, slider functionality, e.g. calibration page is moved to BlsmPageNode
 class SliderPageNode(WebPageNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
