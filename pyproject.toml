@@ -17,6 +17,7 @@ dependencies = [
     "flask-cors>=6.0.1",
     "flask-socketio>=5.5.1",
     "numpy>=2.2.6",
+    "py-trees>=2.4.0",
     "pyserial>=3.5",
     "python-engineio>=4.12.2",
     "python-socketio>=5.13.0",
