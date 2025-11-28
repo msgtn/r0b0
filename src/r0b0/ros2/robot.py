@@ -15,7 +15,7 @@ from typing_extensions import override
 from r0b0 import blsm_config
 from scipy.spatial.transform import Rotation
 
-from r0b0.ros2.actions import Breathe, Keyboard, Sensor, Slider
+from r0b0.ros2.actions import BlsmAction, Breathe, Keyboard, Phone, Sensor, Slider
 from r0b0.ros2.filters import ExponentialFilter
 import rclpy
 import serial
@@ -129,18 +129,25 @@ class BlsmRobotNode(SerialRobotNode):
         self.mirror: bool = True
         self.sensitivity: float = 1
 
-        self.states: dict[StateEnum, list[Callable]] = {
-            StateEnum.IDLE: [Breathe()],
-            StateEnum.SENSOR: [
-                Sensor(serial=self.serial, distance_pub=self.distance_pub)
-            ],
-            StateEnum.PLAYBACK: [],
-            StateEnum.SLIDER: [self.slider_action],
-            # StateEnum.CONVERSATION: [],
-            StateEnum.KEYBOARD: [self.keyboard_action],
-            StateEnum.PHONE: [],
+        self.states: dict[StateEnum, BlsmAction] = {
+            StateEnum.IDLE: Breathe(),
+            StateEnum.SENSOR: Sensor(serial=self.serial, distance_pub=self.distance_pub),
+            # StateEnum.PLAYBACK: ,
+            StateEnum.SLIDER: self.slider_action,
+            # StateEnum.CONVERSATION: ,
+            StateEnum.KEYBOARD: self.keyboard_action,
+            StateEnum.PHONE: Phone(),
         }
         self.state: StateEnum = StateEnum.IDLE
+
+        self.timer = self.create_timer(30, self.update)
+
+    def update(self):
+        active_action = self.states.get(self.state, None)
+        if active_action is not None:
+            active_action.update()
+            self.motor_id_pos = active_action.motor_id_pos
+            self.write_motors()
 
     @override
     def read_serial(self):
