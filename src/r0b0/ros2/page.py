@@ -9,7 +9,9 @@ from threading import Thread
 from typing import Optional
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = True
+# TODO: test try-except block with `import rclpy` to set this automatically
+# or use envvar
+NO_ROS = False
 
 if not NO_ROS:
     import rclpy
