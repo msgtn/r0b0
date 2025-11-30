@@ -51,8 +51,10 @@ def main():
     page_node.start()
 
     try:
-        rclpy.spin(robot_node)
-        rclpy.spin(page_node)
+        executor.spin()
+        # rclpy.spin(page_node)
+        # rclpy.spin(robot_node)
+
     except KeyboardInterrupt:
         robot_node.get_logger().info("Shutting down WebPageNode...")
         page_node.get_logger().info("Shutting down WebPageNode...")
