@@ -73,9 +73,9 @@ class StateEnum(Enum):
     SENSOR = 1
     PLAYBACK = 2
     CONVERSATION = 3
-    KEYBOARD = 4
+    KEY_CONTROL = 4
     PHONE = 5
-    SLIDER = 6
+    CALIBRATION = 6
 
 
 DEG2DXL = [
@@ -139,9 +139,9 @@ class BlsmRobotNode(SerialRobotNode):
                 serial=self.serial, distance_pub=self.distance_pub
             ),
             # StateEnum.PLAYBACK: ,
-            StateEnum.SLIDER: self.slider_action,
+            StateEnum.CALIBRATION: self.slider_action,
             # StateEnum.CONVERSATION: ,
-            StateEnum.KEYBOARD: self.keyboard_action,
+            StateEnum.KEY_CONTROL: self.keyboard_action,
             StateEnum.PHONE: Phone(),
         }
         self.state: StateEnum = StateEnum.IDLE
@@ -154,15 +154,18 @@ class BlsmRobotNode(SerialRobotNode):
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
-            print(f"{self.motor_id_pos}")
             self.write_motors()
 
     def callback_state(self, msg: String):
-        state = StateEnum[msg.data.upper()]
-        print(state)
-        active_action = self.states.get(self.state, None)
-        if active_action is not None:
-            active_action.setup()
+        requested_state = msg.data.upper()
+        if requested_state in StateEnum.__members__:
+            self.state = StateEnum[msg.data.upper()]
+            active_action = self.states.get(self.state, None)
+            if active_action is not None:
+                print(f"{self.state=}, {active_action=}")
+                active_action.setup()
+        else:
+            print(f"No existing {requested_state=}")
 
     @override
     def read_serial(self):
@@ -179,7 +182,6 @@ def main(args=None):
 
     try:
         executor.spin()
-        rclpy.spin(node)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:

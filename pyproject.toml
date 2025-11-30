@@ -13,10 +13,12 @@ requires-python = "==3.12.*"
 dependencies = [
     "aiohttp>=3.12.14",
     "eventlet>=0.40.2",
+    "fastapi>=0.123.0",
     "flask>=3.1.1",
     "flask-cors>=6.0.1",
     "flask-socketio>=5.5.1",
     "numpy>=2.2.6",
+    "py-spy>=0.4.1",
     "py-trees>=2.4.0",
     "pyserial>=3.5",
     "python-engineio>=4.12.2",
@@ -25,6 +27,7 @@ dependencies = [
     "requests>=2.32.4",
     "scipy>=1.15.0",
     "urllib3>=2.5.0",
+    "uvicorn>=0.38.0",
     "websocket-client>=1.8.0",
     "werkzeug>=3.1.3",
 ]

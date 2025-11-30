@@ -184,6 +184,7 @@ window.addEventListener('DOMContentLoaded', event => {
     function detectDesiredState() {
         const path = window.location.pathname || '';
         if (path.startsWith('/blsm_web')) return 'key_control';
+        if (path.startsWith('/blsm_sensor')) return 'sensor';
         if (path.startsWith('/blsm_calib')) return 'calibration';
         if (path.startsWith('/speech_recognition')) return 'speech';
         return 'idle';

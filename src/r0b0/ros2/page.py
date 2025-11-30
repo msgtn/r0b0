@@ -5,8 +5,26 @@ On mobile, go to https://r0b0.ngrok.io/blsm_controller
 
 import os
 import time
+from enum import Enum
 from threading import Thread
-from typing import Optional
+
+import socketio
+import uvicorn
+from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
+from flask_socketio import SocketIO, emit
+
+from r0b0.config import (
+    CSR_PEM,
+    KEY_PEM,
+    ROOT_DIR,
+    SERVER_PORT,
+)
+from r0b0.utils.cert_manager import ensure_https_certificates
+
+import eventlet
+
+eventlet.monkey_patch()
 
 # Set to True to disable ROS2 imports for testing without ROS2
 # TODO: test try-except block with `import rclpy` to set this automatically
@@ -18,7 +36,8 @@ if not NO_ROS:
     from geometry_msgs.msg import Vector3
     from rclpy.executors import MultiThreadedExecutor
     from rclpy.node import Node
-    from std_msgs.msg import String, Int64
+    from std_msgs.msg import Int64, String
+
     from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 else:
 
@@ -76,23 +95,8 @@ else:
     MotorCommand = dict
 
 
-from flask import Flask, render_template, request, jsonify
-from enum import Enum
-from flask_cors import CORS
-from flask_socketio import SocketIO, emit
-
-from r0b0.config import (
-    CSR_PEM,
-    KEY_PEM,
-    LOCALHOST,
-    ROOT_DIR,
-    SERVER_PORT,
-    SOCKET_ADDR,
-)
-from r0b0.utils.cert_manager import ensure_https_certificates
-
 if not NO_ROS:
-    from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
+    from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 MAIN_PAGES_FOLDER = str(ROOT_DIR / "pages" / "main")
@@ -102,6 +106,7 @@ class PageState(str, Enum):
     key_control = "key_control"
     calibration = "calibration"
     speech = "speech"
+    sensor = "sensor"
     idle = "idle"  # default/non-configured state
 
 
@@ -144,10 +149,7 @@ class WebPageNode(Node):
 
     def start(self):
         self.server_thread.start()
-
-    def setup_routes(self):
-        """Define routes for the Flask app."""
-        ...
+        # self.start_web_server()
 
     def start_web_server(self):
         """Start the Flask web server."""
@@ -159,6 +161,29 @@ class WebPageNode(Node):
             certfile=self.certfile,
             keyfile=self.keyfile,
         )
+
+    async def start_web_server_async(self):
+        # Use ASGI app for Flask-SocketIO
+        print("creating agsi_app")
+        asgi_app = socketio.ASGIApp(self.socketio, self.app)
+        print("created agsi_app")
+        print("creating config")
+        config = uvicorn.Config(
+            asgi_app,
+            host="0.0.0.0",
+            port=SERVER_PORT,
+            log_level="info",
+            ssl_certfile=getattr(self, "certfile", None),
+            ssl_keyfile=getattr(self, "keyfile", None),
+        )
+
+        print("creating config")
+        server = uvicorn.Server(config)
+        await server.serve()
+
+    def setup_routes(self):
+        """Define routes for the Flask app."""
+        ...
 
     def _setup_route(self, _route):
         # NOTE: did the same thing back with r0b0.rigs.host
@@ -214,6 +239,9 @@ class BlsmPageNode(WebPageNode):
             callback=self.handle_distance,
             qos_profile=10,
         )
+        self.state_pub = self.create_publisher(
+            String, "/blsm/state/request", qos_profile=10
+        )
         self.server_thread = Thread(target=self.start_web_server)
 
         # Add support for serving main static files
@@ -233,61 +261,77 @@ class BlsmPageNode(WebPageNode):
 
     # -------------------- State REST API --------------------
     def setup_state_routes(self):
-        @self.app.get('/api/state')
+        @self.app.get("/api/state")
         def get_state():
             # Canonical format: { state: <string> }
-            return jsonify({'state': self.current_state.value})
+            return jsonify({"state": self.current_state.value})
 
-        @self.app.post('/api/state')
+        @self.app.post("/api/state")
         def set_state():
             try:
                 data = request.get_json(silent=True) or {}
-                new_state = data.get('state')
+                new_state = data.get("state")
                 if not new_state:
-                    return jsonify({'error': 'missing state'}), 400
+                    return jsonify({"error": "missing state"}), 400
                 # normalize
                 new_state = str(new_state).strip().lower()
                 # validate against enum
                 if new_state not in self._allowed_states:
-                    return jsonify({'error': 'invalid state', 'allowed': sorted(self._allowed_states)}), 400
+                    return jsonify(
+                        {
+                            "error": "invalid state",
+                            "allowed": sorted(self._allowed_states),
+                        }
+                    ), 400
 
                 # update only if changed
                 if self.current_state.value != new_state:
                     self.current_state = PageState(new_state)
                     # Emit over sockets for immediate client updates
                     try:
-                        self.socketio.emit('state_update', {
-                            'state': self.current_state.value,
-                        })
+                        self.socketio.emit(
+                            "state_update",
+                            {
+                                "state": self.current_state.value,
+                            },
+                        )
                     except Exception:
                         pass
 
-                return jsonify({'state': self.current_state.value})
+                self.state_pub.publish(String(data=self.current_state.value))
+                return jsonify({"state": self.current_state.value})
             except Exception as e:
-                return jsonify({'error': str(e)}), 500
+                return jsonify({"error": str(e)}), 500
 
     # -------------------- State Socket.IO API --------------------
     def set_state(self, data):
         try:
             data = data or {}
-            new_state = data.get('state')
+            new_state = data.get("state")
             if not new_state:
-                return {'error': 'missing state'}
+                return {"error": "missing state"}
             new_state = str(new_state).strip().lower()
             if new_state not in self._allowed_states:
-                return {'error': 'invalid state', 'allowed': sorted(self._allowed_states)}
+                return {
+                    "error": "invalid state",
+                    "allowed": sorted(self._allowed_states),
+                }
 
             if self.current_state.value != new_state:
                 self.current_state = PageState(new_state)
                 try:
-                    self.socketio.emit('state_update', {
-                        'state': self.current_state.value,
-                    })
+                    self.socketio.emit(
+                        "state_update",
+                        {
+                            "state": self.current_state.value,
+                        },
+                    )
                 except Exception:
                     pass
-            return {'state': self.current_state.value}
+            self.state_pub.publish(String(data=self.current_state.value))
+            return {"state": self.current_state.value}
         except Exception as e:
-            return {'error': str(e)}
+            return {"error": str(e)}
 
     def broadcaster(self, sid):
         self.get_logger().info(f"{sid=}")
@@ -414,8 +458,15 @@ class BlsmPageNode(WebPageNode):
             )
 
     def handle_distance(self, msg: Int64):
-        # TODO: implement
-        ...
+        value = msg.data
+        # Emit the value to all connected Socket.IO clients using a background task
+        # print(f"distance {value=}")
+        self.socketio.emit("sensor_value", {"value": value})
+        # self.socketio.start_background_task(self._emit_sensor_value, value)
+
+    def _emit_sensor_value(self, value):
+        print(f"distance {value=}")
+        self.socketio.emit("sensor_value", {"value": value})
 
     def setup_routes(self):
         """Define routes for the Flask app."""
@@ -483,31 +534,11 @@ class BlsmPageNode(WebPageNode):
             "blsm_player",
             "blsm_broadcast",
             "blsm_web",
+            "blsm_sensor",
             "blsm_calib",
             "reset",
             "tapes",
         ]:
-            # NOTE: must call in separate function or else
-            # the for-loop does not recreate new method instances
-            self._setup_route(_route)
-
-# not used, slider functionality, e.g. calibration page is moved to BlsmPageNode
-class SliderPageNode(WebPageNode):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        events = ["slider"]
-        for _event in events:
-            self.socketio.on_event(_event, getattr(self, _event), namespace="/")
-            self.pub = self.create_publisher(String, "/blsm", 10)
-            self.server_thread = Thread(target=self.start_web_server)
-
-    def slider(self, *args, **kwargs):
-        breakpoint()
-
-    def setup_routes(self):
-        """Define routes for the Flask app."""
-
-        for _route in ["slider"]:
             # NOTE: must call in separate function or else
             # the for-loop does not recreate new method instances
             self._setup_route(_route)
@@ -549,7 +580,8 @@ def main(args=None):
     node.start()
 
     try:
-        rclpy.spin(node)
+        executor.spin()
+        # rclpy.spin(node)
         # while rclpy.ok():
         #     #     # Spin once to process callbacks
         #     executor.spin_once(timeout_sec=0)

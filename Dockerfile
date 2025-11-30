@@ -15,6 +15,8 @@ RUN uv pip install setuptools
 COPY ./src/r0b0 /r0b0/src/r0b0
 RUN uv sync
 
+COPY ./pages /r0b0/pages
+
 # generate self-signed certs
 RUN make keys
 RUN chmod +x /r0b0/scripts/entrypoint.sh
