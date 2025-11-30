@@ -7,7 +7,7 @@ import serial
 
 from r0b0 import blsm_config
 from r0b0.ros2.filters import ExponentialFilter
-from std_msgs.msg import Int64
+from std_msgs.msg import Int64, String
 
 from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
@@ -40,7 +40,8 @@ class BlsmAction(py_trees.behaviour.Behaviour):
         self,
         name: str = "breathe",
         motor_id_pos: dict | None = None,
-        motor_map=DEG2SERVO,
+        # motor_map=DEG2SERVO,
+        motor_map=DEG2DXL,
     ):
         super().__init__(name)
         self.pose: BlsmPose = BlsmPose()
@@ -95,7 +96,7 @@ class BlsmAction(py_trees.behaviour.Behaviour):
 
         # constrain tower motor range (50-130)
         motor_pos = np.maximum(
-            np.minimum(motor_pos + self.h, blsm_config.h_max), blsm_config.h_min
+            np.minimum(motor_pos + self.pose.h, blsm_config.h_max), blsm_config.h_min
         )
 
         # NOTE: not sure why this is here?
@@ -162,6 +163,7 @@ class Breathe(BlsmAction):
             )
 
         self.pose.h = self.breathe_amp_rad * mult
+        self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
 
         return py_trees.common.Status.RUNNING
 
@@ -195,26 +197,29 @@ class Sensor(BlsmAction):
             data = self.serial.readline()
             if data:
                 data = data.decode(errors="ignore").strip()
-                data = int(data)
-                self.distance_mm = self.distance_filter(data)
-                self.distance_pub.publish(Int64(data=self.distance_mm))
-                # TODO map this to some behavior,
-                # i.e. map distance to the height,
-                # and turn off the height adjustment in the breathing thread
-                dist_within_range = (
-                    DIST2HEIGHT[0][0] < self.distance_mm < DIST2HEIGHT[0][1]
-                )
-                self.breathing = not dist_within_range
-                if dist_within_range:
-                    self.pose.h = np.interp(
-                        self.distance_mm, DIST2HEIGHT[0], DIST2HEIGHT[1]
+                try:
+                    data = int(data)
+                    self.distance_mm = int(self.distance_filter(data))
+                    self.distance_pub.publish(Int64(data=self.distance_mm))
+                    # TODO map this to some behavior,
+                    # i.e. map distance to the height,
+                    # and turn off the height adjustment in the breathing thread
+                    dist_within_range = (
+                        DIST2HEIGHT[0][0] < self.distance_mm < DIST2HEIGHT[0][1]
                     )
+                    if dist_within_range:
+                        self.pose.h = np.interp(
+                            self.distance_mm, DIST2HEIGHT[0], DIST2HEIGHT[1]
+                        )
 
-                    self.ik_from_rot(
-                        self.pose.rot,
-                        alpha=0,
-                        mirror=False,
-                    )
+                        self.ik_from_rot(
+                            self.pose.rot,
+                            alpha=0,
+                            mirror=False,
+                        )
+                except:
+                    print(f"error parsing {data=}")
+                    pass
 
         except serial.SerialException:
             ...
