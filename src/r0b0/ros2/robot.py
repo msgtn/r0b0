@@ -154,7 +154,7 @@ class BlsmRobotNode(SerialRobotNode):
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
-            # print(f"{self.motor_id_pos}")
+            print(f"{self.motor_id_pos}")
             self.write_motors()
 
     def callback_state(self, msg: String):
@@ -178,6 +178,7 @@ def main(args=None):
     executor.add_node(node)
 
     try:
+        executor.spin()
         rclpy.spin(node)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
