@@ -33,6 +33,10 @@ class BlsmPose:
     h: float = 0
     rot: Rotation = Rotation.from_euler("ZXY", angles=[0, 0, 0])
 
+    def reset(self):
+        self.h = 0
+        self.rot = Rotation.from_euler("ZXY", angles=[0, 0, 0])
+
 
 class BlsmAction(py_trees.behaviour.Behaviour):
     # NOTE: refactor with motor positions instead of pose
@@ -50,16 +54,21 @@ class BlsmAction(py_trees.behaviour.Behaviour):
         self.motor_id_pos: dict[str, float] = motor_id_pos
         self._motor_map = motor_map
 
-    def setup(self, **kwargs): ...
+    def setup(self, **kwargs):
+        print("setup")
+        self.pose.reset()
 
-    def initialise(self): ...
+    def initialise(self):
+        print("init")
 
     def update(self) -> py_trees.common.Status:
         return py_trees.common.Status.RUNNING
 
     def terminate(self, new_status: py_trees.common.Status) -> None: ...
 
-    def ik_from_rot(self, rot: Rotation, alpha, mirror: bool, sensitivity: float = 1.0):
+    def ik_from_rot(
+        self, rot: Rotation, alpha, mirror: bool, sensitivity: float = 1.0
+    ):
         # NOTE: could rewrite as matrix multiplication
         p_0 = [
             rot.apply(_p)
@@ -83,9 +92,9 @@ class BlsmAction(py_trees.behaviour.Behaviour):
             mag_del_h = np.linalg.norm(del_h)
 
             # calculate motor angle
-            theta = np.rad2deg(mag_del_h / (blsm_config.r_w / sensitivity)) * np.sign(
-                del_h[1]
-            )
+            theta = np.rad2deg(
+                mag_del_h / (blsm_config.r_w / sensitivity)
+            ) * np.sign(del_h[1])
 
             # EXPERIMENTAL - only take the z-difference
             mag_del_h = del_h[1]
@@ -96,7 +105,8 @@ class BlsmAction(py_trees.behaviour.Behaviour):
 
         # constrain tower motor range (50-130)
         motor_pos = np.maximum(
-            np.minimum(motor_pos + self.pose.h, blsm_config.h_max), blsm_config.h_min
+            np.minimum(motor_pos + self.pose.h, blsm_config.h_max),
+            blsm_config.h_min,
         )
 
         # NOTE: not sure why this is here?
@@ -143,12 +153,6 @@ class Breathe(BlsmAction):
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
 
-    def setup(self, **kwargs):
-        print("setup")
-
-    def initialise(self):
-        print("init")
-
     def update(self) -> py_trees.common.Status:
         t = time.time() % (self.breathe_rise_s + self.breathe_fall_s)
 
@@ -157,7 +161,10 @@ class Breathe(BlsmAction):
         else:
             mult = (
                 -np.sin(
-                    2 * np.pi / (self.breathe_fall_s * 4) * (t - self.breathe_rise_s)
+                    2
+                    * np.pi
+                    / (self.breathe_fall_s * 4)
+                    * (t - self.breathe_rise_s)
                 )
                 + 1
             )
@@ -172,16 +179,16 @@ class Breathe(BlsmAction):
 
 
 class Sensor(BlsmAction):
-    def __init__(self, serial: serial.Serial, distance_pub, name: str = "breathe"):
+    def __init__(
+        self, serial: serial.Serial, distance_pub, name: str = "breathe"
+    ):
         super().__init__(name)
         self.serial = serial
         self.distance_mm: int | None = None
         self.distance_filter = ExponentialFilter(alpha=0.5)
         self.distance_pub = distance_pub
-
-    def setup(self, **kwargs): ...
-
-    def initialise(self): ...
+        self._last_publish_time = 0  # Add this for rate limiting
+        self._publish_interval = 0.1  # seconds (10 Hz)
 
     def update(self) -> py_trees.common.Status:
         try:
@@ -200,10 +207,14 @@ class Sensor(BlsmAction):
                 try:
                     data = int(data)
                     self.distance_mm = int(self.distance_filter(data))
-                    self.distance_pub.publish(Int64(data=self.distance_mm))
+                    now = time.time()
+                    if now - self._last_publish_time > self._publish_interval:
+                        self.distance_pub.publish(Int64(data=self.distance_mm))
+                        self._last_publish_time = now
                     # TODO map this to some behavior,
                     # i.e. map distance to the height,
                     # and turn off the height adjustment in the breathing thread
+                    # print(f"{self.distance_mm=}")
                     dist_within_range = (
                         DIST2HEIGHT[0][0] < self.distance_mm < DIST2HEIGHT[0][1]
                     )
