@@ -3,34 +3,32 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
-from enum import Enum
-import copy
-import os
 import time
 from abc import abstractmethod
-from threading import Thread
-from typing import Callable
-import numpy as np
-from typing_extensions import override
-from r0b0 import blsm_config
-from scipy.spatial.transform import Rotation
+from enum import Enum
 
-from r0b0.ros2.actions import BlsmAction, Breathe, Keyboard, Phone, Sensor, Slider
-from r0b0.ros2.filters import ExponentialFilter
+import numpy as np
 import rclpy
 import serial
+from geometry_msgs.msg import Vector3
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
-from std_msgs.msg import String, Int64
-from geometry_msgs.msg import Vector3
+from scipy.spatial.transform import Rotation
+from std_msgs.msg import Int64, String
+from typing_extensions import override
 
 from r0b0.config import (
-    LOCALHOST,
     ROOT_DIR,
-    SERVER_PORT,
-    SOCKET_ADDR,
 )
-from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
+from r0b0.ros2.actions import (
+    BlsmAction,
+    Breathe,
+    Keyboard,
+    Phone,
+    Sensor,
+    Slider,
+)
+from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
@@ -70,8 +68,6 @@ class SerialRobotNode(RobotNode):
         self.serial.write(bytes(params, encoding="utf-8"))
 
 
-
-
 class StateEnum(Enum):
     IDLE = 0
     SENSOR = 1
@@ -80,6 +76,7 @@ class StateEnum(Enum):
     KEYBOARD = 4
     PHONE = 5
     SLIDER = 6
+
 
 DEG2DXL = [
     [[-10, 140], [0, 2048]],
@@ -94,22 +91,23 @@ DEG2SERVO = [
     [[-140, 140], [10, 170]],
 ]
 
+
 class BlsmRobotNode(SerialRobotNode):
     def __init__(self, motor_map=DEG2DXL, **kwargs):
         super().__init__(**kwargs)
         self._motor_map = motor_map
-        self.phone_action = 
+        self.phone_action = Phone()
         self.device_motion_sub = self.create_subscription(
             DeviceMotion,
             "/blsm/device_motion",
-            callback=self.ik_from_msg,
+            callback=self.phone_action.ik_from_msg,
             qos_profile=10,
         )
         self.keyboard_action = Keyboard()
         self.key_event_sub = self.create_subscription(
             String,
             "/blsm/key_event",
-            callback=self.update_rotation_from_keys,
+            callback=self.keyboard_action.update_rotation_from_keys,
             qos_profile=10,
         )
         self.slider_action = Slider()
@@ -122,6 +120,12 @@ class BlsmRobotNode(SerialRobotNode):
         self.distance_pub = self.create_publisher(
             Int64, "/blsm/distance_sensor", qos_profile=10
         )
+        self.state_sub = self.create_subscription(
+            String,
+            "/blsm/state/request",
+            callback=self.callback_state,
+            qos_profile=10,
+        )
 
         self.h: float = 0
         self.alpha: float = 0
@@ -131,7 +135,9 @@ class BlsmRobotNode(SerialRobotNode):
 
         self.states: dict[StateEnum, BlsmAction] = {
             StateEnum.IDLE: Breathe(),
-            StateEnum.SENSOR: Sensor(serial=self.serial, distance_pub=self.distance_pub),
+            StateEnum.SENSOR: Sensor(
+                serial=self.serial, distance_pub=self.distance_pub
+            ),
             # StateEnum.PLAYBACK: ,
             StateEnum.SLIDER: self.slider_action,
             # StateEnum.CONVERSATION: ,
@@ -139,21 +145,29 @@ class BlsmRobotNode(SerialRobotNode):
             StateEnum.PHONE: Phone(),
         }
         self.state: StateEnum = StateEnum.IDLE
+        # self.state: StateEnum = StateEnum.SENSOR
 
-        self.timer = self.create_timer(30, self.update)
+        self.timer = self.create_timer(1 / 30.0, self.update)
 
     def update(self):
         active_action = self.states.get(self.state, None)
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
+            # print(f"{self.motor_id_pos}")
             self.write_motors()
+
+    def callback_state(self, msg: String):
+        state = StateEnum[msg.data.upper()]
+        print(state)
+        active_action = self.states.get(self.state, None)
+        if active_action is not None:
+            active_action.setup()
 
     @override
     def read_serial(self):
         while True:
             time.sleep(0.05)
-
 
 
 def main(args=None):
