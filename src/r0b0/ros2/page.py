@@ -3,6 +3,10 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
+import eventlet
+
+# eventlet.monkey_patch()
+
 import os
 import time
 from enum import Enum
@@ -22,14 +26,14 @@ from r0b0.config import (
 )
 from r0b0.utils.cert_manager import ensure_https_certificates
 
-import eventlet
-
-eventlet.monkey_patch()
 
 # Set to True to disable ROS2 imports for testing without ROS2
-# TODO: test try-except block with `import rclpy` to set this automatically
-# or use envvar
-NO_ROS = False
+try:
+    import rclpy
+
+    NO_ROS = False
+except:
+    NO_ROS = True
 
 if not NO_ROS:
     import rclpy
@@ -160,6 +164,7 @@ class WebPageNode(Node):
             port=SERVER_PORT,
             certfile=self.certfile,
             keyfile=self.keyfile,
+            # async_mode="eventlet",
         )
 
     async def start_web_server_async(self):
@@ -243,11 +248,20 @@ class BlsmPageNode(WebPageNode):
             String, "/blsm/state/request", qos_profile=10
         )
         self.server_thread = Thread(target=self.start_web_server)
+        self.test_emit_thread = Thread(target=self.test_emit)
+        self.test_emit_thread.start()
 
         # Add support for serving main static files
         self.setup_main_static_route()
         # Setup REST API routes for state management
         self.setup_state_routes()
+
+    def test_emit(self):
+        ctr = 0
+        while True:
+            self.socketio.emit("sensor_value", {"value": str(ctr)})
+            ctr += 1
+            time.sleep(0.001)
 
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
@@ -461,8 +475,11 @@ class BlsmPageNode(WebPageNode):
         value = msg.data
         # Emit the value to all connected Socket.IO clients using a background task
         # print(f"distance {value=}")
-        self.socketio.emit("sensor_value", {"value": value})
-        # self.socketio.start_background_task(self._emit_sensor_value, value)
+        try:
+            self.socketio.emit("sensor_value", {"value": value})
+        except:
+            pass
+        self.socketio.start_background_task(self._emit_sensor_value, value)
 
     def _emit_sensor_value(self, value):
         print(f"distance {value=}")
@@ -577,16 +594,21 @@ def main(args=None):
 
     executor = MultiThreadedExecutor()
     executor.add_node(node)
-    node.start()
+    # node.start()
+    # eventlet.spawn(executor.spin)
+    spin_thread = Thread(target=executor.spin)
+    spin_thread.start()
+    node.start_web_server()
 
     try:
-        executor.spin()
+        # executor.spin()
         # rclpy.spin(node)
         # while rclpy.ok():
         #     #     # Spin once to process callbacks
         #     executor.spin_once(timeout_sec=0)
 
         #     # Perform other tasks here if needed
+        ...
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:
