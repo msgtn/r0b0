@@ -1,259 +1,397 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Key Event Listener for r0b0 robot control" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="description"
+      content="Key Event Listener for r0b0 robot control"
+    />
     <meta name="author" content="" />
     <title>Key Events - r0b0 Framework</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="/main/assets/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
     <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/main/css/styles.css" rel="stylesheet" />
     <!-- Include Socket.IO -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"></script>
-</head>
-<body id="page-top">
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body id="page-top">
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" href="/">r0b0</a>
-            <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
-                            <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/speech_recognition">Speech</a></li>
-                        <li class="nav-item dropdown mx-0 mx-lg-1">
-                            <a class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded" href="#" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuDropdown">
-                                <li><a class="dropdown-item" href="/speech_history" target="_blank">History</a></li>
-                                <li><a class="dropdown-item" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+    <nav
+      class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top"
+      id="mainNav"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="/">r0b0</a>
+        <button
+          class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web"
+                >Key Events</a
+              >
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib"
+                >Calibration</a
+              >
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a
+                class="nav-link py-3 px-0 px-lg-3 rounded"
+                href="/speech_recognition"
+                >Speech</a
+              >
+            </li>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+              <a
+                class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded"
+                href="#"
+                id="menuDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                >Menu</a
+              >
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="menuDropdown"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="/speech_history"
+                    target="_blank"
+                    >History</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="https://github.com/msgtn/r0b0"
+                    target="_blank"
+                    >GitHub</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
     <!-- Masthead-->
     <header class="masthead bg-primary text-white text-center">
-        <div class="container d-flex align-items-center flex-column">
-            <!-- Masthead Heading-->
-            <h1 class="masthead-heading text-uppercase mb-0">Key Events</h1>
-            <!-- Icon Divider-->
-            <div class="divider-custom divider-light">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-keyboard"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <!-- Masthead Subheading-->
-            <p class="masthead-subheading font-weight-light mb-0">Keyboard Input Capture for Robot Control</p>
+      <div class="container d-flex align-items-center flex-column">
+        <!-- Masthead Heading-->
+        <h1 class="masthead-heading text-uppercase mb-0">Key Events</h1>
+        <!-- Icon Divider-->
+        <div class="divider-custom divider-light">
+          <div class="divider-custom-line"></div>
+          <div class="divider-custom-icon"><i class="fas fa-keyboard"></i></div>
+          <div class="divider-custom-line"></div>
         </div>
+        <!-- Masthead Subheading-->
+        <p class="masthead-subheading font-weight-light mb-0">
+          Keyboard Input Capture for Robot Control
+        </p>
+      </div>
     </header>
     <!-- Key Events Section-->
     <section class="page-section bg-white" id="keyevents">
-        <div class="container">
-            <!-- Section Heading-->
-            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Key Event Listener</h2>
-            <!-- Icon Divider-->
-            <div class="divider-custom">
-                <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-                <div class="divider-custom-line"></div>
-            </div>
-            <!-- Instructions and Status-->
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <p class="lead mb-4">Press any key on your keyboard to send control signals to the robot.</p>
-                    
-                    <!-- Status Display -->
-                    <div class="card bg-light mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
-                                Connection Status
-                            </h5>
-                            <p class="card-text" id="connectionStatus">Connecting to server...</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Key Event Display -->
-                    <div class="card bg-primary text-white">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-keyboard me-2"></i>
-                                Last Key Event
-                            </h5>
-                            <p class="card-text lead" id="status">Waiting for key events...</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Instructions -->
-                    <div class="mt-4">
-                        <h6 class="text-uppercase mb-3">Instructions</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p class="small">• Press any key to send control signals</p>
-                                <p class="small">• Key events are sent immediately via WebSocket</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p class="small">• Check connection status above</p>
-                                <p class="small">• Use different keys for different robot actions</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="container">
+        <!-- Section Heading-->
+        <h2
+          class="page-section-heading text-center text-uppercase text-secondary mb-0"
+        >
+          Key Event Listener
+        </h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom">
+          <div class="divider-custom-line"></div>
+          <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+          <div class="divider-custom-line"></div>
         </div>
+        <!-- Instructions and Status-->
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <p class="lead mb-4">
+              Press any key on your keyboard to send control signals to the
+              robot.
+            </p>
+
+            <!-- Status Display -->
+            <div class="card bg-light mb-4">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i
+                    class="fas fa-circle text-warning me-2"
+                    id="connectionIcon"
+                  ></i>
+                  Connection Status
+                </h5>
+                <p class="card-text" id="connectionStatus">
+                  Connecting to server...
+                </p>
+              </div>
+            </div>
+
+            <!-- Key Event Display -->
+            <div class="card bg-primary text-white">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fas fa-keyboard me-2"></i>
+                  Last Key Event
+                </h5>
+                <p class="card-text lead" id="status">
+                  Waiting for key events...
+                </p>
+              </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="mt-4">
+              <h6 class="text-uppercase mb-3">Instructions</h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="small">• Press any key to send control signals</p>
+                  <p class="small">
+                    • Key events are sent immediately via WebSocket
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <p class="small">• Check connection status above</p>
+                  <p class="small">
+                    • Use different keys for different robot actions
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- Footer-->
     <footer class="footer text-center">
-        <div class="container">
-            <div class="row">
-                <!-- Footer Project Info-->
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
-                    <p class="lead mb-0">
-                        Communication library for<br />
-                        hardware and software
-                    </p>
-                </div>
-                <!-- Footer Social Icons-->
-                <div class="col-lg-4 mb-5 mb-lg-0">
-                    <h4 class="text-uppercase mb-4">Links</h4>
-                    <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-fw fa-github"></i></a>
-                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"><i class="fas fa-fw fa-keyboard"></i></a>
-                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"><i class="fas fa-fw fa-sliders-h"></i></a>
-                </div>
-                <!-- Footer About Text-->
-                <div class="col-lg-4">
-                    <h4 class="text-uppercase mb-4">Open Source</h4>
-                    <p class="lead mb-0">
-                        Licensed under AGPL-3.0<br />
-                        <a href="https://github.com/msgtn/r0b0">View Source Code</a>
-                    </p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="row">
+          <!-- Footer Project Info-->
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
+            <p class="lead mb-0">
+              Communication library for<br />
+              hardware and software
+            </p>
+          </div>
+          <!-- Footer Social Icons-->
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <h4 class="text-uppercase mb-4">Links</h4>
+            <a
+              class="btn btn-outline-light btn-social mx-1"
+              href="https://github.com/msgtn/r0b0"
+              target="_blank"
+              ><i class="fab fa-fw fa-github"></i
+            ></a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"
+              ><i class="fas fa-fw fa-keyboard"></i
+            ></a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"
+              ><i class="fas fa-fw fa-sliders-h"></i
+            ></a>
+          </div>
+          <!-- Footer About Text-->
+          <div class="col-lg-4">
+            <h4 class="text-uppercase mb-4">Open Source</h4>
+            <p class="lead mb-0">
+              Licensed under AGPL-3.0<br />
+              <a href="https://github.com/msgtn/r0b0">View Source Code</a>
+            </p>
+          </div>
         </div>
+      </div>
     </footer>
     <!-- Copyright Section-->
     <div class="copyright py-4 text-center text-white">
-        <div class="container"><small>Copyright &copy; r0b0 Framework 2023</small></div>
+      <div class="container">
+        <small>Copyright &copy; r0b0 Framework 2023</small>
+      </div>
     </div>
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="/main/js/scripts.js"></script>
-    
+
     <!-- Key Event Listener Script -->
     <script>
-        let socketAddr = window.location.origin;
-        
-        // DOM elements
-        const statusElement = document.getElementById('status');
-        const connectionStatusElement = document.getElementById('connectionStatus');
-        const connectionIconElement = document.getElementById('connectionIcon');
+      let socketAddr = window.location.origin;
 
-        // Initialize connection status as disconnected
-        function setConnectionStatus(status, message, iconClass) {
-            connectionStatusElement.textContent = message;
-            connectionIconElement.className = iconClass;
+      // DOM elements
+      const statusElement = document.getElementById("status");
+      const connectionStatusElement =
+        document.getElementById("connectionStatus");
+      const connectionIconElement = document.getElementById("connectionIcon");
+
+      // Initialize connection status as disconnected
+      function setConnectionStatus(status, message, iconClass) {
+        connectionStatusElement.textContent = message;
+        connectionIconElement.className = iconClass;
+      }
+
+      // Set initial status
+      setConnectionStatus(
+        "connecting",
+        "Connecting to server...",
+        "fas fa-circle text-warning me-2"
+      );
+
+      // Connect to the Socket.IO server
+      const socket = io.connect(socketAddr, {
+        // Add connection timeout and retry settings
+        timeout: 5000,
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionAttempts: 5,
+      });
+
+      // Listen for keydown events
+      document.addEventListener("keydown", (event) => {
+        // Only process key events if connected
+        if (!socket.connected) {
+          statusElement.textContent =
+            "Cannot send key events - Not connected to server";
+          return;
         }
 
-        // Set initial status
-        setConnectionStatus('connecting', 'Connecting to server...', 'fas fa-circle text-warning me-2');
+        const key = event.key; // Get the key that was pressed
+        const code = event.code; // Get the key code
 
-        // Connect to the Socket.IO server
-        const socket = io.connect(socketAddr, {
-            // Add connection timeout and retry settings
-            timeout: 5000,
-            reconnection: true,
-            reconnectionDelay: 1000,
-            reconnectionAttempts: 5
-        });
+        // Send the key event as a socket event
+        socket.emit("key_event", { key, code });
 
-        // Listen for keydown events
-        document.addEventListener('keydown', (event) => {
-            // Only process key events if connected
-            if (!socket.connected) {
-                statusElement.textContent = 'Cannot send key events - Not connected to server';
-                return;
-            }
+        // Update the status on the page
+        statusElement.textContent = `Key pressed: ${key} (Code: ${code})`;
 
-            const key = event.key; // Get the key that was pressed
-            const code = event.code; // Get the key code
+        // Add visual feedback
+        statusElement.parentElement.classList.add("bg-success");
+        statusElement.parentElement.classList.remove("bg-primary");
+        setTimeout(() => {
+          statusElement.parentElement.classList.remove("bg-success");
+          statusElement.parentElement.classList.add("bg-primary");
+        }, 200);
+      });
 
-            // Send the key event as a socket event
-            socket.emit('key_event', { key, code });
+      // Handle connection events
+      socket.on("connect", () => {
+        console.log("Connected to the server");
+        setConnectionStatus(
+          "connected",
+          "Connected to server - Ready to capture key events",
+          "fas fa-circle text-success me-2"
+        );
+      });
 
-            // Update the status on the page
-            statusElement.textContent = `Key pressed: ${key} (Code: ${code})`;
-            
-            // Add visual feedback
-            statusElement.parentElement.classList.add('bg-success');
-            statusElement.parentElement.classList.remove('bg-primary');
-            setTimeout(() => {
-                statusElement.parentElement.classList.remove('bg-success');
-                statusElement.parentElement.classList.add('bg-primary');
-            }, 200);
-        });
+      socket.on("disconnect", (reason) => {
+        console.log("Disconnected from the server:", reason);
+        setConnectionStatus(
+          "disconnected",
+          `Disconnected from server (${reason}) - Check connection`,
+          "fas fa-circle text-danger me-2"
+        );
+        statusElement.textContent =
+          "Disconnected - Key events will not be sent";
+      });
 
-        // Handle connection events
-        socket.on('connect', () => {
-            console.log('Connected to the server');
-            setConnectionStatus('connected', 'Connected to server - Ready to capture key events', 'fas fa-circle text-success me-2');
-        });
+      socket.on("connect_error", (error) => {
+        console.log("Connection error:", error);
+        setConnectionStatus(
+          "error",
+          "Connection error - Unable to reach server",
+          "fas fa-circle text-danger me-2"
+        );
+        statusElement.textContent =
+          "Connection failed - Check if server is running";
+      });
 
-        socket.on('disconnect', (reason) => {
-            console.log('Disconnected from the server:', reason);
-            setConnectionStatus('disconnected', `Disconnected from server (${reason}) - Check connection`, 'fas fa-circle text-danger me-2');
-            statusElement.textContent = 'Disconnected - Key events will not be sent';
-        });
+      socket.on("reconnect", (attemptNumber) => {
+        console.log("Reconnected to server after", attemptNumber, "attempts");
+        setConnectionStatus(
+          "connected",
+          "Reconnected to server - Ready to capture key events",
+          "fas fa-circle text-success me-2"
+        );
+      });
 
-        socket.on('connect_error', (error) => {
-            console.log('Connection error:', error);
-            setConnectionStatus('error', 'Connection error - Unable to reach server', 'fas fa-circle text-danger me-2');
-            statusElement.textContent = 'Connection failed - Check if server is running';
-        });
+      socket.on("reconnect_attempt", (attemptNumber) => {
+        console.log("Attempting to reconnect... attempt", attemptNumber);
+        setConnectionStatus(
+          "reconnecting",
+          `Reconnecting... (attempt ${attemptNumber})`,
+          "fas fa-circle text-warning me-2"
+        );
+      });
 
-        socket.on('reconnect', (attemptNumber) => {
-            console.log('Reconnected to server after', attemptNumber, 'attempts');
-            setConnectionStatus('connected', 'Reconnected to server - Ready to capture key events', 'fas fa-circle text-success me-2');
-        });
+      socket.on("reconnect_failed", () => {
+        console.log("Failed to reconnect");
+        setConnectionStatus(
+          "failed",
+          "Failed to reconnect - Please refresh the page",
+          "fas fa-circle text-danger me-2"
+        );
+      });
 
-        socket.on('reconnect_attempt', (attemptNumber) => {
-            console.log('Attempting to reconnect... attempt', attemptNumber);
-            setConnectionStatus('reconnecting', `Reconnecting... (attempt ${attemptNumber})`, 'fas fa-circle text-warning me-2');
-        });
-
-        socket.on('reconnect_failed', () => {
-            console.log('Failed to reconnect');
-            setConnectionStatus('failed', 'Failed to reconnect - Please refresh the page', 'fas fa-circle text-danger me-2');
-        });
-
-        // Check connection status periodically
-        setInterval(() => {
-            if (socket.connected) {
-                // Connection is healthy
-            } else {
-                // Connection is down
-                if (connectionStatusElement.textContent.includes('Connected')) {
-                    setConnectionStatus('disconnected', 'Connection lost - Attempting to reconnect...', 'fas fa-circle text-warning me-2');
-                }
-            }
-        }, 2000); // Check every 2 seconds
+      // Check connection status periodically
+      setInterval(() => {
+        if (socket.connected) {
+          // Connection is healthy
+        } else {
+          // Connection is down
+          if (connectionStatusElement.textContent.includes("Connected")) {
+            setConnectionStatus(
+              "disconnected",
+              "Connection lost - Attempting to reconnect...",
+              "fas fa-circle text-warning me-2"
+            );
+          }
+        }
+      }, 2000); // Check every 2 seconds
     </script>
-</body>
+  </body>
 </html>

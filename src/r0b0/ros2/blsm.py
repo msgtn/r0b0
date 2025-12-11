@@ -5,7 +5,7 @@ import rclpy
 from rclpy.executors import MultiThreadedExecutor
 
 
-from r0b0.ros2.page import BlsmPageNode
+# from r0b0.ros2.page import BlsmPageNode
 from r0b0.ros2.robot import (
     BLSM_PAGES_FOLDER,
     BlsmRobotNode,
@@ -48,28 +48,29 @@ async def run():
             {"certfile": str(cert_path), "keyfile": str(key_path)}
         )
 
-    page_node = BlsmPageNode(**page_kwargs)
+    # page_node = BlsmPageNode(**page_kwargs)
 
     executor = MultiThreadedExecutor()
     executor.add_node(robot_node)
-    executor.add_node(page_node)
+    # executor.add_node(page_node)
     # Start Flask server as an asyncio task
-    page_node.start()
+    # page_node.start()
     # flask_task = asyncio.create_task(page_node.start_web_server_async())
     # flask_task = asyncio.create_task(page_node.flask_async())
-    ros_task = asyncio.create_task(ros_spin(executor))
+    # ros_task = asyncio.create_task(ros_spin(executor))
 
     try:
-        await asyncio.gather(
-            # flask_task,
-            ros_task
-        )
+        executor.spin()
+        # await asyncio.gather(
+        #     # flask_task,
+        #     ros_task
+        # )
     except KeyboardInterrupt:
         robot_node.get_logger().info("Shutting down WebPageNode...")
-        page_node.get_logger().info("Shutting down WebPageNode...")
+        # page_node.get_logger().info("Shutting down WebPageNode...")
     finally:
         robot_node.destroy_node()
-        page_node.destroy_node()
+        # page_node.destroy_node()
         rclpy.shutdown()
 
 

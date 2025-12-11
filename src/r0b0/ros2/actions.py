@@ -7,6 +7,7 @@ import serial
 
 from r0b0 import blsm_config
 from r0b0.ros2.filters import ExponentialFilter
+from r0b0.ros2.tapes import Tape
 from std_msgs.msg import Int64, String
 
 from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
@@ -26,16 +27,6 @@ DEG2SERVO = [
     [[-10, 140], [90, 170]],
     [[-140, 140], [10, 170]],
 ]
-
-
-@dataclass
-class BlsmPose:
-    h: float = 0
-    rot: Rotation = Rotation.from_euler("ZXY", angles=[0, 0, 0])
-
-    def reset(self):
-        self.h = 0
-        self.rot = Rotation.from_euler("ZXY", angles=[0, 0, 0])
 
 
 class BlsmAction(py_trees.behaviour.Behaviour):
@@ -188,7 +179,8 @@ class Sensor(BlsmAction):
         self.distance_filter = ExponentialFilter(alpha=0.5)
         self.distance_pub = distance_pub
         self._last_publish_time = 0  # Add this for rate limiting
-        self._publish_interval = 0.1  # seconds (10 Hz)
+        # self._publish_interval = 0.1  # seconds (10 Hz)
+        self._publish_interval = 1.0  # seconds (10 Hz)
 
     def update(self) -> py_trees.common.Status:
         try:
@@ -347,6 +339,29 @@ class Phone(BlsmAction):
             mirror=msg.mirror,
             sensitivity=sensitivity,
         )
+
+
+class Playback(BlsmAction):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.tape_loaded = None
+        self.tapes: dict[str, Tape] = {"none": Tape(name="none", frames=[])}
+
+    def setup(self, **kwargs):
+        print("setup")
+        self.tape_loaded = None
+        self.pose.reset()
+
+    def update(self) -> py_trees.common.Status:
+        if self.tape_loaded is not None:
+            self.pose = self.tape_loaded.get_frame_at_ts(time.time())
+        self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
+        return py_trees.common.Status.RUNNING
+
+    def playback_callback(self, msg: String):
+        self.tape_loaded = self.tapes.get(msg.data)
+        if self.tape_loaded is None:
+            print(f"No tape '{msg.data}'")
 
 
 def main():

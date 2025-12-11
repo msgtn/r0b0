@@ -254,15 +254,6 @@
         reconnectionAttempts: 5,
       });
 
-      //   socket.onAny((event, ...args) => {
-      //     console.log("Socket event:", event, args);
-      //   });
-
-      socket.on("sensor_value", function (data) {
-        console.log(data);
-        document.getElementById("sensorValue").textContent = data.value;
-      });
-
       // Handle connection events
       socket.on("connect", () => {
         console.log("Connected to the server");
@@ -318,9 +309,19 @@
         );
       });
 
+      socket.onAny((event, ...args) => {
+        console.log("Socket event:", event, args);
+      });
+
+      socket.on("sensor_value", function (data) {
+        console.log(data);
+        document.getElementById("sensorValue").textContent = data.value;
+      });
+
       // Check connection status periodically
       setInterval(() => {
         if (socket.connected) {
+          console.log("still connected");
           // Connection is healthy
         } else {
           // Connection is down

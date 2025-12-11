@@ -3,6 +3,7 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
+import os
 import time
 from abc import abstractmethod
 from enum import Enum
@@ -25,6 +26,7 @@ from r0b0.ros2.actions import (
     Breathe,
     Keyboard,
     Phone,
+    Playback,
     Sensor,
     Slider,
 )
@@ -126,6 +128,13 @@ class BlsmRobotNode(SerialRobotNode):
             callback=self.callback_state,
             qos_profile=10,
         )
+        self.playback_action = Playback()
+        self.playback_request_sub = self.create_subscription(
+            String,
+            "/blsm/playback/request",
+            callback=self.playback_action.playback_callback,
+            qos_profile=10,
+        )
 
         self.h: float = 0
         self.alpha: float = 0
@@ -138,7 +147,7 @@ class BlsmRobotNode(SerialRobotNode):
             StateEnum.SENSOR: Sensor(
                 serial=self.serial, distance_pub=self.distance_pub
             ),
-            # StateEnum.PLAYBACK: ,
+            StateEnum.PLAYBACK: self.playback_action,
             StateEnum.CALIBRATION: self.slider_action,
             # StateEnum.CONVERSATION: ,
             StateEnum.KEY_CONTROL: self.keyboard_action,
@@ -175,7 +184,12 @@ class BlsmRobotNode(SerialRobotNode):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = BlsmRobotNode("robot_node")
+    node = BlsmRobotNode(
+        name="robot_node",
+        # motor_map=DEG2SERVO,
+        motor_map=DEG2DXL,
+        port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
+    )
 
     executor = MultiThreadedExecutor()
     executor.add_node(node)
