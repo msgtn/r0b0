@@ -7,6 +7,7 @@ import serial
 
 from r0b0 import blsm_config
 from r0b0.ros2.filters import ExponentialFilter
+from r0b0.ros2.pose import BlsmPose
 from r0b0.ros2.tapes import Tape
 from std_msgs.msg import Int64, String
 
@@ -35,8 +36,8 @@ class BlsmAction(py_trees.behaviour.Behaviour):
         self,
         name: str = "breathe",
         motor_id_pos: dict | None = None,
-        # motor_map=DEG2SERVO,
-        motor_map=DEG2DXL,
+        motor_map=DEG2SERVO,
+        # motor_map=DEG2DXL,
     ):
         super().__init__(name)
         self.pose: BlsmPose = BlsmPose()
@@ -143,6 +144,7 @@ class Breathe(BlsmAction):
         self.breathe_rise_s: float = 4
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
+        self.breathe_amp_rad: float = 100
 
     def update(self) -> py_trees.common.Status:
         t = time.time() % (self.breathe_rise_s + self.breathe_fall_s)
@@ -207,6 +209,7 @@ class Sensor(BlsmAction):
                     # i.e. map distance to the height,
                     # and turn off the height adjustment in the breathing thread
                     # print(f"{self.distance_mm=}")
+                    print(data)
                     dist_within_range = (
                         DIST2HEIGHT[0][0] < self.distance_mm < DIST2HEIGHT[0][1]
                     )
