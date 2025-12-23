@@ -1,6 +1,7 @@
 import asyncio
 import os
 from r0b0.config import CSR_PEM, KEY_PEM
+from r0b0.ros2.page import BlsmPageNode
 import rclpy
 from rclpy.executors import MultiThreadedExecutor
 
@@ -48,13 +49,13 @@ async def run():
             {"certfile": str(cert_path), "keyfile": str(key_path)}
         )
 
-    # page_node = BlsmPageNode(**page_kwargs)
+    page_node = BlsmPageNode(**page_kwargs)
 
     executor = MultiThreadedExecutor()
     executor.add_node(robot_node)
-    # executor.add_node(page_node)
+    executor.add_node(page_node)
     # Start Flask server as an asyncio task
-    # page_node.start()
+    page_node.start()
     # flask_task = asyncio.create_task(page_node.start_web_server_async())
     # flask_task = asyncio.create_task(page_node.flask_async())
     # ros_task = asyncio.create_task(ros_spin(executor))
