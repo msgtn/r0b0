@@ -1,3 +1,4 @@
+import eventlet
 import asyncio
 import os
 from r0b0.config import CSR_PEM, KEY_PEM
@@ -61,7 +62,9 @@ async def run():
     # ros_task = asyncio.create_task(ros_spin(executor))
 
     try:
-        executor.spin()
+        while rclpy.ok():
+            executor.spin_once(timeout_sec=0.01)
+            eventlet.sleep(0.01)
         # await asyncio.gather(
         #     # flask_task,
         #     ros_task

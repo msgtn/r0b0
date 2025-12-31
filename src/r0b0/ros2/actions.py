@@ -181,8 +181,8 @@ class Sensor(BlsmAction):
         self.distance_filter = ExponentialFilter(alpha=0.5)
         self.distance_pub = distance_pub
         self._last_publish_time = 0  # Add this for rate limiting
-        # self._publish_interval = 0.1  # seconds (10 Hz)
-        self._publish_interval = 1.0  # seconds (10 Hz)
+        self._publish_interval = 0.1  # seconds (10 Hz)
+        # self._publish_interval = 1.0  # seconds (10 Hz)
 
     def update(self) -> py_trees.common.Status:
         try:
