@@ -4,13 +4,13 @@ On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
 import eventlet
+import random
 
-# eventlet.monkey_patch()
+eventlet.monkey_patch()
 
 import os
 import time
 from enum import Enum
-from threading import Thread
 
 import socketio
 import uvicorn
@@ -43,6 +43,7 @@ if not NO_ROS:
     from std_msgs.msg import Int64, String
 
     from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
+
 else:
 
     class Node:
@@ -99,9 +100,6 @@ else:
     MotorCommand = dict
 
 
-if not NO_ROS:
-    from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
-
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 MAIN_PAGES_FOLDER = str(ROOT_DIR / "pages" / "main")
 
@@ -145,15 +143,16 @@ class WebPageNode(Node):
             self.app,
             cors_allowed_origins="*",
             max_http_buffer_size=int(1e8),
+            logger=True,
+            engineio_logger=True,
+            async_mode="eventlet",
         )
         self.certfile = certfile
         self.keyfile = keyfile
-        # Start Flask server in a separate thread
-        self.server_thread = Thread(target=self.start_web_server)
 
     def start(self):
-        self.server_thread.start()
-        # self.start_web_server()
+        """Start web server in background using eventlet greenlet."""
+        eventlet.spawn(self.start_web_server)
 
     def start_web_server(self):
         """Start the Flask web server."""
@@ -164,7 +163,6 @@ class WebPageNode(Node):
             port=SERVER_PORT,
             certfile=self.certfile,
             keyfile=self.keyfile,
-            # async_mode="eventlet",
         )
 
     async def start_web_server_async(self):
@@ -247,21 +245,12 @@ class BlsmPageNode(WebPageNode):
         self.state_pub = self.create_publisher(
             String, "/blsm/state/request", qos_profile=10
         )
-        self.server_thread = Thread(target=self.start_web_server)
-        self.test_emit_thread = Thread(target=self.test_emit)
-        self.test_emit_thread.start()
+        self._latest_distance = None
 
         # Add support for serving main static files
         self.setup_main_static_route()
         # Setup REST API routes for state management
         self.setup_state_routes()
-
-    def test_emit(self):
-        ctr = 0
-        while True:
-            self.socketio.emit("sensor_value", {"value": str(ctr)})
-            ctr += 1
-            time.sleep(0.001)
 
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
@@ -279,6 +268,13 @@ class BlsmPageNode(WebPageNode):
         def get_state():
             # Canonical format: { state: <string> }
             return jsonify({"state": self.current_state.value})
+
+        @self.app.get("/api/test_sensor")
+        def test_sensor():
+            """Test endpoint to manually emit a sensor value."""
+            test_value = random.choice(range(10))
+            self.socketio.emit("sensor_value", {"value": test_value})
+            return jsonify({"emitted": test_value})
 
         @self.app.post("/api/state")
         def set_state():
@@ -472,18 +468,10 @@ class BlsmPageNode(WebPageNode):
             )
 
     def handle_distance(self, msg: Int64):
-        value = msg.data
-        # Emit the value to all connected Socket.IO clients using a background task
-        # print(f"distance {value=}")
-        try:
-            self.socketio.emit("sensor_value", {"value": value})
-        except:
-            pass
-        self.socketio.start_background_task(self._emit_sensor_value, value)
-
-    def _emit_sensor_value(self, value):
-        print(f"distance {value=}")
-        self.socketio.emit("sensor_value", {"value": value})
+        """ROS2 callback - emit sensor value directly to clients."""
+        self._latest_distance = msg.data
+        self.socketio.emit("sensor_value", {"value": msg.data})
+        print(msg.data)
 
     def setup_routes(self):
         """Define routes for the Flask app."""
@@ -594,21 +582,14 @@ def main(args=None):
 
     executor = MultiThreadedExecutor()
     executor.add_node(node)
-    # node.start()
-    # eventlet.spawn(executor.spin)
-    spin_thread = Thread(target=executor.spin)
-    spin_thread.start()
-    node.start_web_server()
+    # Start web server in background (non-blocking)
+    node.start()
 
     try:
-        # executor.spin()
-        # rclpy.spin(node)
-        # while rclpy.ok():
-        #     #     # Spin once to process callbacks
-        #     executor.spin_once(timeout_sec=0)
-
-        #     # Perform other tasks here if needed
-        ...
+        # Use spin_once with eventlet.sleep to allow greenlets to run
+        while rclpy.ok():
+            executor.spin_once(timeout_sec=0.01)
+            eventlet.sleep(0.01)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down WebPageNode...")
     finally:

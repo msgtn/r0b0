@@ -119,3 +119,8 @@ conda env create `r0b0` -f env.yaml
 conda activate r0b0
 pip3 install -r req.txt 
 ```
+
+## TODO
+- [ ] fix sensor
+- [ ] playback
+- [ ] instruction updates
