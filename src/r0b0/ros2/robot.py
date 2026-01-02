@@ -58,17 +58,46 @@ class RobotNode(Node):
 class SerialRobotNode(RobotNode):
     def __init__(self, name, port="/dev/ttyACM0", baudrate=115200):
         super().__init__(name)
-        self.serial = serial.Serial(port, baudrate)
+        self.serial = None
+        self.serial_connected = False
+        self._port = port
+        self._baudrate = baudrate
+        self._connect_serial()
+
+    def _connect_serial(self):
+        """Attempt to connect to the serial port."""
+        if self.serial_connected:
+            return True
+        try:
+            self.serial = serial.Serial(self._port, self._baudrate)
+            self.serial_connected = True
+            self.get_logger().info(f"Serial connected on {self._port}")
+            return True
+        except serial.SerialException as e:
+            self.serial = None
+            self.serial_connected = False
+            self.get_logger().warn(
+                f"Serial port {self._port} not available: {e}. "
+                "Running in disconnected mode."
+            )
+            return False
 
     @override
     def write_motors(self):
         """Send the motor values as a string"""
+        if not self.serial_connected:
+            return
         # params: str = "&".join(["=".join([str(k), str(v)])
         params: str = "&".join(
             [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
         )
         params += "\n"
-        self.serial.write(bytes(params, encoding="utf-8"))
+        try:
+            self.serial.write(bytes(params, encoding="utf-8"))
+        except serial.SerialException as e:
+            self.get_logger().error(f"Serial write failed: {e}")
+            self.serial_connected = False
+            self.serial = None
 
 
 class StateEnum(Enum):
@@ -123,13 +152,16 @@ class BlsmRobotNode(SerialRobotNode):
         self.distance_pub = self.create_publisher(
             Int64, "/blsm/distance_sensor", qos_profile=10
         )
+        self.playback_status_pub = self.create_publisher(
+            String, "/blsm/playback/status", qos_profile=10
+        )
         self.state_sub = self.create_subscription(
             String,
             "/blsm/state/request",
             callback=self.callback_state,
             qos_profile=10,
         )
-        self.playback_action = Playback()
+        self.playback_action = Playback(status_pub=self.playback_status_pub)
         # Register example tapes for playback
         for tape in get_example_tapes():
             self.playback_action.register_tape(tape)
@@ -150,17 +182,20 @@ class BlsmRobotNode(SerialRobotNode):
         self.mirror: bool = True
         self.sensitivity: float = 1
 
+        self.sensor_action = Sensor(
+            serial=self.serial, distance_pub=self.distance_pub
+        ) if self.serial_connected else None
+
         self.states: dict[StateEnum, BlsmAction] = {
             StateEnum.IDLE: Breathe(),
-            StateEnum.SENSOR: Sensor(
-                serial=self.serial, distance_pub=self.distance_pub
-            ),
             StateEnum.PLAYBACK: self.playback_action,
             StateEnum.CALIBRATION: self.slider_action,
             # StateEnum.CONVERSATION: ,
             StateEnum.KEY_CONTROL: self.keyboard_action,
             StateEnum.PHONE: Phone(),
         }
+        if self.sensor_action is not None:
+            self.states[StateEnum.SENSOR] = self.sensor_action
         self.state: StateEnum = StateEnum.IDLE
         # self.state: StateEnum = StateEnum.SENSOR
 
@@ -171,19 +206,24 @@ class BlsmRobotNode(SerialRobotNode):
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
-            # print(self.motor_id_pos
+            # print(self.motor_id_pos)
             self.write_motors()
 
     def callback_state(self, msg: String):
         requested_state = msg.data.upper()
         if requested_state in StateEnum.__members__:
-            self.state = StateEnum[msg.data.upper()]
-            active_action = self.states.get(self.state, None)
+            new_state = StateEnum[msg.data.upper()]
+            active_action = self.states.get(new_state, None)
             if active_action is not None:
-                print(f"{self.state=}, {active_action=}")
+                self.state = new_state
+                self.get_logger().info(f"State changed to {self.state}")
                 active_action.setup()
+            else:
+                self.get_logger().warn(
+                    f"State {new_state} unavailable (serial not connected?)"
+                )
         else:
-            print(f"No existing {requested_state=}")
+            self.get_logger().warn(f"No existing state: {requested_state}")
 
     @override
     def read_serial(self):

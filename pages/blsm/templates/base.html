@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="{{ description|default('r0b0 robot control') }}" />
+    <meta name="author" content="" />
+    <title>{{ title }} - r0b0 Framework</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/main/assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/main/css/styles.css" rel="stylesheet" />
+    <!-- Include Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"></script>
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand" href="/">r0b0</a>
+        <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded"
+          type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+          aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_playback">Playback</a>
+            </li>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+              <a class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded" href="#"
+                id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuDropdown">
+                <li><a class="dropdown-item" href="/blsm_sensor">Sensor</a></li>
+                <li><a class="dropdown-item" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Masthead-->
+    <header class="masthead bg-primary text-white text-center" {% block masthead_style %}{% endblock %}>
+      <div class="container d-flex align-items-center flex-column">
+        <h1 class="masthead-heading text-uppercase mb-0" {% block heading_style %}{% endblock %}>{{ heading }}</h1>
+        <div class="divider-custom divider-light">
+          <div class="divider-custom-line"></div>
+          <div class="divider-custom-icon"><i class="fas fa-{{ icon }}"></i></div>
+          <div class="divider-custom-line"></div>
+        </div>
+        {% if subheading %}
+        <p class="masthead-subheading font-weight-light mb-0">{{ subheading }}</p>
+        {% endif %}
+      </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer-->
+    <footer class="footer text-center {% block footer_class %}{% endblock %}">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
+            <p class="lead mb-0">
+              Communication library for<br />
+              hardware and software
+            </p>
+          </div>
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <h4 class="text-uppercase mb-4">Links</h4>
+            <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank">
+              <i class="fab fa-fw fa-github"></i>
+            </a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web">
+              <i class="fas fa-fw fa-keyboard"></i>
+            </a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib">
+              <i class="fas fa-fw fa-sliders-h"></i>
+            </a>
+          </div>
+          <div class="col-lg-4">
+            <h4 class="text-uppercase mb-4">Open Source</h4>
+            <p class="lead mb-0">
+              Licensed under AGPL-3.0<br />
+              <a href="https://github.com/msgtn/r0b0">View Source Code</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Copyright Section-->
+    <div class="copyright py-4 text-center text-white">
+      <div class="container">
+        <small>Copyright &copy; r0b0 Framework 2023</small>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="/main/js/scripts.js"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

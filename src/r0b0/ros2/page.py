@@ -252,6 +252,12 @@ class BlsmPageNode(WebPageNode):
         self.playback_pub = self.create_publisher(
             String, "/blsm/playback", qos_profile=10
         )
+        self.playback_status_sub = self.create_subscription(
+            String,
+            "/blsm/playback/status",
+            callback=self.handle_playback_status,
+            qos_profile=10,
+        )
         self._latest_distance = None
         self._registered_tapes: list[dict] = []
 
@@ -302,6 +308,33 @@ class BlsmPageNode(WebPageNode):
         def get_tapes():
             """Get list of registered tapes for playback."""
             return jsonify({"tapes": self._registered_tapes})
+
+        @self.app.get("/api/tape/<tape_name>/frames")
+        def get_tape_frames(tape_name):
+            """Get all frames for a tape (for visualizer scrubbing)."""
+            try:
+                from r0b0.ros2.example_tapes import get_example_tapes
+
+                for tape in get_example_tapes():
+                    if tape.name == tape_name:
+                        frames = []
+                        for frame in tape.frames:
+                            euler = frame.pose.rot.as_euler("ZXY")
+                            frames.append({
+                                "ts": frame.ts,
+                                "h": frame.pose.h,
+                                "yaw": float(euler[0]),
+                                "pitch": float(euler[1]),
+                                "roll": float(euler[2]),
+                            })
+                        return jsonify({
+                            "name": tape.name,
+                            "duration": tape.duration,
+                            "frames": frames,
+                        })
+                return jsonify({"error": f"Tape '{tape_name}' not found"}), 404
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
 
         @self.app.post("/api/state")
         def set_state():
@@ -501,6 +534,35 @@ class BlsmPageNode(WebPageNode):
         self._latest_distance = msg.data
         self.socketio.emit("sensor_value", {"value": msg.data})
         print(msg.data)
+
+    def handle_playback_status(self, msg: String):
+        """ROS2 callback - emit playback status to clients."""
+        import json
+
+        try:
+            status = json.loads(msg.data)
+
+            # Emit main status update
+            self.socketio.emit("playback_status", {
+                "state": status.get("state", "stopped"),
+                "tape_name": status.get("tape_name", ""),
+                "progress": status.get("progress", 0.0),
+                "current_time": status.get("current_time", 0.0),
+                "total_time": status.get("total_time", 0.0),
+            })
+
+            # Emit pose update if available
+            pose = status.get("pose")
+            if pose:
+                self.socketio.emit("playback_pose", {
+                    "h": pose.get("h", 0),
+                    "yaw": pose.get("yaw", 0),
+                    "pitch": pose.get("pitch", 0),
+                    "roll": pose.get("roll", 0),
+                    "progress": status.get("progress", 0.0),
+                })
+        except json.JSONDecodeError:
+            self.get_logger().warn(f"Invalid playback status JSON: {msg.data}")
 
     # -------------------- Playback Socket.IO API --------------------
     def playback_play(self, data):

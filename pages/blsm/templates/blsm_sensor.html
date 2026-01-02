@@ -1,339 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta
-      name="description"
-      content="Key Event Listener for r0b0 robot control"
-    />
-    <meta name="author" content="" />
-    <title>Key Events - r0b0 Framework</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/main/assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script
-      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Google fonts-->
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="/main/css/styles.css" rel="stylesheet" />
-    <!-- Include Socket.IO -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body id="page-top">
-    <!-- Navigation-->
-    <nav
-      class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top"
-      id="mainNav"
-    >
-      <div class="container">
-        <a class="navbar-brand" href="/">r0b0</a>
-        <button
-          class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarResponsive"
-          aria-controls="navbarResponsive"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a>
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web"
-                >Key Events</a
-              >
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib"
-                >Calibration</a
-              >
-            </li>
-            <li class="nav-item mx-0 mx-lg-1">
-              <a
-                class="nav-link py-3 px-0 px-lg-3 rounded"
-                href="/speech_recognition"
-                >Speech</a
-              >
-            </li>
-            <li class="nav-item dropdown mx-0 mx-lg-1">
-              <a
-                class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded"
-                href="#"
-                id="menuDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                >Menu</a
-              >
-              <ul
-                class="dropdown-menu dropdown-menu-end"
-                aria-labelledby="menuDropdown"
-              >
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="/speech_history"
-                    target="_blank"
-                    >History</a
-                  >
-                </li>
-                <li>
-                  <a
-                    class="dropdown-item"
-                    href="https://github.com/msgtn/r0b0"
-                    target="_blank"
-                    >GitHub</a
-                  >
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- Masthead-->
-    <header class="masthead bg-primary text-white text-center">
-      <div class="container d-flex align-items-center flex-column">
-        <h1 class="masthead-heading text-uppercase mb-0">Sensor Value</h1>
-        <div class="divider-custom divider-light">
-          <div class="divider-custom-line"></div>
-          <div class="divider-custom-icon">
-            <i class="fas fa-sliders-h"></i>
-          </div>
-          <div class="divider-custom-line"></div>
-        </div>
-        <p class="masthead-subheading font-weight-light mb-0">
-          Live sensor reading from robot
-        </p>
-      </div>
-    </header>
-    <section class="page-section bg-white" id="sensor">
-      <div class="container text-center">
-        <h2
-          class="page-section-heading text-center text-uppercase text-secondary mb-0"
-        >
-          Current Sensor Value
-        </h2>
+{% extends "base.html" %}
 
-        <div class="divider-custom">
-          <div class="divider-custom-line"></div>
-          <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-          <div class="divider-custom-line"></div>
-        </div>
-        <!-- Status Display -->
-        <div class="card bg-light mb-4">
-          <div class="card-body">
-            <h5 class="card-title">
-              <i
-                class="fas fa-circle text-warning me-2"
-                id="connectionIcon"
-              ></i>
-              Connection Status
-            </h5>
-            <p class="card-text" id="connectionStatus">
-              Connecting to server...
-            </p>
-          </div>
-        </div>
-        <div class="card bg-light mb-4">
-          <div class="card-body">
-            <h5 class="card-title">
-              <i class="fas fa-wave-square me-2"></i>
-              Sensor Value
-            </h5>
-            <p class="card-text lead" id="sensorValue">--</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Footer-->
-    <footer class="footer text-center">
-      <div class="container">
-        <div class="row">
-          <!-- Footer Project Info-->
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">r0b0 Framework</h4>
-            <p class="lead mb-0">
-              Communication library for<br />
-              hardware and software
-            </p>
-          </div>
-          <!-- Footer Social Icons-->
-          <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Links</h4>
-            <a
-              class="btn btn-outline-light btn-social mx-1"
-              href="https://github.com/msgtn/r0b0"
-              target="_blank"
-              ><i class="fab fa-fw fa-github"></i
-            ></a>
-            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"
-              ><i class="fas fa-fw fa-keyboard"></i
-            ></a>
-            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"
-              ><i class="fas fa-fw fa-sliders-h"></i
-            ></a>
-          </div>
-          <!-- Footer About Text-->
-          <div class="col-lg-4">
-            <h4 class="text-uppercase mb-4">Open Source</h4>
-            <p class="lead mb-0">
-              Licensed under AGPL-3.0<br />
-              <a href="https://github.com/msgtn/r0b0">View Source Code</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- Copyright Section-->
-    <div class="copyright py-4 text-center text-white">
-      <div class="container">
-        <small>Copyright &copy; r0b0 Framework 2023</small>
+{% set title = "Sensor Value" %}
+{% set description = "Live sensor reading from r0b0 robot" %}
+{% set heading = "Sensor Value" %}
+{% set icon = "sliders-h" %}
+{% set subheading = "Live sensor reading from robot" %}
+
+{% block content %}
+<section class="page-section bg-white" id="sensor">
+  <div class="container text-center">
+    <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">
+      Current Sensor Value
+    </h2>
+    <div class="divider-custom">
+      <div class="divider-custom-line"></div>
+      <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+      <div class="divider-custom-line"></div>
+    </div>
+
+    <!-- Status Display -->
+    <div class="card bg-light mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+          Connection Status
+        </h5>
+        <p class="card-text" id="connectionStatus">Connecting to server...</p>
       </div>
     </div>
 
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="/main/js/scripts.js"></script>
+    <div class="card bg-light mb-4">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="fas fa-wave-square me-2"></i>
+          Sensor Value
+        </h5>
+        <p class="card-text lead" id="sensorValue">--</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
 
-    <!-- Sensor Writer Script -->
-    <script>
-      let socketAddr = window.location.origin;
+{% block scripts %}
+<script>
+  let socketAddr = window.location.origin;
 
-      // DOM elements
-      const connectionStatusElement =
-        document.getElementById("connectionStatus");
-      const connectionIconElement = document.getElementById("connectionIcon");
+  const connectionStatusElement = document.getElementById("connectionStatus");
+  const connectionIconElement = document.getElementById("connectionIcon");
 
-      // Initialize connection status as disconnected
-      function setConnectionStatus(status, message, iconClass) {
-        connectionStatusElement.textContent = message;
-        connectionIconElement.className = iconClass;
-      }
+  function setConnectionStatus(status, message, iconClass) {
+    connectionStatusElement.textContent = message;
+    connectionIconElement.className = iconClass;
+  }
 
-      // Set initial status
-      setConnectionStatus(
-        "connecting",
-        "Connecting to server...",
-        "fas fa-circle text-warning me-2"
-      );
+  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-warning me-2");
 
-      // Connect to the Socket.IO server
-      const socket = io.connect(socketAddr, {
-        // Add connection timeout and retry settings
-        timeout: 5000,
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionAttempts: 5,
-      });
+  const socket = io.connect(socketAddr, {
+    timeout: 5000,
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionAttempts: 5,
+  });
 
-      // Handle connection events
-      socket.on("connect", () => {
-        console.log("Connected to the server");
-        setConnectionStatus(
-          "connected",
-          "Connected to server - Ready to capture key events",
-          "fas fa-circle text-success me-2"
-        );
-      });
+  socket.on("connect", () => {
+    console.log("Connected to the server");
+    setConnectionStatus("connected", "Connected to server - Ready to receive sensor data", "fas fa-circle text-success me-2");
+  });
 
-      socket.on("disconnect", (reason) => {
-        console.log("Disconnected from the server:", reason);
-        setConnectionStatus(
-          "disconnected",
-          `Disconnected from server (${reason}) - Check connection`,
-          "fas fa-circle text-danger me-2"
-        );
-      });
+  socket.on("disconnect", (reason) => {
+    console.log("Disconnected from the server:", reason);
+    setConnectionStatus("disconnected", `Disconnected from server (${reason}) - Check connection`, "fas fa-circle text-danger me-2");
+  });
 
-      socket.on("connect_error", (error) => {
-        console.log("Connection error:", error);
-        setConnectionStatus(
-          "error",
-          "Connection error - Unable to reach server",
-          "fas fa-circle text-danger me-2"
-        );
-      });
+  socket.on("connect_error", (error) => {
+    console.log("Connection error:", error);
+    setConnectionStatus("error", "Connection error - Unable to reach server", "fas fa-circle text-danger me-2");
+  });
 
-      socket.on("reconnect", (attemptNumber) => {
-        console.log("Reconnected to server after", attemptNumber, "attempts");
-        setConnectionStatus(
-          "connected",
-          "Reconnected to server - Ready to capture key events",
-          "fas fa-circle text-success me-2"
-        );
-      });
+  socket.on("reconnect", (attemptNumber) => {
+    console.log("Reconnected to server after", attemptNumber, "attempts");
+    setConnectionStatus("connected", "Reconnected to server - Ready to receive sensor data", "fas fa-circle text-success me-2");
+  });
 
-      socket.on("reconnect_attempt", (attemptNumber) => {
-        console.log("Attempting to reconnect... attempt", attemptNumber);
-        setConnectionStatus(
-          "reconnecting",
-          `Reconnecting... (attempt ${attemptNumber})`,
-          "fas fa-circle text-warning me-2"
-        );
-      });
+  socket.on("reconnect_attempt", (attemptNumber) => {
+    console.log("Attempting to reconnect... attempt", attemptNumber);
+    setConnectionStatus("reconnecting", `Reconnecting... (attempt ${attemptNumber})`, "fas fa-circle text-warning me-2");
+  });
 
-      socket.on("reconnect_failed", () => {
-        console.log("Failed to reconnect");
-        setConnectionStatus(
-          "failed",
-          "Failed to reconnect - Please refresh the page",
-          "fas fa-circle text-danger me-2"
-        );
-      });
+  socket.on("reconnect_failed", () => {
+    console.log("Failed to reconnect");
+    setConnectionStatus("failed", "Failed to reconnect - Please refresh the page", "fas fa-circle text-danger me-2");
+  });
 
-      socket.onAny((event, ...args) => {
-        console.log("Socket event:", event, args);
-      });
+  socket.onAny((event, ...args) => {
+    console.log("Socket event:", event, args);
+  });
 
-      socket.on("sensor_value", function (data) {
-        console.log(data);
-        document.getElementById("sensorValue").textContent = data.value;
-      });
+  socket.on("sensor_value", function (data) {
+    console.log(data);
+    document.getElementById("sensorValue").textContent = data.value;
+  });
 
-      // Check connection status periodically
-      setInterval(() => {
-        if (socket.connected) {
-          console.log("still connected");
-          // Connection is healthy
-        } else {
-          // Connection is down
-          if (connectionStatusElement.textContent.includes("Connected")) {
-            setConnectionStatus(
-              "disconnected",
-              "Connection lost - Attempting to reconnect...",
-              "fas fa-circle text-warning me-2"
-            );
-          }
-        }
-      }, 2000); // Check every 2 seconds
-    </script>
-  </body>
-</html>
+  setInterval(() => {
+    if (!socket.connected && connectionStatusElement.textContent.includes("Connected")) {
+      setConnectionStatus("disconnected", "Connection lost - Attempting to reconnect...", "fas fa-circle text-warning me-2");
+    }
+  }, 2000);
+</script>
+{% endblock %}

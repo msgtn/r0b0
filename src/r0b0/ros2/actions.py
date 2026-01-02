@@ -351,22 +351,66 @@ class Playback(BlsmAction):
     Supports play, pause, stop, and loop functionality.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, status_pub=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tape_loaded: Tape | None = None
         self.tapes: dict[str, Tape] = {}
         self._playing: bool = False
         self._loop: bool = False
+        self._status_pub = status_pub
+        self._last_status_time: float = 0
+        self._status_interval: float = 1 / 15.0  # 15 Hz status updates
 
     def setup(self, **kwargs):
         self.tape_loaded = None
         self._playing = False
         self.pose.reset()
+        self._publish_status("stopped")
 
     def initialise(self):
         # Reset tape to beginning when behavior becomes active
         if self.tape_loaded is not None:
             self.tape_loaded.reset()
+
+    def _publish_status(self, state: str | None = None):
+        """Publish playback status to ROS2 topic."""
+        if self._status_pub is None:
+            return
+
+        import json
+
+        # Determine state if not provided
+        if state is None:
+            if self._playing:
+                state = "playing"
+            else:
+                state = "stopped"
+
+        status = {
+            "state": state,
+            "tape_name": self.tape_loaded.name if self.tape_loaded else "",
+            "progress": 0.0,
+            "current_time": 0.0,
+            "total_time": 0.0,
+        }
+
+        # Add progress info if tape is loaded
+        if self.tape_loaded is not None:
+            progress = self.tape_loaded.get_progress()
+            status["progress"] = progress
+            status["current_time"] = progress * self.tape_loaded.duration
+            status["total_time"] = self.tape_loaded.duration
+
+            # Add current pose info
+            euler = self.pose.rot.as_euler("ZXY")
+            status["pose"] = {
+                "h": float(self.pose.h),
+                "yaw": float(euler[0]),
+                "pitch": float(euler[1]),
+                "roll": float(euler[2]),
+            }
+
+        self._status_pub.publish(String(data=json.dumps(status)))
 
     def update(self) -> py_trees.common.Status:
         if self._playing and self.tape_loaded is not None:
@@ -374,15 +418,23 @@ class Playback(BlsmAction):
             if pose is not None:
                 self.pose = pose
                 self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
+
+                # Publish status at regular intervals
+                now = time.time()
+                if now - self._last_status_time >= self._status_interval:
+                    self._publish_status("playing")
+                    self._last_status_time = now
             elif not self._loop:
                 # Tape finished and not looping
                 self._playing = False
+                self._publish_status("stopped")
                 return py_trees.common.Status.SUCCESS
 
         return py_trees.common.Status.RUNNING
 
     def terminate(self, new_status: py_trees.common.Status) -> None:
         self._playing = False
+        self._publish_status("stopped")
 
     def register_tape(self, tape: Tape):
         """Register a tape for playback by name."""
@@ -413,10 +465,12 @@ class Playback(BlsmAction):
                 # Reset tape timing when starting fresh
                 self.tape_loaded.reset()
             self._playing = True
+            self._publish_status("playing")
 
     def pause(self):
         """Pause playback (can be resumed with play())."""
         self._playing = False
+        self._publish_status("paused")
 
     def stop(self):
         """Stop playback and reset to beginning."""
@@ -424,6 +478,7 @@ class Playback(BlsmAction):
         if self.tape_loaded is not None:
             self.tape_loaded.reset()
         self.pose.reset()
+        self._publish_status("stopped")
 
     def playback_callback(self, msg: String):
         """ROS2 callback to handle playback commands.
