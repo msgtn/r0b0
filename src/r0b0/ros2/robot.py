@@ -30,6 +30,7 @@ from r0b0.ros2.actions import (
     Sensor,
     Slider,
 )
+from r0b0.ros2.example_tapes import get_example_tapes
 from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 
 BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
@@ -63,7 +64,9 @@ class SerialRobotNode(RobotNode):
     def write_motors(self):
         """Send the motor values as a string"""
         # params: str = "&".join(["=".join([str(k), str(v)])
-        params: str = "&".join([f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()])
+        params: str = "&".join(
+            [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
+        )
         params += "\n"
         self.serial.write(bytes(params, encoding="utf-8"))
 
@@ -127,9 +130,16 @@ class BlsmRobotNode(SerialRobotNode):
             qos_profile=10,
         )
         self.playback_action = Playback()
-        self.playback_request_sub = self.create_subscription(
+        # Register example tapes for playback
+        for tape in get_example_tapes():
+            self.playback_action.register_tape(tape)
+            self.get_logger().info(
+                f"Registered tape: {tape.name} ({tape.duration:.1f}s)"
+            )
+
+        self.playback_sub = self.create_subscription(
             String,
-            "/blsm/playback/request",
+            "/blsm/playback",
             callback=self.playback_action.playback_callback,
             qos_profile=10,
         )
@@ -161,7 +171,7 @@ class BlsmRobotNode(SerialRobotNode):
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
-            print(self.motor_id_pos)
+            # print(self.motor_id_pos
             self.write_motors()
 
     def callback_state(self, msg: String):
