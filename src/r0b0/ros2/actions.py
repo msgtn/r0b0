@@ -345,26 +345,125 @@ class Phone(BlsmAction):
 
 
 class Playback(BlsmAction):
+    """Playback recorded Tapes (time-series lists of poses).
+
+    Tapes can be loaded via `load_tape()` or the ROS2 callback `playback_callback()`.
+    Supports play, pause, stop, and loop functionality.
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.tape_loaded = None
-        self.tapes: dict[str, Tape] = {"none": Tape(name="none", frames=[])}
+        self.tape_loaded: Tape | None = None
+        self.tapes: dict[str, Tape] = {}
+        self._playing: bool = False
+        self._loop: bool = False
 
     def setup(self, **kwargs):
-        print("setup")
         self.tape_loaded = None
+        self._playing = False
         self.pose.reset()
 
-    def update(self) -> py_trees.common.Status:
+    def initialise(self):
+        # Reset tape to beginning when behavior becomes active
         if self.tape_loaded is not None:
-            self.pose = self.tape_loaded.get_frame_at_ts(time.time())
-        self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
+            self.tape_loaded.reset()
+
+    def update(self) -> py_trees.common.Status:
+        if self._playing and self.tape_loaded is not None:
+            pose = self.tape_loaded.get_frame_at_ts(time.time())
+            if pose is not None:
+                self.pose = pose
+                self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
+            elif not self._loop:
+                # Tape finished and not looping
+                self._playing = False
+                return py_trees.common.Status.SUCCESS
+
         return py_trees.common.Status.RUNNING
 
+    def terminate(self, new_status: py_trees.common.Status) -> None:
+        self._playing = False
+
+    def register_tape(self, tape: Tape):
+        """Register a tape for playback by name."""
+        self.tapes[tape.name] = tape
+
+    def load_tape(self, name: str, loop: bool = False) -> bool:
+        """Load a tape by name for playback.
+
+        Args:
+            name: Name of the tape to load.
+            loop: Whether to loop playback.
+
+        Returns:
+            True if tape was found and loaded, False otherwise.
+        """
+        tape = self.tapes.get(name)
+        if tape is None:
+            return False
+        self.tape_loaded = tape
+        self.tape_loaded.loop = loop
+        self._loop = loop
+        return True
+
+    def play(self):
+        """Start or resume playback."""
+        if self.tape_loaded is not None:
+            if not self._playing:
+                # Reset tape timing when starting fresh
+                self.tape_loaded.reset()
+            self._playing = True
+
+    def pause(self):
+        """Pause playback (can be resumed with play())."""
+        self._playing = False
+
+    def stop(self):
+        """Stop playback and reset to beginning."""
+        self._playing = False
+        if self.tape_loaded is not None:
+            self.tape_loaded.reset()
+        self.pose.reset()
+
     def playback_callback(self, msg: String):
-        self.tape_loaded = self.tapes.get(msg.data)
-        if self.tape_loaded is None:
-            print(f"No tape '{msg.data}'")
+        """ROS2 callback to handle playback commands.
+
+        Accepts JSON commands: {"action": "play", "tape_name": "...", "loop": bool}
+        Or simple strings: tape name to play, "stop" to stop, "pause" to pause.
+        """
+        import json
+
+        data = msg.data.strip()
+
+        # Try parsing as JSON first
+        try:
+            cmd = json.loads(data)
+            action = cmd.get("action", "")
+
+            if action == "play":
+                tape_name = cmd.get("tape_name", "")
+                loop = cmd.get("loop", False)
+                if tape_name and self.load_tape(tape_name, loop=loop):
+                    self.play()
+                else:
+                    print(f"No tape '{tape_name}' registered")
+            elif action == "pause":
+                self.pause()
+            elif action == "stop":
+                self.stop()
+            return
+        except json.JSONDecodeError:
+            pass
+
+        # Fall back to simple string commands
+        if data == "stop":
+            self.stop()
+        elif data == "pause":
+            self.pause()
+        elif self.load_tape(data, loop=self._loop):
+            self.play()
+        else:
+            print(f"No tape '{data}' registered")
 
 
 def main():

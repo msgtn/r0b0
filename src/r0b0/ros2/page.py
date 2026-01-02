@@ -109,6 +109,7 @@ class PageState(str, Enum):
     calibration = "calibration"
     speech = "speech"
     sensor = "sensor"
+    playback = "playback"
     idle = "idle"  # default/non-configured state
 
 
@@ -143,8 +144,8 @@ class WebPageNode(Node):
             self.app,
             cors_allowed_origins="*",
             max_http_buffer_size=int(1e8),
-            logger=True,
-            engineio_logger=True,
+            # logger=True,
+            # engineio_logger=True,
             async_mode="eventlet",
         )
         self.certfile = certfile
@@ -218,6 +219,9 @@ class BlsmPageNode(WebPageNode):
             "slider_event",
             "speech_command",
             "set_state",
+            "playback_play",
+            "playback_pause",
+            "playback_stop",
         ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
@@ -245,12 +249,30 @@ class BlsmPageNode(WebPageNode):
         self.state_pub = self.create_publisher(
             String, "/blsm/state/request", qos_profile=10
         )
+        self.playback_pub = self.create_publisher(
+            String, "/blsm/playback", qos_profile=10
+        )
         self._latest_distance = None
+        self._registered_tapes: list[dict] = []
+
+        # Register example tapes for the UI
+        self._load_example_tapes()
 
         # Add support for serving main static files
         self.setup_main_static_route()
         # Setup REST API routes for state management
         self.setup_state_routes()
+
+    def _load_example_tapes(self):
+        """Load example tapes for the playback UI."""
+        try:
+            from r0b0.ros2.example_tapes import get_example_tapes
+
+            for tape in get_example_tapes():
+                self.register_tape(tape.name, tape.duration)
+                self.get_logger().info(f"Registered tape for UI: {tape.name}")
+        except Exception as e:
+            self.get_logger().warning(f"Could not load example tapes: {e}")
 
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
@@ -276,10 +298,16 @@ class BlsmPageNode(WebPageNode):
             self.socketio.emit("sensor_value", {"value": test_value})
             return jsonify({"emitted": test_value})
 
+        @self.app.get("/api/tapes")
+        def get_tapes():
+            """Get list of registered tapes for playback."""
+            return jsonify({"tapes": self._registered_tapes})
+
         @self.app.post("/api/state")
         def set_state():
             try:
                 data = request.get_json(silent=True) or {}
+                print(f"{data=}")
                 new_state = data.get("state")
                 if not new_state:
                     return jsonify({"error": "missing state"}), 400
@@ -317,6 +345,7 @@ class BlsmPageNode(WebPageNode):
     def set_state(self, data):
         try:
             data = data or {}
+            print(f"socket {data=}")
             new_state = data.get("state")
             if not new_state:
                 return {"error": "missing state"}
@@ -473,6 +502,64 @@ class BlsmPageNode(WebPageNode):
         self.socketio.emit("sensor_value", {"value": msg.data})
         print(msg.data)
 
+    # -------------------- Playback Socket.IO API --------------------
+    def playback_play(self, data):
+        """Handle playback play command from client."""
+        tape_name = data.get("tape_name", "")
+        loop = data.get("loop", False)
+        if not tape_name:
+            return {"error": "missing tape_name"}
+
+        # Publish to ROS2 topic as JSON command
+        import json
+
+        cmd = json.dumps(
+            {"action": "play", "tape_name": tape_name, "loop": loop}
+        )
+        self.playback_pub.publish(String(data=cmd))
+        self.get_logger().info(f"Playback play: {tape_name} (loop={loop})")
+
+        # Emit status update to all clients
+        self.socketio.emit(
+            "playback_status",
+            {
+                "state": "playing",
+                "tape_name": tape_name,
+            },
+        )
+        return {"status": "ok"}
+
+    def playback_pause(self, data):
+        """Handle playback pause command from client."""
+        import json
+
+        cmd = json.dumps({"action": "pause"})
+        self.playback_pub.publish(String(data=cmd))
+        self.get_logger().info("Playback pause")
+
+        self.socketio.emit("playback_status", {"state": "paused"})
+        return {"status": "ok"}
+
+    def playback_stop(self, data):
+        """Handle playback stop command from client."""
+        import json
+
+        cmd = json.dumps({"action": "stop"})
+        self.playback_pub.publish(String(data=cmd))
+        self.get_logger().info("Playback stop")
+
+        self.socketio.emit("playback_status", {"state": "stopped"})
+        return {"status": "ok"}
+
+    def register_tape(self, name: str, duration: float = 0.0):
+        """Register a tape for the playback UI."""
+        # Avoid duplicates
+        for tape in self._registered_tapes:
+            if tape["name"] == name:
+                tape["duration"] = duration
+                return
+        self._registered_tapes.append({"name": name, "duration": duration})
+
     def setup_routes(self):
         """Define routes for the Flask app."""
 
@@ -537,6 +624,7 @@ class BlsmPageNode(WebPageNode):
         for _route in [
             "blsm_controller",
             "blsm_player",
+            "blsm_playback",
             "blsm_broadcast",
             "blsm_web",
             "blsm_sensor",
