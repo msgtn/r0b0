@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -38,6 +39,15 @@ class Tape:
     def reset(self):
         """Reset playback state to beginning."""
         self.ts_start = None
+
+    def get_progress(self) -> float:
+        """Get current playback progress as a value between 0.0 and 1.0."""
+        if self.ts_start is None or self.duration <= 0:
+            return 0.0
+        elapsed = time.time() - self.ts_start
+        if self.loop and self.duration > 0:
+            elapsed = elapsed % self.duration
+        return min(1.0, max(0.0, elapsed / self.duration))
 
     def get_frame_at_ts(self, ts: float) -> BlsmPose | None:
         """Get interpolated pose at the given timestamp.
