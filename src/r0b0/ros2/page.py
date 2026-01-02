@@ -100,8 +100,7 @@ else:
     MotorCommand = dict
 
 
-BLSM_PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
-MAIN_PAGES_FOLDER = str(ROOT_DIR / "pages" / "main")
+PAGES_FOLDER = str(ROOT_DIR / "pages" / "blsm")
 
 
 class PageState(str, Enum):
@@ -264,8 +263,6 @@ class BlsmPageNode(WebPageNode):
         # Register example tapes for the UI
         self._load_example_tapes()
 
-        # Add support for serving main static files
-        self.setup_main_static_route()
         # Setup REST API routes for state management
         self.setup_state_routes()
 
@@ -279,16 +276,6 @@ class BlsmPageNode(WebPageNode):
                 self.get_logger().info(f"Registered tape for UI: {tape.name}")
         except Exception as e:
             self.get_logger().warning(f"Could not load example tapes: {e}")
-
-    def setup_main_static_route(self):
-        """Set up route to serve static files from main pages folder."""
-        from flask import send_from_directory
-
-        @self.app.route("/main/<path:filename>")
-        def main_static(filename):
-            return send_from_directory(
-                os.path.join(MAIN_PAGES_FOLDER, "static"), filename
-            )
 
     # -------------------- State REST API --------------------
     def setup_state_routes(self):
@@ -625,57 +612,13 @@ class BlsmPageNode(WebPageNode):
     def setup_routes(self):
         """Define routes for the Flask app."""
 
-        # Add home page route to serve main template
         @self.app.route("/")
         def home():
-            from flask import render_template_string
+            return render_template("index.html")
 
-            # Read the main template file directly
-            main_template_path = os.path.join(
-                MAIN_PAGES_FOLDER, "templates", "index.html"
-            )
-            with open(main_template_path, "r") as f:
-                template_content = f.read()
-            # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace(
-                'href="css/', 'href="/main/css/'
-            )
-            template_content = template_content.replace(
-                'src="js/', 'src="/main/js/'
-            )
-            template_content = template_content.replace(
-                'src="assets/', 'src="/main/assets/'
-            )
-            template_content = template_content.replace(
-                'href="assets/', 'href="/main/assets/'
-            )
-            return render_template_string(template_content)
-
-        # Add speech recognition route from main templates
         @self.app.route("/speech_recognition")
         def speech_recognition():
-            from flask import render_template_string
-
-            # Read the speech recognition template file directly
-            speech_template_path = os.path.join(
-                MAIN_PAGES_FOLDER, "templates", "speech_recognition.html"
-            )
-            with open(speech_template_path, "r") as f:
-                template_content = f.read()
-            # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace(
-                'href="css/', 'href="/main/css/'
-            )
-            template_content = template_content.replace(
-                'src="js/', 'src="/main/js/'
-            )
-            template_content = template_content.replace(
-                'src="assets/', 'src="/main/assets/'
-            )
-            template_content = template_content.replace(
-                'href="assets/', 'href="/main/assets/'
-            )
-            return render_template_string(template_content)
+            return render_template("speech_recognition.html")
 
         @self.app.route("/speech_history")
         def speech_history():
@@ -713,8 +656,8 @@ def main(args=None):
 
     page_kwargs = {
         "name": "web_page_node",
-        "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
-        "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
+        "template_folder": os.path.join(PAGES_FOLDER, "templates"),
+        "static_folder": os.path.join(PAGES_FOLDER, "static"),
     }
     if cert_path and key_path:
         page_kwargs.update(
