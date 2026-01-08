@@ -1,5 +1,4 @@
 PORT ?= 8080
-DEVICE ?= /dev/ttyACM0
 DOCKER_FLAGS ?= -it
 
 blsm:
@@ -27,8 +26,7 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run:
-# 	UID=1000 docker run --network=host --ipc=host --pid=host --privileged -v /dev/shm:/dev/shm -v $(DEVICE):$(DEVICE) -p 8080:8080 -e BLSM_PORT=$(DEVICE) $(DOCKER_FLAGS) r0b0:latest
-	UID=1000 DEVICE=${DEVICE} docker compose -f ./docker-compose.yml run blsm
+	UID=1000 docker compose -f ./docker-compose.yml run blsm
 
 docker-build-run:
 	make docker-build

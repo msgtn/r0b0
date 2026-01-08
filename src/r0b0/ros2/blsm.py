@@ -24,10 +24,14 @@ async def ros_spin(executor):
 
 async def run():
     rclpy.init()
+
+    # Select motor map based on MOTOR_TYPE env var: "servo" or "dxl" (default)
+    motor_type = os.environ.get("MOTOR_TYPE", "dxl").lower()
+    motor_map = DEG2SERVO if motor_type == "servo" else DEG2DXL
+
     robot_node = BlsmRobotNode(
         name="robot_node",
-        # motor_map=DEG2SERVO,
-        motor_map=DEG2DXL,
+        motor_map=motor_map,
         port=os.environ.get("BLSM_PORT", "/dev/ttyACM0"),
     )
     # robot_node = HeadRobotNode("robot_node")

@@ -19,6 +19,54 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
       integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
       crossorigin="anonymous"></script>
+    <!-- Three.js for floating visualizer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Floating visualizer styles -->
+    <style>
+      .floating-viz {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 280px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 9999;
+        overflow: hidden;
+        transition: height 0.3s ease;
+      }
+      .floating-viz.collapsed {
+        height: 36px;
+      }
+      .floating-viz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #2c3e50;
+        color: white;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+      .floating-viz-header button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+      }
+      #floating-viz-container {
+        height: 200px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .floating-viz.collapsed #floating-viz-container {
+        display: none;
+      }
+    </style>
     {% block head_extra %}{% endblock %}
   </head>
   <body id="page-top">
@@ -116,10 +164,77 @@
       </div>
     </div>
 
+    <!-- Floating Visualizer Panel -->
+    <div id="floating-visualizer" class="floating-viz">
+      <div class="floating-viz-header" onclick="toggleFloatingViz()">
+        <span><i class="fas fa-robot me-2"></i>Robot</span>
+        <button id="viz-toggle-btn">_</button>
+      </div>
+      <div id="floating-viz-container"></div>
+    </div>
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
     <script src="/static/js/scripts.js"></script>
+    <!-- Visualizer JS -->
+    <script src="/static/visualizer.js"></script>
+    <!-- Floating visualizer initialization -->
+    <script>
+      (function() {
+        let floatingViz = null;
+        const panel = document.getElementById('floating-visualizer');
+        const container = document.getElementById('floating-viz-container');
+        const toggleBtn = document.getElementById('viz-toggle-btn');
+
+        // Restore collapsed state from localStorage
+        const isCollapsed = localStorage.getItem('floatingVizCollapsed') === 'true';
+        if (isCollapsed) {
+          panel.classList.add('collapsed');
+          toggleBtn.textContent = '+';
+        }
+
+        window.toggleFloatingViz = function() {
+          panel.classList.toggle('collapsed');
+          const collapsed = panel.classList.contains('collapsed');
+          toggleBtn.textContent = collapsed ? '+' : '_';
+          localStorage.setItem('floatingVizCollapsed', collapsed);
+          // Trigger resize for visualizer
+          if (floatingViz && !collapsed) {
+            setTimeout(() => floatingViz.onResize(), 350);
+          }
+        };
+
+        // Initialize visualizer when DOM is ready
+        function initFloatingVisualizer() {
+          if (container && typeof BlsmVisualizer !== 'undefined' && !floatingViz) {
+            floatingViz = new BlsmVisualizer(container);
+          }
+        }
+
+        // Connect to Socket.IO for motor pose updates
+        const socketAddr = window.location.origin;
+        const vizSocket = io.connect(socketAddr, {
+          timeout: 5000,
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionAttempts: 10,
+        });
+
+        vizSocket.on('motor_pose', function(data) {
+          if (floatingViz) {
+            floatingViz.updatePose(data.h, data.yaw, data.pitch, data.roll);
+          }
+        });
+
+        // Initialize on DOMContentLoaded or immediately if already loaded
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initFloatingVisualizer);
+        } else {
+          initFloatingVisualizer();
+        }
+      })();
+    </script>
     {% block scripts %}{% endblock %}
   </body>
 </html>

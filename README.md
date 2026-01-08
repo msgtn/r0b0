@@ -121,6 +121,10 @@ pip3 install -r req.txt
 ```
 
 ## TODO
-- [ ] fix sensor
-- [ ] playback
+- [ ] test with dxl setup
+- [ ] test sensor with dxl blossom
+- [ ] test playback with dxl setup
 - [ ] instruction updates
+- [ ] Update 
+
+### instruction update
