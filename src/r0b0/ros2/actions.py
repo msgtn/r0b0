@@ -58,6 +58,16 @@ class BlsmAction(py_trees.behaviour.Behaviour):
 
     def terminate(self, new_status: py_trees.common.Status) -> None: ...
 
+    def get_pose(self) -> dict:
+        """Return current pose as a dict for visualization."""
+        euler = self.pose.rot.as_euler("ZXY")
+        return {
+            "h": float(self.pose.h),
+            "yaw": float(euler[0]),
+            "pitch": float(euler[1]),
+            "roll": float(euler[2]),
+        }
+
     def ik_from_rot(
         self, rot: Rotation, alpha, mirror: bool, sensitivity: float = 1.0
     ):
@@ -287,10 +297,21 @@ class Keyboard(BlsmAction):
                 rotmat = np.eye(3)
             #     rotvec = [0,0,0]
         # self.rotation *= Rotation.from_rotvec(delta_rad*np.array(rotvec))
-        self.pose.rot *= Rotation.from_matrix(rotmat)
-        self.ik_from_rot(
-            self.pose.rot, alpha=self.pose.rot.as_euler("ZXY")[0], mirror=False
-        )
+        # self.pose.rot *= Rotation.from_matrix(rotmat)
+        self.pose.rot = Rotation.from_matrix(rotmat) * self.pose.rot
+        # Clamp
+        # TODO: there is a bug causing yaw at the ends to start pitching,
+        # results in rotation in bad state
+        euler = self.pose.rot.as_euler("ZXY")  # [yaw, pitch, roll]
+        clamp = True
+        if clamp:
+            max_yaw = np.pi / 2.1
+            max_angle = np.pi / 4
+            euler[0] = np.clip(euler[0], -max_yaw, max_yaw)  # yaw
+            euler[1] = np.clip(euler[1], -max_angle, max_angle)  # pitch
+            euler[2] = np.clip(euler[2], -max_angle, max_angle)  # roll
+            self.pose.rot = Rotation.from_euler("ZXY", euler)
+        self.ik_from_rot(self.pose.rot, alpha=euler[0], mirror=False)
 
 
 class Slider(BlsmAction):

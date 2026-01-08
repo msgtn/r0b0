@@ -106,55 +106,43 @@ class BlsmVisualizer {
     baseMesh.position.y = 0.01;
     this.scene.add(baseMesh);
 
-    // Towers (3 vertical cylinders)
-    const towerGeometry = new THREE.CylinderGeometry(0.03, 0.03, 1.5, 16);
-    const towerMaterial = new THREE.MeshPhongMaterial({ color: 0x666666 });
-
-    this.TOWER_POSITIONS.forEach((pos, i) => {
-      const tower = new THREE.Mesh(towerGeometry, towerMaterial);
-      tower.position.set(pos.x * s, 0.75, pos.y * s);
-      this.scene.add(tower);
-      this.towers.push(tower);
-    });
-
-    // Robot body (central sphere/dome that rotates)
+    // Robot body (floating disc)
     const bodyGroup = new THREE.Group();
 
-    // Main body - soft rounded shape
-    const bodyGeometry = new THREE.SphereGeometry(0.35, 32, 24, 0, Math.PI * 2, 0, Math.PI * 0.6);
+    // Main body - flat disc (larger than tower base radius)
+    const bodyGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.06, 32);
     const bodyMaterial = new THREE.MeshPhongMaterial({
       color: 0x1abc9c,
       shininess: 30,
     });
     const bodyMesh = new THREE.Mesh(bodyGeometry, bodyMaterial);
-    bodyMesh.rotation.x = Math.PI;
     bodyMesh.position.y = 0;
     bodyGroup.add(bodyMesh);
 
-    // Face indicator (small sphere to show orientation)
+    // Face indicator (small sphere on edge to show orientation)
     const faceGeometry = new THREE.SphereGeometry(0.08, 16, 16);
     const faceMaterial = new THREE.MeshPhongMaterial({ color: 0x2c3e50 });
     const faceMesh = new THREE.Mesh(faceGeometry, faceMaterial);
-    faceMesh.position.set(0.25, 0.1, 0);
+    faceMesh.position.set(0.52, 0.03, 0);
     bodyGroup.add(faceMesh);
 
-    // Eyes
-    const eyeGeometry = new THREE.SphereGeometry(0.04, 12, 12);
+    // Eyes on top surface of disc
+    const eyeGeometry = new THREE.SphereGeometry(0.05, 12, 12);
     const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
-    const eyePupilGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+    const eyePupilGeometry = new THREE.SphereGeometry(0.025, 8, 8);
     const eyePupilMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
 
-    [-0.08, 0.08].forEach(z => {
+    [-0.12, 0.12].forEach(z => {
       const eye = new THREE.Mesh(eyeGeometry, eyeMaterial);
-      eye.position.set(0.32, 0.15, z);
+      eye.position.set(0.25, 0.06, z);
       bodyGroup.add(eye);
 
       const pupil = new THREE.Mesh(eyePupilGeometry, eyePupilMaterial);
-      pupil.position.set(0.35, 0.15, z);
+      pupil.position.set(0.28, 0.07, z);
       bodyGroup.add(pupil);
     });
 
-    bodyGroup.position.y = this.REST_HEIGHT * s;
+    bodyGroup.position.y = 1.6;
     this.robotBody = bodyGroup;
     this.scene.add(bodyGroup);
 
@@ -163,8 +151,8 @@ class BlsmVisualizer {
 
     this.TOWER_POSITIONS.forEach((pos, i) => {
       const points = [
-        new THREE.Vector3(pos.x * s, 1.4, pos.y * s),
-        new THREE.Vector3(pos.x * s * 0.3, this.REST_HEIGHT * s, pos.y * s * 0.3)
+        new THREE.Vector3(pos.x * s * 0.3, 0.05, pos.y * s * 0.3),
+        new THREE.Vector3(pos.x * s * 0.9, 1.6, pos.y * s * 0.9)
       ];
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       const cable = new THREE.Line(geometry, cableMaterial);
@@ -208,11 +196,11 @@ class BlsmVisualizer {
     this.TOWER_POSITIONS.forEach((towerPos, i) => {
       if (!this.cables[i]) return;
 
-      // Calculate attachment point on body (rotated with body)
+      // Calculate attachment point on disc edge (rotated with body)
       const attachOffset = new THREE.Vector3(
-        towerPos.x * s * 0.3,
-        0,
-        towerPos.y * s * 0.3
+        towerPos.x * s * 0.9,
+        -0.03,
+        towerPos.y * s * 0.9
       );
       attachOffset.applyEuler(this.robotBody.rotation);
 
@@ -222,8 +210,13 @@ class BlsmVisualizer {
         bodyPos.z + attachOffset.z
       );
 
-      // Update cable geometry
+      // Update cable geometry (start at base inward, end at disc edge)
       const positions = this.cables[i].geometry.attributes.position;
+      // Base position inward (index 0-2)
+      positions.array[0] = towerPos.x * s * 0.3;
+      positions.array[1] = 0.05;
+      positions.array[2] = towerPos.y * s * 0.3;
+      // Disc attachment point outward (index 3-5)
       positions.array[3] = attachPoint.x;
       positions.array[4] = attachPoint.y;
       positions.array[5] = attachPoint.z;

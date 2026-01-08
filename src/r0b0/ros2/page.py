@@ -257,6 +257,12 @@ class BlsmPageNode(WebPageNode):
             callback=self.handle_playback_status,
             qos_profile=10,
         )
+        self.motor_pose_sub = self.create_subscription(
+            String,
+            "/blsm/motor_pose",
+            callback=self.handle_motor_pose,
+            qos_profile=10,
+        )
         self._latest_distance = None
         self._registered_tapes: list[dict] = []
 
@@ -550,6 +556,16 @@ class BlsmPageNode(WebPageNode):
                 })
         except json.JSONDecodeError:
             self.get_logger().warn(f"Invalid playback status JSON: {msg.data}")
+
+    def handle_motor_pose(self, msg: String):
+        """ROS2 callback - emit motor pose to clients for visualizer."""
+        import json
+
+        try:
+            pose = json.loads(msg.data)
+            self.socketio.emit("motor_pose", pose)
+        except json.JSONDecodeError:
+            self.get_logger().warn(f"Invalid motor pose JSON: {msg.data}")
 
     # -------------------- Playback Socket.IO API --------------------
     def playback_play(self, data):

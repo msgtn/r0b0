@@ -3,6 +3,7 @@ On computer, go to https://localhost:8080/blsm_broadcast
 On mobile, go to https://r0b0.ngrok.io/blsm_controller
 """
 
+import json
 import os
 import time
 from abc import abstractmethod
@@ -155,6 +156,10 @@ class BlsmRobotNode(SerialRobotNode):
         self.playback_status_pub = self.create_publisher(
             String, "/blsm/playback/status", qos_profile=10
         )
+        self.motor_pose_pub = self.create_publisher(
+            String, "/blsm/motor_pose", qos_profile=10
+        )
+        self._pose_pub_counter = 0
         self.state_sub = self.create_subscription(
             String,
             "/blsm/state/request",
@@ -182,9 +187,11 @@ class BlsmRobotNode(SerialRobotNode):
         self.mirror: bool = True
         self.sensitivity: float = 1
 
-        self.sensor_action = Sensor(
-            serial=self.serial, distance_pub=self.distance_pub
-        ) if self.serial_connected else None
+        self.sensor_action = (
+            Sensor(serial=self.serial, distance_pub=self.distance_pub)
+            if self.serial_connected
+            else None
+        )
 
         self.states: dict[StateEnum, BlsmAction] = {
             StateEnum.IDLE: Breathe(),
@@ -197,7 +204,6 @@ class BlsmRobotNode(SerialRobotNode):
         if self.sensor_action is not None:
             self.states[StateEnum.SENSOR] = self.sensor_action
         self.state: StateEnum = StateEnum.IDLE
-        # self.state: StateEnum = StateEnum.SENSOR
 
         self.timer = self.create_timer(1 / 30.0, self.update)
 
@@ -208,6 +214,12 @@ class BlsmRobotNode(SerialRobotNode):
             self.motor_id_pos = active_action.motor_id_pos
             # print(self.motor_id_pos)
             self.write_motors()
+            # Publish pose at 15Hz (every 2nd frame of 30Hz update)
+            self._pose_pub_counter += 1
+            if self._pose_pub_counter >= 2:
+                self._pose_pub_counter = 0
+                pose = active_action.get_pose()
+                self.motor_pose_pub.publish(String(data=json.dumps(pose)))
 
     def callback_state(self, msg: String):
         requested_state = msg.data.upper()
