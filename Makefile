@@ -1,5 +1,9 @@
-PORT ?= 8080
+# Environment variables:
+#   DEVICE     - Serial port (default: /dev/ttyACM0)
+#   MOTOR_TYPE - Motor type: "dxl" (default) or "servo"
+# Example: DEVICE=/dev/ttyUSB0 MOTOR_TYPE=servo make docker-run
 DOCKER_FLAGS ?= -it
+DEVICE ?= /dev/ttyACM0
 
 blsm:
 	-. scripts/ngrok.sh &
@@ -26,7 +30,7 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run:
-	UID=1000 docker compose -f ./docker-compose.yml run blsm
+	UID=1000 DEVICE=${DEVICE} docker compose -f ./docker-compose.yml run blsm
 
 docker-build-run:
 	make docker-build
