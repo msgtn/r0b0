@@ -36,8 +36,7 @@ class BlsmAction(py_trees.behaviour.Behaviour):
         self,
         name: str = "breathe",
         motor_id_pos: dict | None = None,
-        motor_map=DEG2SERVO,
-        # motor_map=DEG2DXL,
+        motor_map=DEG2DXL,
     ):
         super().__init__(name)
         self.pose: BlsmPose = BlsmPose()
@@ -149,12 +148,11 @@ class BlsmAction(py_trees.behaviour.Behaviour):
 
 
 class Breathe(BlsmAction):
-    def __init__(self, name: str = "breathe"):
-        super().__init__(name)
+    def __init__(self, name: str = "breathe", motor_map=DEG2DXL):
+        super().__init__(name, motor_map=motor_map)
         self.breathe_rise_s: float = 4
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
-        self.breathe_amp_rad: float = 100
 
     def update(self) -> py_trees.common.Status:
         t = time.time() % (self.breathe_rise_s + self.breathe_fall_s)
@@ -173,6 +171,7 @@ class Breathe(BlsmAction):
             )
 
         self.pose.h = self.breathe_amp_rad * mult
+        print(self.pose.h)
         self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
 
         return py_trees.common.Status.RUNNING
@@ -183,9 +182,13 @@ class Breathe(BlsmAction):
 
 class Sensor(BlsmAction):
     def __init__(
-        self, serial: serial.Serial, distance_pub, name: str = "breathe"
+        self,
+        serial: serial.Serial,
+        distance_pub,
+        name: str = "sensor",
+        motor_map=DEG2DXL,
     ):
-        super().__init__(name)
+        super().__init__(name, motor_map=motor_map)
         self.serial = serial
         self.distance_mm: int | None = None
         self.distance_filter = ExponentialFilter(alpha=0.5)
@@ -303,7 +306,7 @@ class Keyboard(BlsmAction):
         # TODO: there is a bug causing yaw at the ends to start pitching,
         # results in rotation in bad state
         euler = self.pose.rot.as_euler("ZXY")  # [yaw, pitch, roll]
-        clamp = True
+        clamp = False
         if clamp:
             max_yaw = np.pi / 2.1
             max_angle = np.pi / 4
@@ -315,6 +318,12 @@ class Keyboard(BlsmAction):
 
 
 class Slider(BlsmAction):
+    # def __init__(
+    #     self,
+    #     motor_map=DEG2DXL,
+    # ):
+    #     super().__init__(name, motor_map=motor_map)
+
     def update_motors_from_sliders(self, msg: MotorCommands):
         for motor_cmd in msg.data:
             self.motor_id_pos.update({motor_cmd.name: motor_cmd.position_rad})
@@ -372,8 +381,8 @@ class Playback(BlsmAction):
     Supports play, pause, stop, and loop functionality.
     """
 
-    def __init__(self, status_pub=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, status_pub=None, motor_map=DEG2DXL, *args, **kwargs):
+        super().__init__(*args, motor_map=motor_map, **kwargs)
         self.tape_loaded: Tape | None = None
         self.tapes: dict[str, Tape] = {}
         self._playing: bool = False

@@ -10,10 +10,10 @@ COPY ./pyproject.toml ./Makefile /r0b0/
 COPY ./scripts /r0b0/scripts
 RUN mkdir -p /r0b0/src/r0b0
 RUN uv sync
-RUN uv pip install setuptools
 
 COPY ./src/r0b0 /r0b0/src/r0b0
 RUN uv sync
+RUN uv pip install setuptools
 
 COPY ./pages /r0b0/pages
 
