@@ -1,7 +1,9 @@
 # Environment variables:
-#   DEVICE     - Serial port (default: /dev/ttyACM0)
-#   MOTOR_TYPE - Motor type: "dxl" (default) or "servo"
+#   DEVICE        - Serial port (default: /dev/ttyACM0)
+#   MOTOR_TYPE    - Motor type: "dxl" (default) or "servo"
+#   DISABLE_VIDEO - Set to 1 to disable video feed (default: 0)
 # Example: DEVICE=/dev/ttyUSB0 MOTOR_TYPE=servo make docker-run
+# Example: DISABLE_VIDEO=1 make docker-run
 DOCKER_FLAGS ?= -it
 DEVICE ?= /dev/ttyACM0
 

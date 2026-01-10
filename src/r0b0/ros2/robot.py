@@ -59,7 +59,7 @@ class SerialRobotNode(RobotNode):
             [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
         )
         params += "\n"
-        print(params)
+        # print(params)
         self.serial.write(bytes(params, encoding="utf-8"))
 
 

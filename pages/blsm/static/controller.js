@@ -22,9 +22,7 @@ const config = {
   ],
 };
 let socketAddr = window.location.origin;
-// MJPEG webcam stream URL (same origin, integrated into page server)
-let webcamStreamUrl = window.location.origin + "/video";
-console.log(webcamStreamUrl);
+// Video frames now received via socket events instead of HTTP polling
 
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
@@ -221,20 +219,7 @@ function startup() {
   watcherVideo.style.zIndex = "-1";
   broadcasterVideo.style.zIndex = "-1";
 
-  // Poll for video frames - wait for each frame to load before requesting next
-  function refreshVideoFrame() {
-    const newImg = new Image();
-    newImg.onload = () => {
-      broadcasterVideo.src = newImg.src;
-      setTimeout(refreshVideoFrame, 16);  // Request next frame after short delay
-    };
-    newImg.onerror = () => {
-      console.warn("Webcam stream not available at " + webcamStreamUrl);
-      setTimeout(refreshVideoFrame, 100);  // Retry after longer delay on error
-    };
-    newImg.src = webcamStreamUrl + "?t=" + Date.now();
-  }
-  refreshVideoFrame();
+  // Video frames received via socket events - setup happens after socket connection
 
   endpointIndicator.style.top = broadcasterVideo.height / 3 + "px";
   recordingIndicator.style.top = watcherVideo.height / 10 + "px";
@@ -262,6 +247,23 @@ function startup() {
 
   socket.on("connect", () => {
     socket.emit("watcher", socket.id);
+    // Start requesting video frames via socket
+    socket.emit("request_frame");
+  });
+
+  // Handle video frames received via socket
+  socket.on("video_frame", (data) => {
+    if (data.status === "ok") {
+      broadcasterVideo.src = "data:image/jpeg;base64," + data.frame;
+      // Request next frame after current one loads
+      setTimeout(() => socket.emit("request_frame"), 16);
+    } else if (data.status === "disabled") {
+      // Video is disabled server-side, stop requesting
+      console.log("Video feed disabled");
+    } else {
+      // No frame available, retry after short delay
+      setTimeout(() => socket.emit("request_frame"), 100);
+    }
   });
 
   socket.on("broadcaster", () => {

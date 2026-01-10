@@ -178,6 +178,7 @@ class BlsmPageNode(WebPageNode):
             "key_event",
             "slider_event",
             "speech_command",
+            "request_frame",
         ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
@@ -261,6 +262,7 @@ class BlsmPageNode(WebPageNode):
                 frame_data = self.latest_frame
         else:
             frame_data = None
+            print(params)
 
         return frame_data
 
@@ -340,6 +342,23 @@ class BlsmPageNode(WebPageNode):
                     ]
                 )
             )
+
+    def request_frame(self, data=None):
+        """Handle video frame request from client via socket."""
+        import base64
+
+        # Check if video is disabled via environment variable
+        if os.environ.get("DISABLE_VIDEO", "0") == "1":
+            emit("video_frame", {"status": "disabled"})
+            return
+
+        frame_data = self.get_frame()
+        if frame_data is None:
+            emit("video_frame", {"status": "no_frame"})
+        else:
+            # Encode frame as base64 for socket transmission
+            frame_b64 = base64.b64encode(frame_data).decode("utf-8")
+            emit("video_frame", {"status": "ok", "frame": frame_b64})
 
     def speech_command(self, data):
         """Handle speech command from client."""
