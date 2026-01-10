@@ -199,7 +199,7 @@ class BlsmPageNode(WebPageNode):
         self.server_thread = Thread(target=self.start_web_server)
 
         # Start camera capture thread early so frames are ready
-        self.start_camera_capture()
+        # self.start_camera_capture()
 
         # Add support for serving main static files
         self.setup_main_static_route()
@@ -245,7 +245,9 @@ class BlsmPageNode(WebPageNode):
         """Start the background camera capture thread."""
         if not self.capturing:
             self.capturing = True
-            self.capture_thread = Thread(target=self._capture_frames, daemon=True)
+            self.capture_thread = Thread(
+                target=self._capture_frames, daemon=True
+            )
             self.capture_thread.start()
             self.get_logger().info("Started background frame capture thread")
 

@@ -59,6 +59,7 @@ class SerialRobotNode(RobotNode):
             [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
         )
         params += "\n"
+        print(params)
         self.serial.write(bytes(params, encoding="utf-8"))
 
 
@@ -143,7 +144,7 @@ class BlsmRobotNode(SerialRobotNode):
         for motor_cmd in msg.data:
             self.motor_id_pos.update({motor_cmd.name: motor_cmd.position_rad})
         # NOTE 250909: this is not dissimilar from rendering functions in e.g. neopixels
-        print(self.motor_id_pos)
+        # print(self.motor_id_pos)
         self.write_motors()
 
     def update_rotation_from_keys(self, msg: String, delta_deg=10):

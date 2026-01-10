@@ -22,4 +22,8 @@ services:
     volumes:
       - /dev/shm:/dev/shm
       - ${DEVICE}:${DEVICE}
+      # Mount source code for live reloading without rebuild
+      - ./src:/r0b0/src
+      - ./pages:/r0b0/pages
+      - ./scripts:/r0b0/scripts
 
