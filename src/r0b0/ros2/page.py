@@ -19,36 +19,46 @@ if not NO_ROS:
     from std_msgs.msg import String
     from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
 else:
+
     class Node:
         def __init__(self, name):
             self._name = name
+
         def get_logger(self):
             import logging
+
             logging.basicConfig(level=logging.INFO)
             return logging.getLogger(self._name)
+
         def create_publisher(self, *args, **kwargs):
             return self
+
         def publish(self, *args, **kwargs):
             pass
+
         def destroy_node(self):
             pass
 
     class MultiThreadedExecutor:
         def add_node(self, node):
             pass
+
         def spin_once(self, *args, **kwargs):
             pass
-    
+
     class _rclpy:
         def init(self, *args, **kwargs):
             pass
+
         def spin(self, node, *args, **kwargs):
             # keep main thread alive
-            node.get_logger().info('Spinning')
+            node.get_logger().info("Spinning")
             while True:
                 time.sleep(1)
+
         def shutdown(self):
             pass
+
         def ok(self):
             return True
 
@@ -60,7 +70,9 @@ else:
     MotorCommand = dict
 
 
-from flask import Flask, render_template, request
+import cv2
+
+from flask import Flask, render_template, request, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
@@ -143,8 +155,16 @@ class WebPageNode(Node):
 
 
 class BlsmPageNode(WebPageNode):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, camera_index: int = 32, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # Webcam streaming configuration
+        self.camera_index = camera_index
+        self.camera = None
+        self.latest_frame = None
+        self.frame_lock = None
+        self.capture_thread = None
+        self.capturing = False
         webrtc_events = [
             "broadcaster",
             "watcher",
@@ -177,20 +197,70 @@ class BlsmPageNode(WebPageNode):
             String, "/blsm/speech_command", 10
         )
         self.server_thread = Thread(target=self.start_web_server)
-        
+
+        # Start camera capture thread early so frames are ready
+        self.start_camera_capture()
+
         # Add support for serving main static files
         self.setup_main_static_route()
 
     def setup_main_static_route(self):
         """Set up route to serve static files from main pages folder."""
         from flask import send_from_directory
-        
-        @self.app.route('/main/<path:filename>')
+
+        @self.app.route("/main/<path:filename>")
         def main_static(filename):
             return send_from_directory(
-                os.path.join(MAIN_PAGES_FOLDER, 'static'), 
-                filename
+                os.path.join(MAIN_PAGES_FOLDER, "static"), filename
             )
+
+    def _capture_frames(self):
+        """Background thread that initializes camera and continuously captures frames."""
+        from threading import Lock
+
+        if self.frame_lock is None:
+            self.frame_lock = Lock()
+
+        # Initialize camera in background thread to avoid blocking
+        self.camera = cv2.VideoCapture(self.camera_index)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        self.get_logger().info(
+            f"Webcam initialized on device {self.camera_index}"
+        )
+
+        while self.capturing:
+            success, frame = self.camera.read()
+            if not success:
+                self.get_logger().warning("Failed to read frame from webcam")
+                time.sleep(0.1)
+                continue
+            _, buffer = cv2.imencode(
+                ".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80]
+            )
+            with self.frame_lock:
+                self.latest_frame = buffer.tobytes()
+
+    def start_camera_capture(self):
+        """Start the background camera capture thread."""
+        if not self.capturing:
+            self.capturing = True
+            self.capture_thread = Thread(target=self._capture_frames, daemon=True)
+            self.capture_thread.start()
+            self.get_logger().info("Started background frame capture thread")
+
+    def get_frame(self):
+        """Get the latest JPEG frame from webcam."""
+        # Start capture thread if not already running
+        self.start_camera_capture()
+
+        if self.frame_lock is not None:
+            with self.frame_lock:
+                frame_data = self.latest_frame
+        else:
+            frame_data = None
+
+        return frame_data
 
     def broadcaster(self, sid):
         self.get_logger().info(f"{sid=}")
@@ -272,76 +342,127 @@ class BlsmPageNode(WebPageNode):
     def speech_command(self, data):
         """Handle speech command from client."""
         try:
-            command = data.get('command', '')
-            language = data.get('language', 'en-US')
-            confidence = data.get('confidence', 0.0)
-            
+            command = data.get("command", "")
+            language = data.get("language", "en-US")
+            confidence = data.get("confidence", 0.0)
+
             if not command:
-                emit('speech_response', {'status': 'error', 'message': 'No command provided'})
+                emit(
+                    "speech_response",
+                    {"status": "error", "message": "No command provided"},
+                )
                 return
-            
+
             # Store the command
             self.speech_commands.append(data)
 
             # Publish to ROS2 topic
             ros_msg = String(data=command)
             self.speech_command_pub.publish(ros_msg)
-            
-            self.get_logger().info(f"Speech command published: {command} (lang: {language}, conf: {confidence:.2f})")
-            
+
+            self.get_logger().info(
+                f"Speech command published: {command} (lang: {language}, conf: {confidence:.2f})"
+            )
+
             # Send success response
-            emit('speech_response', {
-                'status': 'success',
-                'message': f'Command processed: {command}',
-                'command': command,
-                'language': language,
-                'confidence': confidence
-            })
-            
+            emit(
+                "speech_response",
+                {
+                    "status": "success",
+                    "message": f"Command processed: {command}",
+                    "command": command,
+                    "language": language,
+                    "confidence": confidence,
+                },
+            )
+
         except Exception as e:
             self.get_logger().error(f"Error processing speech command: {e}")
-            emit('speech_response', {
-                'status': 'error',
-                'message': f'Error processing command: {str(e)}'
-            })
+            emit(
+                "speech_response",
+                {
+                    "status": "error",
+                    "message": f"Error processing command: {str(e)}",
+                },
+            )
 
     def setup_routes(self):
         """Define routes for the Flask app."""
-        
+
         # Add home page route to serve main template
-        @self.app.route('/')
+        @self.app.route("/")
         def home():
             from flask import render_template_string
+
             # Read the main template file directly
-            main_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'index.html')
-            with open(main_template_path, 'r') as f:
+            main_template_path = os.path.join(
+                MAIN_PAGES_FOLDER, "templates", "index.html"
+            )
+            with open(main_template_path, "r") as f:
                 template_content = f.read()
             # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace('href="css/', 'href="/main/css/')
-            template_content = template_content.replace('src="js/', 'src="/main/js/')
-            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
-            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            template_content = template_content.replace(
+                'href="css/', 'href="/main/css/'
+            )
+            template_content = template_content.replace(
+                'src="js/', 'src="/main/js/'
+            )
+            template_content = template_content.replace(
+                'src="assets/', 'src="/main/assets/'
+            )
+            template_content = template_content.replace(
+                'href="assets/', 'href="/main/assets/'
+            )
             return render_template_string(template_content)
 
         # Add speech recognition route from main templates
-        @self.app.route('/speech_recognition')
+        @self.app.route("/speech_recognition")
         def speech_recognition():
             from flask import render_template_string
+
             # Read the speech recognition template file directly
-            speech_template_path = os.path.join(MAIN_PAGES_FOLDER, 'templates', 'speech_recognition.html')
-            with open(speech_template_path, 'r') as f:
+            speech_template_path = os.path.join(
+                MAIN_PAGES_FOLDER, "templates", "speech_recognition.html"
+            )
+            with open(speech_template_path, "r") as f:
                 template_content = f.read()
             # Replace asset paths to use the /main/ prefix
-            template_content = template_content.replace('href="css/', 'href="/main/css/')
-            template_content = template_content.replace('src="js/', 'src="/main/js/')
-            template_content = template_content.replace('src="assets/', 'src="/main/assets/')
-            template_content = template_content.replace('href="assets/', 'href="/main/assets/')
+            template_content = template_content.replace(
+                'href="css/', 'href="/main/css/'
+            )
+            template_content = template_content.replace(
+                'src="js/', 'src="/main/js/'
+            )
+            template_content = template_content.replace(
+                'src="assets/', 'src="/main/assets/'
+            )
+            template_content = template_content.replace(
+                'href="assets/', 'href="/main/assets/'
+            )
             return render_template_string(template_content)
 
-        @self.app.route('/speech_history')
+        @self.app.route("/speech_history")
         def speech_history():
             from flask import jsonify
+
             return jsonify(self.speech_commands)
+
+        @self.app.route("/video")
+        def video_feed():
+            """Single frame JPEG endpoint - client polls for updates."""
+            frame_data = self.get_frame()
+            if frame_data is None:
+                # Return a 1x1 transparent pixel if no frame yet
+                return Response(status=204)
+            return Response(
+                frame_data,
+                mimetype="image/jpeg",
+                headers={
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Age": "0",
+                },
+            )
 
         for _route in [
             "blsm_controller",
@@ -380,7 +501,7 @@ class SliderPageNode(WebPageNode):
 
 def main(args=None):
     rclpy.init(args=args)
-    
+
     # Ensure HTTPS certificates exist (auto-generate if needed)
     try:
         cert_path, key_path = ensure_https_certificates(CSR_PEM, KEY_PEM)
@@ -389,14 +510,16 @@ def main(args=None):
         print(f"⚠ Warning: Could not set up HTTPS certificates: {e}")
         print("  Continuing without HTTPS...")
         cert_path, key_path = None, None
-    
+
     page_kwargs = {
         "name": "web_page_node",
         "template_folder": os.path.join(BLSM_PAGES_FOLDER, "templates"),
         "static_folder": os.path.join(BLSM_PAGES_FOLDER, "static"),
     }
     if cert_path and key_path:
-        page_kwargs.update({"certfile": str(cert_path), "keyfile": str(key_path)})
+        page_kwargs.update(
+            {"certfile": str(cert_path), "keyfile": str(key_path)}
+        )
 
     node = BlsmPageNode(**page_kwargs)
 

@@ -1,0 +1,25 @@
+services:
+  blsm:
+    image: r0b0:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    network_mode: "host"
+    ipc: host
+    pid: host
+    privileged: true
+    stdin_open: true
+    tty: true
+    environment:
+      - UID=1000
+      - ROS_DOMAIN_ID
+      - DEVICE=${DEVICE:-/dev/ttyACM0}
+      - BLSM_PORT=${DEVICE:-/dev/ttyACM0}
+      - MOTOR_TYPE=${MOTOR_TYPE:-dxl}
+    ports:
+      - "8080:8080"
+    volumes:
+      - /dev/shm:/dev/shm
+      - ${DEVICE}:${DEVICE}
+

@@ -22,6 +22,9 @@ const config = {
   ],
 };
 let socketAddr = window.location.origin;
+// MJPEG webcam stream URL (same origin, integrated into page server)
+let webcamStreamUrl = window.location.origin + "/video";
+console.log(webcamStreamUrl);
 
 // const io = requirejs("static/socket.io")(server, {origins: '*:*'});
 // const io = requirejs("/static/socket.io")(server, {origins: '*'});
@@ -189,13 +192,49 @@ function moveTouch(event) {
 const peerConnections = {};
 
 function startup() {
-  broadcasterVideo.width = parseInt(window.innerWidth) * 1;
+  // Calculate available height between tapeRow and controlStuff
+  const tapeRowRect = tapeRow.getBoundingClientRect();
+  const controlStuffRect = controlStuff.getBoundingClientRect();
+  const availableHeight = controlStuffRect.top - tapeRowRect.bottom;
+
+  // Set video dimensions to fit in available space (accounting for rotation)
+  // After 90deg rotation, the visual height = original width
+  // We want visual height to fit availableHeight
+  broadcasterVideo.width = availableHeight;
   broadcasterVideo.height = (broadcasterVideo.width * 3) / 4;
+
+  // Rotate 90 degrees clockwise and center
+  broadcasterVideo.style.transform = "rotate(90deg)";
+  broadcasterVideo.style.transformOrigin = "center center";
+  broadcasterVideo.style.display = "block";
+  broadcasterVideo.style.margin = "auto";
+
+  // Set wrapper height to contain rotated video
+  const videoWrapper = document.getElementById("videoWrapper");
+  if (videoWrapper) {
+    videoWrapper.style.height = availableHeight + "px";
+  }
+
   watcherVideo.width = watcherVideo.height = 0;
   videoContainer.width = broadcasterVideo.width;
   videoContainer.height = broadcasterVideo.height;
   watcherVideo.style.zIndex = "-1";
   broadcasterVideo.style.zIndex = "-1";
+
+  // Poll for video frames - wait for each frame to load before requesting next
+  function refreshVideoFrame() {
+    const newImg = new Image();
+    newImg.onload = () => {
+      broadcasterVideo.src = newImg.src;
+      setTimeout(refreshVideoFrame, 16);  // Request next frame after short delay
+    };
+    newImg.onerror = () => {
+      console.warn("Webcam stream not available at " + webcamStreamUrl);
+      setTimeout(refreshVideoFrame, 100);  // Retry after longer delay on error
+    };
+    newImg.src = webcamStreamUrl + "?t=" + Date.now();
+  }
+  refreshVideoFrame();
 
   endpointIndicator.style.top = broadcasterVideo.height / 3 + "px";
   recordingIndicator.style.top = watcherVideo.height / 10 + "px";
