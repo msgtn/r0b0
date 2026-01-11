@@ -17,7 +17,7 @@ def create_nod_tape() -> Tape:
         t = i / (num_frames - 1) * duration
         # Sinusoidal nod: pitch forward then back
         pitch = 0.3 * np.sin(2 * np.pi * t / duration)  # radians
-        rot = Rotation.from_euler("ZXY", [0, pitch, 0])
+        rot = Rotation.from_euler("ZXY", [0, 0, pitch])
         frames.append(Frame(ts=t, pose=BlsmPose(h=50, rot=rot)))
 
     return Tape(name="nod", frames=frames)
@@ -89,7 +89,10 @@ def create_breathe_tape() -> Tape:
             mult = np.sin(2 * np.pi / (rise_duration * 4) * t)
         else:
             # Falling phase
-            mult = -np.sin(2 * np.pi / (fall_duration * 4) * (t - rise_duration)) + 1
+            mult = (
+                -np.sin(2 * np.pi / (fall_duration * 4) * (t - rise_duration))
+                + 1
+            )
 
         h = 80 * mult
         rot = Rotation.from_euler("ZXY", [0, 0, 0])

@@ -97,7 +97,7 @@ class SerialRobotNode(RobotNode):
         params += "\n"
         try:
             self.serial.write(bytes(params, encoding="utf-8"))
-            print(params)
+            # print(f"write_motors {params}")
         except serial.SerialException as e:
             self.get_logger().error(f"Serial write failed: {e}")
             self.serial_connected = False
@@ -155,7 +155,9 @@ class BlsmRobotNode(SerialRobotNode):
             callback=self.callback_state,
             qos_profile=10,
         )
-        self.playback_action = Playback(status_pub=self.playback_status_pub, motor_map=motor_map)
+        self.playback_action = Playback(
+            status_pub=self.playback_status_pub, motor_map=motor_map
+        )
         # Register example tapes for playback
         for tape in get_example_tapes():
             self.playback_action.register_tape(tape)
@@ -177,7 +179,11 @@ class BlsmRobotNode(SerialRobotNode):
         self.sensitivity: float = 1
 
         self.sensor_action = (
-            Sensor(serial=self.serial, distance_pub=self.distance_pub, motor_map=motor_map)
+            Sensor(
+                serial=self.serial,
+                distance_pub=self.distance_pub,
+                motor_map=motor_map,
+            )
             if self.serial_connected
             else None
         )
@@ -201,7 +207,7 @@ class BlsmRobotNode(SerialRobotNode):
         if active_action is not None:
             active_action.update()
             self.motor_id_pos = active_action.motor_id_pos
-            print(self.motor_id_pos)
+            # print(self.motor_id_pos)
             self.write_motors()
             # Publish pose at 15Hz (every 2nd frame of 30Hz update)
             self._pose_pub_counter += 1

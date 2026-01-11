@@ -13,7 +13,7 @@ from std_msgs.msg import Int64, String
 
 from r0b0_interfaces.msg import DeviceMotion, MotorCommands, MotorCommand
 
-DIST2HEIGHT = [[0, 500], [0, 50]]
+DIST2HEIGHT = [[0, 500], [0, 80]]
 
 
 DEG2DXL = [
@@ -196,6 +196,16 @@ class Sensor(BlsmAction):
         self._last_publish_time = 0  # Add this for rate limiting
         self._publish_interval = 0.1  # seconds (10 Hz)
         # self._publish_interval = 1.0  # seconds (10 Hz)
+        self._active = False
+
+    def setup(self, **kwargs):
+        super().setup(**kwargs)
+        # Flush stale serial data when entering Sensor mode
+        self.serial.reset_input_buffer()
+        self._active = True
+
+    def terminate(self, new_status):
+        self._active = False
 
     def update(self) -> py_trees.common.Status:
         try:
@@ -208,6 +218,8 @@ class Sensor(BlsmAction):
             # NOTE 251118 jumping may not be that bad,
             # could be the "cat" inching away until contact,
             # then purrs up
+            if self.serial.in_waiting == 0:
+                return py_trees.common.Status.RUNNING
             data = self.serial.readline()
             if data:
                 data = data.decode(errors="ignore").strip()
@@ -230,12 +242,14 @@ class Sensor(BlsmAction):
                         self.pose.h = np.interp(
                             self.distance_mm, DIST2HEIGHT[0], DIST2HEIGHT[1]
                         )
+                    else:
+                        self.pose.h = DIST2HEIGHT[1][1]
 
-                        self.ik_from_rot(
-                            self.pose.rot,
-                            alpha=0,
-                            mirror=False,
-                        )
+                    self.ik_from_rot(
+                        self.pose.rot,
+                        alpha=0,
+                        mirror=False,
+                    )
                 except:
                     print(f"error parsing {data=}")
                     pass
