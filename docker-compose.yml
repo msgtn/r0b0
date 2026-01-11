@@ -16,10 +16,13 @@ services:
       - ROS_DOMAIN_ID
       - DEVICE=${DEVICE:-/dev/ttyACM0}
       - BLSM_PORT=${DEVICE:-/dev/ttyACM0}
-      - MOTOR_TYPE=${MOTOR_TYPE:-dxl}
+      - MOTOR_TYPE=${MOTOR_TYPE:-servo}
     ports:
       - "8080:8080"
     volumes:
       - /dev/shm:/dev/shm
       - ${DEVICE}:${DEVICE}
+      - ./src:/r0b0/src
+      - ./pages:/r0b0/pages
+      - ./scripts:/r0b0/scripts
 
