@@ -66,6 +66,7 @@ class SerialRobotNode(RobotNode):
         self._port = port
         self._baudrate = baudrate
         self._connect_serial()
+        self.create_timer(2.0, self._try_reconnect)
 
     def _connect_serial(self):
         """Attempt to connect to the serial port."""
@@ -85,12 +86,20 @@ class SerialRobotNode(RobotNode):
             )
             return False
 
+    def _try_reconnect(self):
+        """Periodically attempt to reconnect if disconnected."""
+        if not self.serial_connected:
+            if self._connect_serial():
+                self._on_serial_reconnected()
+
+    def _on_serial_reconnected(self):
+        """Hook for subclasses to handle reconnection events."""
+        pass
+
     @override
     def write_motors(self):
         """Send the motor values as a string"""
         if not self.serial_connected:
-            print("cannot write serial disconnected")
-            self._connect_serial()
             return
         # params: str = "&".join(["=".join([str(k), str(v)])
         params: str = "&".join(
@@ -99,7 +108,7 @@ class SerialRobotNode(RobotNode):
         params += "\n"
         try:
             self.serial.write(bytes(params, encoding="utf-8"))
-            print(f"write_motors {params}")
+            # print(f"write_motors {params}")
         except (serial.SerialException, OSError):
             self.get_logger().warn("Serial disconnected")
             self.serial_connected = False
@@ -203,6 +212,17 @@ class BlsmRobotNode(SerialRobotNode):
         self.state: StateEnum = StateEnum.IDLE
 
         self.timer = self.create_timer(1 / 30.0, self.update)
+
+    @override
+    def _on_serial_reconnected(self):
+        """Reinitialize sensor action when serial reconnects."""
+        self.sensor_action = Sensor(
+            serial=self.serial,
+            distance_pub=self.distance_pub,
+            motor_map=self._motor_map,
+        )
+        self.states[StateEnum.SENSOR] = self.sensor_action
+        self.get_logger().info("Sensor action reinitialized after reconnection")
 
     def update(self):
         active_action = self.states.get(self.state, None)
