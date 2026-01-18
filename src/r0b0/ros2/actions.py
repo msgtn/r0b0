@@ -184,13 +184,13 @@ class Breathe(BlsmAction):
 class Sensor(BlsmAction):
     def __init__(
         self,
-        serial: serial.Serial,
+        node,
         distance_pub,
         name: str = "sensor",
         motor_map=DEG2DXL,
     ):
         super().__init__(name, motor_map=motor_map)
-        self.serial = serial
+        self._node = node
         self.distance_mm: int | None = None
         self.distance_filter = ExponentialFilter(alpha=0.5)
         self.distance_pub = distance_pub
@@ -199,11 +199,15 @@ class Sensor(BlsmAction):
         # self._publish_interval = 1.0  # seconds (10 Hz)
         self._active = False
 
+    @property
+    def serial(self):
+        return self._node.serial
+
     def setup(self, **kwargs):
         super().setup(**kwargs)
         # Flush stale serial data when entering Sensor mode
         try:
-            if self.serial.is_open:
+            if self.serial is not None and self.serial.is_open:
                 self.serial.reset_input_buffer()
         except (serial.SerialException, OSError, termios.error):
             pass
@@ -213,6 +217,8 @@ class Sensor(BlsmAction):
         self._active = False
 
     def update(self) -> py_trees.common.Status:
+        if self.serial is None:
+            return py_trees.common.Status.RUNNING
         try:
             # TODO: handle jumps when sensor is covered,
             # from low values (~50) to max (~2500)
