@@ -180,14 +180,10 @@ class BlsmRobotNode(SerialRobotNode):
         self.mirror: bool = True
         self.sensitivity: float = 1
 
-        self.sensor_action = (
-            Sensor(
-                serial=self.serial,
-                distance_pub=self.distance_pub,
-                motor_map=motor_map,
-            )
-            if self.serial_connected
-            else None
+        self.sensor_action = Sensor(
+            node=self,
+            distance_pub=self.distance_pub,
+            motor_map=motor_map,
         )
 
         self.states: dict[StateEnum, BlsmAction] = {
@@ -197,9 +193,8 @@ class BlsmRobotNode(SerialRobotNode):
             # StateEnum.CONVERSATION: ,
             StateEnum.KEY_CONTROL: self.keyboard_action,
             StateEnum.PHONE: Phone(motor_map=motor_map),
+            StateEnum.SENSOR: self.sensor_action,
         }
-        if self.sensor_action is not None:
-            self.states[StateEnum.SENSOR] = self.sensor_action
         self.state: StateEnum = StateEnum.IDLE
 
         self.timer = self.create_timer(1 / 30.0, self.update)
