@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import termios
 import time
 import numpy as np
 import py_trees
@@ -201,7 +202,11 @@ class Sensor(BlsmAction):
     def setup(self, **kwargs):
         super().setup(**kwargs)
         # Flush stale serial data when entering Sensor mode
-        self.serial.reset_input_buffer()
+        try:
+            if self.serial.is_open:
+                self.serial.reset_input_buffer()
+        except (serial.SerialException, OSError, termios.error):
+            pass
         self._active = True
 
     def terminate(self, new_status):
@@ -218,7 +223,7 @@ class Sensor(BlsmAction):
             # NOTE 251118 jumping may not be that bad,
             # could be the "cat" inching away until contact,
             # then purrs up
-            if self.serial.in_waiting == 0:
+            if not self.serial.is_open or self.serial.in_waiting == 0:
                 return py_trees.common.Status.RUNNING
             data = self.serial.readline()
             if data:
@@ -254,8 +259,9 @@ class Sensor(BlsmAction):
                     print(f"error parsing {data=}")
                     pass
 
-        except serial.SerialException:
-            ...
+        except (serial.SerialException, OSError, termios.error):
+            # Device disconnected or I/O error
+            pass
         return py_trees.common.Status.RUNNING
 
     def terminate(self, new_status: py_trees.common.Status) -> None: ...

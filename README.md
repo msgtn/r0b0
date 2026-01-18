@@ -128,3 +128,17 @@ pip3 install -r req.txt
 - [ ] Update 
 
 ### instruction update
+
+## Sources
+### USB Gadget Mode
+https://github.com/charkster/rpi_gadget_mode?tab=readme-ov-file
+- must be connected through pi zero's USB port, not PWR_IN
+- need to edit in `/boot/firmware/`, not `/boot/`
+- changed ip address from 192.168.1.2 to 10.55.0.2, and 192.168.1.1 to 192.168.1.1
+- must configure this ipv4 address in settings > network > wired > IPv4
+- could `ssh ${USER}@raspberrypi.local`
+
+Potentially useful sources for deploying on Chromebooks:
+- https://forums.raspberrypi.com/viewtopic.php?t=217610
+- https://forums.raspberrypi.com/viewtopic.php?t=235692
+

@@ -98,8 +98,8 @@ class SerialRobotNode(RobotNode):
         try:
             self.serial.write(bytes(params, encoding="utf-8"))
             # print(f"write_motors {params}")
-        except serial.SerialException as e:
-            self.get_logger().error(f"Serial write failed: {e}")
+        except (serial.SerialException, OSError):
+            self.get_logger().warn("Serial disconnected")
             self.serial_connected = False
             self.serial = None
 
