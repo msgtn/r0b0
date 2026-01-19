@@ -1,0 +1,17 @@
+[Unit]
+Description=Blossom Servo Service
+After=multi-user.target
+
+[Service]
+Type=simple
+User=blsm
+WorkingDirectory=/home/blsm/r0b0
+ExecStart=make docker-run
+Restart=on-failure
+RestartSec=5
+Environment="DEVICE=/dev/serial0"
+
+[Install]
+WantedBy=multi-user.target
+
+
