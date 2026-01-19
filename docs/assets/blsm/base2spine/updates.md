@@ -1,0 +1,2 @@
+The SR piece (bottom of the spine) now has a small hook that only fits through the D base piece ina  certain angle, making it unlikely for the spine to disconnect from the base.
+Additionally, a small ring (A1 piece) has been updated to be snapped onto the hook (onto the SR piece from below after SR is inserted through the D piece). When the ring is in the right place, the spine can no longer be removed from the base.
