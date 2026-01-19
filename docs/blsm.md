@@ -170,68 +170,31 @@ Next, we set up the Zero.
 	-  [ ] Add link
 - Connect a microSD card to the computer.
 - Open the imager, and burn the latest `bookworm` image onto the SD card.
-	- Apply any settings for connecting to wifi.
+	- Pi Zero 2W, Bookworm 64-bit.
+	- Configure network connection to your local network
+	- Enable ssh
 
+## scripts
+```sh
+# Install dependencies and build contanier
+./scripts/install.sh
+# Test docker:
+docker run hello-world
 
-#### Set up USB gadget mode
-- [ ] Link to repository
-- Edit files
-	- [ ] Can the files be edited before booting the Zero?
-- Shutdown the Zero and reonnect to the computer through the `USB` input, **not** `PWR IN`
-- On the host machine, apply the OS-specific configuration settings for connecting to the Zero.
-	- [ ] Add link to these instructions
+# Configure WiFi access point 
+# MAKE SURE TO SAVE THE OUPUT SSID AND PASSWORD
+sudo ./scripts/wifi.sh start
 
-#### Docker
-Next, we build the project image and configure startup service to run on boot
-- Install docker
-- Clone the repository (pulling the `micropython-servo` submodule is not necessary)
-- In `/r0b0`, build the image with `make docker-build`
-- Configure the image as a startup service with `make service`
-	- Check the status of the Docker image with `docker ps`. There should be a running container tagged `r0b0:latest`.
-	- Check the status of the service with `journalctl --follow -u blsm`. Any errors will be indicated here.
-
-```shell
-curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
-  | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
-  && echo "deb https://ngrok-agent.s3.amazonaws.com bookworm main" \
-  | sudo tee /etc/apt/sources.list.d/ngrok.list \
-  && sudo apt update \
-  && sudo apt install ngrok
-
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-sudo systemctl start docker
-
-sudo groupadd docker
-
-sudo usermod -aG docker $USER
-
-newgrp docker
-```
-
-## enable uart
-```shell
-sudo -i
-vi /boot/firmware/config.txt
-# add:
+# Enable /dev/serial0
+sudo nano /boot/firmware/config.txt
+# At the end, add:
 enable_uart=1
+# Exit with Ctrl-X, then Y to save
+
+# Set up startup service so blsm container runs on boot
+./scripts/service.sh
 ```
+Then, reboot
 
 # TODO
 - [ ] Motor calibration instructions and interface
