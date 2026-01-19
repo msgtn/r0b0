@@ -129,7 +129,13 @@ pip3 install -r req.txt
 
 ### instruction update
 
+#### Pi Imaging instructions
+- Pi Zero 2W, Bookworm 64-bit.
+- Configure network connection
+- Enable ssh
+
 ## Sources
+
 ### USB Gadget Mode
 https://github.com/charkster/rpi_gadget_mode?tab=readme-ov-file
 - must be connected through pi zero's USB port, not PWR_IN
@@ -144,3 +150,4 @@ Potentially useful sources for deploying on Chromebooks:
 
 ### WiFi Access Point Setup
 https://github.com/pi-top/Wi-Fi-Access-Point-and-Station-Mode
+
