@@ -30,3 +30,5 @@ newgrp docker
 
 # Build Blossom container
 make docker-build
+
+sudo install -m 755 scripts/wifi.sh /usr/bin/wifi-ap-sta

@@ -6,7 +6,7 @@ After=multi-user.target
 Type=simple
 User=blsm
 WorkingDirectory=/home/blsm/r0b0
-ExecStart=make docker-run
+ExecStart=/usr/bin/make docker-run
 Restart=on-failure
 RestartSec=5
 Environment="DEVICE=/dev/serial0"
