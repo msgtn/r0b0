@@ -30,7 +30,11 @@ docker-build:
 	docker build -t r0b0:latest .
 
 docker-run:
-	UID=1000 DEVICE=${DEVICE} docker compose -f ./docker-compose.yml run blsm
+	-docker rm -f blsm-servo 2>/dev/null
+	UID=1000 DEVICE=${DEVICE} docker compose -f ./docker-compose.yml run --name blsm-servo --rm blsm 
+
+docker-stop:
+	docker stop blsm-servo
 
 docker-build-run:
 	make docker-build
