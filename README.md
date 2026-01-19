@@ -142,3 +142,5 @@ Potentially useful sources for deploying on Chromebooks:
 - https://forums.raspberrypi.com/viewtopic.php?t=217610
 - https://forums.raspberrypi.com/viewtopic.php?t=235692
 
+### WiFi Access Point Setup
+https://github.com/pi-top/Wi-Fi-Access-Point-and-Station-Mode
