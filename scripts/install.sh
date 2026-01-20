@@ -1,9 +1,13 @@
+sudo apt install tmux
+
 curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
   | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
   && echo "deb https://ngrok-agent.s3.amazonaws.com bookworm main" \
   | sudo tee /etc/apt/sources.list.d/ngrok.list \
   && sudo apt update \
   && sudo apt install ngrok
+
+sudo install -m 755 scripts/wifi.sh /usr/bin/wifi-ap-sta
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
@@ -28,7 +32,3 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 
-# Build Blossom container
-make docker-build
-
-sudo install -m 755 scripts/wifi.sh /usr/bin/wifi-ap-sta
