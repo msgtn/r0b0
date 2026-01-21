@@ -90,6 +90,12 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 
 ### Wiring
 
+> **NOTE**: the column of motors are descending in order:
+> - 4, the base motor, is first at the top
+> - 3, the robot's left motor, is second
+> - 2, the robot's right motor, is third
+> - 1, the robot's front motor, is fourth at the bottom
+
 ![Wiring diagram for the Pi Zero, Pi Pico, and servo motors](assets/blsm/blsm-pico_bb.png)
 
 ## Software
