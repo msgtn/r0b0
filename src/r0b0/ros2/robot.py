@@ -59,7 +59,7 @@ class SerialRobotNode(RobotNode):
             [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
         )
         params += "\n"
-        print(params)
+        # print(params)
         self.serial.write(bytes(params, encoding="utf-8"))
 
 
@@ -109,6 +109,7 @@ class BlsmRobotNode(SerialRobotNode):
         self.breathe_rise_s: float = 4
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
+        self.breathe_bias_rad: float = 30
         # self.ts = time.time()
         self.breathing_thread = Thread(target=self.breathe, daemon=True)
         self.breathing_thread.start()
@@ -131,7 +132,7 @@ class BlsmRobotNode(SerialRobotNode):
                 )
 
             # self.h = 50 * np.sin(time.time()) + 50
-            self.h = self.breathe_amp_rad * mult
+            self.h = self.breathe_amp_rad * mult + self.breathe_bias_rad
 
             self._ik(
                 self.rotation,
