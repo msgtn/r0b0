@@ -7,7 +7,7 @@ name = "r0b0"
 description = "Library for connecting hardware and software, like aconnect for anything."
 authors = [{ name = "Michael Suguitan", email = "m.jp.sgtn@icloud.com" }]
 readme = "README.md"
-license = { file = "LICENSE.txt" }
+license-files = ["LICENSE.txt"] 
 dynamic = ["version"]
 requires-python = "==3.12.*"
 dependencies = [

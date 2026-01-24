@@ -59,14 +59,15 @@ class SerialRobotNode(RobotNode):
             [f"{k}={v:0.2f}" for k, v in self.motor_id_pos.items()]
         )
         params += "\n"
-        # print(params)
+        print(params)
         self.serial.write(bytes(params, encoding="utf-8"))
 
 
 DEG2DXL = [
-    [[-10, 140], [0, 2048]],
-    [[-10, 140], [0, 2048]],
-    [[-10, 140], [0, 2048]],
+    # [[-10, 140], [0, 2048]],
+    [[-10, 140], [1024, 3072]],
+    [[-10, 140], [1024, 3072]],
+    [[-10, 140], [1024, 3072]],
     [[-140, 140], [0, 4096]],
 ]
 DEG2SERVO = [
