@@ -9,6 +9,7 @@ RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash && colcon build"
 COPY . /r0b0
 RUN uv sync
 RUN uv pip install setuptools
+RUN uv pip install -e .
 
 # Prevent uv from trying to fetch packages at runtime
 ENV UV_OFFLINE=1
