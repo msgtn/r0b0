@@ -155,7 +155,7 @@ class WebPageNode(Node):
 
 
 class BlsmPageNode(WebPageNode):
-    def __init__(self, *args, camera_index: int = 32, **kwargs):
+    def __init__(self, *args, camera_index: int = 0, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Webcam streaming configuration
