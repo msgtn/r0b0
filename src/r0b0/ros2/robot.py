@@ -11,7 +11,7 @@ from threading import Thread
 import numpy as np
 from typing_extensions import override
 from r0b0 import blsm_config
-from scipy.spatial.transform import Rotation
+from scipy.spatial.transform import Rotation, Slerp
 
 import rclpy
 import serial
@@ -65,9 +65,9 @@ class SerialRobotNode(RobotNode):
 
 DEG2DXL = [
     # [[-10, 140], [0, 2048]],
-    [[-10, 140], [1024, 3072]],
-    [[-10, 140], [1024, 3072]],
-    [[-10, 140], [1024, 3072]],
+    # [[-10, 140], [1024, 3072]],
+    # *[[[-10, 140], [2048, 3072]]] * 3,
+    *[[[-10, 140], [1024, 3072]]] * 3,
     [[-140, 140], [0, 4096]],
 ]
 DEG2SERVO = [
@@ -106,6 +106,10 @@ class BlsmRobotNode(SerialRobotNode):
         self.yaw_offset = 0
         self.mirror: bool = True
         self.sensitivity: float = 1
+        self.rotation_filter_alpha: float = (
+            0.6  # exponential filter coefficient (0-1, lower = smoother)
+        )
+        self.motor_filter_alpha: float = 0.6  # exponential filter for motor positions (0-1, lower = smoother)
         self.breathe_rise_s: float = 4
         self.breathe_fall_s: float = 6
         self.breathe_amp_rad: float = 50
@@ -241,7 +245,10 @@ class BlsmRobotNode(SerialRobotNode):
         r = r * Rotation.from_euler("Z", np.pi / 2)
         if portrait:
             r = r * Rotation.from_euler("Y", np.pi / 2)
-        self.rotation = r
+        # Apply exponential filter using SLERP
+        key_rots = Rotation.concatenate([self.rotation, r])
+        slerp = Slerp([0, 1], key_rots)
+        self.rotation = slerp(self.rotation_filter_alpha)
         self.mirror = msg.mirror
         self.sensitivity = sensitivity
         # return self._ik(
@@ -322,10 +329,21 @@ class BlsmRobotNode(SerialRobotNode):
             motor_pos[1], motor_pos[2] = motor_pos[2], motor_pos[1]
             motor_pos[3] *= -1
 
-        self.motor_id_pos = {
+        # Calculate new motor positions
+        new_motor_pos = {
             str(i + 1): int(np.interp(value, *self._motor_map[i]))
             for i, value in enumerate(motor_pos)
         }
+        # Apply exponential filter
+        for key, new_val in new_motor_pos.items():
+            if key in self.motor_id_pos:
+                filtered = (
+                    self.motor_filter_alpha * new_val
+                    + (1 - self.motor_filter_alpha) * self.motor_id_pos[key]
+                )
+                self.motor_id_pos[key] = int(filtered)
+            else:
+                self.motor_id_pos[key] = new_val
         self.write_motors()
 
 

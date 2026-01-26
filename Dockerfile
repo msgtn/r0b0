@@ -10,6 +10,8 @@ COPY . /r0b0
 RUN uv sync
 RUN uv pip install setuptools
 
+# Prevent uv from trying to fetch packages at runtime
+ENV UV_OFFLINE=1
 
 # generate self-signed certs
 RUN make keys
