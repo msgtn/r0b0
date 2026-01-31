@@ -1,9 +1,30 @@
 services:
-  r0b0:
-    build: .
-    container_name: r0b0
-    restart: unless-stopped
-    network_mode: host
+  blsm:
+    image: r0b0:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    network_mode: "host"
+    ipc: host
+    pid: host
     privileged: true
+    stdin_open: true
+    tty: true
+    environment:
+      - UID=1000
+      - ROS_DOMAIN_ID
+      - DEVICE=${DEVICE:-/dev/ttyACM0}
+      - BLSM_PORT=${DEVICE:-/dev/ttyACM0}
+      - MOTOR_TYPE=${MOTOR_TYPE:-dxl}
+      - DISABLE_VIDEO=${DISABLE_VIDEO:-0}
+    ports:
+      - "8080:8080"
     volumes:
-      - /dev:/dev
+      - /dev/shm:/dev/shm
+      - ${DEVICE}:${DEVICE}
+      # Mount source code for live reloading without rebuild
+      - ./src:/r0b0/src
+      - ./pages:/r0b0/pages
+      - ./scripts:/r0b0/scripts
+
