@@ -1,15 +1,16 @@
-# /etc/systemd/system/r0b0-docker.service
+# /etc/systemd/system/blsm.service
 [Unit]
-Description=Start r0b0 Docker container at boot
-After=network.target
+Description=r0b0 blsm service
+After=docker.service network.target
+Requires=docker.service
 
 [Service]
+Type=oneshot
+RemainAfterExit=yes
 WorkingDirectory=/home/dummy/r0b0
-ExecStart=/usr/bin/make docker-run
-Environment=DOCKER_FLAGS=
-Environment=DEVICE=/dev/serial0
-StandardOutput=inherit
-StandardError=inherit
+ExecStartPre=-/usr/bin/docker compose down
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
 User=dummy
 
 [Install]
