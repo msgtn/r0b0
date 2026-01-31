@@ -8,17 +8,10 @@
     <title>Key Events - r0b0 Framework</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="/main/assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/main/css/styles.css" rel="stylesheet" />
     <!-- Include Socket.IO -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
-        integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
-        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='socket.io.js') }}"></script>
 </head>
 <body id="page-top">
     <!-- Navigation-->
@@ -27,7 +20,6 @@
             <a class="navbar-brand" href="/">r0b0</a>
             <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
-                <i class="fas fa-bars"></i>
             </button>
                             <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
@@ -49,7 +41,7 @@
             <!-- Icon Divider-->
             <div class="divider-custom divider-light">
                 <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-keyboard"></i></div>
+                <div class="divider-custom-icon">*</div>
                 <div class="divider-custom-line"></div>
             </div>
             <!-- Masthead Subheading-->
@@ -64,7 +56,7 @@
             <!-- Icon Divider-->
             <div class="divider-custom">
                 <div class="divider-custom-line"></div>
-                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-icon">*</div>
                 <div class="divider-custom-line"></div>
             </div>
             <!-- Instructions and Status-->
@@ -76,7 +68,7 @@
                     <div class="card bg-light mb-4">
                         <div class="card-body">
                             <h5 class="card-title">
-                                <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+                                <span id="connectionIcon">●</span>
                                 Connection Status
                             </h5>
                             <p class="card-text" id="connectionStatus">Connecting to server...</p>
@@ -87,7 +79,6 @@
                     <div class="card bg-primary text-white">
                         <div class="card-body">
                             <h5 class="card-title">
-                                <i class="fas fa-keyboard me-2"></i>
                                 Last Key Event
                             </h5>
                             <p class="card-text lead" id="status">Waiting for key events...</p>
@@ -127,9 +118,9 @@
                 <!-- Footer Social Icons-->
                 <div class="col-lg-4 mb-5 mb-lg-0">
                     <h4 class="text-uppercase mb-4">Links</h4>
-                    <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-fw fa-github"></i></a>
-                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web"><i class="fas fa-fw fa-keyboard"></i></a>
-                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib"><i class="fas fa-fw fa-sliders-h"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/msgtn/r0b0" target="_blank">GitHub</a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web">Keys</a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib">Calib</a>
                 </div>
                 <!-- Footer About Text-->
                 <div class="col-lg-4">
@@ -148,7 +139,7 @@
     </div>
 
     <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static',filename='vendor/bootstrap.bundle.min.js') }}"></script>
     <!-- Core theme JS-->
     <script src="/main/js/scripts.js"></script>
     
@@ -162,13 +153,13 @@
         const connectionIconElement = document.getElementById('connectionIcon');
 
         // Initialize connection status as disconnected
-        function setConnectionStatus(status, message, iconClass) {
+        function setConnectionStatus(status, message, color) {
             connectionStatusElement.textContent = message;
-            connectionIconElement.className = iconClass;
+            connectionIconElement.style.color = color;
         }
 
         // Set initial status
-        setConnectionStatus('connecting', 'Connecting to server...', 'fas fa-circle text-warning me-2');
+        setConnectionStatus('connecting', 'Connecting to server...', 'orange');
 
         // Connect to the Socket.IO server
         const socket = io.connect(socketAddr, {
@@ -208,34 +199,34 @@
         // Handle connection events
         socket.on('connect', () => {
             console.log('Connected to the server');
-            setConnectionStatus('connected', 'Connected to server - Ready to capture key events', 'fas fa-circle text-success me-2');
+            setConnectionStatus('connected', 'Connected to server - Ready to capture key events', 'green');
         });
 
         socket.on('disconnect', (reason) => {
             console.log('Disconnected from the server:', reason);
-            setConnectionStatus('disconnected', `Disconnected from server (${reason}) - Check connection`, 'fas fa-circle text-danger me-2');
+            setConnectionStatus('disconnected', `Disconnected from server (${reason}) - Check connection`, 'red');
             statusElement.textContent = 'Disconnected - Key events will not be sent';
         });
 
         socket.on('connect_error', (error) => {
             console.log('Connection error:', error);
-            setConnectionStatus('error', 'Connection error - Unable to reach server', 'fas fa-circle text-danger me-2');
+            setConnectionStatus('error', 'Connection error - Unable to reach server', 'red');
             statusElement.textContent = 'Connection failed - Check if server is running';
         });
 
         socket.on('reconnect', (attemptNumber) => {
             console.log('Reconnected to server after', attemptNumber, 'attempts');
-            setConnectionStatus('connected', 'Reconnected to server - Ready to capture key events', 'fas fa-circle text-success me-2');
+            setConnectionStatus('connected', 'Reconnected to server - Ready to capture key events', 'green');
         });
 
         socket.on('reconnect_attempt', (attemptNumber) => {
             console.log('Attempting to reconnect... attempt', attemptNumber);
-            setConnectionStatus('reconnecting', `Reconnecting... (attempt ${attemptNumber})`, 'fas fa-circle text-warning me-2');
+            setConnectionStatus('reconnecting', `Reconnecting... (attempt ${attemptNumber})`, 'orange');
         });
 
         socket.on('reconnect_failed', () => {
             console.log('Failed to reconnect');
-            setConnectionStatus('failed', 'Failed to reconnect - Please refresh the page', 'fas fa-circle text-danger me-2');
+            setConnectionStatus('failed', 'Failed to reconnect - Please refresh the page', 'red');
         });
 
         // Check connection status periodically
@@ -245,7 +236,7 @@
             } else {
                 // Connection is down
                 if (connectionStatusElement.textContent.includes('Connected')) {
-                    setConnectionStatus('disconnected', 'Connection lost - Attempting to reconnect...', 'fas fa-circle text-warning me-2');
+                    setConnectionStatus('disconnected', 'Connection lost - Attempting to reconnect...', 'orange');
                 }
             }
         }, 2000); // Check every 2 seconds
