@@ -22,18 +22,31 @@ keys:
 .PHONY: service
 service:
 	sudo cp ./service/blsm.service /etc/systemd/system/blsm.service
+	sudo cp ./service/pico-reset.service /etc/systemd/system/pico-reset.service
 	sudo systemctl daemon-reload
 	sudo systemctl kill blsm
 	-docker ps | grep r0b0 | awk '{print $$NF}' | xargs -n1 docker rm -f
 	sudo systemctl enable blsm
+	sudo systemctl enable pico-reset
 	sudo systemctl start blsm
+	sudo systemctl start pico-reset
 
 docker-build:
 	docker build -t r0b0:latest .
 
 docker-run:
-	UID=1000 DEVICE=${DEVICE} docker compose -f ./docker-compose.yml run blsm
+	-docker stop r0b0 2>/dev/null
+	-docker rm r0b0 2>/dev/null
+	UID=1000 DEVICE=${DEVICE} docker compose up
+
+docker-stop:
+	-docker compose down
+	-docker stop r0b0 2>/dev/null
+	-docker rm r0b0 2>/dev/null
 
 docker-build-run:
 	make docker-build
 	make docker-run
+
+pico-reset:
+	python3 scripts/pico_reset_cli.py

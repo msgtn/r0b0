@@ -1,6 +1,7 @@
 services:
   blsm:
     image: r0b0:latest
+    container_name: r0b0
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,7 +24,6 @@ services:
     volumes:
       - /dev/shm:/dev/shm
       - ${DEVICE}:${DEVICE}
-      # Mount source code for live reloading without rebuild
       - ./src:/r0b0/src
       - ./pages:/r0b0/pages
       - ./scripts:/r0b0/scripts

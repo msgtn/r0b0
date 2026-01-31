@@ -1,0 +1,13 @@
+[Unit]
+Description=Pico reset button monitor
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/dummy/r0b0/scripts/pico_reset.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
