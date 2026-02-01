@@ -217,6 +217,7 @@ class BlsmPageNode(WebPageNode):
 
     def _capture_frames(self):
         """Background thread that initializes camera and continuously captures frames."""
+        import gc
         from threading import Lock
 
         if self.frame_lock is None:
@@ -224,12 +225,13 @@ class BlsmPageNode(WebPageNode):
 
         # Initialize camera in background thread to avoid blocking
         self.camera = cv2.VideoCapture(self.camera_index)
-        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
         self.get_logger().info(
             f"Webcam initialized on device {self.camera_index}"
         )
 
+        frame_count = 0
         while self.capturing:
             success, frame = self.camera.read()
             if not success:
@@ -237,10 +239,15 @@ class BlsmPageNode(WebPageNode):
                 time.sleep(0.1)
                 continue
             _, buffer = cv2.imencode(
-                ".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80]
+                ".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 50]
             )
             with self.frame_lock:
                 self.latest_frame = buffer.tobytes()
+            del frame, buffer
+            frame_count += 1
+            if frame_count % 100 == 0:
+                gc.collect()
+            time.sleep(0.1)  # ~10 FPS max to reduce memory pressure
 
     def start_camera_capture(self):
         """Start the background camera capture thread."""
