@@ -367,8 +367,16 @@ const handleOrientation = (e) => {
   beta = (e.beta * Math.PI) / 180;
   gamma = (e.gamma * Math.PI) / 180;
 
-  alphaTrue = compassHeading(e.alpha, e.beta, e.gamma);
- // Set yawOffset to alphaTrue if it is null
+  // Android's deviceorientationabsolute already provides compass heading in alpha
+  // iOS needs compassHeading() calculation from raw values
+  if (iosDevice) {
+    alphaTrue = compassHeading(e.alpha, e.beta, e.gamma);
+  } else {
+    // Android: alpha is already the compass heading (0-360)
+    alphaTrue = e.alpha || 0;
+  }
+
+  // Set yawOffset to alphaTrue if it is null
   if (yawOffset === null) {
     yawOffset = alphaTrue;
     // alert("Current yawOffset: " + yawOffset);
