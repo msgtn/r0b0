@@ -90,6 +90,12 @@ The minimal M2 hardware required is all available in [this set](https://www.amaz
 
 ### Wiring
 
+> **NOTE**: the column of motors are descending in order:
+> - 4, the base motor, is first at the top
+> - 3, the robot's left motor, is second
+> - 2, the robot's right motor, is third
+> - 1, the robot's front motor, is fourth at the bottom
+
 ![Wiring diagram for the Pi Zero, Pi Pico, and servo motors](assets/blsm/blsm-pico_bb.png)
 
 ## Software
@@ -104,7 +110,7 @@ sequenceDiagram
 	note over comp: Clone `r0b0` repository, including submodules
 
 	pico ->> comp: Plug USB 
-	note over pico: Load MicroPython onto board 
+	note over pico: Load firmware onto board 
 	note over comp: Download `uv`
 	note over comp: Start `sudo uvx rshell`
 	comp ->> pico: Copy files
@@ -123,40 +129,56 @@ sequenceDiagram
 	note over zero: Build image
 	note over zero: Run `make service` to set up `systemd` service to run on boot
 
-	note over comp: Access interface<br>10.55.0.2:8080/blsm_web
+	note over comp: Access interface<br>192.168.90.1:8080
 	comp ->> motors: Command motors to calibration positon
 	note over motors: Attach servos in configuration orientation<br>(TODO: link to instructions)
 ```
 
 There are helper scripts runnable through `r0b0/Makefile`, though some may need modification depending on your host machine.
 
-### Clone `r0b0` repository
-First, we clone the base `rr0b0` repository, as well as the `micropython-servo` submodule repository for loading the firmware onto hte Pico.
-```bash
-# Clone the main repository
-git clone https://github.com/msgtn/r0b0
-cd r0b0
+### Pico
 
-# clone the micropython-servo repository to /deps/micropython-servo
-git submoule update --init --recursive 
+#### Clone firmware repo
+On your local machine, **not** the Zero, clone the firmware repo:
+```sh
+git clone https://github.com/msgtn/micropython-servo
+cd micropython-servo
+# Checkout the most updated development branch
+git checkout msgtn/251210
+cd cpp
 ```
 
-### Pico
-#### Micropython
-Now, weload the MicroPython firmware on the Pico.
-The full instructions, paragraphsed from the Raspberry Pi website
-- [ ] Link to raspebrry pi page
-- While holding down the `BOOTSEL` button, connect the Pico to the computer through USB.
-- The Pico should appear as a mounted volume. 
-	- Download the appropriate file from the Raspberry Pi website, and copy onto the board. The board should momentarily disconnect.
-	- Alternatively, from `/r0b0/deps/micropython-servo`, try running `make micropython-dl` which `wget`s the firmware onto the board, assuming the board is the Pico W.
+#### Install Pico firmware
 
-#### `rshell`
-Next, we connect to the Pico through the terminal using `rshell`, a command-line utility.
-We'll use `uv` to manaage `rshell` and its dependencies.
-- Install `uv`, [instructions here](https://docs.astral.sh/uv/getting-started/installation/).
-- From within `/r0b0/deps/micropython-servo`, start `rshell` with `uvx rshell`. `rshell` should detect the Pico on a given port.
-- The commands to copy the files are in `/micropython-servo/copy-files.sh`, but this file is not executable from within `rshell`, so copy and execute each command line by line. After executing the commands, the directory structure at `/pyboard` should be identical to `/micropython-servo/src`.
+Connect the Pico to your computer through its USB port.
+At this point, follow the steps at:
+https://github.com/msgtn/micropython-servo/tree/msgtn/251210/cpp/README.md
+
+Instructions copied below:
+
+```sh
+# First install the Pico SDK
+git clone https://github.com/raspberrypi/pico-sdk.git
+cd pico-sdk
+git submodule update --init
+export PICO_SDK_PATH=/path/to/pico-sdk
+sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi picotool
+
+# Then build
+cd cpp
+mkdir build
+# PWM servos (default)
+cmake -B build . && cmake --build build
+cd build
+make -j4
+
+# Then load onto the board
+# Force device into BOOTSEL mode and load firmware
+sudo picotool load -f servo_controller.uf2
+
+# Reboot into application mode after loading
+sudo picotool reboot
+```
 
 #### Wire Pico to Zero
 - Disconnect the Pico from the computer.
@@ -166,29 +188,62 @@ We'll use `uv` to manaage `rshell` and its dependencies.
 ### Zero
 #### Imaging
 Next, we set up the Zero.
-- Download the Raspberry Pi Imager
-	-  [ ] Add link
+- Download the Raspberry Pi Imager ([source](https://www.raspberrypi.com/software/))
 - Connect a microSD card to the computer.
-- Open the imager, and burn the latest `bookworm` image onto the SD card.
-	- Apply any settings for connecting to wifi.
+- Open the imager, and flash the image onto the SD card.
+	- Pi Zero 2W, Bookworm 64-bit (may be hidden in an "other" or "legacy" section).
+	- Configure network connection to your local network
+	- Set the Zero's username to `blsm` -- this is necessary for the startup services.
+	- Enable `ssh`
 
+## Software Setup
+`ssh` into the Zero:
+```sh
+ssh blsm@{zero's ip address}
+```
 
-#### Set up USB gadget mode
-- [ ] Link to repository
-- Edit files
-	- [ ] Can the files be edited before booting the Zero?
-- Shutdown the Zero and reonnect to the computer through the `USB` input, **not** `PWR IN`
-- On the host machine, apply the OS-specific configuration settings for connecting to the Zero.
-	- [ ] Add link to these instructions
+Then run the following scripts:
 
-#### Docker
-Next, we build the project image and configure startup service to run on boot
-- Install docker
-- Clone the repository (pulling the `micropython-servo` submodule is not necessary)
-- In `/r0b0`, build the image with `make docker-build`
-- Configure the image as a startup service with `make service`
-	- Check the status of the Docker image with `docker ps`. There should be a running container tagged `r0b0:latest`.
-	- Check the status of the service with `journalctl --follow -u blsm`. Any errors will be indicated here.
+```sh
+# Run the following in the top level of the directory
+cd r0b0
+
+# Install dependencies, including WiFi access point configurator
+./scripts/install.sh
+# Test docker:
+docker run hello-world
+
+# Build Blossom container
+make docker-build
+
+# Configure WiFi access point 
+# MAKE SURE TO SAVE THE OUTPUT SSID AND PASSWORD
+sudo wifi-ap-sta start
+
+# Enable /dev/serial0
+sudo nano /boot/firmware/config.txt
+# At the end, add:
+enable_uart=1
+# Exit with Ctrl-X, then Y to save
+
+# Set up startup service so blsm container runs on boot
+./scripts/service.sh
+```
+Then, reboot.
+Rebooting is necessary for enabling `/dev/serial0` to take effect.
+
+## Interface 
+The interface can be accessed either through the same local network or through the Zero's own access point.
+### From the local network
+Access the interface at `https://{ip-address}:8080`, the same `ip-address` used for `ssh`ing to the robot.
+Note that you **must** use `https`; `http` will not work.
+Bypass the security warning -- the certiicates are self-signed.
+
+### From the Zero's access point
+After running the above installation scripts and rebooting, the Zero will start broadcasting it's own access point.
+The SSID may look like `raspberrypi-someNumbersAndLetters`, and the password printed after running `sudo wifi-ap-sta start` above.
+When connected to this access point, the interface will be accessible at `https://192.168.90.1:8080`, regardless of the Zero's local IP address.
+
 
 # TODO
 - [ ] Motor calibration instructions and interface
