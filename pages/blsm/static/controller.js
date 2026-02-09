@@ -77,12 +77,10 @@ var videoSelect = document.getElementById("videoSource");
 var recordingIndicator = document.getElementById("recordingIndicator");
 var recordButton = document.getElementById("record");
 var touchPad = document.getElementById("touchpad");
-var tapeRow = document.getElementById("tapeRow");
 var sourceRow = document.getElementById("sourceRow");
 var wholeCover = document.getElementById("wholeCover");
 // var tapeName = document.getElementById("tapeName");
 var controlStuff = document.getElementById("controlStuff");
-var loop = document.getElementById("loopSwitch").querySelector("#loop");
 recordButton.classList.add("notRec");
 recording = false;
 
@@ -110,7 +108,6 @@ if (mobileDevice) {
   // touchPad.style.display = "none";
 }
 touchPad.style.display = "none";
-// tapeRow.style.display = "none";
 sourceRow.style.display = "none";
 controlStuff.style.position = "absolute";
 controlStuff.style.bottom = 0;
@@ -190,32 +187,7 @@ function moveTouch(event) {
 const peerConnections = {};
 
 function startup() {
-  // Calculate available height between tapeRow and controlStuff
-  const tapeRowRect = tapeRow.getBoundingClientRect();
-  const controlStuffRect = controlStuff.getBoundingClientRect();
-  const availableHeight = controlStuffRect.top - tapeRowRect.bottom;
-
-  // Set video dimensions to fit in available space (accounting for rotation)
-  // After 90deg rotation, the visual height = original width
-  // We want visual height to fit availableHeight
-  broadcasterVideo.width = availableHeight;
-  broadcasterVideo.height = (broadcasterVideo.width * 3) / 4;
-
-  // Rotate 90 degrees clockwise and center
-  broadcasterVideo.style.transform = "rotate(90deg)";
-  broadcasterVideo.style.transformOrigin = "center center";
-  broadcasterVideo.style.display = "block";
-  broadcasterVideo.style.margin = "auto";
-
-  // Set wrapper height to contain rotated video
-  const videoWrapper = document.getElementById("videoWrapper");
-  if (videoWrapper) {
-    videoWrapper.style.height = availableHeight + "px";
-  }
-
   watcherVideo.width = watcherVideo.height = 0;
-  videoContainer.width = broadcasterVideo.width;
-  videoContainer.height = broadcasterVideo.height;
   watcherVideo.style.zIndex = "-1";
   broadcasterVideo.style.zIndex = "-1";
 
@@ -530,17 +502,8 @@ function onRecord() {
     event: "device_motion",
     id: socket.id,
   });
-  setTimeout(updateTapes(), 2000);
 }
 
-function onLoad() {
-  console.log("load");
-  socket.emit("load", {
-    tapeName: tapeName.value,
-    event: "load",
-    id: socket.id,
-  });
-}
 
 window.onunload = window.onbeforeunload = () => {
   socket.close();
@@ -611,83 +574,7 @@ videoSelect.onchange = getStream;
 getStream(audioSelect).then(getDevices).then(gotDevices);
 getStream(videoSelect).then(getDevices).then(gotDevices);
 
-function onText() {
-  controlSwitch.checked = false;
-  onControl();
-  let res = window.prompt("Type a message to Blossom");
-  if (res == null || res == "") {
-  } else {
-    socket.emit("phone_text", {
-      event: "phone_text",
-      text: res,
-      id: socket.id,
-    });
-    console.log("emitted onText");
-  }
-}
 
-// const socket = io.connect(socketAddr)
-const tapesSelect = document.getElementById("tapes");
-// const loop = document.getElementById("loop");
-
-function updateTapes() {
-  fetch(`${socketAddr}/tapes`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(tapesSelect);
-      console.log(data);
-      data = data.reverse();
-      data.map((lang, i) => {
-        let opt = document.createElement("option");
-        opt.value = i; // the index
-        opt.innerHTML = lang.replace(".json", "");
-        console.log(opt);
-        // tapesSelect.append(opt);
-        tapesSelect[i] = opt;
-      });
-    });
-}
-
-function playTape() {
-  controlSwitch.checked = false;
-  onControl();
-  socket.emit("play", {
-    tape_name: selectedTape(),
-    loop: loop.checked,
-  });
-}
-
-function selectedTape() {
-  let tapesSelect = document.getElementById("tapes");
-  return tapesSelect.options[tapesSelect.selectedIndex].text;
-}
-
-function stopTape() {
-  // controlSwitch.checked = false; onControl();
-  socket.emit("stop", {
-    tape_name: selectedTape(),
-  });
-}
-
-if (false) {
-  wholeCover.style.display = "none";
-  // tapeRow.style.display = "none";
-  // controlStuff.style.display = "none";
-  let res = window.prompt("Please type the 4-digit code:");
-  if (res == null || res == "") {
-  } else {
-    if (res == "1234") {
-      wholeCover.style.display = "inline";
-      // tapeRow.style.display = "inline";
-      // controlStuff.style.display = "inline";
-
-      startup();
-
-      updateTapes();
-    }
-  }
-}
 
 // wholeCover.style.display = "inline";
 startup();
-updateTapes();
