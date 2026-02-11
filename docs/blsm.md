@@ -111,8 +111,7 @@ sequenceDiagram
 
 	pico ->> comp: Plug USB 
 	note over pico: Load firmware onto board 
-	note over comp: Download `uv`
-	note over comp: Start `sudo uvx rshell`
+	note over comp: Build and load C++ firmware
 	comp ->> pico: Copy files
 	pico ->> comp: Unplug USB
 	pico ->> zero: Connect UART pins<br>(TODO: link to diagram)
@@ -124,19 +123,23 @@ sequenceDiagram
 	comp ->> zero: Insert microSD card
 	zero ->> comp: Plug USB<br>(NOTE: ensure using Zero's USB, not PWR)
 
-	note over zero: Download docker
 	note over zero: Clone repository
-	note over zero: Build image
-	note over zero: Run `make service` to set up `systemd` service to run on boot
+	note over zero: Install Docker
+	note over zero: Configure access point
+	note over zero: Enable serial communications
+	note over zero: Build container
+	note over zero: Configure service to run on boot
+	note over zero: Reboot
 
+	note over comp: Connect to Zero's access point
 	note over comp: Access interface<br>192.168.90.1:8080
 	comp ->> motors: Command motors to calibration positon
-	note over motors: Attach servos in configuration orientation<br>(TODO: link to instructions)
+	note over motors: (Re)attach servos in configuration orientation
 ```
 
-There are helper scripts runnable through `r0b0/Makefile`, though some may need modification depending on your host machine.
-
 ### Pico
+
+First, we need to load firmware onto the Pico.
 
 #### Clone firmware repo
 On your local machine, **not** the Zero, clone the firmware repo:
@@ -234,6 +237,7 @@ Rebooting is necessary for enabling `/dev/serial0` to take effect.
 
 ## Interface 
 The interface can be accessed either through the same local network or through the Zero's own access point.
+
 ### From the local network
 Access the interface at `https://{ip-address}:8080`, the same `ip-address` used for `ssh`ing to the robot.
 Note that you **must** use `https`; `http` will not work.
@@ -244,9 +248,14 @@ After running the above installation scripts and rebooting, the Zero will start 
 The SSID may look like `raspberrypi-someNumbersAndLetters`, and the password printed after running `sudo wifi-ap-sta start` above.
 When connected to this access point, the interface will be accessible at `https://192.168.90.1:8080`, regardless of the Zero's local IP address.
 
+## Motor Calibration
 
-# TODO
-- [ ] Motor calibration instructions and interface
+We must calibrate the tower servos; we *do not* need to calibrate the base servo.
+If the wheels are already attached to the servos, remove them.
+On the interface, click on `Calibration`, or go to `https://{ip-address}:8080/blsm_calib`.
+Click `Reset to Calibration Position` to move all motors to the celibration position.
+Reattach the wheels with the strings pointed down, or the servo horn aligned with the body of the servo:
+![Calibration position of the servo](https://github.com/msgtn/r0b0/blob/main/docs/assets/blsm/blsm-servo-calib.jpg)
 
 # BELOW IS OLD
 
