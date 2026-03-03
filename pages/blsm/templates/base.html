@@ -117,6 +117,9 @@
           <div class="divider-custom-icon"><i class="fas fa-{{ icon }}"></i></div>
           <div class="divider-custom-line"></div>
         </div>
+        {% if subheading %}
+        <p class="masthead-subheading font-weight-light mb-0">{{ subheading }}</p>
+        {% endif %}
       </div>
     </header>
 
