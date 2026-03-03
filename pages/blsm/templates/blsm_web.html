@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% set title = "Key Events" %}
+{% set title = "Keyboard Control" %}
 {% set description = "Key Event Listener for r0b0 robot control" %}
-{% set heading = "Key Events" %}
+{% set heading = "Keyboard Control" %}
 {% set icon = "keyboard" %}
 {% set subheading = "Keyboard Input Capture for Robot Control" %}
 
@@ -31,9 +31,9 @@
           <div class="card-body">
             <h5 class="card-title">
               <i class="fas fa-keyboard me-2"></i>
-              Last Key Event
+                Last Keyboard Input
             </h5>
-            <p class="card-text lead" id="status">Waiting for key events...</p>
+              <p class="card-text lead" id="status">Waiting for keyboard input...</p>
           </div>
         </div>
 
@@ -43,7 +43,7 @@
           <div class="row">
             <div class="col-md-6">
               <p class="small">• Press any key to send control signals</p>
-              <p class="small">• Key events are sent immediately via WebSocket</p>
+                <p class="small">• Keyboard inputs are sent immediately via WebSocket</p>
             </div>
             <div class="col-md-6">
               <p class="small">• Check connection status above</p>
@@ -81,7 +81,7 @@
 
   document.addEventListener("keydown", (event) => {
     if (!socket.connected) {
-      statusElement.textContent = "Cannot send key events - Not connected to server";
+        statusElement.textContent = "Cannot send keyboard input - Not connected to server";
       return;
     }
 
@@ -100,13 +100,13 @@
 
   socket.on("connect", () => {
     console.log("Connected to the server");
-    setConnectionStatus("connected", "Connected to server - Ready to capture key events", "fas fa-circle text-success me-2");
+     setConnectionStatus("connected", "Connected to server - Ready for keyboard control", "fas fa-circle text-success me-2");
   });
 
   socket.on("disconnect", (reason) => {
     console.log("Disconnected from the server:", reason);
     setConnectionStatus("disconnected", `Disconnected from server (${reason}) - Check connection`, "fas fa-circle text-danger me-2");
-    statusElement.textContent = "Disconnected - Key events will not be sent";
+     statusElement.textContent = "Disconnected - Keyboard input will not be sent";
   });
 
   socket.on("connect_error", (error) => {
@@ -117,7 +117,7 @@
 
   socket.on("reconnect", (attemptNumber) => {
     console.log("Reconnected to server after", attemptNumber, "attempts");
-    setConnectionStatus("connected", "Reconnected to server - Ready to capture key events", "fas fa-circle text-success me-2");
+     setConnectionStatus("connected", "Reconnected to server - Ready for keyboard control", "fas fa-circle text-success me-2");
   });
 
   socket.on("reconnect_attempt", (attemptNumber) => {

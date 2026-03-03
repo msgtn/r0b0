@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% set title = "Motor Control" %}
-{% set description = "Motor Control and Calibration for r0b0 robot" %}
-{% set heading = "Calibration" %}
+{% set title = "Motor Setup" %}
+{% set description = "Motor Setup for r0b0 robot" %}
+{% set heading = "Motor Setup" %}
 {% set icon = "sliders-h" %}
-{% set subheading = "Robot Motor Calibration and Control" %}
+{% set subheading = "Robot Motor Setup" %}
 
 {% block content %}
 <section class="page-section bg-white" id="motorcontrol">
@@ -33,7 +33,7 @@
         <div class="text-center mt-4">
           <button class="btn btn-primary btn-lg" id="reset-sliders">
             <i class="fas fa-undo me-2"></i>
-            Reset to Calibration Position
+            Reset to Default Position
           </button>
         </div>
 
@@ -46,7 +46,7 @@
               <p class="small">• Changes are sent immediately via WebSocket</p>
             </div>
             <div class="col-md-6">
-              <p class="small">• Use reset button to return to calibration position (90°)</p>
+              <p class="small">• Use reset button to return to default position (90°)</p>
               <p class="small">• Monitor connection status above</p>
             </div>
           </div>
@@ -108,10 +108,23 @@
       title.className = 'card-title';
       title.innerHTML = `<i class="fas fa-cog me-2"></i>Motor ${i}`;
 
+      const sliderControl = document.createElement('div');
+      sliderControl.className = 'd-flex align-items-center gap-2 mb-3';
+
+      const decrementBtn = document.createElement('button');
+      decrementBtn.type = 'button';
+      decrementBtn.className = 'btn btn-outline-secondary btn-sm';
+      decrementBtn.textContent = '-';
+
+      const incrementBtn = document.createElement('button');
+      incrementBtn.type = 'button';
+      incrementBtn.className = 'btn btn-outline-secondary btn-sm';
+      incrementBtn.textContent = '+';
+
       const slider = document.createElement('input');
       slider.id = `slider${i}`;
       slider.type = 'range';
-      slider.className = 'form-range mb-3';
+      slider.className = 'form-range flex-grow-1 mb-0';
       slider.min = 10;
       slider.max = 170;
       slider.value = 90;
@@ -122,9 +135,15 @@
       sliderValue.innerText = `Motor ${i}: 90° / 170°`;
 
       slider.addEventListener('input', updateSliderDisplay);
+      decrementBtn.addEventListener('click', () => adjustSlider(slider.id, -1));
+      incrementBtn.addEventListener('click', () => adjustSlider(slider.id, 1));
+
+      sliderControl.appendChild(decrementBtn);
+      sliderControl.appendChild(slider);
+      sliderControl.appendChild(incrementBtn);
 
       cardBodyDiv.appendChild(title);
-      cardBodyDiv.appendChild(slider);
+      cardBodyDiv.appendChild(sliderControl);
       cardBodyDiv.appendChild(sliderValue);
       cardDiv.appendChild(cardBodyDiv);
       colDiv.appendChild(cardDiv);
@@ -132,6 +151,19 @@
       motorControlsContainer.appendChild(colDiv);
       sliders.push(slider);
     }
+  }
+
+  function adjustSlider(sliderId, delta) {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+
+    const min = Number(slider.min);
+    const max = Number(slider.max);
+    const currentValue = Number(slider.value);
+    const nextValue = Math.min(max, Math.max(min, currentValue + delta));
+
+    slider.value = nextValue;
+    slider.dispatchEvent(new Event('input'));
   }
 
   document.getElementById("reset-sliders").onclick = function () {
