@@ -198,6 +198,9 @@ class WebPageNode(Node):
             template_folder=template_folder,
             static_folder=static_folder,
         )
+        self.app.config["TEMPLATES_AUTO_RELOAD"] = True
+        self.app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+        self.app.jinja_env.auto_reload = True
 
         # Allow all origins
         CORS(self.app, resources={r"/*": {"origins": "*"}})
@@ -228,6 +231,8 @@ class WebPageNode(Node):
             port=SERVER_PORT,
             certfile=self.certfile,
             keyfile=self.keyfile,
+            debug=False,
+            use_reloader=False,
         )
 
     async def start_web_server_async(self):

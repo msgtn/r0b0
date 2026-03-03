@@ -66,7 +66,7 @@
     </style>
     {% block head_extra %}{% endblock %}
   </head>
-  <body id="page-top">
+  <body id="page-top" class="control-page">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
       <div class="container">
@@ -117,9 +117,6 @@
           <div class="divider-custom-icon"><i class="fas fa-{{ icon }}"></i></div>
           <div class="divider-custom-line"></div>
         </div>
-        {% if subheading %}
-        <p class="masthead-subheading font-weight-light mb-0">{{ subheading }}</p>
-        {% endif %}
       </div>
     </header>
 
