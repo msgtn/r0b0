@@ -636,6 +636,10 @@ class BlsmPageNode(WebPageNode):
         def speech_recognition():
             return render_template("speech_recognition.html")
 
+        @self.app.route("/speech_history_page")
+        def speech_history_page():
+            return render_template("speech_history.html")
+
         @self.app.route("/speech_history")
         def speech_history():
             from flask import jsonify

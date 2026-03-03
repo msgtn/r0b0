@@ -14,7 +14,7 @@ from threading import Thread
 from typing import Optional
 
 # Set to True to disable ROS2 imports for testing without ROS2
-NO_ROS = False
+NO_ROS = True
 
 if not NO_ROS:
     import rclpy
@@ -710,6 +710,10 @@ class BlsmPageNode(WebPageNode):
         @self.app.route("/speech_recognition")
         def speech_recognition():
             return render_template("speech_recognition.html")
+
+        @self.app.route("/speech_history_page")
+        def speech_history_page():
+            return render_template("speech_history.html")
 
         @self.app.route("/speech_history")
         def speech_history():
