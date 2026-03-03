@@ -19,7 +19,7 @@
         <div class="card bg-light mb-4">
           <div class="card-body">
             <h5 class="card-title">
-              <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+              <i class="fas fa-circle text-danger me-2" id="connectionIcon"></i>
               Connection Status
             </h5>
             <p class="card-text" id="connectionStatus">Connecting to server...</p>
@@ -65,12 +65,23 @@
   const connectionStatusElement = document.getElementById("connectionStatus");
   const connectionIconElement = document.getElementById("connectionIcon");
 
-  function setConnectionStatus(status, message, iconClass) {
+  function setConnectionStatus(status, message) {
     connectionStatusElement.textContent = message;
-    connectionIconElement.className = iconClass;
+    // Re-query each time because Font Awesome replaces <i> with <svg>,
+    // making the cached reference stale. Use classList for SVG compatibility.
+    const iconEl = document.getElementById("connectionIcon");
+    if (iconEl) {
+      if (status === "connected") {
+        iconEl.classList.remove("text-danger");
+        iconEl.classList.add("text-success");
+      } else {
+        iconEl.classList.remove("text-success");
+        iconEl.classList.add("text-danger");
+      }
+    }
   }
 
-  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-warning me-2");
+  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-danger me-2");
 
   const socket = io.connect(socketAddr, {
     timeout: 5000,
@@ -122,7 +133,7 @@
 
   socket.on("reconnect_attempt", (attemptNumber) => {
     console.log("Attempting to reconnect... attempt", attemptNumber);
-    setConnectionStatus("reconnecting", `Reconnecting... (attempt ${attemptNumber})`, "fas fa-circle text-warning me-2");
+    setConnectionStatus("reconnecting", `Reconnecting... (attempt ${attemptNumber})`, "fas fa-circle text-danger me-2");
   });
 
   socket.on("reconnect_failed", () => {
@@ -132,7 +143,7 @@
 
   setInterval(() => {
     if (!socket.connected && connectionStatusElement.textContent.includes("Connected")) {
-      setConnectionStatus("disconnected", "Connection lost - Attempting to reconnect...", "fas fa-circle text-warning me-2");
+      setConnectionStatus("disconnected", "Connection lost - Attempting to reconnect...", "fas fa-circle text-danger me-2");
     }
   }, 2000);
 </script>

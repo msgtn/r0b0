@@ -99,7 +99,7 @@
         <div class="card bg-light">
           <div class="card-body py-2">
             <span>
-              <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+              <i class="fas fa-circle text-danger me-2" id="connectionIcon"></i>
               <span id="connectionStatus">Connecting to server...</span>
             </span>
           </div>
@@ -255,9 +255,18 @@
     }
   }
 
-  function setConnectionStatus(status, message, iconClass) {
+  function setConnectionStatus(status, message) {
     connectionStatusElement.textContent = message;
-    connectionIconElement.className = iconClass;
+    const iconEl = document.getElementById("connectionIcon");
+    if (iconEl) {
+      if (status === "connected") {
+        iconEl.classList.remove("text-danger");
+        iconEl.classList.add("text-success");
+      } else {
+        iconEl.classList.remove("text-success");
+        iconEl.classList.add("text-danger");
+      }
+    }
   }
 
   function formatTime(seconds) {
@@ -487,7 +496,7 @@
     }
   });
 
-  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-warning me-2");
+  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-danger me-2");
   updatePlaybackUI("stopped");
 
   document.addEventListener("DOMContentLoaded", initVisualizer);
