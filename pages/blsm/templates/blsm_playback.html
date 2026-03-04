@@ -94,10 +94,11 @@
 {% block content %}
 <section class="page-section bg-white py-4" id="playback">
   <div class="container">
-    <!-- Connection Status -->
-    <div class="row mb-3">
-      <div class="col-12">
-        <div class="card bg-light">
+    <div class="row">
+      <!-- Left Column: Tape Selection + Controls -->
+      <div class="col-lg-4 mb-4">
+        <!-- Connection Status -->
+        <div class="card bg-light mb-3">
           <div class="card-body py-2">
             <span>
               <i class="fas fa-circle text-danger me-2" id="connectionIcon"></i>
@@ -105,12 +106,7 @@
             </span>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <!-- Left Column: Tape Selection + Controls -->
-      <div class="col-lg-4 mb-4">
         <!-- Tape Selection -->
         <div class="card mb-3">
           <div class="card-header d-flex justify-content-between align-items-center py-2">
