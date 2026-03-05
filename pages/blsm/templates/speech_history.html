@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% set title = "Speech History" %}
+{% set description = "Speech command history for r0b0 robot control" %}
+{% set heading = "Speech History" %}
+{% set icon = "history" %}
+{% set subheading = "This page keeps a list of what people said to the robot. You can check old commands anytime." %}
+
+{% block content %}
+<section class="page-section bg-white" id="speechhistory">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-microphone me-2"></i>Speech Events</h5>
+            <button id="refreshHistoryBtn" class="btn btn-sm btn-outline-secondary" type="button">
+              <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col" style="width: 70px;">#</th>
+                    <th scope="col" style="width: 220px;">Timestamp</th>
+                    <th scope="col">Command</th>
+                  </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">Loading history...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <small id="historyStatus" class="text-muted">Ready</small>
+            <small id="historyCount" class="text-muted">0 entries</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function formatTimestamp(entry) {
+    const raw = entry?.timestamp ?? entry?.time ?? entry?.datetime ?? entry?.created_at;
+    if (!raw) {
+      return '-';
+    }
+
+    const asNumber = Number(raw);
+    if (!Number.isNaN(asNumber) && Number.isFinite(asNumber)) {
+      const msValue = asNumber < 1e12 ? asNumber * 1000 : asNumber;
+      const dateFromNumber = new Date(msValue);
+      if (!Number.isNaN(dateFromNumber.getTime())) {
+        return dateFromNumber.toLocaleString();
+      }
+    }
+
+    const dateFromString = new Date(raw);
+    if (!Number.isNaN(dateFromString.getTime())) {
+      return dateFromString.toLocaleString();
+    }
+
+    return String(raw);
+  }
+
+  function extractCommand(entry) {
+    if (typeof entry === 'string') {
+      return entry;
+    }
+
+    const commandText = entry?.command ?? entry?.text ?? entry?.transcript ?? entry?.message;
+    if (commandText) {
+      return String(commandText);
+    }
+
+    return JSON.stringify(entry);
+  }
+
+  function renderHistoryEntries(entries) {
+    const tableBody = document.getElementById('historyTableBody');
+    const countLabel = document.getElementById('historyCount');
+
+    if (!entries.length) {
+      tableBody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-muted">No speech commands yet.</td></tr>';
+      countLabel.textContent = '0 entries';
+      return;
+    }
+
+    const newestFirst = [...entries].reverse();
+    const rows = newestFirst.map((entry, index) => {
+      const displayIndex = index + 1;
+      const timestamp = formatTimestamp(entry);
+      const command = extractCommand(entry);
+      return `
+        <tr>
+          <td>${displayIndex}</td>
+          <td>${escapeHtml(timestamp)}</td>
+          <td>${escapeHtml(command)}</td>
+        </tr>
+      `;
+    });
+
+    tableBody.innerHTML = rows.join('');
+    countLabel.textContent = `${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}`;
+  }
+
+  async function loadSpeechHistory() {
+    const statusLabel = document.getElementById('historyStatus');
+
+    try {
+      statusLabel.textContent = 'Loading...';
+      const response = await fetch('/speech_history', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      const entries = Array.isArray(data) ? data : [];
+      renderHistoryEntries(entries);
+      statusLabel.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+    } catch (error) {
+      document.getElementById('historyTableBody').innerHTML =
+        '<tr><td colspan="3" class="text-center py-4 text-danger">Failed to load speech history.</td></tr>';
+      statusLabel.textContent = 'Failed to load';
+      console.error('Failed to load speech history:', error);
+    }
+  }
+
+  document.getElementById('refreshHistoryBtn').addEventListener('click', loadSpeechHistory);
+  loadSpeechHistory();
+  setInterval(loadSpeechHistory, 5000);
+</script>
+{% endblock %}

@@ -10971,9 +10971,24 @@ html {
   padding-top: calc(6rem + 74px);
   padding-bottom: 6rem;
 }
+.control-page .masthead {
+  padding-bottom: 2rem;
+}
+.control-page .page-section {
+  padding-top: 2rem;
+}
+.module-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
 .masthead .masthead-heading {
-  font-size: 2.75rem;
-  line-height: 2.75rem;
+  font-size: 1.375rem;
+  line-height: 1.375rem;
 }
 .masthead .masthead-subheading {
   font-size: 1.25rem;
@@ -10987,9 +11002,15 @@ html {
     padding-top: calc(6rem + 104px);
     padding-bottom: 6rem;
   }
+  .control-page .masthead {
+    padding-bottom: 2rem;
+  }
+  .control-page .page-section {
+    padding-top: 2rem;
+  }
   .masthead .masthead-heading {
-    font-size: 4rem;
-    line-height: 3.5rem;
+    font-size: 2rem;
+    line-height: 1.75rem;
   }
   .masthead .masthead-subheading {
     font-size: 1.5rem;

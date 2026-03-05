@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="{{ description|default('r0b0 robot control') }}" />
     <meta name="author" content="" />
-    <title>{{ title }} - r0b0 Framework</title>
+    <title>{{ title }} - Blossom Framework</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="/static/assets/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
@@ -66,11 +66,11 @@
     </style>
     {% block head_extra %}{% endblock %}
   </head>
-  <body id="page-top">
+  <body id="page-top" class="control-page">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="/">r0b0</a>
+        <a class="navbar-brand" href="/">Blossom</a>
         <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded"
           type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,7 +83,7 @@
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/">Home</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Key Events</a>
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_web">Keyboard Control</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_sensor">Sensor</a>
@@ -92,7 +92,16 @@
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_playback">Playback</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
-              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Calibration</a>
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Motor Setup</a>
+            </li>
+            <li class="nav-item dropdown mx-0 mx-lg-1">
+              <a class="nav-link dropdown-toggle py-3 px-0 px-lg-3 rounded" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">More</a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/speech_recognition"><i class="fas fa-microphone me-2"></i>Speech Recognition</a></li>
+                <li><a class="dropdown-item" href="/speech_history_page"><i class="fas fa-history me-2"></i>History</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="https://github.com/msgtn/r0b0" target="_blank"><i class="fab fa-github me-2"></i>GitHub</a></li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -135,8 +144,17 @@
             <a class="btn btn-outline-light btn-social mx-1" href="/blsm_web">
               <i class="fas fa-fw fa-keyboard"></i>
             </a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_sensor">
+              <i class="fas fa-fw fa-wave-square"></i>
+            </a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/blsm_playback">
+              <i class="fas fa-fw fa-play-circle"></i>
+            </a>
             <a class="btn btn-outline-light btn-social mx-1" href="/blsm_calib">
               <i class="fas fa-fw fa-sliders-h"></i>
+            </a>
+            <a class="btn btn-outline-light btn-social mx-1" href="/speech_recognition">
+              <i class="fas fa-fw fa-microphone"></i>
             </a>
           </div>
           <div class="col-lg-4">

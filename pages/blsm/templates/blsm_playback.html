@@ -4,6 +4,7 @@
 {% set description = "Tape Playback for r0b0 robot control" %}
 {% set heading = "Tape Playback" %}
 {% set icon = "play-circle" %}
+{% set subheading = "Pick a saved robot tape and play it like a video. You can pause, skip, and watch the robot repeat the moves." %}
 
 {% block head_extra %}
 <!-- Three.js (already loaded in base.html, but keeping for standalone compatibility) -->
@@ -90,29 +91,22 @@
 </style>
 {% endblock %}
 
-{% block masthead_style %}style="padding-top: 8rem; padding-bottom: 4rem;"{% endblock %}
-{% block heading_style %}style="font-size: 2rem;"{% endblock %}
-
 {% block content %}
 <section class="page-section bg-white py-4" id="playback">
   <div class="container">
-    <!-- Connection Status -->
-    <div class="row mb-3">
-      <div class="col-12">
-        <div class="card bg-light">
+    <div class="row">
+      <!-- Left Column: Tape Selection + Controls -->
+      <div class="col-lg-4 mb-4">
+        <!-- Connection Status -->
+        <div class="card bg-light mb-3">
           <div class="card-body py-2">
             <span>
-              <i class="fas fa-circle text-warning me-2" id="connectionIcon"></i>
+              <i class="fas fa-circle text-danger me-2" id="connectionIcon"></i>
               <span id="connectionStatus">Connecting to server...</span>
             </span>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <!-- Left Column: Tape Selection + Controls -->
-      <div class="col-lg-4 mb-4">
         <!-- Tape Selection -->
         <div class="card mb-3">
           <div class="card-header d-flex justify-content-between align-items-center py-2">
@@ -258,9 +252,18 @@
     }
   }
 
-  function setConnectionStatus(status, message, iconClass) {
+  function setConnectionStatus(status, message) {
     connectionStatusElement.textContent = message;
-    connectionIconElement.className = iconClass;
+    const iconEl = document.getElementById("connectionIcon");
+    if (iconEl) {
+      if (status === "connected") {
+        iconEl.classList.remove("text-danger");
+        iconEl.classList.add("text-success");
+      } else {
+        iconEl.classList.remove("text-success");
+        iconEl.classList.add("text-danger");
+      }
+    }
   }
 
   function formatTime(seconds) {
@@ -490,7 +493,7 @@
     }
   });
 
-  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-warning me-2");
+  setConnectionStatus("connecting", "Connecting to server...", "fas fa-circle text-danger me-2");
   updatePlaybackUI("stopped");
 
   document.addEventListener("DOMContentLoaded", initVisualizer);

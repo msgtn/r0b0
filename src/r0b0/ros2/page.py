@@ -10,6 +10,71 @@ eventlet.monkey_patch()
 
 import os
 import time
+from threading import Thread
+from typing import Optional
+
+# Set to True to disable ROS2 imports for testing without ROS2
+NO_ROS = False
+
+if not NO_ROS:
+    import rclpy
+    from geometry_msgs.msg import Vector3
+    from rclpy.executors import MultiThreadedExecutor
+    from rclpy.node import Node
+    from std_msgs.msg import String
+    from r0b0_interfaces.msg import DeviceMotion, MotorCommand, MotorCommands
+else:
+
+    class Node:
+        def __init__(self, name):
+            self._name = name
+
+        def get_logger(self):
+            import logging
+
+            logging.basicConfig(level=logging.INFO)
+            return logging.getLogger(self._name)
+
+        def create_publisher(self, *args, **kwargs):
+            return self
+
+        def publish(self, *args, **kwargs):
+            pass
+
+        def destroy_node(self):
+            pass
+
+    class MultiThreadedExecutor:
+        def add_node(self, node):
+            pass
+
+        def spin_once(self, *args, **kwargs):
+            pass
+
+    class _rclpy:
+        def init(self, *args, **kwargs):
+            pass
+
+        def spin(self, node, *args, **kwargs):
+            # keep main thread alive
+            node.get_logger().info("Spinning")
+            while True:
+                time.sleep(1)
+
+        def shutdown(self):
+            pass
+
+        def ok(self):
+            return True
+
+    rclpy = _rclpy()
+    Vector3 = dict
+    String = dict
+    DeviceMotion = dict
+    MotorCommands = dict
+    MotorCommand = dict
+
+
 from enum import Enum
 
 import socketio
@@ -133,6 +198,9 @@ class WebPageNode(Node):
             template_folder=template_folder,
             static_folder=static_folder,
         )
+        self.app.config["TEMPLATES_AUTO_RELOAD"] = True
+        self.app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+        self.app.jinja_env.auto_reload = True
 
         # Allow all origins
         CORS(self.app, resources={r"/*": {"origins": "*"}})
@@ -163,6 +231,8 @@ class WebPageNode(Node):
             port=SERVER_PORT,
             certfile=self.certfile,
             keyfile=self.keyfile,
+            debug=False,
+            use_reloader=False,
         )
 
     async def start_web_server_async(self):
@@ -313,18 +383,22 @@ class BlsmPageNode(WebPageNode):
                         frames = []
                         for frame in tape.frames:
                             euler = frame.pose.rot.as_euler("ZXY")
-                            frames.append({
-                                "ts": frame.ts,
-                                "h": frame.pose.h,
-                                "yaw": float(euler[0]),
-                                "pitch": float(euler[1]),
-                                "roll": float(euler[2]),
-                            })
-                        return jsonify({
-                            "name": tape.name,
-                            "duration": tape.duration,
-                            "frames": frames,
-                        })
+                            frames.append(
+                                {
+                                    "ts": frame.ts,
+                                    "h": frame.pose.h,
+                                    "yaw": float(euler[0]),
+                                    "pitch": float(euler[1]),
+                                    "roll": float(euler[2]),
+                                }
+                            )
+                        return jsonify(
+                            {
+                                "name": tape.name,
+                                "duration": tape.duration,
+                                "frames": frames,
+                            }
+                        )
                 return jsonify({"error": f"Tape '{tape_name}' not found"}), 404
             except Exception as e:
                 return jsonify({"error": str(e)}), 500
@@ -536,24 +610,30 @@ class BlsmPageNode(WebPageNode):
             status = json.loads(msg.data)
 
             # Emit main status update
-            self.socketio.emit("playback_status", {
-                "state": status.get("state", "stopped"),
-                "tape_name": status.get("tape_name", ""),
-                "progress": status.get("progress", 0.0),
-                "current_time": status.get("current_time", 0.0),
-                "total_time": status.get("total_time", 0.0),
-            })
+            self.socketio.emit(
+                "playback_status",
+                {
+                    "state": status.get("state", "stopped"),
+                    "tape_name": status.get("tape_name", ""),
+                    "progress": status.get("progress", 0.0),
+                    "current_time": status.get("current_time", 0.0),
+                    "total_time": status.get("total_time", 0.0),
+                },
+            )
 
             # Emit pose update if available
             pose = status.get("pose")
             if pose:
-                self.socketio.emit("playback_pose", {
-                    "h": pose.get("h", 0),
-                    "yaw": pose.get("yaw", 0),
-                    "pitch": pose.get("pitch", 0),
-                    "roll": pose.get("roll", 0),
-                    "progress": status.get("progress", 0.0),
-                })
+                self.socketio.emit(
+                    "playback_pose",
+                    {
+                        "h": pose.get("h", 0),
+                        "yaw": pose.get("yaw", 0),
+                        "pitch": pose.get("pitch", 0),
+                        "roll": pose.get("roll", 0),
+                        "progress": status.get("progress", 0.0),
+                    },
+                )
         except json.JSONDecodeError:
             self.get_logger().warn(f"Invalid playback status JSON: {msg.data}")
 
@@ -635,6 +715,10 @@ class BlsmPageNode(WebPageNode):
         @self.app.route("/speech_recognition")
         def speech_recognition():
             return render_template("speech_recognition.html")
+
+        @self.app.route("/speech_history_page")
+        def speech_history_page():
+            return render_template("speech_history.html")
 
         @self.app.route("/speech_history")
         def speech_history():
