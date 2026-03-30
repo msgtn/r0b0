@@ -28,6 +28,7 @@ from r0b0.ros2.actions import (
     DEG2DXL,
     DEG2SERVO,
     Keyboard,
+    KeyframePlayback,
     Phone,
     Playback,
     Sensor,
@@ -114,6 +115,7 @@ class StateEnum(Enum):
     KEY_CONTROL = 4
     PHONE = 5
     CALIBRATION = 6
+    KEYFRAME_PLAYBACK = 7
 
 
 class BlsmRobotNode(SerialRobotNode):
@@ -174,6 +176,22 @@ class BlsmRobotNode(SerialRobotNode):
             qos_profile=10,
         )
 
+        self.keyframe_playback_action = KeyframePlayback(
+            status_pub=self.playback_status_pub, motor_map=motor_map
+        )
+        self.keyframe_tape_sub = self.create_subscription(
+            String,
+            "/blsm/keyframe_tape",
+            callback=self._on_keyframe_tape,
+            qos_profile=10,
+        )
+        self.keyframe_playback_sub = self.create_subscription(
+            String,
+            "/blsm/keyframe_playback",
+            callback=self.keyframe_playback_action.playback_callback,
+            qos_profile=10,
+        )
+
         self.h: float = 0
         self.alpha: float = 0
         self.yaw_offset = 0
@@ -194,6 +212,7 @@ class BlsmRobotNode(SerialRobotNode):
             StateEnum.KEY_CONTROL: self.keyboard_action,
             StateEnum.PHONE: Phone(motor_map=motor_map),
             StateEnum.SENSOR: self.sensor_action,
+            StateEnum.KEYFRAME_PLAYBACK: self.keyframe_playback_action,
         }
         self.state: StateEnum = StateEnum.IDLE
 
@@ -211,7 +230,19 @@ class BlsmRobotNode(SerialRobotNode):
             if self._pose_pub_counter >= 2:
                 self._pose_pub_counter = 0
                 pose = active_action.get_pose()
+                pose["state"] = self.state.name.lower()
                 self.motor_pose_pub.publish(String(data=json.dumps(pose)))
+
+    def _on_keyframe_tape(self, msg: String):
+        """Receive serialized keyframe tape JSON and register it for playback."""
+        try:
+            data = json.loads(msg.data)
+            tape = self.keyframe_playback_action.register_tape_from_json(data)
+            self.get_logger().info(
+                f"Registered keyframe tape: '{tape.name}' ({tape.duration:.1f}s, {len(tape.frames)} frames)"
+            )
+        except Exception as e:
+            self.get_logger().error(f"Error registering keyframe tape: {e}")
 
     def callback_state(self, msg: String):
         requested_state = msg.data.upper()

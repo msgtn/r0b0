@@ -471,6 +471,7 @@ class Playback(BlsmAction):
     def update(self) -> py_trees.common.Status:
         if self._playing and self.tape_loaded is not None:
             pose = self.tape_loaded.get_frame_at_ts(time.time())
+            # print(f"{pose=}")
             if pose is not None:
                 self.pose = pose
                 self.ik_from_rot(self.pose.rot, alpha=0, mirror=False)
@@ -575,6 +576,41 @@ class Playback(BlsmAction):
             self.play()
         else:
             print(f"No tape '{data}' registered")
+
+
+class KeyframePlayback(Playback):
+    """Playback action for dynamically registered keyframe animation tapes.
+
+    Tapes are registered at runtime by receiving serialized JSON over ROS2
+    rather than loaded from static example files.
+    """
+
+    def register_tape_from_json(self, data: dict):
+        """Build a Tape from serialized JSON and register it for playback.
+
+        Args:
+            data: Dict with keys 'name', 'frames' (list of {ts, h, yaw, pitch, roll}).
+        """
+        from r0b0.ros2.tapes import Frame
+        from r0b0.ros2.pose import BlsmPose
+
+        name = data.get("name", "keyframe_tape")
+        frames = [
+            Frame(
+                ts=float(f["ts"]),
+                pose=BlsmPose(
+                    h=float(f["h"]),
+                    rot=Rotation.from_euler(
+                        "ZXY",
+                        [float(f["yaw"]), float(f["pitch"]), float(f["roll"])],
+                    ),
+                ),
+            )
+            for f in data.get("frames", [])
+        ]
+        tape = Tape(name=name, frames=frames)
+        self.register_tape(tape)
+        return tape
 
 
 def main():

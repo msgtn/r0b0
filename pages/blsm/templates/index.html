@@ -94,6 +94,9 @@
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_playback">Playback</a>
             </li>
             <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_keyframes">Keyframes</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
               <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/blsm_calib">Motor Setup</a>
             </li>
             <li class="nav-item dropdown mx-0 mx-lg-1">
@@ -209,6 +212,22 @@
               >
                 <i class="fas fa-play-circle me-2"></i>
                 Go to Playback
+              </a>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="module-card d-flex flex-column h-100">
+              <h4 class="text-uppercase mb-3">Keyframe Animation</h4>
+              <p class="lead font-weight-light mb-3">
+                Pose the robot with sliders, save keyframes, compose them into
+                a timeline, and play back the animation with looping.
+              </p>
+              <a
+                class="btn btn-outline-light mt-auto align-self-center"
+                href="/blsm_keyframes"
+              >
+                <i class="fas fa-film me-2"></i>
+                Go to Keyframe Animation
               </a>
             </div>
           </div>
@@ -377,7 +396,7 @@
           reconnectionDelay: 1000,
         });
 
-        vizSocket.on('motor_pose', function(data) {
+        vizSocket.on('idle_pose', function(data) {
           if (floatingViz) floatingViz.updatePose(data.h, data.yaw, data.pitch, data.roll);
         });
 

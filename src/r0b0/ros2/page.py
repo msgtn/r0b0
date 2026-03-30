@@ -5,6 +5,7 @@ On mobile, go to https://r0b0.ngrok.io/blsm_controller
 
 import eventlet
 import random
+import json
 
 eventlet.monkey_patch()
 
@@ -174,6 +175,7 @@ class PageState(str, Enum):
     speech = "speech"
     sensor = "sensor"
     playback = "playback"
+    keyframe_playback = "keyframe_playback"
     idle = "idle"  # default/non-configured state
 
 
@@ -291,6 +293,13 @@ class BlsmPageNode(WebPageNode):
             "playback_play",
             "playback_pause",
             "playback_stop",
+            "pose_event",
+            "keyframe_save",
+            "keyframe_delete",
+            "animation_save",
+            "animation_play",
+            "animation_pause",
+            "animation_stop",
         ]
         for _event in webrtc_events + interface_events:
             self.socketio.on_event(_event, getattr(self, _event), namespace="/")
@@ -321,6 +330,12 @@ class BlsmPageNode(WebPageNode):
         self.playback_pub = self.create_publisher(
             String, "/blsm/playback", qos_profile=10
         )
+        self.keyframe_tape_pub = self.create_publisher(
+            String, "/blsm/keyframe_tape", qos_profile=10
+        )
+        self.keyframe_playback_pub = self.create_publisher(
+            String, "/blsm/keyframe_playback", qos_profile=10
+        )
         self.playback_status_sub = self.create_subscription(
             String,
             "/blsm/playback/status",
@@ -335,6 +350,26 @@ class BlsmPageNode(WebPageNode):
         )
         self._latest_distance = None
         self._registered_tapes: list[dict] = []
+
+        # Keyframe animation state
+        self._keyframes: list[dict] = []
+        self._latest_motor_pose: dict = {
+            "h": 0.0,
+            "yaw": 0.0,
+            "pitch": 0.0,
+            "roll": 0.0,
+        }
+        self._current_motors: dict = {
+            "1": 90.0,
+            "2": 90.0,
+            "3": 90.0,
+            "4": 90.0,
+        }
+        self._keyframe_tapes: dict = {}  # name -> Tape
+        self._kf_playing: bool = False
+        self._kf_paused: bool = False
+        self._kf_playback_greenlet = None
+        self._kf_playback_gen: int = 0
 
         # Register example tapes for the UI
         self._load_example_tapes()
@@ -372,9 +407,37 @@ class BlsmPageNode(WebPageNode):
             """Get list of registered tapes for playback."""
             return jsonify({"tapes": self._registered_tapes})
 
+        @self.app.get("/api/keyframes")
+        def get_keyframes():
+            """Get list of saved keyframes."""
+            return jsonify({"keyframes": self._keyframes})
+
         @self.app.get("/api/tape/<tape_name>/frames")
         def get_tape_frames(tape_name):
             """Get all frames for a tape (for visualizer scrubbing)."""
+            # Check keyframe tapes first
+            if tape_name in self._keyframe_tapes:
+                tape = self._keyframe_tapes[tape_name]
+                frames = []
+                for frame in tape.frames:
+                    euler = frame.pose.rot.as_euler("ZXY")
+                    frames.append(
+                        {
+                            "ts": frame.ts,
+                            "h": frame.pose.h,
+                            "yaw": float(euler[0]),
+                            "pitch": float(euler[1]),
+                            "roll": float(euler[2]),
+                        }
+                    )
+                return jsonify(
+                    {
+                        "name": tape.name,
+                        "duration": tape.duration,
+                        "frames": frames,
+                    }
+                )
+
             try:
                 from r0b0.ros2.example_tapes import get_example_tapes
 
@@ -539,6 +602,7 @@ class BlsmPageNode(WebPageNode):
     def slider_event(self, msg):
         if "id" in msg and "value" in msg:
             print(msg)
+            self._current_motors[str(msg["id"])] = float(msg["value"])
             self.motor_command_pub.publish(
                 MotorCommands(
                     data=[
@@ -603,8 +667,17 @@ class BlsmPageNode(WebPageNode):
         print(msg.data)
 
     def handle_playback_status(self, msg: String):
-        """ROS2 callback - emit playback status to clients."""
-        import json
+        """ROS2 callback - emit playback status to clients.
+
+        When the local keyframe greenlet is running, suppress status from the
+        robot node (its setup() fires a spurious "stopped" right after the state
+        change, which would immediately reset the browser UI to "stopped").
+        """
+
+        # If our local greenlet owns the playback, ignore robot-side status
+        # to avoid the setup()-induced "stopped" overwriting the "playing" state.
+        if self._kf_playing:
+            return
 
         try:
             status = json.loads(msg.data)
@@ -638,12 +711,20 @@ class BlsmPageNode(WebPageNode):
             self.get_logger().warn(f"Invalid playback status JSON: {msg.data}")
 
     def handle_motor_pose(self, msg: String):
-        """ROS2 callback - emit motor pose to clients for visualizer."""
+        """ROS2 callback - emit motor pose to clients for visualizer.
+
+        Idle/Breathe state → ``idle_pose`` event (only index.html listens).
+        All other states  → ``motor_pose`` event (every page can listen).
+        """
         import json
 
         try:
             pose = json.loads(msg.data)
-            self.socketio.emit("motor_pose", pose)
+            state = pose.pop("state", "")
+            if state == "idle":
+                self.socketio.emit("idle_pose", pose)
+            else:
+                self.socketio.emit("motor_pose", pose)
         except json.JSONDecodeError:
             self.get_logger().warn(f"Invalid motor pose JSON: {msg.data}")
 
@@ -696,6 +777,275 @@ class BlsmPageNode(WebPageNode):
         self.socketio.emit("playback_status", {"state": "stopped"})
         return {"status": "ok"}
 
+    # -------------------- Keyframe Socket.IO API --------------------
+    def pose_event(self, data):
+        """Receive a pose from the keyframe page sliders, track it, and relay
+        it as motor_pose so the floating visualizer and other tabs stay in sync."""
+        pose = {k: float(data.get(k, 0)) for k in ("h", "yaw", "pitch", "roll")}
+        self._latest_motor_pose = pose
+        self.socketio.emit("motor_pose", pose)
+
+    def keyframe_save(self, data):
+        """Save current motor pose as a named keyframe."""
+        from datetime import datetime
+
+        name = (
+            data.get("name") or f"kf_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        )
+        # Avoid duplicate names
+        existing_names = {kf["name"] for kf in self._keyframes}
+        if name in existing_names:
+            suffix = 1
+            base = name
+            while name in existing_names:
+                name = f"{base}_{suffix}"
+                suffix += 1
+        kf = {
+            "name": name,
+            "motors": dict(self._current_motors),
+            "pose": dict(self._latest_motor_pose),
+            "created_at": time.time(),
+        }
+        self._keyframes.append(kf)
+        emit("keyframe_saved", kf)
+        self.get_logger().info(f"Saved keyframe: {name}")
+        return kf
+
+    def keyframe_delete(self, data):
+        """Delete a keyframe by name."""
+        name = data.get("name")
+        self._keyframes = [kf for kf in self._keyframes if kf["name"] != name]
+        emit("keyframe_deleted", {"name": name})
+        return {"status": "ok"}
+
+    def animation_save(self, data):
+        """Build a Tape from a keyframe timeline and register it."""
+        import json
+        from datetime import datetime
+        from r0b0.ros2.tapes import Tape, Frame
+        from r0b0.ros2.pose import BlsmPose
+        from scipy.spatial.transform import Rotation as _Rotation
+
+        anim_name = (
+            data.get("name")
+            or f"anim_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        )
+        timeline = data.get("frames", [])  # [{keyframe_name, ts}]
+
+        kf_map = {kf["name"]: kf for kf in self._keyframes}
+        tape_frames = []
+        for entry in sorted(timeline, key=lambda x: float(x.get("ts", 0))):
+            kf = kf_map.get(entry.get("keyframe_name"))
+            if not kf:
+                continue
+            p = kf["pose"]
+            rot = _Rotation.from_euler("ZXY", [p["yaw"], p["pitch"], p["roll"]])
+            tape_frames.append(
+                Frame(ts=float(entry["ts"]), pose=BlsmPose(h=p["h"], rot=rot))
+            )
+
+        if not tape_frames:
+            emit(
+                "animation_save_error", {"error": "No valid frames in timeline"}
+            )
+            return {"error": "no frames"}
+
+        tape = Tape(name=anim_name, frames=tape_frames)
+        self._keyframe_tapes[anim_name] = tape
+        self.register_tape(anim_name, tape.duration)
+
+        # Serialize and publish to robot node so it can register the tape
+        serialized_frames = []
+        for f in tape.frames:
+            euler = f.pose.rot.as_euler("ZXY")
+            serialized_frames.append(
+                {
+                    "ts": float(f.ts),
+                    "h": float(f.pose.h),
+                    "yaw": float(euler[0]),
+                    "pitch": float(euler[1]),
+                    "roll": float(euler[2]),
+                }
+            )
+        tape_json = json.dumps({"name": anim_name, "frames": serialized_frames})
+        self.keyframe_tape_pub.publish(String(data=tape_json))
+
+        emit("animation_saved", {"name": anim_name, "duration": tape.duration})
+        self.get_logger().info(
+            f"Saved animation '{anim_name}' with {len(tape_frames)} frames"
+        )
+        return {"name": anim_name, "duration": tape.duration}
+
+    def animation_play(self, data):
+        """Start keyframe animation playback on both the robot and local visualizer."""
+        tape_name = data.get("tape_name", "")
+        loop = data.get("loop", False)
+        tape = self._keyframe_tapes.get(tape_name)
+        if not tape:
+            self.get_logger().warn(
+                f"animation_play: tape '{tape_name}' not found in {list(self._keyframe_tapes.keys())}"
+            )
+            emit(
+                "playback_status", {"state": "stopped", "tape_name": tape_name}
+            )
+            emit(
+                "kf_playback_error",
+                {
+                    "error": f"Animation '{tape_name}' not found. Try saving it again."
+                },
+            )
+            return {"error": "tape not found"}
+
+        # Switch robot to KEYFRAME_PLAYBACK state and send play command
+        self.state_pub.publish(String(data="keyframe_playback"))
+        cmd = json.dumps(
+            {"action": "play", "tape_name": tape_name, "loop": loop}
+        )
+        self.keyframe_playback_pub.publish(String(data=cmd))
+        self.get_logger().info(
+            f"Keyframe animation play: '{tape_name}' (loop={loop})"
+        )
+
+        # Stop any currently running greenlet, then start fresh.
+        # _kf_playing must be True when the new greenlet starts — set it only
+        # AFTER the cleanup block, never inside it.
+        if self._kf_playing:
+            self._kf_playing = False
+            eventlet.sleep(
+                0.1
+            )  # allow old greenlet's current iteration to finish
+
+        tape.loop = loop
+        tape.reset()
+        self._kf_paused = False
+        self._kf_playback_gen += 1
+        current_gen = self._kf_playback_gen
+        self._kf_playing = True
+        print(
+            f"[kf] animation_play: spawning gen={current_gen}, _kf_playing={self._kf_playing}, tape={tape_name}, frames={len(tape.frames)}, duration={tape.duration:.2f}s"
+        )
+        self._kf_playback_greenlet = eventlet.spawn(
+            self._run_kf_playback, tape_name, current_gen
+        )
+        return {"status": "ok"}
+
+    def animation_pause(self, data):
+        """Pause/resume keyframe animation playback on robot and local visualizer."""
+        self._kf_paused = not self._kf_paused
+        state = "paused" if self._kf_paused else "playing"
+        cmd = json.dumps({"action": "pause" if self._kf_paused else "play"})
+        self.keyframe_playback_pub.publish(String(data=cmd))
+        self.socketio.emit("playback_status", {"state": state})
+        return {"status": "ok"}
+
+    def animation_stop(self, data):
+        """Stop keyframe animation playback on robot and local visualizer."""
+        self._kf_playing = False
+        self._kf_paused = False
+        cmd = json.dumps({"action": "stop"})
+        self.keyframe_playback_pub.publish(String(data=cmd))
+        self.state_pub.publish(String(data="idle"))
+        self.socketio.emit("playback_status", {"state": "stopped"})
+        return {"status": "ok"}
+
+    def _run_kf_playback(self, tape_name: str, gen: int):
+        """Background greenlet: emit pose events for keyframe animation preview."""
+        print(
+            f"[kf] _run_kf_playback: entered gen={gen}, _kf_playing={self._kf_playing}, current_gen={self._kf_playback_gen}"
+        )
+        tape = self._keyframe_tapes.get(tape_name)
+        if not tape:
+            print(f"[kf] _run_kf_playback: tape '{tape_name}' not found")
+            self.get_logger().error(
+                f"_run_kf_playback: tape '{tape_name}' not found"
+            )
+            self.socketio.emit(
+                "playback_status", {"state": "stopped", "tape_name": tape_name}
+            )
+            return
+
+        print(
+            f"[kf] _run_kf_playback: tape found, duration={tape.duration:.2f}s, frames={len(tape.frames)}"
+        )
+        self.get_logger().info(
+            f"_run_kf_playback: starting '{tape_name}' gen={gen} (duration={tape.duration:.2f}s, frames={len(tape.frames)})"
+        )
+        self.socketio.emit(
+            "playback_status",
+            {
+                "state": "playing",
+                "tape_name": tape_name,
+                "total_time": tape.duration,
+            },
+        )
+
+        iters = 0
+        exit_reason = "unknown"
+        try:
+            while self._kf_playing and self._kf_playback_gen == gen:
+                iters += 1
+                if self._kf_paused:
+                    eventlet.sleep(0.05)
+                    continue
+
+                pose = tape.get_frame_at_ts(time.time())
+                if pose is None:
+                    exit_reason = "pose_is_none"
+                    break
+
+                euler = pose.rot.as_euler("ZXY")
+                progress = tape.get_progress()
+                pose_data = {
+                    "h": float(pose.h),
+                    "yaw": float(euler[0]),
+                    "pitch": float(euler[1]),
+                    "roll": float(euler[2]),
+                }
+                self.socketio.emit("motor_pose", pose_data)
+                self.socketio.emit(
+                    "playback_pose", {**pose_data, "progress": progress}
+                )
+                self.socketio.emit(
+                    "playback_status",
+                    {
+                        "state": "playing",
+                        "tape_name": tape_name,
+                        "progress": progress,
+                        "current_time": progress * tape.duration,
+                        "total_time": tape.duration,
+                    },
+                )
+                eventlet.sleep(0.05)
+
+                # Natural completion for non-looping tapes.
+                # get_frame_at_ts never returns None once past the end — it holds on the
+                # last frame — so we check progress explicitly to stop the loop.
+                if not tape.loop and progress >= 1.0:
+                    exit_reason = "completed"
+                    break
+            else:
+                exit_reason = f"while_false: _kf_playing={self._kf_playing}, gen_match={self._kf_playback_gen == gen}(cur={self._kf_playback_gen},mine={gen})"
+        except Exception as exc:
+            exit_reason = f"exception: {exc}"
+            self.get_logger().error(f"_run_kf_playback error: {exc}")
+            self.socketio.emit("kf_playback_error", {"error": str(exc)})
+        finally:
+            print(
+                f"[kf] _run_kf_playback: exiting after {iters} iters, reason={exit_reason}, gen={gen}, current_gen={self._kf_playback_gen}, _kf_playing={self._kf_playing}"
+            )
+            # Only reset shared state if we are still the current generation.
+            # A newer greenlet may have already taken over — don't clobber its state.
+            if self._kf_playback_gen == gen:
+                self._kf_playing = False
+                self.socketio.emit(
+                    "playback_status",
+                    {
+                        "state": "stopped",
+                        "tape_name": tape_name,
+                        "progress": 0.0,
+                    },
+                )
+
     def register_tape(self, name: str, duration: float = 0.0):
         """Register a tape for the playback UI."""
         # Avoid duplicates
@@ -734,6 +1084,7 @@ class BlsmPageNode(WebPageNode):
             "blsm_web",
             "blsm_sensor",
             "blsm_calib",
+            "blsm_keyframes",
             "reset",
             "tapes",
         ]:
