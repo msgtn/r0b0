@@ -164,6 +164,7 @@ Instructions copied below:
 git clone https://github.com/raspberrypi/pico-sdk.git
 cd pico-sdk
 git submodule update --init
+# Update `/path/to/pico-sdk` with the path the actual path on your machine
 export PICO_SDK_PATH=/path/to/pico-sdk
 sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi picotool
 
