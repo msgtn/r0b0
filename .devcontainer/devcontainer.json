@@ -1,0 +1,45 @@
+{
+  "name": "r0b0",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/r0b0",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/r0b0,type=bind,consistency=cached",
+  "runArgs": [
+    "--privileged",
+    "--network=host",
+    "--ipc=host"
+  ],
+  "mounts": [
+    "source=/dev,target=/dev,type=bind"
+  ],
+  "postCreateCommand": "bash -c 'source /opt/ros/jazzy/setup.bash && colcon build --packages-select r0b0_interfaces && uv sync && uv pip install setuptools && make keys'",
+  "remoteEnv": {
+    "ROS_DOMAIN_ID": "${localEnv:ROS_DOMAIN_ID:0}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-iot.vscode-ros",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/r0b0/.venv/bin/python",
+        "python.analysis.extraPaths": ["src"],
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash",
+            "args": [
+              "--init-file",
+              "/r0b0/install/local_setup.bash"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
